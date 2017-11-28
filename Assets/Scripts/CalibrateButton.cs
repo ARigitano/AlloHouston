@@ -9,7 +9,7 @@ public class CalibrateButton : MonoBehaviour {
 	void Start()
 	{
 		this.GetComponent<Button> ().onClick.AddListener (
-			() => realObject.Calibrate (MouseManager.instance.mousePositionTags)
+			() => realObject.Calibrate (RealPositionManager.instance.controllerPositionTags)
 		);
 	}
 }

@@ -19,7 +19,7 @@ public class ResetButton : MonoBehaviour {
 				virtualObject.transform.position = _startPosition;
 				virtualObject.transform.rotation = _startRotation;
 				virtualObject.transform.localScale = _startScale;
-				MouseManager.instance.ResetPositionTags();
+				RealPositionManager.instance.ResetPositionTags();
 			}
 		);
 	}
