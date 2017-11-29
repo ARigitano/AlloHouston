@@ -2,7 +2,6 @@
 
 public class MathHelper
 {
-	
 	/// <summary>
 	/// Get an average (mean) from more then two quaternions (with two, slerp would be used).
 	/// Note: this only works if all the quaternions are relatively close together.
