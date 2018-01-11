@@ -10,9 +10,48 @@ public class VirtualObject : MonoBehaviour
 {
 	public PositionTag[] virtualPositionTags;
 
+	public float minimumDistance = 1.0f;
+
+	public int calibrationRepetitionLimit = 20;
+
 	void Start ()
 	{
 		virtualPositionTags = GetComponentsInChildren<PositionTag> ().OrderBy (x => x.positionTagIndex).ToArray ();
+	}
+
+
+		
+	/// <summary>
+	/// Checks if the distance between the two points are below or equal to the minimum
+	/// </summary>
+	/// <returns><c>true</c>, if the distance between the two points is below or equal to the minimum, <c>false</c> otherwise.</returns>
+	/// <param name="realPoint">Real point.</param>
+	/// <param name="virtualPoint">Virtual point.</param>
+	/// <param name="minimumDistance">Minimum distance.</param>
+	bool PointWithinMinimumDistance(PositionTag realPoint, Transform virtualPoint, float minimumDistance)
+	{
+		float distance = (virtualPoint.position - realPoint.transform.position).magnitude;
+		bool withinMinimumDistance  = (distance <= minimumDistance);
+		virtualPoint.gameObject.GetComponent<MeshRenderer> ().material.color = withinMinimumDistance ? Color.green : Color.red;
+		return withinMinimumDistance;
+	}
+
+	/// <summary>
+	/// Checks if the distance between the all corresponding points are below or equal to the minimum
+	/// </summary>
+	/// <returns><c>true</c>, if the distance between the all corresponding points are below or equal to the minimum, <c>false</c> otherwise.</returns>
+	/// <param name="realPositionTags">Real position tags.</param>
+	/// <param name="virtualPositionTags">Virtual position tags.</param>
+	/// <param name="minimumDistance">Minimum distance.</param>
+	bool PointsWithinMinimumDistance(PositionTag[] realPositionTags, PositionTag[] virtualPositionTags, float minimumDistance)
+	{
+		bool withinMinimumDistance = true;
+
+		for (int i = 0; i < realPositionTags.Length; i++) {
+			withinMinimumDistance &= PointWithinMinimumDistance (realPositionTags [i], virtualPositionTags [i].transform, minimumDistance);
+		}
+
+		return withinMinimumDistance;
 	}
 
 	/// <summary>
@@ -26,7 +65,7 @@ public class VirtualObject : MonoBehaviour
 
 		foreach (var point in points) {
 			res += point;
-		}
+		}      
 
 		return res / (float)points.Length;
 	}
@@ -107,9 +146,6 @@ public class VirtualObject : MonoBehaviour
 		this.transform.rotation *= average.rotation;
 		this.transform.position += average.dist;
 
-		Debug.Log ("average rotation=" + average.rotation.eulerAngles);
-		Debug.Log ("average dist=" + average.dist);
-
 		return average;
 	}
 
@@ -147,11 +183,23 @@ public class VirtualObject : MonoBehaviour
 		return dist;
 	}
 
+	public void Calibrate(PositionTag[] realPositionTags)
+	{
+		bool pointsWithinMinimumDistance = PointsWithinMinimumDistance (realPositionTags, virtualPositionTags, minimumDistance);
+
+		// This loop breaks if all points are within minimum distance. It will goes on until it hits the calibration repetition limit otherwise.
+		for (int i = 0; i < calibrationRepetitionLimit && !pointsWithinMinimumDistance; i++) {
+			Debug.Log ("Repetition " + (i + 1));
+			CalcCalibration (realPositionTags);
+			pointsWithinMinimumDistance = PointsWithinMinimumDistance (realPositionTags, virtualPositionTags, minimumDistance);
+		}
+	}
+
 	/// <summary>
 	/// Calibrate the objet to change its rotation, position and scale to match its position tags to the given positions tags.
 	/// </summary>
 	/// <param name="realPositionTags">Real position tags.</param>
-	public void Calibrate (PositionTag[] realPositionTags)
+	void CalcCalibration (PositionTag[] realPositionTags)
 	{
 		int length = Mathf.Min (realPositionTags.Length, virtualPositionTags.Length);
 		int count = 0;
