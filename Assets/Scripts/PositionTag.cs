@@ -2,18 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PositionTag : MonoBehaviour {
-	public int positionTagIndex;
-
-	Vector3 _startingPosition;
-
-	void Start()
+namespace VRCalibrationTool
+{
+	public class PositionTag : MonoBehaviour
 	{
-		_startingPosition = this.transform.position;
-	}
+		public int positionTagIndex;
 
-	public void Reset()
-	{
-		this.transform.position = _startingPosition;
+		Vector3 _startingPosition;
+
+		void Start ()
+		{
+			_startingPosition = this.transform.position;
+		}
+
+		public void Reset ()
+		{
+			this.transform.position = _startingPosition;
+		}
 	}
 }

@@ -3,13 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CalibrateButton : MonoBehaviour {
-	public VirtualObject realObject;
-
-	void Start()
+namespace VRCalibrationTool
+{
+	public class CalibrateButton : MonoBehaviour
 	{
-		this.GetComponent<Button> ().onClick.AddListener (
-			() => realObject.Calibrate (RealPositionManager.instance.controllerPositionTags)
-		);
+		public VirtualObject realObject;
+
+		void Start ()
+		{
+			this.GetComponent<Button> ().onClick.AddListener (
+				() => realObject.Calibrate (RealPositionManager.instance.controllerPositionTags)
+			);
+		}
 	}
 }
