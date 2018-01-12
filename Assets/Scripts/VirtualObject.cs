@@ -12,7 +12,8 @@ namespace VRCalibrationTool
 	{
 		public PositionTag[] virtualPositionTags;
 
-		public float minimumDistance = 1.0f;
+		public float minimumDistanceToRealObject = 1.0f;
+		public float minimumDistanceToPreviousApprox = 0.01f;
 
 		public int calibrationRepetitionLimit = 20;
 
@@ -30,9 +31,9 @@ namespace VRCalibrationTool
 		/// <param name="realPoint">Real point.</param>
 		/// <param name="virtualPoint">Virtual point.</param>
 		/// <param name="minimumDistance">Minimum distance.</param>
-		bool PointWithinMinimumDistance (PositionTag realPoint, Transform virtualPoint, float minimumDistance)
+		bool PointWithinMinimumDistance (Vector3 realPoint, Transform virtualPoint, float minimumDistance)
 		{
-			float distance = (virtualPoint.position - realPoint.transform.position).magnitude;
+			float distance = (virtualPoint.position - realPoint).magnitude;
 			bool withinMinimumDistance = (distance <= minimumDistance);
 			virtualPoint.gameObject.GetComponent<MeshRenderer> ().material.color = withinMinimumDistance ? Color.green : Color.red;
 			return withinMinimumDistance;
@@ -45,7 +46,7 @@ namespace VRCalibrationTool
 		/// <param name="realPositionTags">Real position tags.</param>
 		/// <param name="virtualPositionTags">Virtual position tags.</param>
 		/// <param name="minimumDistance">Minimum distance.</param>
-		bool PointsWithinMinimumDistance (PositionTag[] realPositionTags, PositionTag[] virtualPositionTags, float minimumDistance)
+		bool PointsWithinMinimumDistance (Vector3[] realPositionTags, PositionTag[] virtualPositionTags, float minimumDistance)
 		{
 			bool withinMinimumDistance = true;
 
@@ -187,13 +188,20 @@ namespace VRCalibrationTool
 
 		public void Calibrate (PositionTag[] realPositionTags)
 		{
-			bool pointsWithinMinimumDistance = PointsWithinMinimumDistance (realPositionTags, virtualPositionTags, minimumDistance);
+			Vector3[] realPositions = realPositionTags.Select (x => x.transform.position).ToArray ();
+			bool minDistanceRealObject = PointsWithinMinimumDistance (realPositions, virtualPositionTags, minimumDistanceToRealObject);
+			bool minDistancePreviousApprox = false;
+			Vector3[] previousPositions = null;
 
 			// This loop breaks if all points are within minimum distance. It will goes on until it hits the calibration repetition limit otherwise.
-			for (int i = 0; i < calibrationRepetitionLimit && !pointsWithinMinimumDistance; i++) {
+			for (int i = 0; i < calibrationRepetitionLimit && !minDistanceRealObject && !minDistancePreviousApprox; i++) {
 				Debug.Log ("Repetition " + (i + 1));
 				CalcCalibration (realPositionTags);
-				pointsWithinMinimumDistance = PointsWithinMinimumDistance (realPositionTags, virtualPositionTags, minimumDistance);
+				if (previousPositions != null)
+					minDistancePreviousApprox = PointsWithinMinimumDistance (previousPositions, virtualPositionTags, minimumDistanceToPreviousApprox);
+				if (!minDistancePreviousApprox)
+					minDistanceRealObject = PointsWithinMinimumDistance (realPositions, virtualPositionTags, minimumDistanceToRealObject);
+				previousPositions = virtualPositionTags.Select (x => x.transform.position).ToArray ();
 			}
 		}
 
