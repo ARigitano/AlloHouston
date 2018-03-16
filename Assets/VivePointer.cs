@@ -5,33 +5,24 @@ using UnityEngine;
 
 namespace VRCalibrationTool
 {
-public class VivePointer : MonoBehaviour {
+	public class VivePointer : MonoBehaviour {
 
-	
 		[SerializeField] private ViveControllerManager viveManager;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
-
-	void OnTriggerEnter(Collider other) {
-		if (other.tag == "PositionTag") {
-			viveManager.touchingPoint = true;
+		void OnTriggerEnter(Collider other) {
+			if (other.tag == "PositionTag") {
+				viveManager.touchingPoint = true;
 				viveManager.incorrectPoint = other.gameObject;
+			} else if (other.tag == "ViveTracker") {
+				viveManager.touchingTracker = true;
+			}
 		}
-	}
 
-	void OnTriggerExit(Collider other){
-		if (other.tag == "PositionTag") {
+		void OnTriggerExit(Collider other){
+			if (other.tag == "PositionTag") {
 				viveManager.touchingPoint = false;
 				viveManager.incorrectPoint = null;
+			}
 		}
 	}
-}
 }
