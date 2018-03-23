@@ -16,17 +16,21 @@ namespace VRCalibrationTool
 		[SerializeField] private bool hasWaited = false;
 		[SerializeField] private string _objectName;
 		[SerializeField] private Material[] _materialDistances;
+		[SerializeField] private GameObject[] _objectsCollection;
+		[SerializeField] private SteamVR_LaserPointer laser;
 		//private int temporaryIndex;
 		public PositionTag[] PositionTags;
 		public bool touchingPoint = false;
 		public bool touchingTracker = false;
 		public GameObject incorrectPoint;
 		private GameObject virtualObject;
-		private float[] distancePoints;
+		[SerializeField] private float[] distancePoint;
 		private PositionTag[] orderedTags;
+		public int objectNumber;
 
 		void Start() {
-			virtualObject = GameObject.Find (_objectName);
+			//virtualObject = GameObject.Find (_objectName);
+
 		}
 
 
@@ -57,12 +61,15 @@ namespace VRCalibrationTool
 		/// <param name="objectCalibrate">Vive Tracker used if the virtual object is movable.</param>
 		void CalibrateVR(GameObject objectCalibrate) {
 			objectCalibrate.GetComponent<VirtualObject> ().Calibrate (PositionTags);
-			distancePoints = new float[_numberPoints];
+			distancePoint = new float[_numberPoints];
+			Color cStart = Color.red;
+			Color cEnd = Color.white;
 			for (int i = 0; i < PositionTags.Length; i++) {
-				distancePoints [i] = Vector3.Distance (PositionTags [i].gameObject.transform.position, virtualObject.GetComponent<VirtualObject> ().virtualPositionTags [i].transform.position); 
+				distancePoint[i] = Vector3.Distance (PositionTags [i].gameObject.transform.position, objectCalibrate.GetComponent<VirtualObject> ().virtualPositionTags [i].transform.position);
+				PositionTags [i].GetComponent<Renderer> ().material.color = new Color (distancePoint[i]*5, 0f, 0f, 0.6f);
 			}
 				
-			orderedTags = new PositionTag[_numberPoints];
+			/*orderedTags = new PositionTag[_numberPoints];
 			for (int i = 0; i < PositionTags.Length; i++) {
 				if (i == 0 || distancePoints [i] >= distancePoints [i - 1]) {
 					orderedTags[i] = PositionTags[i];
@@ -74,6 +81,10 @@ namespace VRCalibrationTool
 
 			for (int i = 0; i < PositionTags.Length; i++) {
 				orderedTags [i].gameObject.GetComponent<Renderer>().material = _materialDistances [i];
+			}*/
+
+			if (objectCalibrate == _objectsCollection [2]) {
+				transformTracker (objectCalibrate);
 			}
 
 			if (touchingTracker) {
@@ -115,20 +126,36 @@ namespace VRCalibrationTool
 			}
 			indexPositionTag = 0;
 			touchingTracker = false;
-			virtualObject.transform.parent = null;
+			//_objectsCollection[objectNumber].transform.parent = null;
 			Debug.Log("All position tags have been removed");
+		}
+
+		void transformTracker(GameObject tracker) {
+			if (tracker.GetComponent<SteamVR_TrackedObject> () == null) {
+				tracker.AddComponent<SteamVR_TrackedObject> ();
+				tracker.GetComponent<SteamVR_TrackedObject> ().index = SteamVR_TrackedObject.EIndex.Device2;
+			}
+
+			SteamVR_ControllerManager cameraVive = GameObject.Find ("[CameraRig]").GetComponent<SteamVR_ControllerManager> ();
+			cameraVive.objects [2] = tracker;
+
+
+			
 		}
 	
 		// Update is called once per frame
 		void Update ()
 		{
+
+
+
 			SteamVR_Controller.Device device = SteamVR_Controller.Input ((int)_trackedObj.index);
 			if (device.GetTouchDown (SteamVR_Controller.ButtonMask.Trigger)) {
 				if (!touchingPoint) {
 					if (indexPositionTag < _numberPoints) {
 						CreatePositionTag ();
-					} else if (virtualObject.GetComponent<VirtualObject> () != null) {
-							CalibrateVR (virtualObject);
+					} else if (objectNumber != null && _objectsCollection[objectNumber].GetComponent<VirtualObject> () != null) {
+						CalibrateVR (_objectsCollection[objectNumber]);
 						}
 				} else if (incorrectPoint != null && hasWaited && touchingPoint) {
 					RemovePositionTag (incorrectPoint);
