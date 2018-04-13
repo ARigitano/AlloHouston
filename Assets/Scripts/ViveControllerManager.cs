@@ -12,20 +12,20 @@ namespace VRCalibrationTool
 		[SerializeField] private PositionTag _positionTag;
 		[SerializeField] private Transform _spawnPosition;
 		[SerializeField] private int _numberPoints;
-		[SerializeField] private int indexPositionTag = 0;
+		[SerializeField] private int _indexPositionTag = 0;
 		[SerializeField] private bool hasWaited = false;
 		[SerializeField] private string _objectName;
 		[SerializeField] private Material[] _materialDistances;
 		[SerializeField] private GameObject[] _objectsCollection;
-		[SerializeField] private SteamVR_LaserPointer laser;
+		[SerializeField] private SteamVR_LaserPointer _laser;
+		[SerializeField] private float[] _distancePoint;
+		private PositionTag[] _orderedTags;
+		private GameObject _virtualObject;
 		//private int temporaryIndex;
 		public PositionTag[] PositionTags;
 		public bool touchingPoint = false;
 		public bool touchingTracker = false;
 		public GameObject incorrectPoint;
-		private GameObject virtualObject;
-		[SerializeField] private float[] distancePoint;
-		private PositionTag[] orderedTags;
 		public int objectNumber;
 
 		void Start() {
@@ -49,7 +49,7 @@ namespace VRCalibrationTool
 				}
 			}
 
-			indexPositionTag++;
+			_indexPositionTag++;
 			Debug.Log ("New position tag created");
 			StartCoroutine ("Waiting");
 
@@ -61,12 +61,12 @@ namespace VRCalibrationTool
 		/// <param name="objectCalibrate">Vive Tracker used if the virtual object is movable.</param>
 		void CalibrateVR(GameObject objectCalibrate) {
 			objectCalibrate.GetComponent<VirtualObject> ().Calibrate (PositionTags);
-			distancePoint = new float[_numberPoints];
+			_distancePoint = new float[_numberPoints];
 			Color cStart = Color.red;
 			Color cEnd = Color.white;
 			for (int i = 0; i < PositionTags.Length; i++) {
-				distancePoint[i] = Vector3.Distance (PositionTags [i].gameObject.transform.position, objectCalibrate.GetComponent<VirtualObject> ().virtualPositionTags [i].transform.position);
-				PositionTags [i].GetComponent<Renderer> ().material.color = new Color (distancePoint[i]*5, 0f, 0f, 0.6f);
+				_distancePoint[i] = Vector3.Distance (PositionTags [i].gameObject.transform.position, objectCalibrate.GetComponent<VirtualObject> ().virtualPositionTags [i].transform.position);
+				PositionTags [i].GetComponent<Renderer> ().material.color = new Color (_distancePoint[i]*5, 0f, 0f, 0.6f);
 			}
 				
 			/*orderedTags = new PositionTag[_numberPoints];
@@ -108,7 +108,7 @@ namespace VRCalibrationTool
 		/// <param name="pointRemove">The position tag to remove.</param>
 		void RemovePositionTag(GameObject pointRemove) {
 			Destroy (pointRemove);
-			indexPositionTag--;
+			_indexPositionTag--;
 			touchingPoint = false;
 			incorrectPoint = null;
 			Debug.Log ("Position tag destroyed");
@@ -124,7 +124,7 @@ namespace VRCalibrationTool
 					PositionTags [i] = null;
 				}
 			}
-			indexPositionTag = 0;
+			_indexPositionTag = 0;
 			touchingTracker = false;
 			//_objectsCollection[objectNumber].transform.parent = null;
 			Debug.Log("All position tags have been removed");
@@ -152,7 +152,7 @@ namespace VRCalibrationTool
 			SteamVR_Controller.Device device = SteamVR_Controller.Input ((int)_trackedObj.index);
 			if (device.GetTouchDown (SteamVR_Controller.ButtonMask.Trigger)) {
 				if (!touchingPoint) {
-					if (indexPositionTag < _numberPoints) {
+					if (_indexPositionTag < _numberPoints) {
 						CreatePositionTag ();
 					} else if (objectNumber != null && _objectsCollection[objectNumber].GetComponent<VirtualObject> () != null) {
 						CalibrateVR (_objectsCollection[objectNumber]);
