@@ -1,4 +1,8 @@
-﻿using System.Collections;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Collections.Generic;
@@ -8,52 +12,53 @@ using System.IO;
 
 namespace VRCalibrationTool
 {
-public class XMLManager : MonoBehaviour {
+    public class XMLManager : MonoBehaviour
+    {
+        public static XMLManager ins;
 
-	public static XMLManager ins;
+        private void Awake()
+        {
+            ins = this;
 
-	void Awake() {
-		ins = this;
+            SaveItems();
+            //LoadItems();
+        }
 
-		SaveItems ();
-		//LoadItems();
-	}
+        public ItemDatabase itemDB;
 
-	public ItemDatabase itemDB;
+        public void SaveItems()
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(ItemDatabase));
+            FileStream stream = new FileStream(Application.dataPath + "/StreamingAssets/XML/item_data.xml", FileMode.Create);
+            serializer.Serialize(stream, itemDB);
+            stream.Close();
+        }
 
-	public void SaveItems() {
-
-		XmlSerializer serializer = new XmlSerializer (typeof(ItemDatabase));
-		FileStream stream = new FileStream (Application.dataPath + "/StreamingAssets/XML/item_data.xml", FileMode.Create);
-		serializer.Serialize (stream, itemDB);
-		stream.Close();
-
-	}
-
-	public void LoadItems() {
-		XmlSerializer serializer = new XmlSerializer (typeof(ItemDatabase));
-		FileStream stream = new FileStream (Application.dataPath + "/StreamingAssets/XML/item_data.xml", FileMode.Open);
-		itemDB = serializer.Deserialize (stream) as ItemDatabase;
-		stream.Close();
-	}
-
-}
+        public void LoadItems()
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(ItemDatabase));
+            FileStream stream = new FileStream(Application.dataPath + "/StreamingAssets/XML/item_data.xml", FileMode.Open);
+            itemDB = serializer.Deserialize(stream) as ItemDatabase;
+            stream.Close();
+        }
+    }
 
 
 
-[System.Serializable]
-public class ItemEntry {
-	[XmlAttribute("type")]
-	public string type;
-	public SerializableVector3 point1, point2, point3;
-}
+    [System.Serializable]
+    public class ItemEntry
+    {
+        [XmlAttribute("type")]
+        public string type;
+        public SerializableVector3 point1, point2, point3;
+    }
 
-[System.Serializable]
-public class ItemDatabase {
-
-	[XmlArray("CalibratedItems")]
-	public List<ItemEntry> list = new List<ItemEntry>();
-}
+    [System.Serializable]
+    public class ItemDatabase
+    {
+        [XmlArray("CalibratedItems")]
+        public List<ItemEntry> list = new List<ItemEntry>();
+    }
 }
 
 

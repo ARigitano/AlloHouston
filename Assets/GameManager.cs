@@ -1,38 +1,45 @@
-﻿using System.Collections;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour {
+public class GameManager : MonoBehaviour
+{
+    public int incidentsFixed = 0;
+    [SerializeField]
+    private TextMesh _tableText;
 
-	public int incidentsFixed = 0;
-	[SerializeField] private TextMesh tableText;
+    // Use this for initialization
+    private void Start()
+    {
+    }
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    // Update is called once per frame
+    private void Update()
+    {
+    }
 
-	/*public void StartCalibration() {
-
-	}*/
-
-	/*public void EndCalibration() {
+    /*public void StartCalibration() {
 
 	}*/
 
-	/*public void StartGame() {
+    /*public void EndCalibration() {
 
 	}*/
 
-	public void EndGame() {
-		if (incidentsFixed == 3) {
-			tableText.text = "Victory";
-			Debug.Log ("End of game");
-		}
-	}
+    /*public void StartGame() {
+
+	}*/
+
+    public void EndGame()
+    {
+        if (incidentsFixed == 3)
+        {
+            _tableText.text = "Victory";
+            Debug.Log("End of game");
+        }
+    }
 }

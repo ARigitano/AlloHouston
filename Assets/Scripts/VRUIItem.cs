@@ -1,31 +1,35 @@
-﻿using UnityEngine;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
+using UnityEngine;
 
 [RequireComponent(typeof(RectTransform))]
 public class VRUIItem : MonoBehaviour
 {
-	private BoxCollider boxCollider;
-	private RectTransform rectTransform;
+    private BoxCollider _boxCollider;
+    private RectTransform _rectTransform;
 
-	private void OnEnable()
-	{
-		ValidateCollider();
-	}
+    private void OnEnable()
+    {
+        ValidateCollider();
+    }
 
-	private void OnValidate()
-	{
-		ValidateCollider();
-	}
+    private void OnValidate()
+    {
+        ValidateCollider();
+    }
 
-	private void ValidateCollider()
-	{
-		rectTransform = GetComponent<RectTransform>();
+    private void ValidateCollider()
+    {
+        _rectTransform = GetComponent<RectTransform>();
 
-		boxCollider = GetComponent<BoxCollider>();
-		if (boxCollider == null)
-		{
-			boxCollider = gameObject.AddComponent<BoxCollider>();
-		}
+        _boxCollider = GetComponent<BoxCollider>();
+        if (_boxCollider == null)
+        {
+            _boxCollider = gameObject.AddComponent<BoxCollider>();
+        }
 
-		boxCollider.size = rectTransform.sizeDelta;
-	}
+        _boxCollider.size = _rectTransform.sizeDelta;
+    }
 }
