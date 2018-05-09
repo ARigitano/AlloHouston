@@ -38,7 +38,7 @@ public class Sending : MonoBehaviour {
          else 
          {
           sp.Open();  // opens the connection
-          sp.ReadTimeout = 16;  // sets the timeout value before reporting error
+          sp.ReadTimeout = 500;  // sets the timeout value before reporting error
           print("Port Opened!");
 		//		message = "Port Opened!";
          }
