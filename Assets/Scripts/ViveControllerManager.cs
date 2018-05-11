@@ -82,10 +82,30 @@ namespace VRCalibrationTool
 			calObj.point3.Y = PositionTags [2].transform.position.y;
 			calObj.point3.Z = PositionTags [2].transform.position.z;
 
+			for (int i = 0; i < XMLManager.ins.itemDB.list.Count; i++) {
+				if (XMLManager.ins.itemDB.list [i].type == _objectsCollection[objectNumber].name) {
+					XMLManager.ins.itemDB.list [i].type = _objectsCollection[objectNumber].name;
 
-			XMLManager.ins.itemDB.list.Add(calObj);
-			XMLManager.ins.SaveItems ();
-		
+					XMLManager.ins.itemDB.list [i].point1 = new SerializableVector3();
+					XMLManager.ins.itemDB.list [i].point1.X = PositionTags [0].transform.position.x;
+					XMLManager.ins.itemDB.list [i].point1.Y = PositionTags [0].transform.position.y;
+					XMLManager.ins.itemDB.list [i].point1.Z = PositionTags [0].transform.position.z;
+
+					XMLManager.ins.itemDB.list [i].point2 = new SerializableVector3();
+					XMLManager.ins.itemDB.list [i].point2.X = PositionTags [1].transform.position.x;
+					XMLManager.ins.itemDB.list [i].point2.Y = PositionTags [1].transform.position.y;
+					XMLManager.ins.itemDB.list [i].point2.Z = PositionTags [1].transform.position.z;
+
+					XMLManager.ins.itemDB.list [i].point3 = new SerializableVector3();
+					XMLManager.ins.itemDB.list [i].point3.X = PositionTags [2].transform.position.x;
+					XMLManager.ins.itemDB.list [i].point3.Y = PositionTags [2].transform.position.y;
+					XMLManager.ins.itemDB.list [i].point3.Z = PositionTags [2].transform.position.z;
+					break;
+				} else if (i == XMLManager.ins.itemDB.list.Count) {
+					XMLManager.ins.itemDB.list.Add(calObj);
+					XMLManager.ins.SaveItems ();
+				}
+			}
 
 			_distancePoint = new float[_numberPoints];
 			Color cStart = Color.red;

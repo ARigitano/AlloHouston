@@ -15,8 +15,19 @@ public class XMLManager : MonoBehaviour {
 	void Awake() {
 		ins = this;
 
-		SaveItems ();
-		//LoadItems();
+		//SaveItems ();
+		LoadItems();
+
+			for (int i = 0; i < itemDB.list.Count; i++) {
+				if (itemDB.list [i].type == "haha") {
+					Debug.Log ("found");
+					break;
+				}
+			}
+
+
+			SaveItems ();
+
 	}
 
 	public ItemDatabase itemDB;
@@ -25,6 +36,9 @@ public class XMLManager : MonoBehaviour {
 
 		XmlSerializer serializer = new XmlSerializer (typeof(ItemDatabase));
 		FileStream stream = new FileStream (Application.dataPath + "/StreamingAssets/XML/item_data.xml", FileMode.Create);
+
+			Debug.Log (stream.Length);
+
 		serializer.Serialize (stream, itemDB);
 		stream.Close();
 
