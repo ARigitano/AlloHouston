@@ -1,4 +1,9 @@
-﻿using System.Collections;
+﻿/// <summary>
+/// Takes the coordonnates of the selected object stored in the XML to auto calibrate it.
+/// </summary>
+
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,9 +13,8 @@ namespace VRCalibrationTool
 {
 public class AutoCaliberMenu : MonoBehaviour {
 
-		public GameObject buttonPrefab;
-		public GameObject panelToAttachButtonsTo;
-		public PositionTag[] PositionTags;
+		[SerializeField] private GameObject _buttonPrefab;				//Prefab for the autocalibrate button	
+		[SerializeField] private GameObject _panelToAttachButtonsTo;	//Panel to attach the autocalibrate button to
 
 		void Start()
 		{
@@ -21,11 +25,18 @@ public class AutoCaliberMenu : MonoBehaviour {
 
 
 		}
+
+
+		/// <summary>
+		/// If button clicked, autocalibrates the selected object.
+		/// </summary>
 		void OnClick()
 		{
 			
 
-			GameObject objectCalibrate = GameObject.Find (EventSystem.current.currentSelectedGameObject.transform.GetChild(0).GetComponent<Text>().text);
+			string objectCalibrateName = EventSystem.current.currentSelectedGameObject.transform.GetChild(0).GetComponent<Text>().text;
+			GameObject objectCalibrate = (GameObject)Resources.Load (objectCalibrateName);
+			Debug.Log (objectCalibrate.name);
 
 			ViveControllerManager ViveControllerManager = GameObject.Find ("ViveManager").GetComponent<ViveControllerManager> ();
 
@@ -37,14 +48,21 @@ public class AutoCaliberMenu : MonoBehaviour {
 			ViveControllerManager.PositionTags [1].transform.position = XMLManager.ins.itemDB.list[0].point2.Vector3;
 			ViveControllerManager.PositionTags [2].transform.position = XMLManager.ins.itemDB.list[0].point3.Vector3;
 
-			objectCalibrate.GetComponent<VirtualObject> ().Calibrate (ViveControllerManager.PositionTags);
+			GameObject objectInstantiated = (GameObject) Instantiate (objectCalibrate);
+
+			objectInstantiated.GetComponent<VirtualObject> ().Calibrate (ViveControllerManager.PositionTags);
 
 			Debug.Log("Object calibrated: "+objectCalibrate.name);
 		}
 
-		private void CreateButton(string name) {
-			GameObject button = (GameObject)Instantiate(buttonPrefab);
-			button.transform.SetParent(panelToAttachButtonsTo.transform);
+		/// <summary>
+		/// Creates an autocalibrate button.
+		/// </summary>
+		/// <param name="name">Name.</param>
+		private void CreateButton(string name) 
+		{
+			GameObject button = (GameObject)Instantiate(_buttonPrefab);
+			button.transform.SetParent(_panelToAttachButtonsTo.transform);
 			button.GetComponent<Button>().onClick.AddListener(OnClick);
 			button.transform.GetChild(0).GetComponent<Text>().text = name;
 		}
