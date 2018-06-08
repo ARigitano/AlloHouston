@@ -11,19 +11,17 @@ using UnityEngine.EventSystems;
 
 namespace VRCalibrationTool
 {
-public class AutoCaliberMenu : MonoBehaviour {
-
+public class AutoCaliberMenu : MonoBehaviour 
+	{
 		[SerializeField] private GameObject _buttonPrefab;				//Prefab for the autocalibrate button	
 		[SerializeField] private GameObject _panelToAttachButtonsTo;	//Panel to attach the autocalibrate button to
 
 		void Start()
 		{
-
-			for (int i = 0; i < XMLManager.ins.itemDB.list.Count; i++) {
+			for (int i = 0; i < XMLManager.ins.itemDB.list.Count; i++) 
+			{
 				CreateButton (XMLManager.ins.itemDB.list[i].type);
 			}
-
-
 		}
 
 
@@ -44,13 +42,13 @@ public class AutoCaliberMenu : MonoBehaviour {
 			ViveControllerManager.CreatePositionTag ();
 			ViveControllerManager.CreatePositionTag ();
 
-			ViveControllerManager.PositionTags [0].transform.position = XMLManager.ins.itemDB.list[0].point1.Vector3;
-			ViveControllerManager.PositionTags [1].transform.position = XMLManager.ins.itemDB.list[0].point2.Vector3;
-			ViveControllerManager.PositionTags [2].transform.position = XMLManager.ins.itemDB.list[0].point3.Vector3;
+			ViveControllerManager._PositionTags [0].transform.position = XMLManager.ins.itemDB.list[0].point1.Vector3;
+			ViveControllerManager._PositionTags [1].transform.position = XMLManager.ins.itemDB.list[0].point2.Vector3;
+			ViveControllerManager._PositionTags [2].transform.position = XMLManager.ins.itemDB.list[0].point3.Vector3;
 
 			GameObject objectInstantiated = (GameObject) Instantiate (objectCalibrate);
 
-			objectInstantiated.GetComponent<VirtualObject> ().Calibrate (ViveControllerManager.PositionTags);
+			objectInstantiated.GetComponent<VirtualObject> ().Calibrate (ViveControllerManager._PositionTags);
 
 			Debug.Log("Object calibrated: "+objectCalibrate.name);
 		}
@@ -66,6 +64,5 @@ public class AutoCaliberMenu : MonoBehaviour {
 			button.GetComponent<Button>().onClick.AddListener(OnClick);
 			button.transform.GetChild(0).GetComponent<Text>().text = name;
 		}
-
 	}
 }

@@ -18,7 +18,7 @@ namespace VRCalibrationTool
 
         public void AssignCollectionNumber()
         {
-            _viveManager.objectNumber = _buttonID;
+            _viveManager._objectNumber = _buttonID;
         }
     }
 }

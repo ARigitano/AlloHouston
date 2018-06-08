@@ -8,12 +8,9 @@ using UnityEngine;
 
 public class Module : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject _led;
-    [SerializeField]
-    private GameObject _gameManager;
-    [SerializeField]
-    private Material _ledMaterial;
+    [SerializeField] private GameObject _led;
+    [SerializeField] private GameObject _gameManager;
+    [SerializeField] private Material _ledMaterial;
     private bool _isFixed = false;
 
     // Use this for initialization
@@ -21,12 +18,7 @@ public class Module : MonoBehaviour
     {
 		_gameManager = GameObject.Find ("GameManager");
     }
-
-    // Update is called once per frame
-    private void Update()
-    {
-    }
-
+		
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "ViveController" && !_isFixed)

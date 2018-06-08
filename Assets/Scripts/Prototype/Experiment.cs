@@ -2,7 +2,8 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName= "ColorXP", menuName = "Experiment/ColorXP", order = 1)]
-public class Experiment : ScriptableObject {
+public class Experiment : ScriptableObject 
+{
 	public string type = "Color";
 	public string audience = "Casual";
 	public string difficulty = "Very easy";

@@ -18,12 +18,12 @@ namespace VRCalibrationTool
         {
             if (other.tag == "PositionTag")
             {
-                _viveManager.touchingPoint = true;
-                _viveManager.incorrectPoint = other.gameObject;
+                _viveManager._touchingPoint = true;
+                _viveManager._incorrectPoint = other.gameObject;
             }
             else if (other.tag == "ViveTracker")
             {
-                _viveManager.touchingTracker = true;
+                _viveManager._touchingTracker = true;
             }
         }
 
@@ -31,8 +31,8 @@ namespace VRCalibrationTool
         {
             if (other.tag == "PositionTag")
             {
-                _viveManager.touchingPoint = false;
-                _viveManager.incorrectPoint = null;
+                _viveManager._touchingPoint = false;
+                _viveManager._incorrectPoint = null;
             }
         }
     }

@@ -8,9 +8,10 @@ using UnityEngine;
 
 namespace VRCalibrationTool
 {
-	public class ExperienceButton : MonoBehaviour {
-
+	public class ExperienceButton : MonoBehaviour 
+	{
 		private RoomManager _roomManager; 
+		public Experiment[] _experiments;
 
 		// Use this for initialization
 		void Start () 
@@ -23,11 +24,15 @@ namespace VRCalibrationTool
 		/// </summary>
 		public void ChooseExperiment() 
 		{
-			if (_roomManager.j != 0) {
-				_roomManager.j--;
-				_roomManager.module [_roomManager.i] = gameObject.name;
-				_roomManager.i++;
-				}
+			if (_roomManager._wallCounter != 0) 
+			{
+				_roomManager._wallCounter--;
+				_roomManager._tableCounter--;
+				_roomManager._experiments [_roomManager._experimentsCounter] = _experiments[0];
+				_roomManager._placeholdersRoomNeeded += 1;
+				_roomManager._placeholdersTableNeeded += 1;
+				_roomManager._experimentsCounter++;
+			}
 		}
 	}
 }
