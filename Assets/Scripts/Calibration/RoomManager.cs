@@ -30,7 +30,27 @@ namespace VRCalibrationTool
 		public int _experimentsCounter;							//Counter for number of  experiments added
 		public List<int> _possibleWallTop;						//List of numbers to organize wall blocs randomwly
 		public List<int> _possibleTable;						//List of numbers to organize table blocs randomwly
+		[SerializeField]private List<int> _finishedListWall;		
+		[SerializeField]private List<int> _finishedListTable;	
+		public int counterPosition = 0;
 
+		public List<int> GenerateRandomList(int maxNumbers) {
+
+			List<int> uniqueNumbers = new List<int> ();
+			List<int> finishedList = new List<int> ();
+
+			for (int i = 0; i < maxNumbers; i++) {
+				uniqueNumbers.Add (i);
+			}
+
+			for (int i = 0; i < maxNumbers; i++) {
+				int ranNum = uniqueNumbers [Random.Range (0, uniqueNumbers.Count)];
+				finishedList.Add (ranNum);
+				uniqueNumbers.Remove (ranNum);
+			}
+
+			return finishedList;
+		}
 
 		/// <summary>
 		/// Creates an experiment selection button
@@ -85,58 +105,85 @@ namespace VRCalibrationTool
 				Debug.Log ("Number of placeholders wall offered: "+_placeholdersRoom.Length+". Number of placeholders wall asked: "+_placeholdersRoomNeeded);
 				Debug.Log ("Number of placeholders table offered: "+_placeholdersTable.Length+". Number of placeholders table asked: "+_placeholdersTableNeeded);
 
-				//List<int> possibleWallTop = new List<int> (3);
-				//List<int> possibleTable = new List<int> (placeholdersTableNeeded);
-				int possibleWallCounter = 0;
-				int possibleTableCounter = 0;
+				_finishedListWall = GenerateRandomList (_placeholdersRoom.Length);
+				_finishedListTable = GenerateRandomList (_placeholdersRoom.Length);
+
+
+
+				ViveControllerManager ViveControllerManager = GameObject.Find ("ViveManager").GetComponent<ViveControllerManager> ();
+
 
 				//Instantiating and placing expperiments
 				foreach (Experiment experiment in _experiments) 
 				{
 					GameObject instantiatedExperiment = (GameObject) Instantiate (experiment.prefab);
 
-					Debug.Log ("wallcounter= " + possibleWallCounter);
+					instantiatedExperiment.GetComponent<ColorXP> ()._expNumber.text = "A" + _finishedListWall [counterPosition];
 
-					int wallCounter = 0;
-					int tableCounter = 0;
 
-					foreach(Transform child in instantiatedExperiment.transform) 
-					{
-						if (child.tag == "Wall top") 
+						if (instantiatedExperiment.tag == "Wall top") 
 						{
-							//List<int> possibleWallTop = new List<int> (placeholdersRoomNeeded);
-				
+							instantiatedExperiment.transform.parent = _placeholdersRoom [counterPosition].transform;
 
-							_possibleWallTop.Add(possibleWallCounter);
-							possibleWallCounter++;
-							
+							Debug.Log (instantiatedExperiment.name);
 
-							int randomWallTop = Random.Range (0, _possibleWallTop.Count);
-							int randUse = _possibleWallTop [randomWallTop];
-							//possibleWallTop.RemoveAt (randomWallTop);
-							child.position = _placeholdersRoom [randUse].transform.position;
-							child.rotation = _placeholdersRoom [randUse].transform.rotation;
-							child.localScale = _placeholdersRoom [randUse].transform.localScale;
-							Debug.Log(child.position);
-							Debug.Log (_placeholdersRoom [randUse].transform.position);
-							wallCounter++;
+							instantiatedExperiment.transform.position = _placeholdersRoom [counterPosition].transform.position;
+							instantiatedExperiment.transform.localRotation = Quaternion.identity;
+							instantiatedExperiment.transform.localScale = new Vector3(1f, 1f, 1f);
+
+							instantiatedExperiment.transform.parent = _placeholdersRoom [counterPosition].transform.parent;
+							Destroy (_placeholdersRoom [counterPosition].gameObject);
+							counterPosition++;
+
+
+
+
+							/*foreach(Transform child2 in _placeholdersRoom[counterPosition].transform) {
+								
+								if (child2.tag == "PositionTag") {
+									Debug.Log ("Instantiating Positiong Tag");
+									Debug.Log (child2.name);
+
+									child2.gameObject.AddComponent<PositionTag> ();
+									child2.GetComponent<PositionTag> ().positionTagIndex = counterPosition;
+
+									Debug.Log ("Index: " + counterPosition);
+
+									PositionTag pos = (PositionTag) ViveControllerManager.CreatePositionTag ();
+									pos.transform.position = child2.position;
+									ViveControllerManager._PositionTags [counterPosition].transform.position = 
+									counterPosition++;
+								}
+
+
+
+								child.GetComponent<VirtualObject> ().Calibrate (ViveControllerManager._PositionTags);
+
+
+
+								ViveControllerManager._PositionTags [0] = null;
+								ViveControllerManager._PositionTags [1] = null;
+								ViveControllerManager._PositionTags [2] = null;
+								Debug.Log ("YOOOOHIII");
+
+							}
+							counterPosition = 0;*/
 						} 
-						else if (child.tag == "Table") 
+
+
+					
+
+
+
+					/*foreach(Transform child in instantiatedExperiment.transform) 
+					{
+						
+						if (child.tag == "Table") 
 						{
-							//List<int> possibleTable = new List<int> (placeholdersTableNeeded);
 
-
-							_possibleTable.Add(possibleWallCounter);
-							possibleTableCounter++;
-
-							int randomTable = Random.Range (0, _possibleTable.Count);
-							int randUsed = _possibleTable [randomTable];
-							//possibleTable.RemoveAt (randomTable);
-
-							child.position = _placeholdersTable [randUsed].transform.position;
-							tableCounter++;
 						}
-					}
+					}*/
+
 				}
 			} 
 			else 

@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class tesy : MonoBehaviour {
 
+
+	private int maxNumbers = 3;
+	[SerializeField]private List<int> uniqueNumbers;
+	[SerializeField]private List<int> finishedList;
+
 	public GameObject room;
 	public GameObject bloc;
 	public GameObject mur1, mur2, mur3;
@@ -11,8 +16,26 @@ public class tesy : MonoBehaviour {
 	public GameObject inst1, inst2;
 
 
+	public void GenerateRandomList() {
+		for (int i = 0; i < maxNumbers; i++) {
+			uniqueNumbers.Add (i);
+		}
+
+		for (int i = 0; i < maxNumbers; i++) {
+			int ranNum = uniqueNumbers [Random.Range (0, uniqueNumbers.Count)];
+			finishedList.Add (ranNum);
+			uniqueNumbers.Remove (ranNum);
+		}
+	}
+
+
 	// Use this for initialization
 	void Start () {
+
+		uniqueNumbers = new List<int> ();
+		finishedList = new List<int> ();
+		GenerateRandomList ();
+
 
 		inst1 = (GameObject) Instantiate (room);
 		mur1 = GameObject.Find("ColorXP (1)");
@@ -34,9 +57,5 @@ public class tesy : MonoBehaviour {
 
 		
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
 }

@@ -61,6 +61,12 @@ namespace VRCalibrationTool
 		/// <param name="objectCalibrate">Vive Tracker used if the virtual object is movable.</param>
 		void CalibrateVR(GameObject objectCalibrate) 
 		{
+
+			/*_PositionTags [0] = null;
+			_PositionTags [1] = null;
+			_PositionTags [2] = null;*/
+			Debug.Log ("YOOOOHIII");
+
 			objectCalibrate.GetComponent<VirtualObject> ().Calibrate (_PositionTags);
 
 			ItemEntry calObj = new ItemEntry();
@@ -135,6 +141,8 @@ namespace VRCalibrationTool
 				_distancePoint[i] = Vector3.Distance (_PositionTags [i].gameObject.transform.position, objectCalibrate.GetComponent<VirtualObject> ().virtualPositionTags [i].transform.position);
 				_PositionTags [i].GetComponent<Renderer> ().material.color = new Color (_distancePoint[i]*5, 0f, 0f, 0.6f);
 			}
+
+
 				
 			/*orderedTags = new PositionTag[_numberPoints];
 
@@ -161,6 +169,8 @@ namespace VRCalibrationTool
                 objectCalibrate.transform.parent = viveTracker.transform;
                 transformTracker(viveTracker);
             }
+
+
         }
 
         /// <summary>

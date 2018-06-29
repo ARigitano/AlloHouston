@@ -11,7 +11,6 @@ public class Experiment : ScriptableObject
 	public int placeholdersWallTop = 1;
 	public int plaholdersWallTablet = 0;
 	public int plaholdersWallBottom = 0;
-	public int plaholdersTable = 1;
 	public GameObject prefab;
 
 }

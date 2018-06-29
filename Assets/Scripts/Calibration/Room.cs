@@ -12,6 +12,7 @@ namespace VRCalibrationTool
 	{
 		private RoomManager _roomManager;
 		public GameObject[] _placeholders; //The placeholders offered by this room.
+        public GameObject canvas;
 		[SerializeField] private int _index; //1 = room, 2 = table
 
 		// Use this for initialization

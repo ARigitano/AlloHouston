@@ -30,13 +30,22 @@ public class AutoCaliberMenu : MonoBehaviour
 		/// </summary>
 		void OnClick()
 		{
+
+
 			
 
 			string objectCalibrateName = EventSystem.current.currentSelectedGameObject.transform.GetChild(0).GetComponent<Text>().text;
 			GameObject objectCalibrate = (GameObject)Resources.Load (objectCalibrateName);
 			Debug.Log (objectCalibrate.name);
 
+
+
 			ViveControllerManager ViveControllerManager = GameObject.Find ("ViveManager").GetComponent<ViveControllerManager> ();
+
+			/*ViveControllerManager._PositionTags [0] = null;
+			ViveControllerManager._PositionTags [1] = null;
+			ViveControllerManager._PositionTags [2] = null;*/
+			Debug.Log ("YOOOOHIII");
 
 			ViveControllerManager.CreatePositionTag ();
 			ViveControllerManager.CreatePositionTag ();
