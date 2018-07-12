@@ -1,6 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
+﻿//Manages the different steps of the game
 
 using System.Collections;
 using System.Collections.Generic;
@@ -8,13 +6,13 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public int incidentsFixed = 0;
-    [SerializeField]
-    public TextMesh _tableText;
+    public int incidentsFixed = 0;                  //Number of experiments that have been solved
+    [SerializeField] public TextMesh _tableText;    //Table screen 
 
     // Use this for initialization
     private void Start()
     {
+
     }
 
     // Update is called once per frame
@@ -26,9 +24,14 @@ public class GameManager : MonoBehaviour
 
 	}*/
 
-    /*public void EndCalibration() {
+    public void EndCalibration() {
+        GameObject[] calibrationPoints = GameObject.FindGameObjectsWithTag("PositionTag");
 
-	}*/
+        foreach(GameObject calibrationPoint in calibrationPoints)
+        {
+            calibrationPoint.GetComponent<MeshRenderer>().enabled = false;
+        }
+	}
 
     /*public void StartGame() {
 
@@ -38,7 +41,13 @@ public class GameManager : MonoBehaviour
     {
         if (incidentsFixed == 3)
         {
-            _tableText.text = "Victory";
+            GameObject[] errors = GameObject.FindGameObjectsWithTag("Error");
+            foreach(GameObject error in errors)
+            {
+                Destroy(error);
+            }
+
+            _tableText.text = "All incidents have\nbeen cleared.";
             Debug.Log("End of game");
         }
     }

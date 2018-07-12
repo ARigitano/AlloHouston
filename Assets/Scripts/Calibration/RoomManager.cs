@@ -30,20 +30,27 @@ namespace VRCalibrationTool
 		public int _experimentsCounter;							//Counter for number of  experiments added
 		public List<int> _possibleWallTop;						//List of numbers to organize wall blocs randomwly
 		public List<int> _possibleTable;						//List of numbers to organize table blocs randomwly
-		[SerializeField]private List<int> _finishedListWall;		
-		[SerializeField]private List<int> _finishedListTable;	
-		public int counterPosition = 0;
+		[SerializeField]private List<int> _finishedListWall;    //Ordered list of numbers to organize wall blocs randomwly
+        [SerializeField]private List<int> _finishedListTable;   //Ordered list of numbers to organize table blocs randomwly
+        public int counterPosition = 0;
 
-		public List<int> GenerateRandomList(int maxNumbers) {
+        /// <summary>
+        /// Randomly generates a list of unique numbers
+        /// </summary>
+        /// <param name="maxNumbers">Number of numbers to generate</param>
+        /// <returns>The list of randomly generated unique numbers</returns>
+		public List<int> GenerateRandomList(int maxNumbers)
+        {
+			List<int> uniqueNumbers = new List<int> (); //List of unique numbers ranked from smallest to biggest
+			List<int> finishedList = new List<int> ();  //List of unique numbers randomly ranked
 
-			List<int> uniqueNumbers = new List<int> ();
-			List<int> finishedList = new List<int> ();
-
-			for (int i = 0; i < maxNumbers; i++) {
+			for (int i = 0; i < maxNumbers; i++)
+            {
 				uniqueNumbers.Add (i);
 			}
 
-			for (int i = 0; i < maxNumbers; i++) {
+			for (int i = 0; i < maxNumbers; i++)
+            {
 				int ranNum = uniqueNumbers [Random.Range (0, uniqueNumbers.Count)];
 				finishedList.Add (ranNum);
 				uniqueNumbers.Remove (ranNum);
@@ -70,22 +77,6 @@ namespace VRCalibrationTool
 
 		public void calibrateExperiments() 
 		{
-				//voir combien de placeholders mur
-				//voir besoin combien placeholcers mur
-				//result mur
-				//voir combien de placeholders table
-				//voir besoin combien placeholders table
-				//result table
-				//si result mur et table ok
-				//instantier experiences
-				//repartir aleatoirement blocs murs
-				//repartir aleatoirement blocs table
-				//message ok
-				//si result mur et table pas ok
-				//message status mur
-				//message status table
-
-
 			//Checking if there are enough placeholders to meet the demand
 			bool isRoomOk = false;
 
@@ -99,7 +90,7 @@ namespace VRCalibrationTool
 
 			Debug.Log ("Room: " + isRoomOk + " Table: " + isTableOK);
 
-			if (isRoomOk && isTableOK) 
+			if (isRoomOk) 
 			{
 
 				Debug.Log ("Number of placeholders wall offered: "+_placeholdersRoom.Length+". Number of placeholders wall asked: "+_placeholdersRoomNeeded);

@@ -16,12 +16,11 @@ public class ColorButon : MonoBehaviour {
     }
 
     void OnTriggerEnter(Collider other) {
-		if (other.tag == "ViveController" && !_fixed) {
+		if (other.tag == "ViveController" && !_colorXP._fixed) {
             
             _colorXP.Resolved(index);
-            _gameManager.incidentsFixed++;
-            _gameManager.EndGame();
-            _fixed = true;
+            
+            _colorXP._fixed = true;
 			
 		}
 	}
