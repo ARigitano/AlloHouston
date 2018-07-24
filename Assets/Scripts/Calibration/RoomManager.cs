@@ -107,12 +107,14 @@ namespace VRCalibrationTool
 				//Instantiating and placing expperiments
 				foreach (Experiment experiment in _experiments) 
 				{
-					GameObject instantiatedExperiment = (GameObject) Instantiate (experiment.prefab);
+                    GameObject instantiatedExperimentGameObject = (GameObject) Instantiate (experiment.prefab);
+                    Experimentation instantiatedExperiment = (Experimentation)instantiatedExperimentGameObject.GetComponent<Experimentation>();
 
-					instantiatedExperiment.GetComponent<ColorXP> ()._expNumber.text = "A" + _finishedListWall [counterPosition];
+                    //instantiatedExperiment.GetComponent<ColorXP> ()._expNumber.text = "A" + _finishedListWall [counterPosition];
+                    instantiatedExperiment._expNumber.text = "A" + _finishedListWall[counterPosition];
 
 
-						if (instantiatedExperiment.tag == "Wall top") 
+                    if (instantiatedExperiment.tag == "Wall top") 
 						{
 							instantiatedExperiment.transform.parent = _placeholdersRoom [counterPosition].transform;
 
@@ -120,10 +122,10 @@ namespace VRCalibrationTool
 
 							instantiatedExperiment.transform.position = _placeholdersRoom [counterPosition].transform.position;
 							instantiatedExperiment.transform.localRotation = Quaternion.identity;
-							instantiatedExperiment.transform.localScale = new Vector3(1f, 1f, 1f);
+							//instantiatedExperiment.transform.localScale = new Vector3(1f, 1f, 1f);
 
-							instantiatedExperiment.transform.parent = _placeholdersRoom [counterPosition].transform.parent;
-							Destroy (_placeholdersRoom [counterPosition].gameObject);
+							//instantiatedExperiment.transform.parent = _placeholdersRoom [counterPosition].transform.parent;
+							//Destroy (_placeholdersRoom [counterPosition].gameObject);
 							counterPosition++;
 
 
@@ -189,7 +191,8 @@ namespace VRCalibrationTool
 		// Update is called once per frame
 		void Update () 
 		{
-			if (_room != null) 
+            
+            if (_room != null) 
 			{
 				//j = placeholders.Length;
 				_numberPlaceholdersText.text = "Wall Top free: " + _wallCounter;

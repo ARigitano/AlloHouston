@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DigiButton : MonoBehaviour {
+public class TrackedObject : MonoBehaviour {
+
+    public string _type; 
 
 	// Use this for initialization
 	void Start () {

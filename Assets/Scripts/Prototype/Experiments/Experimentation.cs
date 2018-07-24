@@ -17,6 +17,7 @@ public class Experimentation : MonoBehaviour {
     public string _errorReference;
     protected GameManager _gameManager;
     public AudioSource _success, _fail;
+    public string _errorText;
 
        protected void AttachPanel()
     {
@@ -27,27 +28,18 @@ public class Experimentation : MonoBehaviour {
         text.transform.position = panelToAttachTextTo.transform.position;
     }
 
-    // Use this for initialization
-    void Start()
-    {
-        _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-        table = GameObject.FindGameObjectWithTag("Table").GetComponent<Room>();
-    }
 
-
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 
     /// <summary>
     /// Displays a status message depending of the outcome of the experiment
     /// </summary>
     /// <param name="index">Number chose by pressin a colored button</param>
-    public void Resolved(int index)
+    public void Resolved(string inputValue)
     {
-        if (index == error)
+        Debug.Log(inputValue);
+        Debug.Log(_errorReference);
+
+        if (inputValue == _errorText)
         {
             Debug.Log("Experiment solved");
             _success.Play();

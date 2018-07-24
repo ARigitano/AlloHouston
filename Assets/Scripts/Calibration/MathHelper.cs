@@ -3,7 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using UnityEngine;
-using UnityEngine.Collections;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace VRCalibrationTool
