@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace VRCalibrationTool
 {
+    /// <summary>
+    /// Control table
+    /// </summary>
     public class Table : Room
     {
 
@@ -14,7 +17,6 @@ namespace VRCalibrationTool
         void Start()
         {
             _roomManager = GameObject.Find("RoomManager").GetComponent<RoomManager>();
-
             _roomManager._table = gameObject;
         }
 

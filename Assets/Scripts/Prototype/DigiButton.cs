@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+//Digit button from the digicode experiment
 public class DigiButton : MonoBehaviour
 {
-    [SerializeField] private int _value; //Value of this button
+    [SerializeField] private int _value;            //Value of this button
     [SerializeField] private DigicodeXP _digicodXP; //Digicode experiment linked with this button
     private GameManager _gameManager;
 
@@ -27,8 +28,6 @@ public class DigiButton : MonoBehaviour
                 _digicodXP._numberText.text += _value.ToString();
                 _digicodXP._number = Convert.ToInt32(_digicodXP._numberText.text);
             }
-
-            
         }
     }
 }

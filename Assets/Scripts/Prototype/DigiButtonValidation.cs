@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//Button from the digicode experiment to send the final number in an attempt to clear the incident
 public class DigiButtonValidation : MonoBehaviour {
 
-    [SerializeField] private DigicodeXP _digicodXP;
+    [SerializeField] private DigicodeXP _digicodXP; //Digicode experiment linked with this button
 
     void OnTriggerEnter(Collider other)
     {
@@ -14,5 +15,4 @@ public class DigiButtonValidation : MonoBehaviour {
             _digicodXP._fixed = true;
         }
     }
-
 }
