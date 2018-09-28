@@ -43,7 +43,7 @@ public class ColorXP : Experimentation {
                 break;
         }
 
-        _errorText = _errorReference+"ok";
+        _errorText = _errorReference+"";
 
         _table = GameObject.FindGameObjectWithTag("Table").GetComponent<Room>();
 
@@ -56,7 +56,7 @@ public class ColorXP : Experimentation {
 
     private void Update()
     {
-        if (_ledState == 0)
+        /*if (_ledState == 0)
         {
             if (_table.GetComponent<Table>()._trackedObject == "cube")
                 _isLedOn = true;
@@ -69,15 +69,15 @@ public class ColorXP : Experimentation {
                 _isLedOn = false;
             else
                 _isLedOn = true;
-        }
+        }*/
 
         if (_isLedOn)
         {
             _led.GetComponent<MeshRenderer>().material = _ledColor[0];
-            _ledMessage = "ok";
+            _ledMessage = "";
         }
         else {
-            _led.GetComponent<MeshRenderer>().material = _ledColor[1];
+            _led.GetComponent<MeshRenderer>().material = _ledColor[0];
             _ledMessage = "";
         }
 

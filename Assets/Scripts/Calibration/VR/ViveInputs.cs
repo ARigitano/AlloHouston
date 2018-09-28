@@ -26,6 +26,8 @@ public class ViveInputs : MonoBehaviour
         }
         _trackedController.TriggerClicked -= HandleTriggerClicked;
         _trackedController.TriggerClicked += HandleTriggerClicked;
+
+        
     }
 
     private void HandleTriggerClicked(object sender, ClickedEventArgs e)
@@ -44,12 +46,26 @@ public class ViveInputs : MonoBehaviour
             button.Select();
             Debug.Log("HandlePointerIn", e.target.gameObject);
         }
+
+        var slider = e.target.GetComponent<Slider>();
+        if (slider != null)
+        {
+            slider.Select();
+            Debug.Log("HandlePointerIn", e.target.gameObject);
+        }
     }
 
     private void HandlePointerOut(object sender, PointerEventArgs e)
     {
         var button = e.target.GetComponent<Button>();
         if (button != null)
+        {
+            EventSystem.current.SetSelectedGameObject(null);
+            Debug.Log("HandlePointerOut", e.target.gameObject);
+        }
+
+        var slider = e.target.GetComponent<Slider>();
+        if (slider != null)
         {
             EventSystem.current.SetSelectedGameObject(null);
             Debug.Log("HandlePointerOut", e.target.gameObject);

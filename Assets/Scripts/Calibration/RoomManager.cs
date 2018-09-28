@@ -112,12 +112,12 @@ namespace VRCalibrationTool
                 //Instantiating and placing decoration
                 foreach(GameObject decoration in _decorationRoom)
                 {
-                    int randomNuber = Random.Range(0, 2);
+                    /*int randomNuber = Random.Range(0, 2);
                     GameObject instantiatedDecorationGameObject = (GameObject)Instantiate(_wallFurniture[randomNuber]);
                     instantiatedDecorationGameObject.transform.parent = decoration.transform;
                     instantiatedDecorationGameObject.transform.position = decoration.transform.position;
                     instantiatedDecorationGameObject.transform.localScale = _room.transform.localScale;
-                    instantiatedDecorationGameObject.transform.localRotation = Quaternion.identity;
+                    instantiatedDecorationGameObject.transform.localRotation = Quaternion.identity;*/
 
                 }
 			} 
