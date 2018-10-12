@@ -84,7 +84,7 @@ namespace VRCalibrationTool
 				//Instantiating and placing expperiments
 				foreach (Experiment experiment in _experiments) 
 				{
-                    GameObject instantiatedExperimentGameObject = (GameObject) Instantiate (experiment.prefab);
+                    GameObject instantiatedExperimentGameObject = (GameObject) Instantiate (experiment.prefab, _room.transform);
                     Experimentation instantiatedExperiment = (Experimentation)instantiatedExperimentGameObject.GetComponent<Experimentation>();
 
                     instantiatedExperiment._expNumber.text = "A" + _finishedListWall[_counterPosition];
@@ -93,11 +93,11 @@ namespace VRCalibrationTool
                     {
                         Debug.Log(_finishedListWall[_counterPosition]);
                         if(_placeholdersRoom[_finishedListWall[_counterPosition]] != null)
-                        instantiatedExperiment.transform.parent = _placeholdersRoom[_finishedListWall[_counterPosition]].transform;
+                        //instantiatedExperiment.transform.parent = _placeholdersRoom[_finishedListWall[_counterPosition]].transform;
                         
                         instantiatedExperiment.transform.position = _placeholdersRoom[_finishedListWall[_counterPosition]].transform.position;
-                        instantiatedExperiment.transform.localScale = _room.transform.localScale;
-                        instantiatedExperiment.transform.localRotation = Quaternion.identity;
+                        //instantiatedExperiment.transform.localScale = _room.transform.localScale;
+                        instantiatedExperiment.transform.localRotation = _placeholdersRoom[_finishedListWall[_counterPosition]].transform.localRotation;
                         _counterPosition++;
                     } else if (instantiatedExperiment.tag == "Wall bottom")
                         {
