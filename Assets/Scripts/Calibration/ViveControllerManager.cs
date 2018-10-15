@@ -16,14 +16,34 @@ namespace VRCalibrationTool
 		[SerializeField] private int _numberPoints;                 //Number of position tags needed for a calibration
 		[SerializeField] private int _indexPositionTag = 0;         //Number of instantiated position tags    
 		[SerializeField] private bool _hasWaited = false;           //Security stop to prevent removing position tags by mistake
-		[SerializeField] private GameObject[] _objectsCollection;   //Contains all the objects that can be instantiated during the calibration phase
+		[SerializeField] private VirtualObject[] _virtualObjectPrefabs;   //Contains all the objects that can be instantiated during the calibration phase
 		[SerializeField] private float[] _distancePoint;            //Distance between an instantiated position tag and the position where it should be on the instantiated object
-		public PositionTag[] _PositionTags;                         //Contains the instantiated position tags
+		public PositionTag[] _positionTags;                         //Contains the instantiated position tags
 		public bool _touchingPoint = false;                         //Is the precision spike touching an instantiated position tag?
 		public bool _touchingTracker = false;                       //Is the precision spike touching a ViveTracker?
 		public GameObject _incorrectPoint;                          //Position tag considered as incorrectly positionned
-		public int _objectNumber;                                   //Index of an object inside the instatiable objects collection
+		public int _virtualObjectPrefabIndex;                                   //Index of an object inside the instatiable objects collection
         [SerializeField] private GameManager _gameManager;
+
+        public VirtualObject currentVirtualObjectPrefab
+        {
+            get
+            {
+                if (_virtualObjectPrefabs != null && _virtualObjectPrefabIndex >= 0 && _virtualObjectPrefabIndex < _virtualObjectPrefabs.Length)
+                    return _virtualObjectPrefabs[_virtualObjectPrefabIndex];
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Creates n position tags.
+        /// </summary>
+        /// <param name="n">The number of position tags</param>
+        public void CreatePositionTag(int n)
+        {
+            for (int i = 0; i < n; i++)
+                CreatePositionTag();
+        }
 
 		/// <summary>
 		/// Creates a new position tag at the position of the controller.
@@ -31,13 +51,13 @@ namespace VRCalibrationTool
 		public void CreatePositionTag ()
 		{
 			PositionTag pTag = (PositionTag)Instantiate (_positionTag, _spawnPosition.position, Quaternion.identity);
-			for (int i = 0; i < _PositionTags.Length; i++) 
+			for (int i = 0; i < _positionTags.Length; i++) 
 			{
-				if (_PositionTags [i] == null) 
+				if (_positionTags [i] == null) 
 				{
 					pTag.GetComponent<PositionTag> ().positionTagIndex = i;
 					pTag.GetComponent<Renderer> ().material.color = new Color (i * 0.2f, i * 0.2f, i * 0.2f, 0.6f);
-					_PositionTags [i] = pTag;
+					_positionTags [i] = pTag;
 					break;
 				}
 			}
@@ -50,101 +70,59 @@ namespace VRCalibrationTool
 		/// <summary>
 		/// Calibrates the virtual object in VR.
 		/// </summary>
-		/// <param name="objectCalibrate">Vive Tracker used if the virtual object is movable.</param>
-		public void CalibrateVR(GameObject objectCalibrate) 
+		/// <param name="virtualObject">Vive Tracker used if the virtual object is movable.</param>
+		public void CalibrateVR(VirtualObject virtualObject) 
 		{
             //Storing the coordinates of the position tags used to instantiate the object
-            objectCalibrate.GetComponent<VirtualObject> ().Calibrate (_PositionTags);
-
-			ItemEntry calObj = new ItemEntry();
-			calObj.type = _objectsCollection[_objectNumber].name;
-
-			calObj.point1 = new SerializableVector3();
-			calObj.point1.X = _PositionTags [0].transform.position.x;
-			calObj.point1.Y = _PositionTags [0].transform.position.y;
-			calObj.point1.Z = _PositionTags [0].transform.position.z;
-
-			calObj.point2 = new SerializableVector3();
-			calObj.point2.X = _PositionTags [1].transform.position.x;
-			calObj.point2.Y = _PositionTags [1].transform.position.y;
-			calObj.point2.Z = _PositionTags [1].transform.position.z;
-
-			calObj.point3 = new SerializableVector3();
-			calObj.point3.X = _PositionTags [2].transform.position.x;
-			calObj.point3.Y = _PositionTags [2].transform.position.y;
-			calObj.point3.Z = _PositionTags [2].transform.position.z;
+            virtualObject.Calibrate (_positionTags);
+            ItemDatabase itemDB = XMLManager.instance.itemDB;
+            string itemType = _virtualObjectPrefabs[_virtualObjectPrefabIndex].name;
+            ItemEntry calObj = new ItemEntry(itemType, _positionTags);
+            bool added = false;
 
             //Entering or updating those coordinates inside the XML file
-			if (XMLManager.ins.itemDB.list.Count != 0) 
-			{
-				for (int i = 0; i < XMLManager.ins.itemDB.list.Count; i++) 
-				{
-
-					if (XMLManager.ins.itemDB.list [i].type == _objectsCollection [_objectNumber].name) 
-					{
-                        Debug.Log("Item entry modified in XML: " + calObj.type);
-                        XMLManager.ins.itemDB.list [i].type = _objectsCollection [_objectNumber].name;
-
-						XMLManager.ins.itemDB.list [i].point1 = new SerializableVector3 ();
-                        XMLManager.ins.itemDB.list[i].point1.X =  _PositionTags [0].transform.position.x;
-                        XMLManager.ins.itemDB.list[i].point1.Y =  _PositionTags [0].transform.position.y;
-                        XMLManager.ins.itemDB.list[i].point1.Z =  _PositionTags [0].transform.position.z;
-
-                        XMLManager.ins.itemDB.list [i].point2 = new SerializableVector3 ();
-                        XMLManager.ins.itemDB.list[i].point2.X =  _PositionTags [1].transform.position.x;
-                        XMLManager.ins.itemDB.list[i].point2.Y =  _PositionTags [1].transform.position.y;
-                        XMLManager.ins.itemDB.list[i].point2.Z =  _PositionTags [1].transform.position.z;
-
-						XMLManager.ins.itemDB.list [i].point3 = new SerializableVector3 ();
-						XMLManager.ins.itemDB.list [i].point3.X = _PositionTags [2].transform.position.x;
-						XMLManager.ins.itemDB.list [i].point3.Y = _PositionTags [2].transform.position.y;
-						XMLManager.ins.itemDB.list [i].point3.Z = _PositionTags [2].transform.position.z;
-
-						break;
-					} 
-					else if (i == XMLManager.ins.itemDB.list.Count - 1) 
-					{
-                        Debug.Log("Item entry created in XML 1: " + calObj.type);
-                        XMLManager.ins.itemDB.list.Add(calObj);
-					} 
-					else
-						Debug.Log ("Error"+ _objectsCollection[_objectNumber].name);
-				}
-			} 
-			else 
-			{
-				XMLManager.ins.itemDB.list.Add(calObj);
-				Debug.Log ("Item entry created in XML2: "+calObj.type);
-			}
-
-			XMLManager.ins.SaveItems ();
+            for (int i = 0; i < itemDB.list.Count; i++)
+            {
+                if (itemDB.list[i].type == _virtualObjectPrefabs[_virtualObjectPrefabIndex].name)
+                {
+                    Debug.Log("Item entry modified in XML: " + calObj.type);
+                    itemDB.list[i] = calObj;
+                    added = true;
+                }
+            }
+            if (!added)
+            {
+                itemDB.list.Add(calObj);
+                Debug.Log("Item entry created in XML: " + calObj.type);
+            }
+			XMLManager.instance.SaveItems ();
 
             //Coloring the position tags according to their distance to their theoretical positions
 			_distancePoint = new float[_numberPoints];
 			Color cStart = Color.red;
 			Color cEnd = Color.white;
-			for (int i = 0; i < _PositionTags.Length; i++) 
+			for (int i = 0; i < _positionTags.Length; i++) 
 			{
-				_distancePoint[i] = Vector3.Distance (_PositionTags [i].gameObject.transform.position, objectCalibrate.GetComponent<VirtualObject> ().virtualPositionTags [i].transform.position);
-				_PositionTags [i].GetComponent<Renderer> ().material.color = new Color (_distancePoint[i]*5, 0f, 0f, 0.6f);
+				_distancePoint[i] = Vector3.Distance (_positionTags [i].gameObject.transform.position, virtualObject.GetComponent<VirtualObject> ().virtualPositionTags [i].transform.position);
+				_positionTags [i].GetComponent<Renderer> ().material.color = new Color (_distancePoint[i]*5, 0f, 0f, 0.6f);
 			}
 
             //Should the object be tracked?
             if (_touchingTracker)
             {
                 GameObject viveTracker = GameObject.FindGameObjectWithTag("ViveTracker");
-                objectCalibrate.transform.parent = viveTracker.transform;
-                transformTracker(viveTracker);
+                virtualObject.transform.parent = viveTracker.transform;
+                TransformTracker(viveTracker);
             }
         }
 
         /// <summary>
         /// Waits one second not to delete a position tag by mistake after it has been created.
         /// </summary>
-        private IEnumerator Waiting()
+        private IEnumerator Waiting(int time = 1)
         {
             _hasWaited = false;
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(time);
             _hasWaited = true;
         }
 
@@ -166,12 +144,12 @@ namespace VRCalibrationTool
         /// </summary>
         private void ResetPositionTags()
         {
-            for (int i = 0; i < _PositionTags.Length; i++)
+            for (int i = 0; i < _positionTags.Length; i++)
             {
-                if (_PositionTags[i] != null)
+                if (_positionTags[i] != null)
                 {
-                    Destroy(_PositionTags[i].gameObject);
-                    _PositionTags[i] = null;
+                    Destroy(_positionTags[i].gameObject);
+                    _positionTags[i] = null;
                 }
             }
             _indexPositionTag = 0;
@@ -183,7 +161,7 @@ namespace VRCalibrationTool
         /// Turns the instantiated object into a tracked object
         /// </summary>
         /// <param name="tracker">The ViveTracker attached to the object</param>
-        private void transformTracker(GameObject tracker)
+        private void TransformTracker(GameObject tracker)
         {
             if (tracker.GetComponent<SteamVR_TrackedObject>() == null)
             {
@@ -204,14 +182,10 @@ namespace VRCalibrationTool
             {
                 if (!_touchingPoint)
                 {
-                    if (_indexPositionTag < _numberPoints)
-                    {
+                    if (_indexPositionTag < currentVirtualObjectPrefab.virtualPositionTags.Length)
                         CreatePositionTag();
-                    }
-                    else if (_objectsCollection[_objectNumber].GetComponent<VirtualObject>() != null)
-                    {
-						CalibrateVR(Instantiate(_objectsCollection[_objectNumber]));
-                    }
+                    else
+						CalibrateVR(Instantiate(currentVirtualObjectPrefab));
                 }
                 else if (_incorrectPoint != null && _hasWaited && _touchingPoint)
                 {

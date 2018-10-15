@@ -84,7 +84,7 @@ namespace VRCalibrationTool
 				//Instantiating and placing expperiments
 				foreach (Experiment experiment in _experiments) 
 				{
-                    GameObject instantiatedExperimentGameObject = (GameObject) Instantiate (experiment.prefab, _room.transform);
+                    GameObject instantiatedExperimentGameObject = (GameObject) Instantiate (experiment.prefab);
                     Experimentation instantiatedExperiment = (Experimentation)instantiatedExperimentGameObject.GetComponent<Experimentation>();
 
                     instantiatedExperiment._expNumber.text = "A" + _finishedListWall[_counterPosition];
@@ -93,11 +93,11 @@ namespace VRCalibrationTool
                     {
                         Debug.Log(_finishedListWall[_counterPosition]);
                         if(_placeholdersRoom[_finishedListWall[_counterPosition]] != null)
-                        //instantiatedExperiment.transform.parent = _placeholdersRoom[_finishedListWall[_counterPosition]].transform;
+                        instantiatedExperiment.transform.parent = _placeholdersRoom[_finishedListWall[_counterPosition]].transform;
                         
                         instantiatedExperiment.transform.position = _placeholdersRoom[_finishedListWall[_counterPosition]].transform.position;
-                        //instantiatedExperiment.transform.localScale = _room.transform.localScale;
-                        instantiatedExperiment.transform.localRotation = _placeholdersRoom[_finishedListWall[_counterPosition]].transform.localRotation;
+                        instantiatedExperiment.transform.localScale = _room.transform.localScale;
+                        instantiatedExperiment.transform.localRotation = Quaternion.identity;
                         _counterPosition++;
                     } else if (instantiatedExperiment.tag == "Wall bottom")
                         {
@@ -112,12 +112,12 @@ namespace VRCalibrationTool
                 //Instantiating and placing decoration
                 foreach(GameObject decoration in _decorationRoom)
                 {
-                    /*int randomNuber = Random.Range(0, 2);
+                    int randomNuber = Random.Range(0, 2);
                     GameObject instantiatedDecorationGameObject = (GameObject)Instantiate(_wallFurniture[randomNuber]);
                     instantiatedDecorationGameObject.transform.parent = decoration.transform;
                     instantiatedDecorationGameObject.transform.position = decoration.transform.position;
                     instantiatedDecorationGameObject.transform.localScale = _room.transform.localScale;
-                    instantiatedDecorationGameObject.transform.localRotation = Quaternion.identity;*/
+                    instantiatedDecorationGameObject.transform.localRotation = Quaternion.identity;
 
                 }
 			} 

@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace VRCalibrationTool
 {
-    public class buttonCollection : MonoBehaviour
+    public class ButtonCollection : MonoBehaviour
     {
         [SerializeField]
         private ViveControllerManager _viveManager;
@@ -18,7 +18,7 @@ namespace VRCalibrationTool
 
         public void AssignCollectionNumber()
         {
-            _viveManager._objectNumber = _buttonID;
+            _viveManager._virtualObjectPrefabIndex = _buttonID;
         }
     }
 }

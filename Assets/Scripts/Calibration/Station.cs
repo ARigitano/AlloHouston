@@ -32,7 +32,7 @@ namespace VRCalibrationTool
                 {
                     _roomManager._decorationRoom[decorationCounter] = child.gameObject;
                     decorationCounter++;
-                } else if(child.tag == "PlaceholderBottom15")
+                } else if(child.tag == "PlaceholderBottom")
                 {
                     _roomManager._placeholdersRoomBottom[placeholderBottomCounter] = child.gameObject;
                     _roomManager._wallBottomCounter++;

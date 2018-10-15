@@ -22,8 +22,6 @@ namespace VRCalibrationTool
             virtualPositionTags = GetComponentsInChildren<PositionTag>().OrderBy(x => x.positionTagIndex).ToArray();
         }
 
-
-
         /// <summary>
         /// Checks if the distance between the two points are below or equal to the minimum
         /// </summary>
@@ -48,14 +46,12 @@ namespace VRCalibrationTool
         /// <param name="minimumDistance">Minimum distance.</param>
         private bool PointsWithinMinimumDistance(Vector3[] realPositionTags, PositionTag[] virtualPositionTags, float minimumDistance)
         {
-            bool withinMinimumDistance = true;
-
             for (int i = 0; i < realPositionTags.Length; i++)
             {
-                withinMinimumDistance &= PointWithinMinimumDistance(realPositionTags[i], virtualPositionTags[i].transform, minimumDistance);
+                if (!PointWithinMinimumDistance(realPositionTags[i], virtualPositionTags[i].transform, minimumDistance))
+                    return false;
             }
-
-            return withinMinimumDistance;
+            return true;
         }
 
         /// <summary>
@@ -76,7 +72,7 @@ namespace VRCalibrationTool
         }
 
         /// <summary>
-        /// Calculates the difference of rotation and position between two planes around a specific pivot point
+        /// Calculates the difference in rotation and position between two planes around a specific pivot point
         /// </summary>
         /// <returns>The rotation pivot, the difference of rotation and position between two planes.</returns>
         /// <param name="r">The real plane.</param>
