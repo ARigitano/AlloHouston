@@ -61,26 +61,31 @@ public class handCalibration : MonoBehaviour {
 
     public void XRotateRight()
     {
+        manus.LCustomRotationOffset += new Vector3(-rotateNumber, 0f, 0f);
         //cube.transform.eulerAngles += new Vector3(-rotateNumber, 0f, 0f);
     }
 
     public void YRotateLeft()
     {
+        manus.LCustomRotationOffset += new Vector3(0f, -rotateNumber, 0f);
         //cube.transform.eulerAngles += new Vector3(0f, -rotateNumber, 0f);
     }
 
     public void YRotateRight()
     {
+        manus.LCustomRotationOffset += new Vector3(0f, rotateNumber, 0f);
         //cube.transform.eulerAngles += new Vector3(0f, rotateNumber, 0f);
     }
 
     public void ZRotateLeft()
     {
+        manus.LCustomRotationOffset +=new Vector3(0f, 0f, rotateNumber);
         //cube.transform.eulerAngles += new Vector3(0f, 0f, rotateNumber);
     }
 
     public void ZRotateRight()
     {
+        manus.LCustomRotationOffset += new Vector3(0f, 0f, -rotateNumber);
         //cube.transform.eulerAngles += new Vector3(0f, 0f, -rotateNumber);
     }
 
