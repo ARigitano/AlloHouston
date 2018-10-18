@@ -17,7 +17,7 @@ namespace VRCalibrationTool
             if (other.tag == "PositionTag")
             {
                 _viveManager._touchingPoint = true;
-                _viveManager._incorrectPoint = other.gameObject;
+                _viveManager._incorrectPoint = other.gameObject.GetComponent<PositionTag>();
             }
             else if (other.tag == "ViveTracker")
             {
