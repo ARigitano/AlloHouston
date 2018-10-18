@@ -26,6 +26,9 @@ public class GamePanel : MonoBehaviour
     private Camera aiCamera;
     [SerializeField]
     private InputField aiCommunication;
+    public int cameraIndex = 0;
+    [SerializeField]
+    private RawImage displayedCamera;
 
 
 
@@ -49,6 +52,21 @@ public class GamePanel : MonoBehaviour
         aiCamera = aiScreen._aiCamera;
 
 
+    }
+
+    public void changeCamera(bool increase)
+    {
+        if (increase)
+            cameraIndex++;
+        else
+            cameraIndex--;
+
+        if (cameraIndex >= roomManager._cameras.Length)
+            cameraIndex = 0;
+        else if (cameraIndex < 0)
+            cameraIndex = roomManager._cameras.Length-1;
+
+        displayedCamera.texture = roomManager._cameras[cameraIndex];
     }
 
     private void Update()

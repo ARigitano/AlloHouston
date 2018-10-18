@@ -31,6 +31,7 @@ namespace VRCalibrationTool
 		[SerializeField]private List<int> _finishedListWall;    //Ordered list of numbers to organize wall blocs randomwly
         public int _counterPosition = 0;                        //Counter for the experiments positionning
         [SerializeField] private GameObject[] _wallFurniture;   //Decorations that will be place on unused placeholders;
+        public RenderTexture[] _cameras;                               
 
         /// <summary>
         /// Randomly generates a list of unique numbers
