@@ -10,15 +10,22 @@ namespace VRCalibrationTool
     /// </summary>
 	public class ViveControllerManager : MonoBehaviour
 	{
-		[SerializeField] private SteamVR_TrackedObject _trackedObj; //The controller with the precision spike
-		[SerializeField] private PositionTag _positionTag;          //Prefab of a position tag
-		[SerializeField] private Transform _spawnPosition;          //Position at the tip of the precision spike on which the position tags will spawn
-		[SerializeField] private int _numberPoints;                 //Number of position tags needed for a calibration
+		[SerializeField] private SteamVR_TrackedObject _trackedObj = null; //The controller with the precision spike
+		[SerializeField] private PositionTag _positionTagPrefab = null;          //Prefab of a position tag
+		[SerializeField] private Transform _spawnPositionTransform = null;          //Position at the tip of the precision spike on which the position tags will spawn
 		[SerializeField] private int _indexPositionTag = 0;         //Number of instantiated position tags    
 		[SerializeField] private bool _hasWaited = false;           //Security stop to prevent removing position tags by mistake
 		[SerializeField] private VirtualObject[] _virtualObjectPrefabs;   //Contains all the objects that can be instantiated during the calibration phase
 		[SerializeField] private float[] _distancePoint;            //Distance between an instantiated position tag and the position where it should be on the instantiated object
-		public PositionTag[] _positionTags;                         //Contains the instantiated position tags
+        [SerializeField] private bool mouseMode;
+		public List<PositionTag> _positionTags;                         //Contains the instantiated position tags
+        public List<PositionTag> positionTag
+        {
+            get
+            {
+                return _positionTags;
+            }
+        }
 		public bool _touchingPoint = false;                         //Is the precision spike touching an instantiated position tag?
 		public bool _touchingTracker = false;                       //Is the precision spike touching a ViveTracker?
 		public GameObject _incorrectPoint;                          //Position tag considered as incorrectly positionned
@@ -35,6 +42,13 @@ namespace VRCalibrationTool
             }
         }
 
+        private void Start()
+        {
+            _virtualObjectPrefabs = Resources.LoadAll<VirtualObject>("VirtualObjects/");
+            if (_spawnPositionTransform == null)
+                _spawnPositionTransform = GameObject.FindWithTag("SpawnPosition").transform;
+        }
+
         /// <summary>
         /// Creates n position tags.
         /// </summary>
@@ -42,71 +56,45 @@ namespace VRCalibrationTool
         public void CreatePositionTag(int n)
         {
             for (int i = 0; i < n; i++)
-                CreatePositionTag();
+                CreatePositionTag(_spawnPositionTransform.position);
         }
 
 		/// <summary>
 		/// Creates a new position tag at the position of the controller.
 		/// </summary>
-		public void CreatePositionTag ()
+		public void CreatePositionTag (Vector3 position)
 		{
-			PositionTag pTag = (PositionTag)Instantiate (_positionTag, _spawnPosition.position, Quaternion.identity);
-			for (int i = 0; i < _positionTags.Length; i++) 
-			{
-				if (_positionTags [i] == null) 
-				{
-					pTag.GetComponent<PositionTag> ().positionTagIndex = i;
-					pTag.GetComponent<Renderer> ().material.color = new Color (i * 0.2f, i * 0.2f, i * 0.2f, 0.6f);
-					_positionTags [i] = pTag;
-					break;
-				}
-			}
-
+            int count = _positionTags.Count;
+			PositionTag positionTag = (PositionTag)Instantiate (_positionTagPrefab, position, Quaternion.identity);
+            positionTag.positionTagIndex = count;
+            positionTag.GetComponent<Renderer>().material.color = new Color(count * 0.2f, count * 0.2f, count * 0.2f, 0.6f);
+            _positionTags.Add(positionTag);
 			_indexPositionTag++;
 			Debug.Log ("New position tag created");
-			StartCoroutine ("Waiting");
+			StartCoroutine (Waiting());
 		}
-
-		/// <summary>
-		/// Calibrates the virtual object in VR.
-		/// </summary>
-		/// <param name="virtualObject">Vive Tracker used if the virtual object is movable.</param>
-		public void CalibrateVR(VirtualObject virtualObject) 
+        
+        /// <summary>
+        /// Instantiate and calibrate a virtual object.
+        /// </summary>
+        /// <param name="itemType">Name of the type of item that will be instantiated and calibrated.</param>
+		public void CalibrateVR(string itemType) 
 		{
             //Storing the coordinates of the position tags used to instantiate the object
-            virtualObject.Calibrate (_positionTags);
+            VirtualObject virtualObject = Instantiate(_virtualObjectPrefabs.First(x => x.name == itemType));
+            virtualObject.Calibrate(_positionTags.ToArray());
             ItemDatabase itemDB = XMLManager.instance.itemDB;
-            string itemType = _virtualObjectPrefabs[_virtualObjectPrefabIndex].name;
-            ItemEntry calObj = new ItemEntry(itemType, _positionTags);
-            bool added = false;
-
-            //Entering or updating those coordinates inside the XML file
-            for (int i = 0; i < itemDB.list.Count; i++)
-            {
-                if (itemDB.list[i].type == _virtualObjectPrefabs[_virtualObjectPrefabIndex].name)
-                {
-                    Debug.Log("Item entry modified in XML: " + calObj.type);
-                    itemDB.list[i] = calObj;
-                    added = true;
-                }
-            }
-            if (!added)
-            {
-                itemDB.list.Add(calObj);
-                Debug.Log("Item entry created in XML: " + calObj.type);
-            }
-			XMLManager.instance.SaveItems ();
-
+            ItemEntry itemEntry = new ItemEntry(itemType, _positionTags.ToArray());
+            XMLManager.instance.InsertOrReplaceItem(itemEntry);
             //Coloring the position tags according to their distance to their theoretical positions
-			_distancePoint = new float[_numberPoints];
+			_distancePoint = new float[_positionTags.Count];
 			Color cStart = Color.red;
 			Color cEnd = Color.white;
-			for (int i = 0; i < _positionTags.Length; i++) 
+			for (int i = 0; i < _positionTags.Count; i++) 
 			{
 				_distancePoint[i] = Vector3.Distance (_positionTags [i].gameObject.transform.position, virtualObject.GetComponent<VirtualObject> ().virtualPositionTags [i].transform.position);
 				_positionTags [i].GetComponent<Renderer> ().material.color = new Color (_distancePoint[i]*5, 0f, 0f, 0.6f);
 			}
-
             //Should the object be tracked?
             if (_touchingTracker)
             {
@@ -142,16 +130,14 @@ namespace VRCalibrationTool
         /// <summary>
         /// Deletes every position tags spawned.
         /// </summary>
-        private void ResetPositionTags()
+        public void ResetPositionTags()
         {
-            for (int i = 0; i < _positionTags.Length; i++)
+            foreach (var ptag in _positionTags)
             {
-                if (_positionTags[i] != null)
-                {
-                    Destroy(_positionTags[i].gameObject);
-                    _positionTags[i] = null;
-                }
+                Destroy(ptag.gameObject);
+                Destroy(ptag);
             }
+            _positionTags.Clear();
             _indexPositionTag = 0;
             _touchingTracker = false;
             Debug.Log("All position tags have been removed");
@@ -178,14 +164,22 @@ namespace VRCalibrationTool
         {
             //On trigger press: either create a position tag or instantiate an object
             SteamVR_Controller.Device device = SteamVR_Controller.Input((int)_trackedObj.index);
-            if (device.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger) && !_gameManager._gameStarted)
+            if (device.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger) && !_gameManager._gameStarted
+#if UNITY_EDITOR
+|| mouseMode && Input.GetMouseButtonUp(1)
+#endif
+            )
             {
                 if (!_touchingPoint)
                 {
                     if (_indexPositionTag < currentVirtualObjectPrefab.virtualPositionTags.Length)
-                        CreatePositionTag();
+                    {
+                        CreatePositionTag(mouseMode ? Input.mousePosition : _spawnPositionTransform.position);
+                    }
                     else
-						CalibrateVR(Instantiate(currentVirtualObjectPrefab));
+                    {
+                        CalibrateVR(currentVirtualObjectPrefab.name);
+                    }
                 }
                 else if (_incorrectPoint != null && _hasWaited && _touchingPoint)
                 {

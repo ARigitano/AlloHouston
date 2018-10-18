@@ -12,6 +12,8 @@ namespace VRCalibrationTool
     {
         public PositionTag[] virtualPositionTags;
 
+        public string itemType;
+
         public float minimumDistanceToRealObject = 1.0f;
         public float minimumDistanceToPreviousApprox = 0.01f;
 
@@ -174,9 +176,8 @@ namespace VRCalibrationTool
         private Vector3 CalcDist(CalibrationPlane r, CalibrationPlane v)
         {
             Vector3 rcenter = GetCenterOfPoints(new Vector3[] { r.i, r.j, r.k });
-
             Vector3 vcenter = GetCenterOfPoints(new Vector3[] { v.i, v.j, v.k });
-
+ 
             var dist = rcenter - vcenter;
 
             this.transform.position += dist;

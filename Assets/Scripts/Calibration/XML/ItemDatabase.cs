@@ -40,9 +40,11 @@ namespace VRCalibrationTool
     /// Serializable XML entry
     /// </summary>
     [System.Serializable]
+    [XmlRoot(ElementName = "item_database")]
     public class ItemDatabase
     {
-        [XmlArray("CalibratedItems")]
+        [XmlArrayItem(typeof(ItemEntry), ElementName = "item_entry")]
+        [XmlArray("calibrated_items")]
         public List<ItemEntry> list = new List<ItemEntry>();
 
         public const string path = "XML/item_data.xml";
@@ -62,9 +64,11 @@ namespace VRCalibrationTool
         public void Save(string path)
         {
             XmlSerializer serializer = new XmlSerializer(typeof(ItemDatabase));
-            FileStream stream = new FileStream(Path.Combine(Application.streamingAssetsPath, path), FileMode.Create);
-            serializer.Serialize(stream, this);
-            stream.Close();
+            using (var stream = new FileStream(Path.Combine(Application.streamingAssetsPath, path), FileMode.Create))
+            {
+                serializer.Serialize(stream, this);
+                stream.Close();
+            }
         }
 
         /// <summary>
@@ -84,10 +88,15 @@ namespace VRCalibrationTool
         public static ItemDatabase Load(string path)
         {
             XmlSerializer serializer = new XmlSerializer(typeof(ItemDatabase));
-            FileStream stream = new FileStream(Path.Combine(Application.streamingAssetsPath, path), FileMode.Open);
-            var itemDB = serializer.Deserialize(stream) as ItemDatabase;
-            stream.Close();
-            return itemDB;
+            string completePath = Path.Combine(Application.streamingAssetsPath, path);
+            if (!File.Exists(path))
+                return new ItemDatabase();
+            using (var stream = new FileStream(Path.Combine(Application.streamingAssetsPath, path), FileMode.Open))
+            {
+                var itemDB = serializer.Deserialize(stream) as ItemDatabase;
+                stream.Close();
+                return itemDB;
+            }
         }
     }
 }
