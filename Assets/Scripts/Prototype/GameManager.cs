@@ -9,8 +9,10 @@ using TMPro;
 public class GameManager : MonoBehaviour
 {
     public int _incidentsFixed = 0;                  //Number of experiments that have been solved
-    [SerializeField] public TextMeshPro _tableText; //Table screen 
-    public bool _gameStarted = false;        
+    public TextMeshPro _tableText;                   //Table screen 
+    public bool _gameStarted = false;
+    [SerializeField] private float _timerMinutes;   //Duration of a game in minutes
+    public float _timerSeconds;                     //Duration of a game conferted in seconds
 
     /// <summary>
     /// Events at the beginning of the calibration
@@ -19,6 +21,12 @@ public class GameManager : MonoBehaviour
     {
 
 	}
+
+    private void Start()
+    {
+        _timerSeconds = _timerMinutes * 60;
+        StartCoroutine("GameTimer");
+    }
 
     /// <summary>
     /// Events at the end of the calibration
@@ -49,6 +57,18 @@ public class GameManager : MonoBehaviour
     {
 
 	}
+    /// <summary>
+    /// Launches timer for the game
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator GameTimer()
+    {
+        while (_timerSeconds >0)
+        {
+            yield return new WaitForSeconds(1);
+            _timerSeconds--;
+        }
+    }
 
     /// <summary>
     /// Events at the end of the game

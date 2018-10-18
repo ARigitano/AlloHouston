@@ -37,6 +37,9 @@ namespace VRCalibrationTool
                     _roomManager._placeholdersRoomBottom[placeholderBottomCounter] = child.gameObject;
                     _roomManager._wallBottomCounter++;
                     placeholderBottomCounter++;
+                } else if(child.tag == "AIScreen")
+                {
+                    _roomManager._aiScreen = child.GetComponent<AIScreen>();
                 }
             }
         }

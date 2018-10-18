@@ -18,8 +18,9 @@ namespace VRCalibrationTool
         public GameObject[] _decorationRoomBottom;
         public int _placeholdersRoomNeeded;                     //Number of placeholders needed in the room for this session
         public int _placeholdersRoomNeededBottom;
-        public GameObject _table; 								//The table chosen for the session
-		public int _placeholdersTableNeeded;					//Number of placeholders needed at the table for this session
+        public GameObject _table;                               //The table chosen for the session
+        public AIScreen _aiScreen;
+        public int _placeholdersTableNeeded;					//Number of placeholders needed at the table for this session
 		public Experiment[] _experiments;						//Experiments available
 		public Text _numberPlaceholdersText;                    //Shows the number of placeholders still available
         public Text _numberPlaceholdersBottomText;
