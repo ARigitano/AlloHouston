@@ -8,11 +8,24 @@ namespace VRCalibrationTool
     /// <summary>
     /// A virtual object. This component can align itself to another objet by comparing their respective tags.
     /// </summary>
-    public class VirtualObject : MonoBehaviour
+    public abstract class VirtualObject : MonoBehaviour
     {
+        /// <summary>
+        /// The virtual position tags.
+        /// </summary>
+        [Tooltip("The virtual position tags.")]
         public PositionTag[] virtualPositionTags;
 
+        public ItemEntry itemEntry;
+        /// <summary>
+        /// The calibration will be validated if the distance of a virtual position tag to its real life counterpart is lower than this value.
+        /// </summary>
+        [Tooltip("The calibration will validated if the distance of a virtual position tag to its real life counterpart is lower than this value.")]
         public float minimumDistanceToRealObject = 1.0f;
+        /// <summary>
+        /// The calibration will be validated if the distance between two consecutive approximations is lower than this value.
+        /// </summary>
+        [Tooltip("The calibration will be validated if the distance between two consecutive approximations is lower than this value.")]
         public float minimumDistanceToPreviousApprox = 0.01f;
 
         public int calibrationRepetitionLimit = 20;
@@ -21,8 +34,6 @@ namespace VRCalibrationTool
         {
             virtualPositionTags = GetComponentsInChildren<PositionTag>().OrderBy(x => x.positionTagIndex).ToArray();
         }
-
-
 
         /// <summary>
         /// Checks if the distance between the two points are below or equal to the minimum

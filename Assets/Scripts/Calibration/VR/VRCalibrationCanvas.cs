@@ -15,7 +15,7 @@ public class VRCalibrationCanvas : MonoBehaviour {
     /// </summary>
     [SerializeField]
     [Tooltip("Transform of the panel.")]
-    private Transform _panelTransform;
+    private Transform _panelTransform = null;
     /// <summary>
     /// Button collection prefab.
     /// </summary>

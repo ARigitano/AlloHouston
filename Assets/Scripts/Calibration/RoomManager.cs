@@ -60,7 +60,7 @@ namespace VRCalibrationTool
         /// <summary>
         /// Randomly positions the experiments of the room after their number and type have been selected.
         /// </summary>
-		public void calibrateExperiments() 
+		public void CalibrateExperiments() 
 		{
 			//Checking if there are enough placeholders to meet the demand
 			bool isRoomOk = false;  //Are there enough placeholders in the room?

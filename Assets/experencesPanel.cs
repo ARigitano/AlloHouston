@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class experencesPanel : MonoBehaviour
+public class UIExperiencePanel : MonoBehaviour
 {
 
     [SerializeField]

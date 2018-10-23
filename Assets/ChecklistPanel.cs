@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ChecklistPanel : MonoBehaviour
+public class UIChecklistPanel : MonoBehaviour
 {
 
     [SerializeField]

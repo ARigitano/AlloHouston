@@ -1,41 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
+using System.Xml;
 using System.Xml.Serialization;
 using UnityEngine;
 
 namespace VRCalibrationTool
 {
-    /// <summary>
-    /// Serializabe object
-    /// </summary>
-    [System.Serializable]
-    public class ItemEntry
-    {
-        [XmlAttribute("type")]
-        public string type;
-        [XmlArrayItem(typeof(SerializableVector3), ElementName = "point")]
-        [XmlArray("points")]
-        public SerializableVector3[] points;
-
-        public ItemEntry() { }
-
-        public ItemEntry(string type, SerializableVector3[] points)
-        {
-            this.type = type;
-            this.points = points;
-        }
-
-        public ItemEntry(string type, PositionTag[] points)
-        {
-            this.type = type;
-            this.points = new SerializableVector3[points.Length];
-            for (int i = 0; i < points.Length; i++)
-            {
-                this.points[i] = new SerializableVector3(points[i].transform.position);
-            }
-        }
-    }
-
     /// <summary>
     /// Serializable XML entry
     /// </summary>
@@ -43,8 +15,8 @@ namespace VRCalibrationTool
     [XmlRoot(ElementName = "item_database")]
     public class ItemDatabase
     {
-        [XmlArrayItem(typeof(ItemEntry), ElementName = "item_entry")]
-        [XmlArray("calibrated_items")]
+        [XmlArrayItem(typeof(Room), ElementName = "room")]
+        [XmlArray("rooms")]
         public List<ItemEntry> list = new List<ItemEntry>();
 
         public const string path = "XML/item_data.xml";

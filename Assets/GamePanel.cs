@@ -53,7 +53,7 @@ public class GamePanel : MonoBehaviour
 
     private void Update()
     {
-        time.text =  Mathf.Floor(gameManager._timerSeconds / 60).ToString("00") + ":" + Mathf.Floor(gameManager._timerSeconds % 60).ToString("00");
+        time.text =  (gameManager._timerSeconds / 60).ToString("00") + ":" + (gameManager._timerSeconds % 60).ToString("00");
         aiText.text = aiCommunication.text;
     }
 }
