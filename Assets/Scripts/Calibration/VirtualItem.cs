@@ -7,13 +7,13 @@ namespace VRCalibrationTool
 {
     public class VirtualItem : VirtualObject
     {
-        public VirtualPlaceholder[] placeholders;
+        public VirtualExperienceZone[] placeholders;
 
         public ItemEntry item;
 
         public void Awake()
         {
-            placeholders = GetComponentsInChildren<VirtualPlaceholder>();
+            placeholders = GetComponentsInChildren<VirtualExperienceZone>();
         }
     }
 }

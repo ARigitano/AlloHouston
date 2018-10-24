@@ -9,10 +9,20 @@ namespace VRCalibrationTool
     public class ItemEntry
     {
         /// <summary>
-        /// Name of ItemEntry.
+        /// Path of the ItemEntry prefab.
         /// </summary>
-        [XmlAttribute("name")]
-        public string name;
+        public string prefabPath
+        {
+            get
+            {
+                return type + index.ToString();
+            }
+        }
+        /// <summary>
+        /// Index of ItemEntry.
+        /// </summary>
+        [XmlAttribute("index")]
+        public int index;
         /// <summary>
         /// Type of ItemEntry.
         /// </summary>
@@ -28,8 +38,9 @@ namespace VRCalibrationTool
         public ItemEntry()
         { }
 
-        public ItemEntry(string type, PositionTag[] points)
+        public ItemEntry(int index, string type, PositionTag[] points)
         {
+            this.index = index;
             this.type = type;
             this.points = new SerializableVector3[points.Length];
             for (int i = 0; i < points.Length; i++)

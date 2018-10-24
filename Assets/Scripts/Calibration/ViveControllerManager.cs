@@ -102,7 +102,7 @@ namespace VRCalibrationTool
             VirtualObject virtualObject = Instantiate(_virtualObjectPrefabs.First(x => x.name == itemType));
             virtualObject.Calibrate(_positionTags.ToArray());
 
-            XMLManager.instance.InsertOrReplaceItem(new ItemEntry(itemType, _positionTags.ToArray()));
+            XMLManager.instance.InsertOrReplaceItem(new ItemEntry(0, itemType, _positionTags.ToArray()));
 
             //Coloring the position tags according to their distance to their theoretical positions
             _distancePoint = new float[_positionTags.Count];
