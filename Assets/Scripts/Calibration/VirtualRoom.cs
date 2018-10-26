@@ -7,9 +7,9 @@ namespace VRCalibrationTool
 {
     public class VirtualRoom : VirtualObject
     {
-        public VirtualItem[] items;
+        public VirtualBlock[] blocks;
 
-        public VirtualItem table;
+        public VirtualBlock table;
 
         public RoomEntry room;
     }

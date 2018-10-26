@@ -6,7 +6,7 @@ namespace VRCalibrationTool
     /// An item entry.
     /// </summary>
     [System.Serializable]
-    public class ItemEntry
+    public class BlockEntry
     {
         /// <summary>
         /// Path of the ItemEntry prefab.
@@ -27,7 +27,7 @@ namespace VRCalibrationTool
         /// Type of ItemEntry.
         /// </summary>
         [XmlAttribute("type")]
-        public string type;
+        public BlockType type;
         /// <summary>
         /// Points of calibration.
         /// </summary>
@@ -35,10 +35,10 @@ namespace VRCalibrationTool
         [XmlArray("points")]
         public SerializableVector3[] points;
 
-        public ItemEntry()
+        public BlockEntry()
         { }
 
-        public ItemEntry(int index, string type, PositionTag[] points)
+        public BlockEntry(int index, BlockType type, PositionTag[] points)
         {
             this.index = index;
             this.type = type;

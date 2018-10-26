@@ -758,7 +758,7 @@ public class FalconUnityCall {
 			try {
 				serverSocket.Shutdown(SocketShutdown.Both);
 				serverSocket.Close();
-			} catch (Exception e) {
+			} catch (Exception) {
 				serverSocket = null;
 			}
 		}
@@ -905,7 +905,7 @@ public class FalconUnityCall {
 			
 			setCurrentState(ConnectionState.Idle);
 			
-		} catch(Exception e) {
+		} catch(Exception) {
 			setCurrentState(ConnectionState.Disconnected);
 		}
 	}
@@ -934,7 +934,7 @@ public class FalconUnityCall {
 				recvPacket ();
 			}
 			
-		} catch (Exception e) {
+		} catch (Exception) {
 			setCurrentState(ConnectionState.Disconnected);
 		}
 	}
@@ -974,7 +974,7 @@ public class FalconUnityCall {
 				setCurrentState(ConnectionState.Disconnected);
 			}
 			
-		} catch (Exception e) {
+		} catch (Exception) {
 			setCurrentState(ConnectionState.Disconnected);
 		}
 	}
@@ -1004,7 +1004,7 @@ public class FalconUnityCall {
 						try {
 							serverSocket.Shutdown(SocketShutdown.Both);
 							serverSocket.Close();
-						} catch (Exception e) {
+						} catch (Exception) {
 							serverSocket = null;
 						}
 					}

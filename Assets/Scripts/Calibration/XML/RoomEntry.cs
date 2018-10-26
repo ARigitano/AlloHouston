@@ -13,14 +13,14 @@ namespace VRCalibrationTool
         /// <summary>
         /// List of items that made up the room.  
         /// </summary>
-        [XmlArrayItem(typeof(ItemEntry), ElementName = "item_entry")]
-        [XmlArray("room_items")]
-        public List<ItemEntry> roomItems;
+        [XmlArrayItem(typeof(BlockEntry), ElementName = "item_entry")]
+        [XmlArray("room_blocks")]
+        public List<BlockEntry> roomItems;
         /// <summary>
         /// The table of the room.
         /// </summary>
         [XmlElement("table")]
-        public ItemEntry table;
+        public BlockEntry table;
         /// <summary>
         /// Login of the person who calibrated the ItemEntry.
         /// </summary>

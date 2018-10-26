@@ -1071,8 +1071,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4400344041172876}
-  - component: {fileID: 114959312367285734}
   - component: {fileID: 114725365046844568}
+  - component: {fileID: 114541930809095414}
   m_Layer: 0
   m_Name: Station
   m_TagString: Room
@@ -5669,6 +5669,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   positionTagIndex: 1
+--- !u!114 &114541930809095414
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1611277199947180}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 289169b602e9b384a9ad659a856ee309, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  virtualPositionTags: []
+  minimumDistanceToRealObject: 1
+  minimumDistanceToPreviousApprox: 0.01
+  calibrationRepetitionLimit: 20
+  blocks:
+  - {fileID: 0}
+  - {fileID: 0}
+  table: {fileID: 0}
 --- !u!114 &114725365046844568
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5702,21 +5721,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _aiText: {fileID: 114203016756392334}
   _aiCamera: {fileID: 20289720513208812}
---- !u!114 &114959312367285734
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1611277199947180}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6cb5941d8f6e34ba98ea78ca7e922c9e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  virtualPositionTags: []
-  minimumDistanceToRealObject: 0.05
-  minimumDistanceToPreviousApprox: 0.005
-  calibrationRepetitionLimit: 200
 --- !u!222 &222968614854210912
 CanvasRenderer:
   m_ObjectHideFlags: 1

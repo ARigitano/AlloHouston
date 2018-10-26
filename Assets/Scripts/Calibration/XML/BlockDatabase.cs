@@ -12,14 +12,14 @@ namespace VRCalibrationTool
     /// Serializable XML entry
     /// </summary>
     [System.Serializable]
-    [XmlRoot(ElementName = "item_database")]
-    public class ItemDatabase
+    [XmlRoot(ElementName = "block_database")]
+    public class BlockDatabase
     {
         [XmlArrayItem(typeof(Room), ElementName = "room")]
         [XmlArray("rooms")]
-        public List<ItemEntry> list = new List<ItemEntry>();
+        public List<BlockEntry> list = new List<BlockEntry>();
 
-        public const string path = "XML/item_data.xml";
+        public const string path = "XML/block_data.xml";
 
         /// <summary>
         /// Save items' coordinates in an XML file at the default path.
@@ -35,7 +35,7 @@ namespace VRCalibrationTool
         /// <param name="path">The path of the XML file</param>
         public void Save(string path)
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(ItemDatabase));
+            XmlSerializer serializer = new XmlSerializer(typeof(BlockDatabase));
             using (var stream = new FileStream(Path.Combine(Application.streamingAssetsPath, path), FileMode.Create))
             {
                 serializer.Serialize(stream, this);
@@ -47,7 +47,7 @@ namespace VRCalibrationTool
         /// Loads the information stored in the XML file located at the default path.
         /// </summary>
         /// <returns>An item database</returns>
-        public static ItemDatabase Load()
+        public static BlockDatabase Load()
         {
             return Load(path);
         }
@@ -57,15 +57,15 @@ namespace VRCalibrationTool
         /// </summary>
         /// <param name="path">Path of the xml file</param>
         /// <returns>An item database</returns>
-        public static ItemDatabase Load(string path)
+        public static BlockDatabase Load(string path)
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(ItemDatabase));
+            XmlSerializer serializer = new XmlSerializer(typeof(BlockDatabase));
             string completePath = Path.Combine(Application.streamingAssetsPath, path);
             if (!File.Exists(path))
-                return new ItemDatabase();
+                return new BlockDatabase();
             using (var stream = new FileStream(Path.Combine(Application.streamingAssetsPath, path), FileMode.Open))
             {
-                var itemDB = serializer.Deserialize(stream) as ItemDatabase;
+                var itemDB = serializer.Deserialize(stream) as BlockDatabase;
                 stream.Close();
                 return itemDB;
             }

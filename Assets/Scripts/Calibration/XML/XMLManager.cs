@@ -16,7 +16,7 @@ namespace VRCalibrationTool
             }
         }
 
-        public ItemDatabase itemDB;
+        public BlockDatabase blockDB;
 
         private void Awake()
         {
@@ -28,31 +28,31 @@ namespace VRCalibrationTool
             {
                 Destroy(this);
             }
-            itemDB = ItemDatabase.Load();
+            blockDB = BlockDatabase.Load();
         }
 
         public void SaveItems()
         {
-            itemDB.Save();
+            blockDB.Save();
         }
 
-        public void InsertOrReplaceItem(ItemEntry itemEntry)
+        public void InsertOrReplaceItem(BlockEntry blockEntry)
         {
             //Entering or updating those coordinates inside the XML file
             bool added = false;
-            for (int i = 0; i < itemDB.list.Count; i++)
+            for (int i = 0; i < blockDB.list.Count; i++)
             {
-                if (itemDB.list[i].type == itemEntry.type)
+                if (blockDB.list[i].index == blockEntry.index && blockDB.list[i].type == blockEntry.type)
                 {
-                    Debug.Log("Item entry modified in XML: " + itemEntry.type);
-                    itemDB.list[i] = itemEntry;
+                    Debug.Log("Item entry modified in XML: " + blockEntry.type);
+                    blockDB.list[i] = blockEntry;
                     added = true;
                 }
             }
             if (!added)
             {
-                itemDB.list.Add(itemEntry);
-                Debug.Log("Item entry created in XML: " + itemEntry.type);
+                blockDB.list.Add(blockEntry);
+                Debug.Log("Item entry created in XML: " + blockEntry.type);
             }
             SaveItems();
         }

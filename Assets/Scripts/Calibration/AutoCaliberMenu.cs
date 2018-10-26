@@ -21,9 +21,9 @@ namespace VRCalibrationTool
 
         private void Start()
         {
-            for (int i = 0; i < XMLManager.instance.itemDB.list.Count; i++)
+            for (int i = 0; i < XMLManager.instance.blockDB.list.Count; i++)
             {
-                CreateButton(XMLManager.instance.itemDB.list[i]);
+                CreateButton(XMLManager.instance.blockDB.list[i]);
             }
             _viveControllerManager = GameObject.Find("ViveManager").GetComponent<ViveControllerManager>();
         }
@@ -31,20 +31,18 @@ namespace VRCalibrationTool
         /// <summary>
         /// If button clicked, autocalibrates the selected object.
         /// </summary>
-        private void OnClick(string itemType)
+        private void OnClick(int blockIndex, BlockType blockType)
         {
-            VirtualObject objectCalibrate = ((GameObject)Resources.Load("VirtualObjects/" + itemType)).GetComponent<VirtualObject>();
-            ItemEntry item = XMLManager.instance.itemDB.list.FirstOrDefault(x => x.type == itemType);
-            if (item != null)
+            BlockEntry block = XMLManager.instance.blockDB.list.FirstOrDefault(x => x.type == blockType);
+            if (block != null)
             {
                 _viveControllerManager.ResetPositionTags();
-                _viveControllerManager.CreatePositionTag(item.points.Length);
-                for (int i = 0; i < item.points.Length; i++)
+                _viveControllerManager.CreatePositionTag(block.points.Length);
+                for (int i = 0; i < block.points.Length; i++)
                 {
-                    _viveControllerManager._positionTags[i].transform.position = item.points[i].Vector3;
+                    _viveControllerManager._positionTags[i].transform.position = block.points[i].Vector3;
                 }
-                _viveControllerManager.CalibrateVR(itemType);
-                Debug.Log("Object calibrated: " + objectCalibrate.name);
+                _viveControllerManager.CalibrateVR(blockIndex, blockType);
             }
         }
 
@@ -52,12 +50,12 @@ namespace VRCalibrationTool
         /// Creates an autocalibrate button.
         /// </summary>
         /// <param name="name">Name.</param>
-        private void CreateButton(ItemEntry item)
+        private void CreateButton(BlockEntry block)
         {
             GameObject button = (GameObject)Instantiate(_buttonPrefab);
             button.transform.SetParent(_panelToAttachButtonsTo.transform);
-            button.GetComponent<Button>().onClick.AddListener(() => OnClick(item.type));
-            button.transform.GetChild(0).GetComponent<Text>().text = item.type;
+            button.GetComponent<Button>().onClick.AddListener(() => OnClick(block.index, block.type));
+            button.transform.GetChild(0).GetComponent<Text>().text = block.type.ToString();
         }
     }
 }

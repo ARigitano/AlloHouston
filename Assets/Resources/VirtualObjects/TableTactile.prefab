@@ -447,9 +447,9 @@ GameObject:
   - component: {fileID: 4217129486942324}
   - component: {fileID: 33542652000496476}
   - component: {fileID: 23554614986356962}
-  - component: {fileID: 114983743589510042}
   - component: {fileID: 65848707803041516}
   - component: {fileID: 114668997297390980}
+  - component: {fileID: 114464804242958610}
   m_Layer: 0
   m_Name: TableTactile
   m_TagString: Table
@@ -1600,6 +1600,24 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114464804242958610
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1858457765940996}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e3d625fe3ffad14290a6055c134c192, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  virtualPositionTags: []
+  minimumDistanceToRealObject: 1
+  minimumDistanceToPreviousApprox: 0.01
+  calibrationRepetitionLimit: 20
+  blockEntry:
+    type: 0
+    index: 0
 --- !u!114 &114568221452742762
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2009,21 +2027,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   positionTagIndex: 2
---- !u!114 &114983743589510042
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1858457765940996}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6cb5941d8f6e34ba98ea78ca7e922c9e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  virtualPositionTags: []
-  minimumDistanceToRealObject: 0.05
-  minimumDistanceToPreviousApprox: 0.005
-  calibrationRepetitionLimit: 200
 --- !u!222 &222174850757366754
 CanvasRenderer:
   m_ObjectHideFlags: 1

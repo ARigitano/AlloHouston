@@ -22,13 +22,13 @@ namespace VRCalibrationTool
         [SerializeField]
         private bool _hasWaited = false;           //Security stop to prevent removing position tags by mistake
         [SerializeField]
-        private VirtualObject[] _virtualObjectPrefabs;   //Contains all the objects that can be instantiated during the calibration phase
+        private VirtualBlock[] _virtualBlockPrefabs;   //Contains all the objects that can be instantiated during the calibration phase
 
-        public VirtualObject[] virtualObjectPrefabs
+        public VirtualBlock[] virtualBlockPrefabs
         {
             get
             {
-                return _virtualObjectPrefabs;
+                return _virtualBlockPrefabs;
             }
         }
         [SerializeField]
@@ -50,19 +50,19 @@ namespace VRCalibrationTool
         [SerializeField]
         private GameManager _gameManager;
 
-        public VirtualObject currentVirtualObjectPrefab
+        public VirtualBlock currentVirtualBlockPrefab
         {
             get
             {
-                if (_virtualObjectPrefabs != null && _virtualObjectPrefabIndex >= 0 && _virtualObjectPrefabIndex < _virtualObjectPrefabs.Length)
-                    return _virtualObjectPrefabs[_virtualObjectPrefabIndex];
+                if (_virtualBlockPrefabs != null && _virtualObjectPrefabIndex >= 0 && _virtualObjectPrefabIndex < _virtualBlockPrefabs.Length)
+                    return _virtualBlockPrefabs[_virtualObjectPrefabIndex];
                 return null;
             }
         }
 
         private void Start()
         {
-            _virtualObjectPrefabs = Resources.LoadAll<VirtualObject>("VirtualObjects/");
+            _virtualBlockPrefabs = Resources.LoadAll<VirtualBlock>("VirtualObjects/");
             if (_spawnPositionTransform == null)
                 _spawnPositionTransform = GameObject.FindWithTag("SpawnPosition").transform;
         }
@@ -95,14 +95,14 @@ namespace VRCalibrationTool
         /// <summary>
         /// Instantiate and calibrate a virtual object.
         /// </summary>
-        /// <param name="itemType">Name of the type of item that will be instantiated and calibrated.</param>
-        public void CalibrateVR(string itemType)
+        /// <param name="blockType">Name of the type of item that will be instantiated and calibrated.</param>
+        public void CalibrateVR(int blockIndex, BlockType blockType)
         {
             //Storing the coordinates of the position tags used to instantiate the object
-            VirtualObject virtualObject = Instantiate(_virtualObjectPrefabs.First(x => x.name == itemType));
+            VirtualObject virtualObject = Instantiate(_virtualBlockPrefabs.First(x => x.blockEntry.type == blockType && x.blockEntry.index == blockIndex));
             virtualObject.Calibrate(_positionTags.ToArray());
 
-            XMLManager.instance.InsertOrReplaceItem(new ItemEntry(0, itemType, _positionTags.ToArray()));
+            XMLManager.instance.InsertOrReplaceItem(new BlockEntry(blockIndex, blockType, _positionTags.ToArray()));
 
             //Coloring the position tags according to their distance to their theoretical positions
             _distancePoint = new float[_positionTags.Count];
@@ -190,13 +190,13 @@ namespace VRCalibrationTool
             {
                 if (!_touchingPoint)
                 {
-                    if (_indexPositionTag < currentVirtualObjectPrefab.virtualPositionTags.Length)
+                    if (_indexPositionTag < currentVirtualBlockPrefab.virtualPositionTags.Length)
                     {
                         CreatePositionTag(mouseMode ? Input.mousePosition : _spawnPositionTransform.position);
                     }
                     else
                     {
-                        CalibrateVR(currentVirtualObjectPrefab.name);
+                        CalibrateVR(currentVirtualBlockPrefab.blockEntry.index, currentVirtualBlockPrefab.blockEntry.type);
                     }
                 }
                 else if (_incorrectPoint != null && _hasWaited && _touchingPoint)

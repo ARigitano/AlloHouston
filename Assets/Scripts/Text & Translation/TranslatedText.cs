@@ -42,7 +42,14 @@ namespace CRI.HelloHouston.Translation
         /// Is the text in the common file text ?
         /// </summary>
         [SerializeField]
+        [Tooltip("Is the text in the common file text ?")]
         protected bool _isCommon = false;
+        /// <summary>
+        /// If true, it will use its own font instead of the font defined for the language.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("If true, the translated text will use the font of the text component instead of the font defined for the language.")]
+        protected bool _useFont = true;
 
         private void OnEnable()
         {
@@ -89,7 +96,7 @@ namespace CRI.HelloHouston.Translation
             if (textKey != "")
             {
                 _text.text = TextManager.instance.GetText(textKey, _isCommon);
-                if (TextManager.instance.HasFont(_isCommon))
+                if (!_useFont && TextManager.instance.HasFont(_isCommon))
                     _text.font = TextManager.instance.GetFont(_isCommon);
             }
         }
