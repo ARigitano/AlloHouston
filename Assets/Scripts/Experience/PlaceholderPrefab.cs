@@ -2,69 +2,82 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
-public class WallTopZonePrefab : ZonePrefab
+namespace CRI.HelloHouston.Experience
 {
-    public GameObject placeholderLeft;
-    public GameObject placeholderRight;
-    public GameObject placeholderTablet;
-
-    public override ZoneType GetType()
+    [System.Serializable]
+    public class WallTopZonePrefab : ZonePrefab
     {
-        return ZoneType.WallTop;
+        public GameObject placeholderLeft;
+        public GameObject placeholderRight;
+        public GameObject placeholderTablet;
+
+        public override ZoneType GetType()
+        {
+            return ZoneType.WallTop;
+        }
     }
-}
 
-[System.Serializable]
-public class WallBottomZonePrefab : ZonePrefab
-{
-    public GameObject placeholderLeft;
-    public GameObject placeholderRight;
-
-    public override ZoneType GetType()
+    [System.Serializable]
+    public class BottomPlaceholder
     {
-        return ZoneType.WallBottom;
+        public GameObject placeholderLeft;
+        public GameObject placeholderRight;
     }
-}
 
-[System.Serializable]
-public class HologramZonePrefab : ZonePrefab
-{
-    public GameObject[] hologramPrefabs;
-
-    public override ZoneType GetType()
+    [System.Serializable]
+    public class WallBottomZonePrefab : ZonePrefab
     {
-        return ZoneType.Hologram;
+        public List<BottomPlaceholder> bottomPlaceholders;
+
+        public override ZoneType GetType()
+        {
+            return ZoneType.WallBottom;
+        }
     }
-}
 
-[System.Serializable]
-public class CornerZonePrefab : ZonePrefab
-{
-    public GameObject screenPrefab;
-
-    public override ZoneType GetType()
+    [System.Serializable]
+    public class HologramZonePrefab : ZonePrefab
     {
-        return ZoneType.Corner;
+        public GameObject[] hologramPrefabs;
+
+        public override ZoneType GetType()
+        {
+            return ZoneType.Hologram;
+        }
     }
-}
 
-[System.Serializable]
-public class DoorZonePrefab : ZonePrefab
-{
-    public GameObject doorPrefab;
-
-    public override ZoneType GetType()
+    [System.Serializable]
+    public class CornerPlaceholder
     {
-        throw new System.NotImplementedException();
+        public GameObject screenPrefab;
     }
-}
 
-[System.Serializable]
-public abstract class ZonePrefab
-{
-    public abstract ZoneType GetType();
+    [System.Serializable]
+    public class CornerZonePrefab : ZonePrefab
+    {
+        public List<CornerPlaceholder> cornerPlaceholders;
 
+        public override ZoneType GetType()
+        {
+            return ZoneType.Corner;
+        }
+    }
 
+    [System.Serializable]
+    public class DoorZonePrefab : ZonePrefab
+    {
+        public GameObject doorPrefab;
+
+        public override ZoneType GetType()
+        {
+            throw new System.NotImplementedException();
+        }
+    }
+
+    [System.Serializable]
+    public abstract class ZonePrefab
+    {
+        public abstract ZoneType GetType();
+    }
 }
 

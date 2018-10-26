@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum ZoneType
+namespace CRI.HelloHouston.Experience
 {
-    WallTop,
-    WallBottom,
-    Hologram,
-    Corner,
-    Door,
-    Unknown
-
+    public enum ZoneType
+    {
+        WallTop,
+        WallBottom,
+        Hologram,
+        Corner,
+        Door,
+        Unknown
+    }
 }
