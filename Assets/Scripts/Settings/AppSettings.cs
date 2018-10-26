@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Translation;
+using CRI.HelloHouston.Translation;
 using UnityEngine;
 
 
@@ -10,5 +10,6 @@ using UnityEngine;
 public class AppSettings : ScriptableObject
 {
     public LangApp[] langAppAvailable;
-    public LangApp defaultLanguage;
+    public Font commonFont;
+    public LangApp defaultLanguage { get { return langAppAvailable[0]; } }
 }

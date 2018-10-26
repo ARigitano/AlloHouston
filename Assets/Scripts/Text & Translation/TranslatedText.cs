@@ -5,7 +5,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Translation
+namespace CRI.HelloHouston.Translation
 {
     /// <summary>
     /// A text UI that will be translated.
@@ -54,6 +54,11 @@ namespace Translation
             TextManager.onLangChange -= OnLangChange;
         }
 
+        private void Reset()
+        {
+            _text = GetComponent<Text>();
+        }
+
         /// <summary>
         /// Called whenever the OnLangChange event of the TextManager is triggered. Sets the text to its current lang value.
         /// </summary>
@@ -82,12 +87,15 @@ namespace Translation
         private void SetText()
         {
             if (textKey != "")
+            {
                 _text.text = TextManager.instance.GetText(textKey, _isCommon);
+                if (TextManager.instance.HasFont(_isCommon))
+                    _text.font = TextManager.instance.GetFont(_isCommon);
+            }
         }
 
         private void Start()
         {
-            _text = GetComponent<Text>();
             SetText();
         }
     }

@@ -5,7 +5,7 @@ using System.Text;
 using System.Xml.Serialization;
 using UnityEngine;
 
-namespace Translation
+namespace CRI.HelloHouston.Translation
 {
     /// <summary>
     /// Describes the lang of the application.
@@ -13,16 +13,21 @@ namespace Translation
     [System.Serializable]
     public struct LangApp
     {
-        [XmlAttribute("code")]
         /// <summary>
         /// The code ISO 639-1 of the language.
         /// </summary>
+        [Tooltip("The code ISO 639-1 of the language.")]
         public string code;
-        [XmlAttribute("name")]
         /// <summary>
         /// The english name of the language.
         /// </summary>
+        [Tooltip("The english name of the language.")]
         public string name;
+        /// <summary>
+        /// The font corresponding to the language. If null, the default font will be used.
+        /// </summary>
+        [Tooltip("The font corresponding to the language. If null, the default font will be used.")]
+        public Font font;
 
         public bool Equals(LangApp other)
         {

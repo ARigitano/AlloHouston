@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Xml.Serialization;
 using UnityEngine;
 
-namespace Translation
+namespace CRI.HelloHouston.Translation
 {
     [System.Serializable]
     public struct LangTextEntry

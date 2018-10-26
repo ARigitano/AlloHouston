@@ -6,7 +6,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using UnityEngine;
 
-namespace Translation
+namespace CRI.HelloHouston.Translation
 {
     /// <summary>
     /// Contains all the text of a specific language. Is loaded from an XML files.
@@ -26,6 +26,8 @@ namespace Translation
         [XmlArray("lang_text_entries")]
         [XmlArrayItem(typeof(LangTextEntry), ElementName = "text_entry")]
         public LangTextEntry[] arrayOfLangTextEntry;
+
+        public LangText() { }
 
         /// <summary>
         /// Instantiates a LangText from a code ISO 639-1.

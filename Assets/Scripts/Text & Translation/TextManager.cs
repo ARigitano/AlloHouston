@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using UnityEngine;
 
-namespace Translation
+namespace CRI.HelloHouston.Translation
 {
     public class TextManager : MonoBehaviour
     {
@@ -35,11 +35,11 @@ namespace Translation
         /// <summary>
         /// The path of the text data for each language. The [lang_app] value will be replaced by the code of the language. For exemple for French, it will be "fr".
         /// </summary>
-        public const string text_lang_path_base = "Resources/lang/[lang_app]/text/text.xml";
+        public const string text_lang_path_base = "Lang/[lang_app]/text/text";
         /// <summary>
         /// The path of the text data for all the text that is common between all languages.
         /// </summary>
-        public const string text_lang_common_path = "Resources/lang/Common/text/text.xml";
+        public const string text_lang_common_path = "Lang/Common/text/text";
         /// <summary>
         /// The current language of the application.
         /// </summary>
@@ -65,19 +65,20 @@ namespace Translation
         /// </summary>
         public List<LangText> langTextList = new List<LangText>();
 
-        public AppSettings appSettings;
+        [SerializeField]
+        private AppSettings _appSettings;
 
         private void Awake()
         {
             Init();
-            foreach (var langEnable in appSettings.langAppAvailable)
+            foreach (var langEnable in _appSettings.langAppAvailable)
             {
                 var langText = LoadLangText(langEnable.code);
                 langTextList.Add(langText);
             }
             var commonText = LoadCommonLangText();
             langTextList.Add(commonText);
-            _currentLang = appSettings.defaultLanguage;
+            _currentLang = _appSettings.defaultLanguage;
         }
 
         private void Init()
@@ -96,7 +97,7 @@ namespace Translation
         /// </summary>
         public void SetDefaultLang()
         {
-            currentLang = appSettings.defaultLanguage;
+            currentLang = _appSettings.defaultLanguage;
         }
 
         /// <summary>
@@ -116,7 +117,8 @@ namespace Translation
         /// <returns>A LangText with all the common data.</returns>
         public LangText LoadCommonLangText()
         {
-            return LangText.Load(Path.Combine(Application.dataPath, text_lang_common_path));
+            var text = Resources.Load<TextAsset>(text_lang_common_path) as TextAsset;
+            return LangText.LoadFromText(text.text);
         }
         /// <summary>
         /// Loads the text for a specific language.
@@ -125,7 +127,9 @@ namespace Translation
         /// <returns>A LangText will all the data for that language.</returns>
         public LangText LoadLangText(string langCode)
         {
-            return LangText.Load(Path.Combine(Application.dataPath, GetLangTextPath(langCode)));
+            var path = GetLangTextPath(langCode);
+            var text = Resources.Load<TextAsset>(path);
+            return LangText.LoadFromText(text.text);
         }
 
         /// <summary>
@@ -164,9 +168,36 @@ namespace Translation
             return GetText(key, common ? "COM" : _currentLang.code);
         }
 
+        /// <summary>
+        /// Returns true if the current language or the common language have a defined font.
+        /// </summary>
+        /// <param name="common">If true, it will check only the common language instead.</param>
+        /// <returns>True if the current language has a defined font.</returns>
+        public bool HasFont(bool common = false)
+        {
+            return ((common && _appSettings.commonFont != null) || _currentLang.font != null || _appSettings.commonFont != null);
+        }
+
+        /// <summary>
+        /// Gets the current language's font. If there's no current language's font, gets the common font.
+        /// </summary>
+        /// <param name="common">If true, it will check the common language's font instead.</param>
+        /// <returns>The current language's font.</returns>
+        public Font GetFont(bool common = false)
+        {
+            if (common || _currentLang.font == null)
+                return _appSettings.commonFont;
+            return _currentLang.font;
+        }
+
         private void OnDestroy()
         {
             s_instance = null;
+        }
+
+        public void ChangeLang(int index)
+        {
+            currentLang = _appSettings.langAppAvailable[index];
         }
     }
 }
