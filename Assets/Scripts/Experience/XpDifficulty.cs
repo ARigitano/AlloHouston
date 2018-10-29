@@ -24,6 +24,9 @@ namespace CRI.HelloHouston.Experience
         [Tooltip("The name of the experiment. The same for all difficiculties and audiences versions of the experiment.")]
         public string name;                                   //The name of the experiment. The same for all difficiculties and audiences versions of the experiment.
 
+        [Tooltip("A description of the audience for the experiment.")]
+        public string description;                           //A description of the audience for the experiment.
+
         [Tooltip("The audience of this version of the experiment. Either mainstream public or researchers.")]
         public AudienceType audienceType;                    //The audience of this version of the experiment. Either mainstream public or researchers.
 

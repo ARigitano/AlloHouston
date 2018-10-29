@@ -10,15 +10,15 @@ namespace CRI.HelloHouston.Experience
     public class XpGroup : ScriptableObject
     {
         [Tooltip("The name of the experiment.")]
-        public string _name;                //The name of the experiment.
+        public string name;                //The name of the experiment.
 
         [Tooltip("A description of the experiment.")]
-        public string _description;         //A description of the experiment.
+        public string description;         //A description of the experiment.
 
         [Tooltip("The type of gameplay of the experiment.")]
-        public string _type;                //The type of gameplay of the experiment.
+        public string type;                //The type of gameplay of the experiment.
 
         [Tooltip("The pedagogical content of the experiment.")]
-        public string _subject;             //The pedagogical content of the experiment.
+        public string subject;             //The pedagogical content of the experiment.
     }
 }
