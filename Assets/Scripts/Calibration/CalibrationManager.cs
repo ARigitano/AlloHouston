@@ -4,13 +4,14 @@ using UnityEngine;
 using System.Linq;
 using VRCalibrationTool;
 using CRI.HelloHouston.Calibration.XML;
+using System;
 
 namespace CRI.HelloHouston.Calibration
 {
     /// <summary>
     /// Manages the use of the Vive controllers during the calibratiion process
     /// </summary>
-	public class ViveControllerManager : MonoBehaviour
+	public class CalibrationManager : MonoBehaviour
     {
         [SerializeField]
         private SteamVR_TrackedObject _trackedObj = null; //The controller with the precision spike
@@ -98,10 +99,10 @@ namespace CRI.HelloHouston.Calibration
         public void CalibrateVR(int blockIndex, BlockType blockType)
         {
             //Storing the coordinates of the position tags used to instantiate the object
-            VirtualObject virtualObject = Instantiate(_virtualBlockPrefabs.First(x => x.blockEntry.type == blockType && x.blockEntry.index == blockIndex));
+            VirtualObject virtualObject = Instantiate(GetVirtualBlockPrefab(blockIndex, blockType));
             virtualObject.Calibrate(_positionTags.ToArray());
 
-            XMLManager.instance.InsertOrReplaceItem(new BlockEntry(blockIndex, blockType, _positionTags.ToArray()));
+            XMLManager.instance.InsertOrReplaceItem(new BlockEntry(blockIndex, blockType, _positionTags.ToArray(), DateTime.Now));
 
             //Coloring the position tags according to their distance to their theoretical positions
             _distancePoint = new float[_positionTags.Count];
@@ -129,6 +130,27 @@ namespace CRI.HelloHouston.Calibration
             _hasWaited = false;
             yield return new WaitForSeconds(time);
             _hasWaited = true;
+        }
+
+        /// <summary>
+        /// Get the prefab of a virtual block.
+        /// </summary>
+        /// <param name="blockEntry">A block entry.</param>
+        /// <returns>The prefab of the virtual block.</returns>
+        public VirtualBlock GetVirtualBlockPrefab(BlockEntry blockEntry)
+        {
+            return GetVirtualBlockPrefab(blockEntry.index, blockEntry.type);
+        }
+
+        /// <summary>
+        /// Gets the prefab of a virtual block.
+        /// </summary>
+        /// <param name="blockIndex">The index of the virtual block.</param>
+        /// <param name="blockType">The type of the virtual block.</param>
+        /// <returns>The prefab of a virtual block.</returns>
+        public VirtualBlock GetVirtualBlockPrefab(int blockIndex, BlockType blockType)
+        {
+            return _virtualBlockPrefabs.First(x => x.block.type == blockType && x.block.index == blockIndex);
         }
 
         /// <summary>
@@ -195,7 +217,7 @@ namespace CRI.HelloHouston.Calibration
                     }
                     else
                     {
-                        CalibrateVR(currentVirtualBlockPrefab.blockEntry.index, currentVirtualBlockPrefab.blockEntry.type);
+                        CalibrateVR(currentVirtualBlockPrefab.block.index, currentVirtualBlockPrefab.block.type);
                     }
                 }
                 else if (_incorrectPoint != null && _hasWaited && _touchingPoint)

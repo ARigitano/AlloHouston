@@ -10,7 +10,7 @@ public class VRCalibrationCanvas : MonoBehaviour {
     /// </summary>
     [SerializeField]
     [Tooltip("An instance of the ViveC Controller Manager.")]
-    private ViveControllerManager _viveControllerManager = null;
+    private CalibrationManager _viveControllerManager = null;
     /// <summary>
     /// Transform of the panel.
     /// </summary>
@@ -27,7 +27,7 @@ public class VRCalibrationCanvas : MonoBehaviour {
     private void Start()
     {
         if (_viveControllerManager == null)
-            _viveControllerManager = FindObjectOfType<ViveControllerManager>();
+            _viveControllerManager = FindObjectOfType<CalibrationManager>();
         InitCalibrationCanvas(_viveControllerManager.virtualBlockPrefabs);
     }
 

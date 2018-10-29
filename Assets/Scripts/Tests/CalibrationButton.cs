@@ -11,7 +11,7 @@ namespace CRI.HelloHouston.Calibration
 {
     public class CalibrationButton : VRUIItem
     {
-        private ViveControllerManager _viveManager;
+        private CalibrationManager _viveManager;
         private int _buttonID;
         /// <summary>
         /// Text of the button.
@@ -20,7 +20,7 @@ namespace CRI.HelloHouston.Calibration
         [Tooltip("Text of the button.")]
         private Text _buttonText;
 
-        public void Init(ViveControllerManager viveManager, int buttonId, string text)
+        public void Init(CalibrationManager viveManager, int buttonId, string text)
         {
             _viveManager = viveManager;
             _buttonID = buttonId;

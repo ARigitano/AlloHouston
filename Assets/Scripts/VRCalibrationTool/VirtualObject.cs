@@ -206,7 +206,7 @@ namespace VRCalibrationTool
         /// Calibrate the objet to change its rotation, position and scale to match its position tags to the given positions tags.
         /// </summary>
         /// <param name="realPositions">Positions of the real tags.</param>
-        public void Calibrate(Vector3[] realPositions)
+        public virtual void Calibrate(Vector3[] realPositions)
         {
             bool minDistanceRealObject = PointsWithinMinimumDistance(realPositions, virtualPositionTags, minimumDistanceToRealObject);
             bool minDistancePreviousApprox = false;
@@ -229,7 +229,7 @@ namespace VRCalibrationTool
         /// Calibrate the objet to change its rotation, position and scale to match its position tags to the given positions tags.
         /// </summary>
         /// <param name="realPositionTags">Real position tags.</param>
-        public void Calibrate(PositionTag[] realPositionTags)
+        public virtual void Calibrate(PositionTag[] realPositionTags)
         {
             Vector3[] realPositions = realPositionTags.Select(x => x.transform.position).ToArray();
             Calibrate(realPositions);

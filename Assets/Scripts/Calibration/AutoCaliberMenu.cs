@@ -18,7 +18,7 @@ namespace CRI.HelloHouston.Calibration
         [SerializeField]
         private GameObject _panelToAttachButtonsTo = null;	//Panel to attach the autocalibrate button to
 
-        private ViveControllerManager _viveControllerManager = null;
+        private CalibrationManager _viveControllerManager = null;
 
         private void Start()
         {
@@ -26,7 +26,7 @@ namespace CRI.HelloHouston.Calibration
             {
                 CreateButton(XMLManager.instance.blockDB.list[i]);
             }
-            _viveControllerManager = GameObject.Find("ViveManager").GetComponent<ViveControllerManager>();
+            _viveControllerManager = GameObject.Find("ViveManager").GetComponent<CalibrationManager>();
         }
 
         /// <summary>
@@ -38,10 +38,10 @@ namespace CRI.HelloHouston.Calibration
             if (block != null)
             {
                 _viveControllerManager.ResetPositionTags();
-                _viveControllerManager.CreatePositionTag(block.points.Length);
-                for (int i = 0; i < block.points.Length; i++)
+                _viveControllerManager.CreatePositionTag(block.serializablePoints.Length);
+                for (int i = 0; i < block.serializablePoints.Length; i++)
                 {
-                    _viveControllerManager._positionTags[i].transform.position = block.points[i].Vector3;
+                    _viveControllerManager._positionTags[i].transform.position = block.serializablePoints[i].Vector3;
                 }
                 _viveControllerManager.CalibrateVR(blockIndex, blockType);
             }

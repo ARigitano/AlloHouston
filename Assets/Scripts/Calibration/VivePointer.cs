@@ -11,7 +11,7 @@ namespace CRI.HelloHouston.Calibration
     public class VivePointer : MonoBehaviour
     {
         [SerializeField]
-        private ViveControllerManager _viveManager = null;
+        private CalibrationManager _viveManager = null;
 
         private void OnTriggerEnter(Collider other)
         {

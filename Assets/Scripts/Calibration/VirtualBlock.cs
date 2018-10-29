@@ -25,6 +25,36 @@ namespace CRI.HelloHouston.Calibration
         /// Information about the corresponding block entry.
         /// </summary>
         [Tooltip("Information about the block entry.")]
-        public BlockTypeIndex blockEntry;
+        public BlockTypeIndex block;
+        /// <summary>
+        /// Information about the last update.
+        /// </summary>
+        [Tooltip("Information about the last update.")]
+        public DateTime lastUpdate;
+
+        public void Init(BlockEntry block)
+        {
+            this.block.type = block.type;
+            this.block.index = block.index;
+            this.lastUpdate = block.date;
+            Calibrate(block.points);
+        }
+
+        public BlockEntry ToBlockEntry()
+        {
+            return new BlockEntry(block.index, block.type, virtualPositionTags, lastUpdate);
+        }
+
+        public override void Calibrate(PositionTag[] realPositionTags)
+        {
+            lastUpdate = DateTime.Now;
+            base.Calibrate(realPositionTags);
+        }
+
+        public override void Calibrate(Vector3[] realPositions)
+        {
+            lastUpdate = DateTime.Now;
+            base.Calibrate(realPositions);
+        }
     }
 }
