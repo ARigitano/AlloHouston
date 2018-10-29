@@ -27,9 +27,15 @@ namespace VRCalibrationTool
 
         public int calibrationRepetitionLimit = 20;
 
-        private void Awake()
+        private void Reset()
         {
             virtualPositionTags = GetComponentsInChildren<PositionTag>().OrderBy(x => x.positionTagIndex).ToArray();
+        }
+        
+        private void Awake()
+        {
+            if (virtualPositionTags == null)
+                Reset();
         }
 
         /// <summary>
@@ -180,9 +186,9 @@ namespace VRCalibrationTool
         /// <summary>
         /// Calculates the difference in position between the real plane and the virtual plane.
         /// </summary>
-        /// <returns>The difference in posi</returns>
-        /// <param name="r">The red component.</param>
-        /// <param name="v">V.</param>
+        /// <returns>The difference in position</returns>
+        /// <param name="r">The real calibration plane.</param>
+        /// <param name="v">The virtual calibration plane.</param>
         private Vector3 CalcDist(CalibrationPlane r, CalibrationPlane v)
         {
             Vector3 rcenter = GetCenterOfPoints(new Vector3[] { r.i, r.j, r.k });
@@ -196,9 +202,12 @@ namespace VRCalibrationTool
             return dist;
         }
 
-        public void Calibrate(PositionTag[] realPositionTags)
+        /// <summary>
+        /// Calibrate the objet to change its rotation, position and scale to match its position tags to the given positions tags.
+        /// </summary>
+        /// <param name="realPositions">Positions of the real tags.</param>
+        public void Calibrate(Vector3[] realPositions)
         {
-            Vector3[] realPositions = realPositionTags.Select(x => x.transform.position).ToArray();
             bool minDistanceRealObject = PointsWithinMinimumDistance(realPositions, virtualPositionTags, minimumDistanceToRealObject);
             bool minDistancePreviousApprox = false;
             Vector3[] previousPositions = null;
@@ -207,7 +216,7 @@ namespace VRCalibrationTool
             for (int i = 0; i < calibrationRepetitionLimit && !minDistanceRealObject && !minDistancePreviousApprox; i++)
             {
                 Debug.Log("Repetition " + (i + 1));
-                CalcCalibration(realPositionTags);
+                CalcCalibration(realPositions);
                 if (previousPositions != null)
                     minDistancePreviousApprox = PointsWithinMinimumDistance(previousPositions, virtualPositionTags, minimumDistanceToPreviousApprox);
                 if (!minDistancePreviousApprox)
@@ -220,9 +229,19 @@ namespace VRCalibrationTool
         /// Calibrate the objet to change its rotation, position and scale to match its position tags to the given positions tags.
         /// </summary>
         /// <param name="realPositionTags">Real position tags.</param>
-        private void CalcCalibration(PositionTag[] realPositionTags)
+        public void Calibrate(PositionTag[] realPositionTags)
         {
-            int length = Mathf.Min(realPositionTags.Length, virtualPositionTags.Length);
+            Vector3[] realPositions = realPositionTags.Select(x => x.transform.position).ToArray();
+            Calibrate(realPositions);
+        }
+
+        /// <summary>
+        /// Calibrate the objet to change its rotation, position and scale to match its position tags to the given positions tags.
+        /// </summary>
+        /// <param name="realPositions">Real positions.</param>
+        private void CalcCalibration(Vector3[] realPositions)
+        {
+            int length = Mathf.Min(realPositions.Length, virtualPositionTags.Length);
             int count = 0;
             var startScale = this.transform.localScale;
             var startRotation = this.transform.rotation;
@@ -240,19 +259,13 @@ namespace VRCalibrationTool
                 {
                     for (int k = j + 1; k < length; k++)
                     {
-                        var rtrans = new Transform[] {
-                            realPositionTags [i].transform,
-                            realPositionTags [j].transform,
-                            realPositionTags [k].transform
-                        };
-
                         var vtrans = new Transform[] {
                             virtualPositionTags [i].transform,
                             virtualPositionTags [j].transform,
                             virtualPositionTags [k].transform
                         };
 
-                        var r = new CalibrationPlane(rtrans);
+                        var r = new CalibrationPlane(realPositions [i], realPositions[j], realPositions[k]);
 
                         var v = new CalibrationPlane(vtrans);
 

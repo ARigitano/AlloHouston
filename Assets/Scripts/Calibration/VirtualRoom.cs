@@ -10,5 +10,10 @@ namespace CRI.HelloHouston.Calibration
         public VirtualBlock table;
 
         public RoomEntry room;
+
+        public void Init(RoomEntry room)
+        {
+
+        }
     }
 }
