@@ -35,16 +35,8 @@ namespace CRI.HelloHouston.Calibration
         private void OnClick(int blockIndex, BlockType blockType)
         {
             BlockEntry block = XMLManager.instance.blockDB.list.FirstOrDefault(x => x.type == blockType);
-            if (block != null)
-            {
-                _viveControllerManager.ResetPositionTags();
-                _viveControllerManager.CreatePositionTag(block.serializablePoints.Length);
-                for (int i = 0; i < block.serializablePoints.Length; i++)
-                {
-                    _viveControllerManager._positionTags[i].transform.position = block.serializablePoints[i].Vector3;
-                }
-                _viveControllerManager.CalibrateVR(blockIndex, blockType);
-            }
+            VirtualBlock vblock = Instantiate(_viveControllerManager.GetVirtualBlockPrefab(block));
+            vblock.Init(block);
         }
 
         /// <summary>

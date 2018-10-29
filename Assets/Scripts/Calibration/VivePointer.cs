@@ -10,19 +10,36 @@ namespace CRI.HelloHouston.Calibration
     /// </summary>
     public class VivePointer : MonoBehaviour
     {
-        [SerializeField]
-        private CalibrationManager _viveManager = null;
+        /// <summary>
+        /// Is the precision spike touching an instantiated position tag?
+        /// </summary>
+        public bool isTouchingPoint { get; private set; }
+        /// <summary>
+        /// Is the precision spike touching a ViveTracker?
+        /// </summary>
+        public bool isTouchingTracker { get; private set; }
+        /// <summary>
+        /// Position tag considered as incorrectly positionned.
+        /// </summary>
+        public PositionTag incorrectPoint { get; private set; }
+
+        public void ResetPointer()
+        {
+            isTouchingPoint = false;
+            isTouchingTracker = false;
+            incorrectPoint = null;
+        }
 
         private void OnTriggerEnter(Collider other)
         {
             if (other.tag == "PositionTag")
             {
-                _viveManager._touchingPoint = true;
-                _viveManager._incorrectPoint = other.gameObject.GetComponent<PositionTag>();
+                isTouchingPoint = true;
+                incorrectPoint = other.gameObject.GetComponent<PositionTag>();
             }
             else if (other.tag == "ViveTracker")
             {
-                _viveManager._touchingTracker = true;
+                isTouchingTracker = true;
             }
         }
 
@@ -30,8 +47,8 @@ namespace CRI.HelloHouston.Calibration
         {
             if (other.tag == "PositionTag")
             {
-                _viveManager._touchingPoint = false;
-                _viveManager._incorrectPoint = null;
+                isTouchingPoint = false;
+                incorrectPoint = null;
             }
         }
     }

@@ -13,41 +13,40 @@ namespace CRI.HelloHouston.Calibration
     /// </summary>
 	public class CalibrationManager : MonoBehaviour
     {
+        /// <summary>
+        /// Prefab of a position tag
+        /// </summary>
         [SerializeField]
-        private SteamVR_TrackedObject _trackedObj = null; //The controller with the precision spike
+        [Tooltip("Prefab of a position tag.")]
+        private PositionTag _positionTagPrefab = null;
+        /// <summary>
+        /// A list of position tags.
+        /// </summary>
+        [Tooltip("A list of position tags.")]
+        private List<PositionTag> _positionTags = new List<PositionTag>();
+        /// <summary>
+        /// Contains all the blocks that can be instantiated during the calibration.
+        /// </summary>
         [SerializeField]
-        private PositionTag _positionTagPrefab = null;          //Prefab of a position tag
+        [Tooltip("Contains all the blocks that can be instantiated during the calibration.")]
+        private VirtualBlock[] _virtualBlockPrefabs;
+        /// <summary>
+        /// Contains all the rooms that can be instantiated during the calibration.
+        /// </summary>
         [SerializeField]
-        private Transform _spawnPositionTransform = null;          //Position at the tip of the precision spike on which the position tags will spawn
-        [SerializeField]
-        private int _indexPositionTag = 0;         //Number of instantiated position tags    
-        [SerializeField]
-        private bool _hasWaited = false;           //Security stop to prevent removing position tags by mistake
-        [SerializeField]
-        private VirtualBlock[] _virtualBlockPrefabs;   //Contains all the objects that can be instantiated during the calibration phase
+        [Tooltip("Contains all the rooms that can be instantiated during the calibration.")]
+        private VirtualRoom[] _virtualRoomPrefabs;
+        /// <summary>
+        /// True if the calibration manager can create a position tag.
+        /// </summary>
+        public bool canCreatePositionTag
+        {
+            get
+            {
+                return currentVirtualBlockPrefab != null && _positionTags.Count < currentVirtualBlockPrefab.virtualPositionTags.Length;
+            }
+        }
 
-        public VirtualBlock[] virtualBlockPrefabs
-        {
-            get
-            {
-                return _virtualBlockPrefabs;
-            }
-        }
-        [SerializeField]
-        private float[] _distancePoint;            //Distance between an instantiated position tag and the position where it should be on the instantiated object
-        [SerializeField]
-        private bool mouseMode;
-        public List<PositionTag> _positionTags;                         //Contains the instantiated position tags
-        public List<PositionTag> positionTag
-        {
-            get
-            {
-                return _positionTags;
-            }
-        }
-        public bool _touchingPoint = false;                         //Is the precision spike touching an instantiated position tag?
-        public bool _touchingTracker = false;                       //Is the precision spike touching a ViveTracker?
-        public PositionTag _incorrectPoint;                          //Position tag considered as incorrectly positionned
         public int _virtualObjectPrefabIndex;                                   //Index of an object inside the instatiable objects collection
 
         public VirtualBlock currentVirtualBlockPrefab
@@ -63,18 +62,7 @@ namespace CRI.HelloHouston.Calibration
         private void Start()
         {
             _virtualBlockPrefabs = Resources.LoadAll<VirtualBlock>("VirtualObjects/");
-            if (_spawnPositionTransform == null)
-                _spawnPositionTransform = GameObject.FindWithTag("SpawnPosition").transform;
-        }
-
-        /// <summary>
-        /// Creates n position tags.
-        /// </summary>
-        /// <param name="n">The number of position tags</param>
-        public void CreatePositionTag(int n)
-        {
-            for (int i = 0; i < n; i++)
-                CreatePositionTag(_spawnPositionTransform.position);
+            _virtualRoomPrefabs = Resources.LoadAll<VirtualRoom>("VirtualObjects/");
         }
 
         /// <summary>
@@ -87,9 +75,18 @@ namespace CRI.HelloHouston.Calibration
             positionTag.positionTagIndex = count;
             positionTag.GetComponent<Renderer>().material.color = new Color(count * 0.2f, count * 0.2f, count * 0.2f, 0.6f);
             _positionTags.Add(positionTag);
-            _indexPositionTag++;
-            Debug.Log("New position tag created");
-            StartCoroutine(Waiting());
+        }
+
+        public void CalibrateVR()
+        {
+            if (currentVirtualBlockPrefab != null)
+            {
+                CalibrateVR(currentVirtualBlockPrefab.block.index, currentVirtualBlockPrefab.block.type);
+            }
+            else
+            {
+                throw new Exception("No prefab available for calibration.");
+            }
         }
 
         /// <summary>
@@ -99,37 +96,18 @@ namespace CRI.HelloHouston.Calibration
         public void CalibrateVR(int blockIndex, BlockType blockType)
         {
             //Storing the coordinates of the position tags used to instantiate the object
-            VirtualObject virtualObject = Instantiate(GetVirtualBlockPrefab(blockIndex, blockType));
-            virtualObject.Calibrate(_positionTags.ToArray());
+            VirtualBlock virtualBlock = Instantiate(GetVirtualBlockPrefab(blockIndex, blockType));
+            virtualBlock.Calibrate(_positionTags.ToArray());
 
-            XMLManager.instance.InsertOrReplaceItem(new BlockEntry(blockIndex, blockType, _positionTags.ToArray(), DateTime.Now));
+            XMLManager.instance.InsertOrReplaceItem(virtualBlock.ToBlockEntry());
 
             //Coloring the position tags according to their distance to their theoretical positions
-            _distancePoint = new float[_positionTags.Count];
-            Color cStart = Color.red;
-            Color cEnd = Color.white;
+            float[] _distancePoint = new float[_positionTags.Count];
             for (int i = 0; i < _positionTags.Count; i++)
             {
-                _distancePoint[i] = Vector3.Distance(_positionTags[i].gameObject.transform.position, virtualObject.GetComponent<VirtualObject>().virtualPositionTags[i].transform.position);
+                _distancePoint[i] = Vector3.Distance(_positionTags[i].gameObject.transform.position, virtualBlock.GetComponent<VirtualObject>().virtualPositionTags[i].transform.position);
                 _positionTags[i].GetComponent<Renderer>().material.color = new Color(_distancePoint[i] * 5, 0f, 0f, 0.6f);
             }
-            //Should the object be tracked?
-            if (_touchingTracker)
-            {
-                GameObject viveTracker = GameObject.FindGameObjectWithTag("ViveTracker");
-                virtualObject.transform.parent = viveTracker.transform;
-                TransformTracker(viveTracker);
-            }
-        }
-
-        /// <summary>
-        /// Waits one second not to delete a position tag by mistake after it has been created.
-        /// </summary>
-        private IEnumerator Waiting(int time = 1)
-        {
-            _hasWaited = false;
-            yield return new WaitForSeconds(time);
-            _hasWaited = true;
         }
 
         /// <summary>
@@ -143,6 +121,15 @@ namespace CRI.HelloHouston.Calibration
         }
 
         /// <summary>
+        /// Gets all the virtual block prefabs.
+        /// </summary>
+        /// <returns>An array of VirtualBlock</returns>
+        public VirtualBlock[] GetAllVirtualBlockPrefabs()
+        {
+            return _virtualBlockPrefabs;
+        }
+        
+        /// <summary>
         /// Gets the prefab of a virtual block.
         /// </summary>
         /// <param name="blockIndex">The index of the virtual block.</param>
@@ -154,17 +141,42 @@ namespace CRI.HelloHouston.Calibration
         }
 
         /// <summary>
+        /// Gets the prefab of a virtual room.
+        /// </summary>
+        /// <param name="room">A room entry.</param>
+        /// <returns>A VirtualRoom</returns>
+        public VirtualRoom GetVirtualRoomPrefab(RoomEntry room)
+        {
+            return GetVirtualRoomPrefab(room.index);
+        }
+
+        /// <summary>
+        /// Gets the prefab of a virtual room.
+        /// </summary>
+        /// <param name="index">The index of the virtual room.</param>
+        /// <returns>A VirtualRoom</returns>
+        public VirtualRoom GetVirtualRoomPrefab(int index)
+        {
+            return _virtualRoomPrefabs.First(x => x.index == index);
+        }
+
+        /// <summary>
+        /// Gets all the prefabs of the virtual rooms.
+        /// </summary>
+        /// <returns>An array of VirtualRoom</returns>
+        public VirtualRoom[] GetAllVirtualRooms()
+        {
+            return _virtualRoomPrefabs;
+        }
+
+        /// <summary>
         /// Removes the position tag which collider is being touched by the controller.
         /// </summary>
         /// <param name="pointRemove">The position tag to remove.</param>
-        private void RemovePositionTag(PositionTag pointRemove)
+        internal void RemovePositionTag(PositionTag pointRemove)
         {
             Destroy(pointRemove.gameObject);
             Destroy(pointRemove);
-            _indexPositionTag--;
-            _touchingPoint = false;
-            _incorrectPoint = null;
-            Debug.Log("Position tag destroyed");
         }
 
         /// <summary>
@@ -177,9 +189,6 @@ namespace CRI.HelloHouston.Calibration
                 RemovePositionTag(positionTag);
             }
             _positionTags.Clear();
-            _indexPositionTag = 0;
-            _touchingTracker = false;
-            Debug.Log("All position tags have been removed");
         }
 
         /// <summary>
@@ -193,42 +202,8 @@ namespace CRI.HelloHouston.Calibration
                 tracker.AddComponent<SteamVR_TrackedObject>();
                 tracker.GetComponent<SteamVR_TrackedObject>().index = SteamVR_TrackedObject.EIndex.Device2;
             }
-
             SteamVR_ControllerManager cameraVive = GameObject.Find("[CameraRig]").GetComponent<SteamVR_ControllerManager>();
             cameraVive.objects[2] = tracker;
-        }
-
-        // Update is called once per frame
-        private void Update()
-        {
-            //On trigger press: either create a position tag or instantiate an object
-            SteamVR_Controller.Device device = SteamVR_Controller.Input((int)_trackedObj.index);
-            if (device.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger)
-#if UNITY_EDITOR
-|| mouseMode && Input.GetMouseButtonUp(1)
-#endif
-            )
-            {
-                if (!_touchingPoint)
-                {
-                    if (_indexPositionTag < currentVirtualBlockPrefab.virtualPositionTags.Length)
-                    {
-                        CreatePositionTag(mouseMode ? Input.mousePosition : _spawnPositionTransform.position);
-                    }
-                    else
-                    {
-                        CalibrateVR(currentVirtualBlockPrefab.block.index, currentVirtualBlockPrefab.block.type);
-                    }
-                }
-                else if (_incorrectPoint != null && _hasWaited && _touchingPoint)
-                {
-                    RemovePositionTag(_incorrectPoint);
-                }
-            }
-            else if (device.GetPressDown(SteamVR_Controller.ButtonMask.Grip))
-            {
-                ResetPositionTags();
-            }
         }
     }
 }

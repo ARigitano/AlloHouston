@@ -28,7 +28,7 @@ public class VRCalibrationCanvas : MonoBehaviour {
     {
         if (_viveControllerManager == null)
             _viveControllerManager = FindObjectOfType<CalibrationManager>();
-        InitCalibrationCanvas(_viveControllerManager.virtualBlockPrefabs);
+        //InitCalibrationCanvas(_viveControllerManager.virtualBlockPrefabs);
     }
 
     public void InitCalibrationCanvas(VirtualObject[] virtualObjectPrefabs)
