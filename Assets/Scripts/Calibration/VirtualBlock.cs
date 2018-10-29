@@ -45,12 +45,20 @@ namespace CRI.HelloHouston.Calibration
             return new BlockEntry(block.index, block.type, virtualPositionTags, lastUpdate);
         }
 
+        /// <summary>
+        /// Calibrate the objet to change its rotation, position and scale to match its position tags to the given positions tags.
+        /// </summary>
+        /// <param name="realPositions">Real positions.</param>
         public override void Calibrate(PositionTag[] realPositionTags)
         {
             lastUpdate = DateTime.Now;
             base.Calibrate(realPositionTags);
         }
 
+        /// <summary>
+        /// Calibrate the objet to change its rotation, position and scale to match its position tags to the given positions tags.
+        /// </summary>
+        /// <param name="realPositionTags">Real position tags.</param>
         public override void Calibrate(Vector3[] realPositions)
         {
             lastUpdate = DateTime.Now;
