@@ -1,6 +1,6 @@
 ﻿using System.Xml.Serialization;
 
-namespace VRCalibrationTool
+namespace CRI.HelloHouston.Calibration.XML
 {
     public enum BlockType
     {

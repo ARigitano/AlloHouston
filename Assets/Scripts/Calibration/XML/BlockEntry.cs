@@ -1,6 +1,7 @@
 ﻿using System.Xml.Serialization;
+using VRCalibrationTool;
 
-namespace VRCalibrationTool
+namespace CRI.HelloHouston.Calibration.XML
 {
     /// <summary>
     /// An item entry.

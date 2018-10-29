@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Xml.Serialization;
 
-namespace VRCalibrationTool
+namespace CRI.HelloHouston.Calibration.XML
 {
     /// <summary>
     /// A room.

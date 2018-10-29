@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-namespace VRCalibrationTool
+namespace CRI.HelloHouston.Calibration.XML
 {
     /// <summary>
     /// Makes Vector3 serializable to be stored in XML file

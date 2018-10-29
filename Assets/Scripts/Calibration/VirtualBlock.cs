@@ -1,7 +1,9 @@
-﻿using System;
+﻿using CRI.HelloHouston.Calibration.XML;
+using System;
 using UnityEngine;
+using VRCalibrationTool;
 
-namespace VRCalibrationTool
+namespace CRI.HelloHouston.Calibration
 {
     public class VirtualBlock : VirtualObject
     {

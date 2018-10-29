@@ -1,16 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using VRCalibrationTool;
 
-
-namespace VRCalibrationTool
+namespace CRI.HelloHouston.Calibration
 {
     /// <summary>
     /// Represents the 3D printed precision spike added to the Vive controller in order to instantiate the position tags more easily
     /// </summary>
     public class VivePointer : MonoBehaviour
     {
-        [SerializeField]private ViveControllerManager _viveManager;
+        [SerializeField]
+        private ViveControllerManager _viveManager = null;
 
         private void OnTriggerEnter(Collider other)
         {

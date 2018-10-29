@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace VRCalibrationTool
+namespace CRI.HelloHouston.Calibration
 {
     public class CalibrationButton : VRUIItem
     {

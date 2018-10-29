@@ -1,4 +1,6 @@
-﻿public class XPPrefab
+﻿using System;
+
+public class XPPrefab
 {
 
 }
@@ -28,25 +30,29 @@ public class XPHologram : XPPrefab
 
 }
 
-public class VirtualPlaceholder<T> where T : XPPrefab
+namespace CRI.HelloHouston.Calibration
 {
-    public enum VirtualPlaceholderType
+    [Serializable]
+    public class VirtualPlaceholder<T> where T : XPPrefab
     {
-        WallTopLeft,
-        WallTopRight,
-        Tablet,
-        WallBottomLeft,
-        WallBottomRight,
-        Hologram,
-        Corner,
-        Door,
-        Unknown
-    }
+        public enum VirtualPlaceholderType
+        {
+            WallTopLeft,
+            WallTopRight,
+            Tablet,
+            WallBottomLeft,
+            WallBottomRight,
+            Hologram,
+            Corner,
+            Door,
+            Unknown
+        }
 
-    public VirtualPlaceholderType type;
+        public VirtualPlaceholderType type;
 
-    public void PlaceObject<T>()
-    {
+        public void PlaceObject(T prefab)
+        {
 
+        }
     }
 }

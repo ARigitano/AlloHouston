@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-using System;
+using VRCalibrationTool;
+using CRI.HelloHouston.Calibration.XML;
 
-namespace VRCalibrationTool
+namespace CRI.HelloHouston.Calibration
 {
     /// <summary>
     /// Manages the use of the Vive controllers during the calibratiion process
@@ -47,8 +48,6 @@ namespace VRCalibrationTool
         public bool _touchingTracker = false;                       //Is the precision spike touching a ViveTracker?
         public PositionTag _incorrectPoint;                          //Position tag considered as incorrectly positionned
         public int _virtualObjectPrefabIndex;                                   //Index of an object inside the instatiable objects collection
-        [SerializeField]
-        private GameManager _gameManager;
 
         public VirtualBlock currentVirtualBlockPrefab
         {
@@ -182,7 +181,7 @@ namespace VRCalibrationTool
         {
             //On trigger press: either create a position tag or instantiate an object
             SteamVR_Controller.Device device = SteamVR_Controller.Input((int)_trackedObj.index);
-            if (device.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger) && !_gameManager._gameStarted
+            if (device.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger)
 #if UNITY_EDITOR
 || mouseMode && Input.GetMouseButtonUp(1)
 #endif

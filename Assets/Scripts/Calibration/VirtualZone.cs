@@ -1,7 +1,6 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace VRCalibrationTool
+namespace CRI.HelloHouston.Calibration
 {
     public enum VirtualZoneType
     {
@@ -76,6 +75,7 @@ namespace VRCalibrationTool
                 return VirtualZoneType.Hologram;
             }
         }
+
         public VirtualPlaceholder<XPHologram>[] hologramPlaceholders;
     }
 

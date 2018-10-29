@@ -4,8 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Linq;
+using CRI.HelloHouston.Calibration.XML;
 
-namespace VRCalibrationTool
+namespace CRI.HelloHouston.Calibration
 {
     /// <summary>
     /// Takes the coordonnates of the selected object stored in the XML to auto calibrate it.

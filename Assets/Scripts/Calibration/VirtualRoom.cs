@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using CRI.HelloHouston.Calibration.XML;
+using VRCalibrationTool;
 
-namespace VRCalibrationTool
+namespace CRI.HelloHouston.Calibration
 {
     public class VirtualRoom : VirtualObject
     {

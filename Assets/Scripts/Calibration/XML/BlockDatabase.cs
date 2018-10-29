@@ -6,7 +6,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using UnityEngine;
 
-namespace VRCalibrationTool
+namespace CRI.HelloHouston.Calibration.XML
 {
     /// <summary>
     /// Serializable XML entry
@@ -15,7 +15,7 @@ namespace VRCalibrationTool
     [XmlRoot(ElementName = "block_database")]
     public class BlockDatabase
     {
-        [XmlArrayItem(typeof(Room), ElementName = "room")]
+        [XmlArrayItem(typeof(RoomEntry), ElementName = "room")]
         [XmlArray("rooms")]
         public List<BlockEntry> list = new List<BlockEntry>();
 

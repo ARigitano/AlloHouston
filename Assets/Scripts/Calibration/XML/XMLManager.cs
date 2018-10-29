@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace VRCalibrationTool
+namespace CRI.HelloHouston.Calibration.XML
 {
     /// <summary>
     /// Stores or loads instantiable objects' coordinates for the auto calibration phase
