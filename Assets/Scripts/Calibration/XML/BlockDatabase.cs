@@ -17,7 +17,7 @@ namespace CRI.HelloHouston.Calibration.XML
     {
         [XmlArrayItem(typeof(RoomEntry), ElementName = "room")]
         [XmlArray("rooms")]
-        public List<BlockEntry> list = new List<BlockEntry>();
+        public List<RoomEntry> rooms = new List<RoomEntry>();
 
         public const string path = "XML/block_data.xml";
 

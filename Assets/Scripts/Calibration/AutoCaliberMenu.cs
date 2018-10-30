@@ -22,9 +22,9 @@ namespace CRI.HelloHouston.Calibration
 
         private void Start()
         {
-            for (int i = 0; i < XMLManager.instance.blockDB.list.Count; i++)
+            for (int i = 0; i < XMLManager.instance.blockDB.rooms.Count; i++)
             {
-                CreateButton(XMLManager.instance.blockDB.list[i]);
+                //CreateButton(XMLManager.instance.blockDB.rooms[i]);
             }
             _viveControllerManager = GameObject.Find("ViveManager").GetComponent<CalibrationManager>();
         }
@@ -34,9 +34,9 @@ namespace CRI.HelloHouston.Calibration
         /// </summary>
         private void OnClick(int blockIndex, BlockType blockType)
         {
-            BlockEntry block = XMLManager.instance.blockDB.list.FirstOrDefault(x => x.type == blockType);
-            VirtualBlock vblock = Instantiate(_viveControllerManager.GetVirtualBlockPrefab(block));
-            vblock.Init(block);
+            //BlockEntry block = XMLManager.instance.blockDB.rooms.FirstOrDefault(x => x.type == blockType);
+            //VirtualBlock vblock = Instantiate(_viveControllerManager.GetVirtualBlockPrefab(block));
+            //block.Init(block);
         }
 
         /// <summary>

@@ -36,23 +36,21 @@ namespace CRI.HelloHouston.Calibration.XML
             blockDB.Save();
         }
 
-        public void InsertOrReplaceItem(BlockEntry blockEntry)
+        public void InsertOrReplaceRoom(RoomEntry roomEntry)
         {
             //Entering or updating those coordinates inside the XML file
             bool added = false;
-            for (int i = 0; i < blockDB.list.Count; i++)
+            for (int i = 0; i < blockDB.rooms.Count; i++)
             {
-                if (blockDB.list[i].index == blockEntry.index && blockDB.list[i].type == blockEntry.type)
+                if (blockDB.rooms[i].index == roomEntry.index)
                 {
-                    Debug.Log("Item entry modified in XML: " + blockEntry.type);
-                    blockDB.list[i] = blockEntry;
+                    blockDB.rooms[i] = roomEntry;
                     added = true;
                 }
             }
             if (!added)
             {
-                blockDB.list.Add(blockEntry);
-                Debug.Log("Item entry created in XML: " + blockEntry.type);
+                blockDB.rooms.Add(roomEntry);
             }
             SaveItems();
         }

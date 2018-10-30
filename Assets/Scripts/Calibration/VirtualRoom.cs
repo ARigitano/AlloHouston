@@ -6,8 +6,18 @@ using VRCalibrationTool;
 
 namespace CRI.HelloHouston.Calibration
 {
-    public class VirtualRoom : VirtualObject
+    public class VirtualRoom : VirtualItem
     {
+        /// <summary>
+        /// Type of the virtual item.
+        /// </summary>
+        public override VirtualItemType virtualItemType
+        {
+            get
+            {
+                return VirtualItemType.Room;
+            }
+        }
         /// <summary>
         /// The block of the room.
         /// </summary>
@@ -16,14 +26,6 @@ namespace CRI.HelloHouston.Calibration
         /// The block table.
         /// </summary>
         public VirtualBlock table;
-        /// <summary>
-        /// Index of the room.
-        /// </summary>
-        public int index;
-        /// <summary>
-        /// Date of the last calibration.
-        /// </summary>
-        public DateTime lastUpdate;
 
         /// <summary>
         /// Init a VirtualRoom
@@ -34,7 +36,8 @@ namespace CRI.HelloHouston.Calibration
         {
             this.index = room.index;
             this.lastUpdate = room.date;
-            Calibrate(room.points);
+            if (room.points.Length >= 3)
+                Calibrate(room.points);
             table = Instantiate(calibrationManager.GetVirtualBlockPrefab(room.table), transform);
             table.Init(room.table);
             blocks = new VirtualBlock[room.blocks.Length];
@@ -58,26 +61,6 @@ namespace CRI.HelloHouston.Calibration
                 virtualPositionTags,
                 lastUpdate
                 );
-        }
-
-        /// <summary>
-        /// Calibrate the objet to change its rotation, position and scale to match its position tags to the given positions tags.
-        /// </summary>
-        /// <param name="realPositionTags">Real position tags.</param>
-        public override void Calibrate(PositionTag[] realPositionTags)
-        {
-            lastUpdate = DateTime.Now;
-            base.Calibrate(realPositionTags);
-        }
-
-        /// <summary>
-        /// Calibrate the objet to change its rotation, position and scale to match its position tags to the given positions tags.
-        /// </summary>
-        /// <param name="realPositions">Positions of the real tags.</param>
-        public override void Calibrate(Vector3[] realPositions)
-        {
-            lastUpdate = DateTime.Now;
-            base.Calibrate(realPositions);
         }
     }
 }

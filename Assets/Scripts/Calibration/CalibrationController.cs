@@ -87,7 +87,11 @@ namespace CRI.HelloHouston.Calibration
                             _lastCreation = Time.time;
                         }
                         else
+                        {
                             calibrationManager.CalibrateVR();
+                            calibrationManager.ResetPositionTags();
+                            pointer.ResetPointer();
+                        }
                     }
                     else if (pointer.incorrectPoint != null && Time.time - _lastCreation > _cooldownTime)
                     {

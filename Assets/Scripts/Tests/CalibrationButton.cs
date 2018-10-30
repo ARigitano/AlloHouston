@@ -29,7 +29,7 @@ namespace CRI.HelloHouston.Calibration
 
         public void AssignCollectionNumber()
         {
-            _viveManager._virtualObjectPrefabIndex = _buttonID;
+            //_viveManager._virtualObjectPrefabIndex = _buttonID;
         }
     }
 }

@@ -13,6 +13,17 @@ namespace CRI.HelloHouston.Calibration
     /// </summary>
 	public class CalibrationManager : MonoBehaviour
     {
+        public class VirtualBlockIndex
+        {
+            public VirtualBlock virtualBlock;
+            public int calibrationIndex;
+        }
+
+        public class VirtualRoomIndex
+        {
+            public VirtualRoom virtualRoom;
+            public int calibrationIndex;
+        }
         /// <summary>
         /// Prefab of a position tag
         /// </summary>
@@ -29,13 +40,16 @@ namespace CRI.HelloHouston.Calibration
         /// </summary>
         [SerializeField]
         [Tooltip("Contains all the blocks that can be instantiated during the calibration.")]
-        private VirtualBlock[] _virtualBlockPrefabs;
+        private VirtualItem[] _virtualItemPrefabs;
+
         /// <summary>
-        /// Contains all the rooms that can be instantiated during the calibration.
+        /// List of instantiated blocks and their corresponding calibration index.
         /// </summary>
-        [SerializeField]
-        [Tooltip("Contains all the rooms that can be instantiated during the calibration.")]
-        private VirtualRoom[] _virtualRoomPrefabs;
+        private List<VirtualBlockIndex> _instantiatedBlocks;
+        /// <summary>
+        /// Instantiated room and its corresponding calibration index.
+        /// </summary>
+        private VirtualRoomIndex _instantiatedRoom;
         /// <summary>
         /// True if the calibration manager can create a position tag.
         /// </summary>
@@ -43,26 +57,26 @@ namespace CRI.HelloHouston.Calibration
         {
             get
             {
-                return currentVirtualBlockPrefab != null && _positionTags.Count < currentVirtualBlockPrefab.virtualPositionTags.Length;
+                return currentVirtualItemPrefab != null && _positionTags.Count < currentVirtualItemPrefab.virtualPositionTags.Length;
             }
         }
 
-        public int _virtualObjectPrefabIndex;                                   //Index of an object inside the instatiable objects collection
+        public int _calibrationIndex;
 
-        public VirtualBlock currentVirtualBlockPrefab
+        public int _currentVirtualItemPrefabIndex;
+
+        public VirtualItem currentVirtualItemPrefab
         {
             get
             {
-                if (_virtualBlockPrefabs != null && _virtualObjectPrefabIndex >= 0 && _virtualObjectPrefabIndex < _virtualBlockPrefabs.Length)
-                    return _virtualBlockPrefabs[_virtualObjectPrefabIndex];
-                return null;
+                if (_currentVirtualItemPrefabIndex > _virtualItemPrefabs.Length)
+                    return null;
+                return _virtualItemPrefabs[_currentVirtualItemPrefabIndex];
             }
         }
-
         private void Start()
         {
-            _virtualBlockPrefabs = Resources.LoadAll<VirtualBlock>("VirtualObjects/");
-            _virtualRoomPrefabs = Resources.LoadAll<VirtualRoom>("VirtualObjects/");
+            _virtualItemPrefabs = Resources.LoadAll<VirtualItem>("VirtualObjects/");
         }
 
         /// <summary>
@@ -79,9 +93,10 @@ namespace CRI.HelloHouston.Calibration
 
         public void CalibrateVR()
         {
-            if (currentVirtualBlockPrefab != null)
+            if (currentVirtualItemPrefab != null)
             {
-                CalibrateVR(currentVirtualBlockPrefab.block.index, currentVirtualBlockPrefab.block.type);
+                VirtualItem virtualItem = Instantiate(currentVirtualItemPrefab);
+                virtualItem.Calibrate(_positionTags.ToArray());
             }
             else
             {
@@ -89,25 +104,25 @@ namespace CRI.HelloHouston.Calibration
             }
         }
 
+
         /// <summary>
-        /// Instantiate and calibrate a virtual object.
+        /// Gets all the virtual block prefabs.
         /// </summary>
-        /// <param name="blockType">Name of the type of item that will be instantiated and calibrated.</param>
-        public void CalibrateVR(int blockIndex, BlockType blockType)
+        /// <returns>An array of VirtualBlock</returns>
+        public VirtualBlock[] GetAllVirtualBlockPrefabs()
         {
-            //Storing the coordinates of the position tags used to instantiate the object
-            VirtualBlock virtualBlock = Instantiate(GetVirtualBlockPrefab(blockIndex, blockType));
-            virtualBlock.Calibrate(_positionTags.ToArray());
+            return _virtualItemPrefabs.Where(x => x.virtualItemType == VirtualItem.VirtualItemType.Block).Select(x => (VirtualBlock)x).ToArray();
+        }
 
-            XMLManager.instance.InsertOrReplaceItem(virtualBlock.ToBlockEntry());
-
-            //Coloring the position tags according to their distance to their theoretical positions
-            float[] _distancePoint = new float[_positionTags.Count];
-            for (int i = 0; i < _positionTags.Count; i++)
-            {
-                _distancePoint[i] = Vector3.Distance(_positionTags[i].gameObject.transform.position, virtualBlock.GetComponent<VirtualObject>().virtualPositionTags[i].transform.position);
-                _positionTags[i].GetComponent<Renderer>().material.color = new Color(_distancePoint[i] * 5, 0f, 0f, 0.6f);
-            }
+        /// <summary>
+        /// Gets the prefab of a virtual block.
+        /// </summary>
+        /// <param name="blockIndex">The index of the virtual block.</param>
+        /// <param name="blockType">The type of the virtual block.</param>
+        /// <returns>The prefab of a virtual block.</returns>
+        public VirtualBlock GetVirtualBlockPrefab(int blockIndex, BlockType blockType)
+        {
+            return GetAllVirtualBlockPrefabs().First(x => x.block.type == blockType && x.block.index == blockIndex);
         }
 
         /// <summary>
@@ -121,26 +136,6 @@ namespace CRI.HelloHouston.Calibration
         }
 
         /// <summary>
-        /// Gets all the virtual block prefabs.
-        /// </summary>
-        /// <returns>An array of VirtualBlock</returns>
-        public VirtualBlock[] GetAllVirtualBlockPrefabs()
-        {
-            return _virtualBlockPrefabs;
-        }
-        
-        /// <summary>
-        /// Gets the prefab of a virtual block.
-        /// </summary>
-        /// <param name="blockIndex">The index of the virtual block.</param>
-        /// <param name="blockType">The type of the virtual block.</param>
-        /// <returns>The prefab of a virtual block.</returns>
-        public VirtualBlock GetVirtualBlockPrefab(int blockIndex, BlockType blockType)
-        {
-            return _virtualBlockPrefabs.First(x => x.block.type == blockType && x.block.index == blockIndex);
-        }
-
-        /// <summary>
         /// Gets the prefab of a virtual room.
         /// </summary>
         /// <param name="room">A room entry.</param>
@@ -150,6 +145,7 @@ namespace CRI.HelloHouston.Calibration
             return GetVirtualRoomPrefab(room.index);
         }
 
+
         /// <summary>
         /// Gets the prefab of a virtual room.
         /// </summary>
@@ -157,7 +153,7 @@ namespace CRI.HelloHouston.Calibration
         /// <returns>A VirtualRoom</returns>
         public VirtualRoom GetVirtualRoomPrefab(int index)
         {
-            return _virtualRoomPrefabs.First(x => x.index == index);
+            return GetAllVirtualRooms().First(x => x.index == index);
         }
 
         /// <summary>
@@ -166,7 +162,7 @@ namespace CRI.HelloHouston.Calibration
         /// <returns>An array of VirtualRoom</returns>
         public VirtualRoom[] GetAllVirtualRooms()
         {
-            return _virtualRoomPrefabs;
+            return _virtualItemPrefabs.Where(x => x.virtualItemType == VirtualItem.VirtualItemType.Room).Select(x => (VirtualRoom)x).ToArray();
         }
 
         /// <summary>
@@ -189,6 +185,12 @@ namespace CRI.HelloHouston.Calibration
                 RemovePositionTag(positionTag);
             }
             _positionTags.Clear();
+        }
+
+        public void StartCalibration(int index, int currentVirtualItemPrefabIndex)
+        {
+            _calibrationIndex = index;
+            _currentVirtualItemPrefabIndex = currentVirtualItemPrefabIndex;
         }
 
         /// <summary>
