@@ -24,7 +24,7 @@ namespace VRCalibrationTool
         {
             get
             {
-                return _mousePositionTagList.OrderBy(x => x.positionTagIndex).ToArray();
+                return _mousePositionTagList.OrderBy(x => x.index).ToArray();
             }
         }
 
@@ -44,7 +44,7 @@ namespace VRCalibrationTool
         {
             Debug.Log(position);
             var mpt = GameObject.Instantiate(_mousePositionTag, position, Quaternion.identity, this.transform);
-            mpt.positionTagIndex = positionTagIndex;
+            mpt.index = positionTagIndex;
             positionTagIndex++;
             _mousePositionTagList.Add(mpt);
         }

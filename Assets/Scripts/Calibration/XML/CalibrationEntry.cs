@@ -9,15 +9,15 @@ using VRCalibrationTool;
 
 namespace CRI.HelloHouston.Calibration.XML
 {
-    public abstract class CalibrationEntry
+    public abstract class ItemEntry
     {
         /// <summary>
-        /// Name of the calibration entry
+        /// Name of the item entry
         /// </summary>
         [XmlIgnore]
         public abstract string name { get; }
         /// <summary>
-        /// Index of the calibration entry.
+        /// Index of the item entry.
         /// </summary>
         [XmlAttribute("index")]
         public int index;
@@ -63,7 +63,7 @@ namespace CRI.HelloHouston.Calibration.XML
             }
         }
 
-        public CalibrationEntry(int index, PositionTag[] points, DateTime date)
+        public ItemEntry(int index, PositionTag[] points, DateTime date)
         {
             this.index = index;
             this.date = date;

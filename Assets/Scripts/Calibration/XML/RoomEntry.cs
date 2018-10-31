@@ -7,7 +7,7 @@ namespace CRI.HelloHouston.Calibration.XML
     /// <summary>
     /// A room.
     /// </summary>
-    public class RoomEntry : CalibrationEntry
+    public class RoomEntry : ItemEntry
     {
         /// <summary>
         /// Name of the room.

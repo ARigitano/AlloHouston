@@ -9,6 +9,10 @@ namespace CRI.HelloHouston.Calibration
 {
     public abstract class VirtualItem : VirtualObject
     {
+        public delegate void DateEvent(DateTime date);
+        public delegate void BoolEvent(bool b);
+        public event DateEvent onDateChange;
+        public event BoolEvent onCalibratedChange;
         public enum VirtualItemType
         {
             Block,
@@ -21,7 +25,37 @@ namespace CRI.HelloHouston.Calibration
         /// <summary>
         /// Date of the last calibration.
         /// </summary>
-        public DateTime lastUpdate;
+        public DateTime lastUpdate
+        {
+            get
+            {
+                return _lastUpdate;
+            }
+            set
+            {
+                _lastUpdate = value;
+                if (onDateChange != null)
+                    onDateChange(value);
+            }
+        }
+        /// <summary>
+        /// Date of the last calibration.
+        /// </summary>
+        protected DateTime _lastUpdate;
+        public bool calibrated
+        {
+            get
+            {
+                return _calibrated;
+            }
+            set
+            {
+                _calibrated = value;
+                if (onCalibratedChange != null)
+                    onCalibratedChange(value);
+            }
+        }
+        protected bool _calibrated;
         /// <summary>
         /// The virtual item type.
         /// </summary>

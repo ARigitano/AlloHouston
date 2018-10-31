@@ -8,7 +8,7 @@ namespace CRI.HelloHouston.Calibration.XML
     /// An item entry.
     /// </summary>
     [System.Serializable]
-    public class BlockEntry : CalibrationEntry
+    public class BlockEntry : ItemEntry
     {
         /// <summary>
         /// Path of the ItemEntry prefab.

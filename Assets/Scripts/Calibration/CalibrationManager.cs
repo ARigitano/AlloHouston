@@ -13,17 +13,6 @@ namespace CRI.HelloHouston.Calibration
     /// </summary>
 	public class CalibrationManager : MonoBehaviour
     {
-        public class VirtualBlockIndex
-        {
-            public VirtualBlock virtualBlock;
-            public int calibrationIndex;
-        }
-
-        public class VirtualRoomIndex
-        {
-            public VirtualRoom virtualRoom;
-            public int calibrationIndex;
-        }
         /// <summary>
         /// Prefab of a position tag
         /// </summary>
@@ -40,16 +29,18 @@ namespace CRI.HelloHouston.Calibration
         /// </summary>
         [SerializeField]
         [Tooltip("Contains all the blocks that can be instantiated during the calibration.")]
-        private VirtualItem[] _virtualItemPrefabs;
+        private VirtualBlock[] _virtualBlockPrefabs;
+        /// <summary>
+        /// Contains all the rooms that can be instantiated during the calibration.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("Contains all the rooms that can be instantiated during the calibration.")]
+        private VirtualRoom[] _virtualRoomPrefabs;
 
-        /// <summary>
-        /// List of instantiated blocks and their corresponding calibration index.
-        /// </summary>
-        private List<VirtualBlockIndex> _instantiatedBlocks;
-        /// <summary>
-        /// Instantiated room and its corresponding calibration index.
-        /// </summary>
-        private VirtualRoomIndex _instantiatedRoom;
+        private VirtualItem _currentVirtualItem;
+
+        private CalibrationController _controller;
+
         /// <summary>
         /// True if the calibration manager can create a position tag.
         /// </summary>
@@ -57,26 +48,16 @@ namespace CRI.HelloHouston.Calibration
         {
             get
             {
-                return currentVirtualItemPrefab != null && _positionTags.Count < currentVirtualItemPrefab.virtualPositionTags.Length;
+                return _currentVirtualItem && _positionTags.Count < _currentVirtualItem.virtualPositionTags.Length;
             }
         }
+        
 
-        public int _calibrationIndex;
-
-        public int _currentVirtualItemPrefabIndex;
-
-        public VirtualItem currentVirtualItemPrefab
-        {
-            get
-            {
-                if (_currentVirtualItemPrefabIndex > _virtualItemPrefabs.Length)
-                    return null;
-                return _virtualItemPrefabs[_currentVirtualItemPrefabIndex];
-            }
-        }
         private void Start()
         {
-            _virtualItemPrefabs = Resources.LoadAll<VirtualItem>("VirtualObjects/");
+            _virtualBlockPrefabs = Resources.LoadAll<VirtualBlock>("VirtualObjects/");
+            _virtualRoomPrefabs = Resources.LoadAll<VirtualRoom>("VirtualObjects/");
+            _controller = FindObjectOfType<CalibrationController>();
         }
 
         /// <summary>
@@ -86,21 +67,21 @@ namespace CRI.HelloHouston.Calibration
         {
             int count = _positionTags.Count;
             PositionTag positionTag = (PositionTag)Instantiate(_positionTagPrefab, position, Quaternion.identity);
-            positionTag.positionTagIndex = count;
+            positionTag.index = count;
             positionTag.GetComponent<Renderer>().material.color = new Color(count * 0.2f, count * 0.2f, count * 0.2f, 0.6f);
             _positionTags.Add(positionTag);
         }
 
-        public void CalibrateVR()
+        public void CalibrateCurrentVirtualItem()
         {
-            if (currentVirtualItemPrefab != null)
+            if (_currentVirtualItem != null)
             {
-                VirtualItem virtualItem = Instantiate(currentVirtualItemPrefab);
-                virtualItem.Calibrate(_positionTags.ToArray());
-            }
-            else
-            {
-                throw new Exception("No prefab available for calibration.");
+                _currentVirtualItem.Calibrate(_positionTags.ToArray());
+                _currentVirtualItem.lastUpdate = DateTime.Now;
+                if (_currentVirtualItem.virtualItemType == VirtualItem.VirtualItemType.Room)
+                    XMLManager.instance.InsertOrReplace(((VirtualRoom)_currentVirtualItem).ToRoomEntry());
+                else if (_currentVirtualItem.virtualItemType == VirtualItem.VirtualItemType.Block)
+                    XMLManager.instance.InsertOrReplace(_currentVirtualItem.GetComponentInParent<VirtualRoom>().ToRoomEntry());
             }
         }
 
@@ -111,7 +92,7 @@ namespace CRI.HelloHouston.Calibration
         /// <returns>An array of VirtualBlock</returns>
         public VirtualBlock[] GetAllVirtualBlockPrefabs()
         {
-            return _virtualItemPrefabs.Where(x => x.virtualItemType == VirtualItem.VirtualItemType.Block).Select(x => (VirtualBlock)x).ToArray();
+            return _virtualBlockPrefabs;
         }
 
         /// <summary>
@@ -162,17 +143,31 @@ namespace CRI.HelloHouston.Calibration
         /// <returns>An array of VirtualRoom</returns>
         public VirtualRoom[] GetAllVirtualRooms()
         {
-            return _virtualItemPrefabs.Where(x => x.virtualItemType == VirtualItem.VirtualItemType.Room).Select(x => (VirtualRoom)x).ToArray();
+            return _virtualRoomPrefabs;
         }
 
         /// <summary>
         /// Removes the position tag which collider is being touched by the controller.
         /// </summary>
         /// <param name="pointRemove">The position tag to remove.</param>
-        internal void RemovePositionTag(PositionTag pointRemove)
+        public void RemovePositionTag(PositionTag pointRemove, bool reindex = true)
         {
+            _positionTags.Remove(pointRemove);
             Destroy(pointRemove.gameObject);
             Destroy(pointRemove);
+            for (int i = 0; i < _positionTags.Count && reindex; i++)
+            {
+                _positionTags[i].index = i;
+            }
+        }
+
+        /// <summary>
+        /// Remove the latest position tag.
+        /// </summary>
+        public void RemoveLastPositionTag()
+        {
+            if (_positionTags.Count > 0)
+                RemovePositionTag(_positionTags.Last(), false);
         }
 
         /// <summary>
@@ -182,15 +177,44 @@ namespace CRI.HelloHouston.Calibration
         {
             foreach (var positionTag in _positionTags)
             {
-                RemovePositionTag(positionTag);
+                RemovePositionTag(positionTag, false);
             }
             _positionTags.Clear();
         }
 
-        public void StartCalibration(int index, int currentVirtualItemPrefabIndex)
+        public void StartCalibration(VirtualItem virtualItem)
         {
-            _calibrationIndex = index;
-            _currentVirtualItemPrefabIndex = currentVirtualItemPrefabIndex;
+            ResetPositionTags();
+            _currentVirtualItem = virtualItem;
+            _controller.StartCalibration();
+        }
+
+        public void StopCalibration()
+        {
+            ResetPositionTags();
+            _currentVirtualItem = null;
+            _controller.StopCalibration();
+        }
+
+        /// <summary>
+        /// Instantiates and inits a VirtualRoom from a RoomEntry.
+        /// </summary>
+        /// <param name="roomEntry">The RoomEntry that describes the VirtualRoom</param>
+        /// <returns>An instance of VirtualRoom</returns>
+        public VirtualRoom CreateRoom(RoomEntry roomEntry)
+        {
+            VirtualRoom vroom = Instantiate(GetVirtualRoomPrefab(roomEntry));
+            vroom.Init(roomEntry);
+            VirtualBlock vtable = Instantiate(GetVirtualBlockPrefab(roomEntry.table), transform);
+            vtable.Init(roomEntry.table);
+            vroom.table = vtable;
+            vroom.blocks = new VirtualBlock[vroom.blocks.Length];
+            for (int i = 0; i < vroom.blocks.Length; i++)
+            {
+                vroom.blocks[i] = Instantiate(GetVirtualBlockPrefab(roomEntry.blocks[i]), transform);
+                vroom.blocks[i].Init(roomEntry.blocks[i]);
+            }
+            return vroom;
         }
 
         /// <summary>

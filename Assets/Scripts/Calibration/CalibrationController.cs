@@ -41,6 +41,10 @@ namespace CRI.HelloHouston.Calibration
         [SerializeField]
         [Tooltip("Cooldown between the creation of a position tag and its deletion")]
         private float _cooldownTime = 1.0f;
+        /// <summary>
+        /// The virtual item that will be calibrated.
+        /// </summary>
+        private VirtualItem _virtualItem;
         
         private float _lastCreation = Time.time;
 
@@ -60,6 +64,7 @@ namespace CRI.HelloHouston.Calibration
         /// </summary>
         public void StartCalibration()
         {
+            pointer.ResetPointer();
             _calibration = true;
         }
 
@@ -68,6 +73,7 @@ namespace CRI.HelloHouston.Calibration
         /// </summary>
         public void StopCalibration()
         {
+            pointer.ResetPointer();
             _calibration = false;
         }
 
@@ -88,9 +94,8 @@ namespace CRI.HelloHouston.Calibration
                         }
                         else
                         {
-                            calibrationManager.CalibrateVR();
-                            calibrationManager.ResetPositionTags();
-                            pointer.ResetPointer();
+                            calibrationManager.CalibrateCurrentVirtualItem();
+                            calibrationManager.StopCalibration();
                         }
                     }
                     else if (pointer.incorrectPoint != null && Time.time - _lastCreation > _cooldownTime)
@@ -101,7 +106,7 @@ namespace CRI.HelloHouston.Calibration
                 }
                 else if (device.GetPressDown(SteamVR_Controller.ButtonMask.Grip))
                 {
-                    calibrationManager.ResetPositionTags();
+                    calibrationManager.RemoveLastPositionTag();
                     pointer.ResetPointer();
                 }
             }

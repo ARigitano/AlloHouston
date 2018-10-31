@@ -16,7 +16,7 @@ namespace CRI.HelloHouston.Calibration.XML
             }
         }
 
-        public BlockDatabase blockDB;
+        public ItemDatabase blockDB;
 
         private void Awake()
         {
@@ -28,7 +28,7 @@ namespace CRI.HelloHouston.Calibration.XML
             {
                 Destroy(this);
             }
-            blockDB = BlockDatabase.Load();
+            blockDB = ItemDatabase.Load();
         }
 
         public void SaveItems()
@@ -36,7 +36,7 @@ namespace CRI.HelloHouston.Calibration.XML
             blockDB.Save();
         }
 
-        public void InsertOrReplaceRoom(RoomEntry roomEntry)
+        public void InsertOrReplace(RoomEntry roomEntry)
         {
             //Entering or updating those coordinates inside the XML file
             bool added = false;

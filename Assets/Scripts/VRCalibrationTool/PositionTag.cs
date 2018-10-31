@@ -6,7 +6,7 @@ namespace VRCalibrationTool
 {
     public class PositionTag : MonoBehaviour
     {
-        public int positionTagIndex;
+        public int index;
         private Vector3 _startingPosition;
 
         private void Start()

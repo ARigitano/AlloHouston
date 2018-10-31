@@ -29,7 +29,7 @@ namespace VRCalibrationTool
 
         private void Reset()
         {
-            virtualPositionTags = GetComponentsInChildren<PositionTag>().OrderBy(x => x.positionTagIndex).ToArray();
+            virtualPositionTags = GetComponentsInChildren<PositionTag>().OrderBy(x => x.index).ToArray();
         }
         
         private void Awake()
