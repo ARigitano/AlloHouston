@@ -22,10 +22,6 @@ namespace CRI.HelloHouston.Calibration
         /// The block of the room.
         /// </summary>
         public VirtualBlock[] blocks;
-        /// <summary>
-        /// The block table.
-        /// </summary>
-        public VirtualBlock table;
 
         /// <summary>
         /// Init a VirtualRoom
@@ -49,7 +45,6 @@ namespace CRI.HelloHouston.Calibration
             return new RoomEntry(
                 index,
                 blocks.Select(x => x.ToBlockEntry()).ToArray(),
-                table.ToBlockEntry(),
                 virtualPositionTags,
                 lastUpdate
                 );

@@ -40,8 +40,6 @@ namespace CRI.HelloHouston.Calibration.UI
         {
             UICalibrationEntry roomCalEntry = Instantiate(_calibrationEntryPrefab, _panelTransform);
             roomCalEntry.Init(vroom, calibrationManager);
-            UICalibrationEntry tableCalEntry = Instantiate(_calibrationEntryPrefab, _panelTransform);
-            tableCalEntry.Init(vroom.table, calibrationManager);
             foreach (VirtualBlock vblock in vroom.blocks)
             {
                 UICalibrationEntry blockCalEntry = Instantiate(_calibrationEntryPrefab, _panelTransform);

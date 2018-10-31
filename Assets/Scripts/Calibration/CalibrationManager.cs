@@ -13,6 +13,8 @@ namespace CRI.HelloHouston.Calibration
     /// </summary>
 	public class CalibrationManager : MonoBehaviour
     {
+        public delegate void CalibrationEvent();
+        public static event CalibrationEvent onCalibrationEnd;
         /// <summary>
         /// Prefab of a position tag
         /// </summary>
@@ -184,8 +186,7 @@ namespace CRI.HelloHouston.Calibration
 
         public void StartCalibration(VirtualItem virtualItem)
         {
-            ResetPositionTags();
-            Debug.Log(virtualItem);
+            StopCalibration();
             _currentVirtualItem = virtualItem;
             _controller.StartCalibration();
         }
@@ -195,6 +196,8 @@ namespace CRI.HelloHouston.Calibration
             ResetPositionTags();
             _currentVirtualItem = null;
             _controller.StopCalibration();
+            if (onCalibrationEnd != null)
+                onCalibrationEnd();
         }
 
         /// <summary>
@@ -206,9 +209,6 @@ namespace CRI.HelloHouston.Calibration
         {
             VirtualRoom vroom = Instantiate(GetVirtualRoomPrefab(roomEntry));
             vroom.Init(roomEntry);
-            VirtualBlock vtable = Instantiate(GetVirtualBlockPrefab(roomEntry.table), vroom.transform);
-            vtable.Init(roomEntry.table);
-            vroom.table = vtable;
             vroom.blocks = new VirtualBlock[roomEntry.blocks.Length];
             for (int i = 0; i < roomEntry.blocks.Length; i++)
             {
