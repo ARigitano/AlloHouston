@@ -7,6 +7,7 @@ namespace CRI.HelloHouston.Calibration.XML
     /// <summary>
     /// A room.
     /// </summary>
+    [Serializable]
     public class RoomEntry : ItemEntry
     {
         /// <summary>
@@ -35,6 +36,8 @@ namespace CRI.HelloHouston.Calibration.XML
         /// </summary>
         [XmlAttribute("login")]
         public string login;
+
+        public RoomEntry() : base() { }
 
         public RoomEntry(int index, BlockEntry[] blocks, BlockEntry table, PositionTag[] points, DateTime date) : base(index, points, date)
         {

@@ -49,7 +49,6 @@ namespace VRCalibrationTool
         {
             float distance = (virtualPoint.position - realPoint).magnitude;
             bool withinMinimumDistance = (distance <= minimumDistance);
-            virtualPoint.gameObject.GetComponent<MeshRenderer>().material.color = withinMinimumDistance ? Color.green : Color.red;
             return withinMinimumDistance;
         }
 

@@ -68,6 +68,7 @@ namespace CRI.HelloHouston.Calibration
         public override void Calibrate(PositionTag[] realPositionTags)
         {
             lastUpdate = DateTime.Now;
+            calibrated = true;
             base.Calibrate(realPositionTags);
         }
 
@@ -78,6 +79,7 @@ namespace CRI.HelloHouston.Calibration
         public override void Calibrate(Vector3[] realPositions)
         {
             lastUpdate = DateTime.Now;
+            calibrated = true;
             base.Calibrate(realPositions);
         }
     }

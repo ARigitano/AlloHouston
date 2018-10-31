@@ -9,6 +9,7 @@ using VRCalibrationTool;
 
 namespace CRI.HelloHouston.Calibration.XML
 {
+    [Serializable]
     public abstract class ItemEntry
     {
         /// <summary>
@@ -59,8 +60,14 @@ namespace CRI.HelloHouston.Calibration.XML
         {
             get
             {
-                return serializablePoints.Select(x => x.Vector3).ToArray();
+                return serializablePoints != null ? serializablePoints.Select(x => x.Vector3).ToArray() : null;
             }
+        }
+
+        public ItemEntry()
+        {
+            date = DateTime.Now;
+            serializablePoints = new SerializableVector3[0];
         }
 
         public ItemEntry(int index, PositionTag[] points, DateTime date)

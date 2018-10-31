@@ -6,29 +6,24 @@ using UnityEngine;
 
 namespace CRI.HelloHouston.Calibration
 {
-    [RequireComponent(typeof(SteamVR_TrackedObject))]
     public class CalibrationController : MonoBehaviour
     {
         /// <summary>
-        /// A vive controller with a precision spike.
+        /// A calibrator.
         /// </summary>
-        [Tooltip("A vive controller with a precision spike.")]
-        public SteamVR_TrackedObject trackedObject;
+        [SerializeField]
+        [Tooltip("A calibrator.")]
+        private GameObject _calibrator;
         /// <summary>
         /// The pointer of the controller.
         /// </summary>
+        [SerializeField]
         [Tooltip("The pointer of the controller.")]
-        public VivePointer pointer;
-        /// <summary>
-        /// The transform of the position on which the position tags will be created.
-        /// </summary>
-        [Tooltip("The transform of the position on which the position tags will be created.")]
-        public Transform spawnPosition;
+        private CalibrationPointer _pointer;
         /// <summary>
         /// The calibration manager.
         /// </summary>
-        [Tooltip("The calibration manager.")]
-        public CalibrationManager calibrationManager;
+        private CalibrationManager _calibrationManager;
         /// <summary>
         /// If true, the calibration has started.
         /// </summary>
@@ -45,18 +40,27 @@ namespace CRI.HelloHouston.Calibration
         /// The virtual item that will be calibrated.
         /// </summary>
         private VirtualItem _virtualItem;
-        
-        private float _lastCreation = Time.time;
+
+        private float _lastCreation;
+
+        private void OnValidate()
+        {
+            if (_calibrator != null && _calibrator.GetComponent<ICalibrator>() == null)
+            {
+                Debug.LogError("The calibrator needs to implement the ICalibrator interface.");
+                _calibrator = null;
+            }
+        }
 
         private void Reset()
         {
-            trackedObject = GetComponent<SteamVR_TrackedObject>();
-            pointer = GetComponentInChildren<VivePointer>();
+            _pointer = GetComponentInChildren<CalibrationPointer>();
         }
 
         private void Start()
         {
-            calibrationManager = FindObjectOfType<CalibrationManager>();
+            _lastCreation = Time.time;
+            _calibrationManager = FindObjectOfType<CalibrationManager>();
         }
 
         /// <summary>
@@ -64,7 +68,7 @@ namespace CRI.HelloHouston.Calibration
         /// </summary>
         public void StartCalibration()
         {
-            pointer.ResetPointer();
+            _pointer.ResetPointer();
             _calibration = true;
         }
 
@@ -73,7 +77,7 @@ namespace CRI.HelloHouston.Calibration
         /// </summary>
         public void StopCalibration()
         {
-            pointer.ResetPointer();
+            _pointer.ResetPointer();
             _calibration = false;
         }
 
@@ -81,33 +85,34 @@ namespace CRI.HelloHouston.Calibration
         {
             if (_calibration)
             {
-                SteamVR_Controller.Device device = SteamVR_Controller.Input((int)trackedObject.index);
-                if (device.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger))
+                if (_calibrator.GetComponent<ICalibrator>().GetCalibrationTriggerUp())
                 {
+                    Debug.Log("Up");
                     //On trigger press: either create a position tag or instantiate an object
-                    if (!pointer.isTouchingPoint)
+                    if (!_pointer.isTouchingPoint)
                     {
-                        if (calibrationManager.canCreatePositionTag)
+                        if (_calibrationManager.canCreatePositionTag)
                         {
-                            calibrationManager.CreatePositionTag(spawnPosition.position);
+                            _calibrationManager.CreatePositionTag(_calibrator.GetComponent<ICalibrator>().GetCalibrationPosition());
                             _lastCreation = Time.time;
                         }
                         else
                         {
-                            calibrationManager.CalibrateCurrentVirtualItem();
-                            calibrationManager.StopCalibration();
+                            Debug.Log("Stop");
+                            _calibrationManager.CalibrateCurrentVirtualItem();
+                            _calibrationManager.StopCalibration();
                         }
                     }
-                    else if (pointer.incorrectPoint != null && Time.time - _lastCreation > _cooldownTime)
+                    else if (_pointer.incorrectPoint != null && Time.time - _lastCreation > _cooldownTime)
                     {
-                        calibrationManager.RemovePositionTag(pointer.incorrectPoint);
-                        pointer.ResetPointer();
+                        _calibrationManager.RemovePositionTag(_pointer.incorrectPoint);
+                        _pointer.ResetPointer();
                     }
                 }
-                else if (device.GetPressDown(SteamVR_Controller.ButtonMask.Grip))
+                else if (_calibrator.GetComponent<ICalibrator>().GetCalibrationResetUp())
                 {
-                    calibrationManager.RemoveLastPositionTag();
-                    pointer.ResetPointer();
+                    _calibrationManager.RemoveLastPositionTag();
+                    _pointer.ResetPointer();
                 }
             }
         }

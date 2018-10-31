@@ -7,7 +7,7 @@ namespace CRI.HelloHouston.Calibration.XML
     /// <summary>
     /// An item entry.
     /// </summary>
-    [System.Serializable]
+    [Serializable]
     public class BlockEntry : ItemEntry
     {
         /// <summary>
@@ -26,6 +26,8 @@ namespace CRI.HelloHouston.Calibration.XML
         /// </summary>
         [XmlAttribute("type")]
         public BlockType type;
+
+        public BlockEntry() : base() { }
 
         public BlockEntry(int index, BlockType type, PositionTag[] points, DateTime date) : base(index, points, date)
         {

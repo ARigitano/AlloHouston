@@ -11,13 +11,13 @@ namespace CRI.HelloHouston.Calibration.XML
     /// <summary>
     /// Serializable XML entry
     /// </summary>
-    [System.Serializable]
+    [Serializable]
     [XmlRoot(ElementName = "item_database")]
     public class ItemDatabase
     {
         [XmlArrayItem(typeof(RoomEntry), ElementName = "room")]
         [XmlArray("rooms")]
-        public List<RoomEntry> rooms = new List<RoomEntry>();
+        public List<RoomEntry> rooms;
 
         public const string path = "XML/item_data.xml";
 
@@ -61,7 +61,7 @@ namespace CRI.HelloHouston.Calibration.XML
         {
             XmlSerializer serializer = new XmlSerializer(typeof(ItemDatabase));
             string completePath = Path.Combine(Application.streamingAssetsPath, path);
-            if (!File.Exists(path))
+            if (!File.Exists(completePath))
                 return new ItemDatabase();
             using (var stream = new FileStream(Path.Combine(Application.streamingAssetsPath, path), FileMode.Open))
             {

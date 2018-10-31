@@ -8,7 +8,7 @@ namespace CRI.HelloHouston.Calibration
     /// <summary>
     /// Represents the 3D printed precision spike added to the Vive controller in order to instantiate the position tags more easily
     /// </summary>
-    public class VivePointer : MonoBehaviour
+    public class CalibrationPointer : MonoBehaviour
     {
         /// <summary>
         /// Is the precision spike touching an instantiated position tag?

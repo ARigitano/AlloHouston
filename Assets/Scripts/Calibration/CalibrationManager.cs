@@ -48,7 +48,7 @@ namespace CRI.HelloHouston.Calibration
         {
             get
             {
-                return _currentVirtualItem && _positionTags.Count < _currentVirtualItem.virtualPositionTags.Length;
+                return _currentVirtualItem != null && _positionTags.Count < _currentVirtualItem.virtualPositionTags.Length;
             }
         }
         
@@ -103,7 +103,7 @@ namespace CRI.HelloHouston.Calibration
         /// <returns>The prefab of a virtual block.</returns>
         public VirtualBlock GetVirtualBlockPrefab(int blockIndex, BlockType blockType)
         {
-            return GetAllVirtualBlockPrefabs().First(x => x.block.type == blockType && x.block.index == blockIndex);
+            return GetAllVirtualBlockPrefabs().FirstOrDefault(x => x.block.type == blockType && x.block.index == blockIndex);
         }
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace CRI.HelloHouston.Calibration
         /// <returns>A VirtualRoom</returns>
         public VirtualRoom GetVirtualRoomPrefab(int index)
         {
-            return GetAllVirtualRooms().First(x => x.index == index);
+            return GetAllVirtualRooms().FirstOrDefault(x => x.index == index);
         }
 
         /// <summary>
@@ -175,7 +175,7 @@ namespace CRI.HelloHouston.Calibration
         /// </summary>
         public void ResetPositionTags()
         {
-            foreach (var positionTag in _positionTags)
+            foreach (var positionTag in _positionTags.ToList())
             {
                 RemovePositionTag(positionTag, false);
             }
@@ -185,6 +185,7 @@ namespace CRI.HelloHouston.Calibration
         public void StartCalibration(VirtualItem virtualItem)
         {
             ResetPositionTags();
+            Debug.Log(virtualItem);
             _currentVirtualItem = virtualItem;
             _controller.StartCalibration();
         }
@@ -201,17 +202,17 @@ namespace CRI.HelloHouston.Calibration
         /// </summary>
         /// <param name="roomEntry">The RoomEntry that describes the VirtualRoom</param>
         /// <returns>An instance of VirtualRoom</returns>
-        public VirtualRoom CreateRoom(RoomEntry roomEntry)
+        public VirtualRoom CreateVirtualRoom(RoomEntry roomEntry)
         {
             VirtualRoom vroom = Instantiate(GetVirtualRoomPrefab(roomEntry));
             vroom.Init(roomEntry);
-            VirtualBlock vtable = Instantiate(GetVirtualBlockPrefab(roomEntry.table), transform);
+            VirtualBlock vtable = Instantiate(GetVirtualBlockPrefab(roomEntry.table), vroom.transform);
             vtable.Init(roomEntry.table);
             vroom.table = vtable;
-            vroom.blocks = new VirtualBlock[vroom.blocks.Length];
-            for (int i = 0; i < vroom.blocks.Length; i++)
+            vroom.blocks = new VirtualBlock[roomEntry.blocks.Length];
+            for (int i = 0; i < roomEntry.blocks.Length; i++)
             {
-                vroom.blocks[i] = Instantiate(GetVirtualBlockPrefab(roomEntry.blocks[i]), transform);
+                vroom.blocks[i] = Instantiate(GetVirtualBlockPrefab(roomEntry.blocks[i]), vroom.transform);
                 vroom.blocks[i].Init(roomEntry.blocks[i]);
             }
             return vroom;
