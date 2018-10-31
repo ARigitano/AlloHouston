@@ -6,21 +6,9 @@ namespace CRI.HelloHouston.Experience
     /// <summary>
     /// Constructor for XpDifficulty scriptable object.
     /// </summary>
-    [CreateAssetMenu(fileName = "New XpDifficulty", menuName = "Experience/New XpDifficulty", order = 2)]
-    public class XpDifficulty : ScriptableObject
+    [CreateAssetMenu(fileName = "New XpContext", menuName = "Experience/New XpContext", order = 2)]
+    public class XpContext : ScriptableObject
     {
-        public enum AudienceType
-        {
-            Casual,
-            Scientific
-        }
-
-        public enum DifficultyType
-        {
-            Easy,
-            Medium,
-            Hard
-        }
         [Tooltip("The name of the experiment. The same for all difficiculties and audiences versions of the experiment.")]
         public string name;                                   //The name of the experiment. The same for all difficiculties and audiences versions of the experiment.
 
@@ -28,10 +16,10 @@ namespace CRI.HelloHouston.Experience
         public string description;                           //A description of the audience for the experiment.
 
         [Tooltip("The audience of this version of the experiment. Either mainstream public or researchers.")]
-        public AudienceType audienceType;                    //The audience of this version of the experiment. Either mainstream public or researchers.
+        public string context;                              //The context(audience -ie mainstream or researchers-, physical place, event...) of this version of the experiment. 
 
-        [Tooltip("The difficulty of this version of the experiment. Either easy, medium or hard.")]
-        public DifficultyType difficultyType;               //The difficulty of this version of the experiment. Either easy, medium or hard.
+        [Tooltip("The estimated duration (in minutes) of this version of the experiment.")]
+        public int duration;                                 //The estimated duration (in minutes) of this version of the experiment.
 
         [Tooltip("An empty object with the XpSynchronizer inhreting script of the experiment.")]
         public XpSynchronizer xpSynchronizer;               //An empty object with the XpSynchronizer inhreting script of the experiment.
