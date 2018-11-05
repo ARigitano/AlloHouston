@@ -10,6 +10,7 @@ public class ExperimentsPanel : MonoBehaviour {
     public Toggle start;
     public Button removeButton;
     public int id;
+    public bool isStart = true;
 
 	// Use this for initialization
 	void Start () {

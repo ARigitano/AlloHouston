@@ -41,8 +41,11 @@ namespace CRI.HelloHouston.Experience
         /// <param name="panel">The panel of the experiment to be destroyed</param>
         public void RemoveExperiment(ExperimentsPanel panel)
         {
-            _contextsTotal.RemoveAt(panel.id);
+            _contextsTotal.Insert(panel.id, null);
+            _contextsTotal.RemoveAt(panel.id+1);
             Destroy(panel.gameObject);
+
+            TotalPlaceholder();
         }
 
         /// <summary>
@@ -161,6 +164,51 @@ namespace CRI.HelloHouston.Experience
         }
 
         /// <summary>
+        /// Check and displays the total number of placeholders used
+        /// </summary>
+        private void TotalPlaceholder()
+        {
+            if (_contextsTotal.Count == 0)
+            {
+                _nextButton.interactable = false;
+            }
+            else
+            {
+                _totalWallTopNumber = 0;
+                _totalWallBottomNumber = 0;
+                _totalCornerNumber = 0;
+                _totalDoorNumber = 0;
+                _totalDurationNumber = 0;
+
+                foreach (XpContext context in _contextsTotal)
+                {
+                    if (context != null)
+                    {
+                        _totalWallTopNumber += 1;
+                        _totalWallBottomNumber += context.wallBottomZonePrefab.bottomPlaceholders.Count;
+                        _totalCornerNumber += context.cornerZonePrefab.cornerPlaceholders.Count;
+                        if (context.doorZonePrefab != null)
+                            _totalDoorNumber += 1;
+                        _totalDurationNumber += context.duration;
+                    }
+                }
+                _experiencesTotalPanel.totalWallTop.text = _totalWallTopNumber.ToString() + "/" + roomWallTop.ToString();
+                NextGray(_totalWallTopNumber, roomWallTop, _experiencesTotalPanel.totalWallTop);
+
+                _experiencesTotalPanel.totalWallBottom.text = _totalWallBottomNumber.ToString() + "/" + roomWallBottom.ToString();
+                NextGray(_totalWallBottomNumber, roomWallBottom, _experiencesTotalPanel.totalWallBottom);
+
+                _experiencesTotalPanel.totalCorner.text = _totalCornerNumber.ToString() + "/" + roomCorner.ToString();
+                NextGray(_totalCornerNumber, roomCorner, _experiencesTotalPanel.totalCorner);
+
+                _experiencesTotalPanel.totalDoor.text = _totalDoorNumber.ToString() + "/" + roomDoor.ToString();
+                NextGray(_totalDoorNumber, roomDoor, _experiencesTotalPanel.totalDoor);
+
+                _experiencesTotalPanel.totalDuration.text = _totalDurationNumber.ToString();
+            }
+        }
+
+        /// <summary>
         /// When the context of an experiment is selected, displays the placeholders required and all other relevant informations on the GameManager canvas.
         /// </summary>
         /// <param name="option">The chosen context of the experiment.</param>
@@ -197,38 +245,7 @@ namespace CRI.HelloHouston.Experience
 
             PlaceholdersTextsFill(xpPanel, contextSelected);
 
-            _totalWallTopNumber = 0;
-            _totalWallBottomNumber = 0;
-            _totalCornerNumber = 0;
-            _totalDoorNumber = 0;
-            _totalDurationNumber = 0;
-
-            foreach (XpContext context in _contextsTotal)
-            {
-                if (context != null)
-                {
-                    _totalWallTopNumber += 1;
-                    _totalWallBottomNumber += context.wallBottomZonePrefab.bottomPlaceholders.Count;
-                    _totalCornerNumber += context.cornerZonePrefab.cornerPlaceholders.Count;
-                    if (context.doorZonePrefab != null)
-                        _totalDoorNumber += 1;
-                    _totalDurationNumber += context.duration;
-                }
-                
-            }
-            _experiencesTotalPanel.totalWallTop.text = _totalWallTopNumber.ToString()+"/"+roomWallTop.ToString();
-            NextGray(_totalWallTopNumber, roomWallTop, _experiencesTotalPanel.totalWallTop);
-
-            _experiencesTotalPanel.totalWallBottom.text = _totalWallBottomNumber.ToString()+"/"+roomWallBottom.ToString();
-            NextGray(_totalWallBottomNumber, roomWallBottom, _experiencesTotalPanel.totalWallBottom);
-
-            _experiencesTotalPanel.totalCorner.text = _totalCornerNumber.ToString()+"/"+roomCorner.ToString();
-            NextGray(_totalCornerNumber, roomCorner, _experiencesTotalPanel.totalCorner);
-
-            _experiencesTotalPanel.totalDoor.text = _totalDoorNumber.ToString()+"/"+roomDoor.ToString();
-            NextGray(_totalDoorNumber, roomDoor, _experiencesTotalPanel.totalDoor);
-
-            _experiencesTotalPanel.totalDuration.text = _totalDurationNumber.ToString();
+            TotalPlaceholder();
         }
 
         /// <summary>
