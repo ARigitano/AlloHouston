@@ -31,12 +31,12 @@ namespace CRI.HelloHouston.Calibration
 
         public bool GetCalibrationResetUp()
         {
-            return _device.GetTouchUp(SteamVR_Controller.ButtonMask.Trigger);
+            return _device.GetTouchUp(SteamVR_Controller.ButtonMask.Grip);
         }
 
         public bool GetCalibrationTriggerUp()
         {
-            return _device.GetPressUp(SteamVR_Controller.ButtonMask.Grip);
+            return _device.GetPressUp(SteamVR_Controller.ButtonMask.Trigger);
         }
 
         public Vector3 GetCalibrationPosition()
