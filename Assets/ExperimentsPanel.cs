@@ -5,8 +5,11 @@ using UnityEngine.UI;
 
 public class ExperimentsPanel : MonoBehaviour {
 
-    public Text experiment, walltop, wallbottom, corner, door;
+    public Text experiment, walltop, wallbottom, corner, door, duration;
     public Dropdown contexts;
+    public Toggle start;
+    public Button removeButton;
+    public int id;
 
 	// Use this for initialization
 	void Start () {
