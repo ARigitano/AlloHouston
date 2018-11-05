@@ -1,6 +1,7 @@
 ﻿using CRI.HelloHouston.Calibration.XML;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace CRI.HelloHouston.Calibration.UI
 {
@@ -19,9 +20,40 @@ namespace CRI.HelloHouston.Calibration.UI
         [Tooltip("Transform of the panel.")]
         private Transform _panelTransform;
         /// <summary>
+        /// Next button.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("Next button.")]
+        private Button _nextButton;
+        /// <summary>
         /// List of calibration entries.
         /// </summary>
         private List<UICalibrationEntry> _calibrationEntryList = new List<UICalibrationEntry>();
+
+        private void OnEnable()
+        {
+            CalibrationManager.onCalibrationEnd += OnCalibrationEnd;
+        }
+
+        private void OnDisable()
+        {
+            CalibrationManager.onCalibrationEnd -= OnCalibrationEnd;
+        }
+
+        private void OnCalibrationEnd()
+        {
+            CheckInteractable();
+        }
+
+        private void CheckInteractable()
+        {
+            bool interactable = true;
+            foreach (var calibrationEntry in _calibrationEntryList)
+            {
+                interactable &= calibrationEntry.virtualItem.calibrated;
+            }
+            _nextButton.interactable = interactable;
+        }
 
         private void Reset()
         {
@@ -33,6 +65,7 @@ namespace CRI.HelloHouston.Calibration.UI
             var calibrationManager = FindObjectOfType<CalibrationManager>();
             VirtualRoom vroom = calibrationManager.CreateVirtualRoom(XMLManager.instance.blockDB.rooms[0]);
             Init(vroom, calibrationManager);
+            CheckInteractable();
         }
 
         /// <summary>
@@ -44,10 +77,12 @@ namespace CRI.HelloHouston.Calibration.UI
         {
             UICalibrationEntry roomCalEntry = Instantiate(_calibrationEntryPrefab, _panelTransform);
             roomCalEntry.Init(vroom, calibrationManager);
+            _calibrationEntryList.Add(roomCalEntry);
             foreach (VirtualBlock vblock in vroom.blocks)
             {
                 UICalibrationEntry blockCalEntry = Instantiate(_calibrationEntryPrefab, _panelTransform);
                 blockCalEntry.Init(vblock, calibrationManager);
+                _calibrationEntryList.Add(blockCalEntry);
             }
         }
     }

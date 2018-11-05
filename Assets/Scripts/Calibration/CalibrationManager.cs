@@ -39,7 +39,11 @@ namespace CRI.HelloHouston.Calibration
         private VirtualRoom[] _virtualRoomPrefabs;
 
         private VirtualItem _currentVirtualItem;
-
+        /// <summary>
+        /// The calibration controller.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("The calibration controller.")]
         private CalibrationController _controller;
 
         /// <summary>
@@ -53,12 +57,17 @@ namespace CRI.HelloHouston.Calibration
             }
         }
         
+        private void Reset()
+        {
+            _controller = FindObjectOfType<CalibrationController>();
+        }
 
         private void Start()
         {
             _virtualBlockPrefabs = Resources.LoadAll<VirtualBlock>("VirtualObjects/");
             _virtualRoomPrefabs = Resources.LoadAll<VirtualRoom>("VirtualObjects/");
-            _controller = FindObjectOfType<CalibrationController>();
+            if (_controller == null)
+                _controller = FindObjectOfType<CalibrationController>();
         }
 
         /// <summary>

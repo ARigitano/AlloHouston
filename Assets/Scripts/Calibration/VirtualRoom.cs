@@ -31,6 +31,8 @@ namespace CRI.HelloHouston.Calibration
             this.lastUpdate = room.date;
             if (room.points.Length >= 3)
                 Calibrate(room.points);
+            if (room.points.Length == 0)
+                _calibrated = true;
         }
 
         /// <summary>

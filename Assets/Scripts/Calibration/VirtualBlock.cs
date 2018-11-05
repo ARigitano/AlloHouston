@@ -76,6 +76,8 @@ namespace CRI.HelloHouston.Calibration
             this.indexInRoom = indexInRoom;
             if (block.points.Length >= 3)
                 Calibrate(block.points);
+            if (block.points.Length == 0)
+                _calibrated = true;
         }
 
         /// <summary>

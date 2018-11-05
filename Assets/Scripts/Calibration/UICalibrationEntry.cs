@@ -43,31 +43,34 @@ namespace CRI.HelloHouston.Calibration.UI
         [Tooltip("Ongoing calibration text")]
         public string _ongoingCalibrationText;
 
-        private VirtualItem _virtualItem;
+        public VirtualItem virtualItem {
+            get;
+            private set;
+        }
 
         private void OnEnable()
         {
-            if (_virtualItem != null)
+            if (virtualItem != null)
             {
-                _virtualItem.onDateChange += OnDateChange;
-                _virtualItem.onCalibratedChange += OnCalibratedChange;
+                virtualItem.onDateChange += OnDateChange;
+                virtualItem.onCalibratedChange += OnCalibratedChange;
             }
             CalibrationManager.onCalibrationEnd += OnCalibrationEnd;
         }
 
         private void OnDisable()
         {
-            if (_virtualItem != null)
+            if (virtualItem != null)
             {
-                _virtualItem.onDateChange -= OnDateChange;
-                _virtualItem.onCalibratedChange -= OnCalibratedChange;
+                virtualItem.onDateChange -= OnDateChange;
+                virtualItem.onCalibratedChange -= OnCalibratedChange;
             }
             CalibrationManager.onCalibrationEnd -= OnCalibrationEnd;
         }
 
         private void Init(VirtualItem virtualItem, CalibrationManager calibrationManager)
         {
-            _virtualItem = virtualItem;
+            this.virtualItem = virtualItem;
             _dateText.text = virtualItem.lastUpdate.ToString();
             _calibrationButton.GetComponentInChildren<TranslatedText>().InitTranslatedText(_calibrationText);
             _calibrationValidationButton.SetValidation(virtualItem.calibrated);
