@@ -1,8 +1,5 @@
 ﻿using CRI.HelloHouston.Calibration.XML;
-using System;
 using System.Linq;
-using UnityEngine;
-using VRCalibrationTool;
 
 namespace CRI.HelloHouston.Calibration
 {

@@ -21,8 +21,15 @@ namespace CRI.HelloHouston.Calibration
                 return VirtualZoneType.Corner;
             }
         }
+        public override VirtualPlaceholder[] placeholders
+        {
+            get
+            {
+                return new VirtualPlaceholder[] { wallCornerPlaceholder };
+            }
+        }
 
-        public VirtualPlaceholder<XPCorner> wallCornerPlaceholder;
+        public VirtualPlaceholder wallCornerPlaceholder;
     }
 
     public class VirtualWallTopZone : VirtualZone
@@ -34,9 +41,17 @@ namespace CRI.HelloHouston.Calibration
                 return VirtualZoneType.WallTop;
             }
         }
+        public override VirtualPlaceholder[] placeholders
+        {
+            get
+            {
+                return new VirtualPlaceholder[] { wallTopLeftPlaceholder, wallTopRightPlaceholder, tabletPlaceholder };
+            }
+        }
 
-        public VirtualPlaceholder<XPWallTop> wallTopLeftPlaceholder;
-        public VirtualPlaceholder<XPWallTop> wallTopRightPlaceholder;
+        public VirtualPlaceholder wallTopLeftPlaceholder;
+        public VirtualPlaceholder wallTopRightPlaceholder;
+        public VirtualPlaceholder tabletPlaceholder;
     }
 
     public class VirtualWallBottomZone : VirtualZone
@@ -48,9 +63,15 @@ namespace CRI.HelloHouston.Calibration
                 return VirtualZoneType.WallBottom;
             }
         }
-
-        public VirtualPlaceholder<XPWallBottom> wallBottomLeftPlaceholder;
-        public VirtualPlaceholder<XPWallBottom> wallBottomRightPlaceholder;
+        public override VirtualPlaceholder[] placeholders
+        {
+            get
+            {
+                return new VirtualPlaceholder[] { wallBottomLeftPlaceholder, wallBottomRightPlaceholder };
+            }
+        }
+        public VirtualPlaceholder wallBottomLeftPlaceholder;
+        public VirtualPlaceholder wallBottomRightPlaceholder;
     }
 
     public class VirtualDoorZone : VirtualZone
@@ -62,8 +83,15 @@ namespace CRI.HelloHouston.Calibration
                 return VirtualZoneType.Door;
             }
         }
+        public override VirtualPlaceholder[] placeholders
+        {
+            get
+            {
+                return new VirtualPlaceholder[] { doorPlaceholder };
+            }
+        }
 
-        public VirtualPlaceholder<XPDoor> doorPlaceholder;
+        public VirtualPlaceholder doorPlaceholder;
     }
 
     public class VirtualHologramZone : VirtualZone
@@ -76,11 +104,19 @@ namespace CRI.HelloHouston.Calibration
             }
         }
 
-        public VirtualPlaceholder<XPHologram>[] hologramPlaceholders;
+        public override VirtualPlaceholder[] placeholders
+        {
+            get
+            {
+                return hologramPlaceholders;
+            }
+        }
+        public VirtualPlaceholder[] hologramPlaceholders;
     }
 
     public abstract class VirtualZone : MonoBehaviour
     {
         public abstract VirtualZoneType type { get; }
+        public abstract VirtualPlaceholder[] placeholders { get; }
     }
 }

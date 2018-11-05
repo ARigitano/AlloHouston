@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using VRCalibrationTool;
@@ -213,7 +212,7 @@ namespace CRI.HelloHouston.Calibration
             for (int i = 0; i < roomEntry.blocks.Length; i++)
             {
                 vroom.blocks[i] = Instantiate(GetVirtualBlockPrefab(roomEntry.blocks[i]), vroom.transform);
-                vroom.blocks[i].Init(roomEntry.blocks[i]);
+                vroom.blocks[i].Init(roomEntry.blocks[i], i);
             }
             return vroom;
         }

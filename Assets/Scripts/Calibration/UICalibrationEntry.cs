@@ -1,9 +1,6 @@
-﻿using CRI.HelloHouston.Calibration;
-using CRI.HelloHouston.Calibration.XML;
-using CRI.HelloHouston.Translation;
+﻿using CRI.HelloHouston.Translation;
 using UnityEngine;
 using UnityEngine.UI;
-using VRCalibrationTool;
 
 namespace CRI.HelloHouston.Calibration.UI
 {
@@ -26,7 +23,7 @@ namespace CRI.HelloHouston.Calibration.UI
         /// </summary>
         [SerializeField]
         [Tooltip("Image to tell if the calibration is successful")]
-        private Image _calibrationSuccessfulImage = null;
+        private UICalibrationValidationButton _calibrationValidationButton = null;
         /// <summary>
         /// Text field of the date of the last calibration.
         /// </summary>
@@ -68,40 +65,45 @@ namespace CRI.HelloHouston.Calibration.UI
             CalibrationManager.onCalibrationEnd -= OnCalibrationEnd;
         }
 
-        public void Init(VirtualRoom virtualRoom,
-            CalibrationManager calibrationManager)
+        private void Init(VirtualItem virtualItem, CalibrationManager calibrationManager)
         {
-            _virtualItem = virtualRoom;
-            _nameText.text = string.Format("Room {0}", virtualRoom.index);
-            _dateText.text = virtualRoom.lastUpdate.ToString();
+            _virtualItem = virtualItem;
+            _dateText.text = virtualItem.lastUpdate.ToString();
             _calibrationButton.GetComponentInChildren<TranslatedText>().InitTranslatedText(_calibrationText);
-            _calibrationSuccessfulImage.color = virtualRoom.calibrated ? Color.green : Color.red;
-            virtualRoom.onDateChange += OnDateChange;
-            virtualRoom.onCalibratedChange += OnCalibratedChange;
+            _calibrationValidationButton.SetValidation(virtualItem.calibrated);
+            virtualItem.onDateChange += OnDateChange;
+            virtualItem.onCalibratedChange += OnCalibratedChange;
             _calibrationButton.onClick.AddListener(() =>
             {
-                calibrationManager.StartCalibration(virtualRoom);
+                calibrationManager.StartCalibration(virtualItem);
                 _calibrationButton.interactable = false;
                 _calibrationButton.GetComponentInChildren<TranslatedText>().InitTranslatedText(_ongoingCalibrationText);
             }
             );
         }
 
+        /// <summary>
+        /// Initialization of the calibration entry.
+        /// </summary>
+        /// <param name="virtualRoom"></param>
+        /// <param name="calibrationManager"></param>
+        public void Init(VirtualRoom virtualRoom,
+            CalibrationManager calibrationManager)
+        {
+            _nameText.text = string.Format("Room {0}", virtualRoom.index);
+            Init((VirtualItem)virtualRoom, calibrationManager);
+        }
+
+        /// <summary>
+        /// Initialization of the calibration entry.
+        /// </summary>
+        /// <param name="virtualBlock"></param>
+        /// <param name="calibrationManager"></param>
         public void Init(VirtualBlock virtualBlock,
             CalibrationManager calibrationManager)
         {
-            _virtualItem = virtualBlock;
-            _nameText.text = string.Format("∟ Block {0} {1}", virtualBlock.block.type, virtualBlock.block.index);
-            _dateText.text = virtualBlock.lastUpdate.ToString();
-            _calibrationButton.GetComponentInChildren<TranslatedText>().InitTranslatedText(_calibrationText);
-            virtualBlock.onDateChange += OnDateChange;
-            virtualBlock.onCalibratedChange += OnCalibratedChange;
-            _calibrationButton.onClick.AddListener(() =>
-            {
-                calibrationManager.StartCalibration(virtualBlock);
-                _calibrationButton.interactable = false;
-                _calibrationButton.GetComponentInChildren<TranslatedText>().InitTranslatedText(_ongoingCalibrationText);
-            });
+            _nameText.text = string.Format("∟ {2} - Block {0} {1}", virtualBlock.block.type, virtualBlock.block.index, virtualBlock.indexInRoom + 1);
+            Init((VirtualItem)virtualBlock, calibrationManager);
         }
 
         private void OnDateChange(System.DateTime date)
@@ -109,9 +111,9 @@ namespace CRI.HelloHouston.Calibration.UI
             _dateText.text = date.ToString();
         }
 
-        private void OnCalibratedChange(bool b)
+        private void OnCalibratedChange(bool validation)
         {
-            _calibrationSuccessfulImage.color = b ? Color.green : Color.red;
+            _calibrationValidationButton.SetValidation(validation);
         }
 
         private void OnCalibrationEnd()

@@ -1,5 +1,4 @@
-﻿using CRI.HelloHouston.Calibration;
-using CRI.HelloHouston.Calibration.XML;
+﻿using CRI.HelloHouston.Calibration.XML;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -36,6 +35,11 @@ namespace CRI.HelloHouston.Calibration.UI
             Init(vroom, calibrationManager);
         }
 
+        /// <summary>
+        /// Initialization of the calibration panel.
+        /// </summary>
+        /// <param name="vroom"></param>
+        /// <param name="calibrationManager"></param>
         public void Init(VirtualRoom vroom, CalibrationManager calibrationManager)
         {
             UICalibrationEntry roomCalEntry = Instantiate(_calibrationEntryPrefab, _panelTransform);

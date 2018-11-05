@@ -1,4 +1,4 @@
-﻿using System;
+﻿using UnityEngine;
 
 public class XPPrefab
 {
@@ -20,6 +20,11 @@ public class XPWallBottom : XPPrefab
 
 }
 
+public class XPTablet : XPPrefab
+{
+
+}
+
 public class XPCorner : XPPrefab
 {
 
@@ -32,27 +37,18 @@ public class XPHologram : XPPrefab
 
 namespace CRI.HelloHouston.Calibration
 {
-    [Serializable]
-    public class VirtualPlaceholder<T> where T : XPPrefab
+    public class VirtualPlaceholder : MonoBehaviour
     {
-        public enum VirtualPlaceholderType
+        private XPPrefab _currentPrefab;
+
+        public void PlaceObject(XPPrefab prefab)
         {
-            WallTopLeft,
-            WallTopRight,
-            Tablet,
-            WallBottomLeft,
-            WallBottomRight,
-            Hologram,
-            Corner,
-            Door,
-            Unknown
+            _currentPrefab = prefab;
         }
 
-        public VirtualPlaceholderType type;
-
-        public void PlaceObject(T prefab)
+        public T GetObject<T>() where T : XPPrefab, new()
         {
-
+            return _currentPrefab as T;
         }
     }
 }
