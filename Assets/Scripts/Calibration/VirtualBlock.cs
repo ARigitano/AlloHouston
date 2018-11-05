@@ -79,6 +79,18 @@ namespace CRI.HelloHouston.Calibration
         }
 
         /// <summary>
+        /// Get all zones of a type.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public VirtualZone[] GetZones(VirtualZoneType type)
+        {
+            if (zones.Length == 0)
+                return new VirtualZone[0];
+            return zones.Where(x => x.type == type).ToArray();
+        }
+
+        /// <summary>
         /// Gets a block entry out of the virtual block.
         /// </summary>
         /// <returns>An instance of BlockEntry</returns>

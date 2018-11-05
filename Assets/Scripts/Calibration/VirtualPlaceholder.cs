@@ -37,9 +37,27 @@ public class XPHologram : XPPrefab
 
 namespace CRI.HelloHouston.Calibration
 {
+    public enum VirtualPlaceholderType
+    {
+        WallTopLeft,
+        WallTopRight,
+        Tablet,
+        WallBottomLeft,
+        WallBottomRight,
+        Hologram,
+        Corner,
+        Door,
+        Unknown
+    }
+
     public class VirtualPlaceholder : MonoBehaviour
     {
         private XPPrefab _currentPrefab;
+        /// <summary>
+        /// The type of placeholder.
+        /// </summary>
+        [Tooltip("The type of placeholder")]
+        public VirtualPlaceholderType placeholderType;
 
         public void PlaceObject(XPPrefab prefab)
         {

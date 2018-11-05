@@ -34,6 +34,16 @@ namespace CRI.HelloHouston.Calibration
         }
 
         /// <summary>
+        /// Get all the zones of a type.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public VirtualZone[] GetZones(VirtualZoneType type)
+        {
+            return blocks.SelectMany(x => x.GetZones(type)).ToArray();
+        }
+
+        /// <summary>
         /// Gets the RoomEntry for the Virtual Room.
         /// </summary>
         /// <returns></returns>
