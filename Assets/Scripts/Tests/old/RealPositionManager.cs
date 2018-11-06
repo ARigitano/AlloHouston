@@ -40,7 +40,7 @@ namespace VRCalibrationTool
         {
             foreach (var realPositionTag in _realPositionTagList)
             {
-                realPositionTag.Reset();
+                realPositionTag.ResetPosition();
             }
         }
     }

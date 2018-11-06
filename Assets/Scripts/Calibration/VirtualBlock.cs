@@ -2,6 +2,7 @@
 using System;
 using System.Linq;
 using UnityEngine;
+using VRCalibrationTool;
 
 namespace CRI.HelloHouston.Calibration
 {
@@ -74,10 +75,10 @@ namespace CRI.HelloHouston.Calibration
             this.block.index = block.index;
             this.lastUpdate = block.date;
             this.indexInRoom = indexInRoom;
+            if (virtualPositionTags.Length == 0)
+                calibrated = true;
             if (block.points.Length >= 3)
                 Calibrate(block.points);
-            if (block.points.Length == 0)
-                _calibrated = true;
         }
 
         /// <summary>
@@ -98,7 +99,7 @@ namespace CRI.HelloHouston.Calibration
         /// <returns>An instance of BlockEntry</returns>
         public BlockEntry ToBlockEntry()
         {
-            return new BlockEntry(block.index, block.type, virtualPositionTags, lastUpdate);
+            return new BlockEntry(block.index, block.type, calibrated ? virtualPositionTags : new PositionTag[0], lastUpdate);
         }
     }
 }

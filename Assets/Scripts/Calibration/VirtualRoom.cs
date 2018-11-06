@@ -1,5 +1,6 @@
 ﻿using CRI.HelloHouston.Calibration.XML;
 using System.Linq;
+using VRCalibrationTool;
 
 namespace CRI.HelloHouston.Calibration
 {
@@ -29,10 +30,10 @@ namespace CRI.HelloHouston.Calibration
         {
             this.index = room.index;
             this.lastUpdate = room.date;
+            if (virtualPositionTags.Length == 0)
+                calibrated = true;
             if (room.points.Length >= 3)
                 Calibrate(room.points);
-            if (room.points.Length == 0)
-                _calibrated = true;
         }
 
         /// <summary>
@@ -54,7 +55,7 @@ namespace CRI.HelloHouston.Calibration
             return new RoomEntry(
                 index,
                 blocks.Select(x => x.ToBlockEntry()).ToArray(),
-                virtualPositionTags,
+                calibrated ? virtualPositionTags : new PositionTag[0],
                 lastUpdate
                 );
         }
