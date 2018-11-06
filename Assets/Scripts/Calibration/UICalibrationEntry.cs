@@ -1,4 +1,5 @@
-﻿using CRI.HelloHouston.Translation;
+﻿using System;
+using CRI.HelloHouston.Translation;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -79,10 +80,16 @@ namespace CRI.HelloHouston.Calibration.UI
             _calibrationButton.onClick.AddListener(() =>
             {
                 calibrationManager.StartCalibration(virtualItem);
+                _calibrationButton.GetComponentInChildren<Text>().text = calibrationManager.remainingPositionTags.Value.ToString();
                 _calibrationButton.interactable = false;
-                _calibrationButton.GetComponentInChildren<TranslatedText>().InitTranslatedText(_ongoingCalibrationText);
+                CalibrationManager.onUpdatePositionTag += OnUpdatePositionTag;
             }
             );
+        }
+
+        private void OnUpdatePositionTag(int positionTagCount, int? remainingPositionTags)
+        {
+            _calibrationButton.GetComponentInChildren<Text>().text = remainingPositionTags != null ? remainingPositionTags.ToString() : "";
         }
 
         /// <summary>
@@ -123,6 +130,7 @@ namespace CRI.HelloHouston.Calibration.UI
         {
             _calibrationButton.interactable = true;
             _calibrationButton.GetComponentInChildren<TranslatedText>().InitTranslatedText(_calibrationText);
+            CalibrationManager.onUpdatePositionTag -= OnUpdatePositionTag;
         }
     }
 }

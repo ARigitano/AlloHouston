@@ -18,13 +18,19 @@ namespace CRI.HelloHouston.Calibration.UI
         /// </summary>
         [SerializeField]
         [Tooltip("Transform of the panel.")]
-        private Transform _panelTransform;
+        private Transform _panelTransform = null;
         /// <summary>
         /// Next button.
         /// </summary>
         [SerializeField]
         [Tooltip("Next button.")]
-        private Button _nextButton;
+        private Button _nextButton = null;
+        /// <summary>
+        /// Reset button.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("Reset button.")]
+        private Button _resetButton = null;
         /// <summary>
         /// List of calibration entries.
         /// </summary>
@@ -76,6 +82,7 @@ namespace CRI.HelloHouston.Calibration.UI
         public void Init(VirtualRoom vroom, CalibrationManager calibrationManager)
         {
             UICalibrationEntry roomCalEntry = Instantiate(_calibrationEntryPrefab, _panelTransform);
+            _resetButton.onClick.AddListener(() => calibrationManager.ResetVirtualItems());
             roomCalEntry.Init(vroom, calibrationManager);
             _calibrationEntryList.Add(roomCalEntry);
             foreach (VirtualBlock vblock in vroom.blocks)

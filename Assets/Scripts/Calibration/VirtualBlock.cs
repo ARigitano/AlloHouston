@@ -79,6 +79,8 @@ namespace CRI.HelloHouston.Calibration
                 calibrated = true;
             if (block.points.Length >= 3)
                 Calibrate(block.points);
+            if (!calibrated)
+                gameObject.SetActive(false);
         }
 
         /// <summary>

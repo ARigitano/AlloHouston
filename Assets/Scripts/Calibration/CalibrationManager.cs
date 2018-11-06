@@ -4,6 +4,7 @@ using System.Linq;
 using VRCalibrationTool;
 using CRI.HelloHouston.Calibration.XML;
 using System;
+using UnityEngine.UI;
 
 namespace CRI.HelloHouston.Calibration
 {
@@ -13,7 +14,9 @@ namespace CRI.HelloHouston.Calibration
 	public class CalibrationManager : MonoBehaviour
     {
         public delegate void CalibrationEvent();
+        public delegate void PositionTagEvent(int positionTagCount, int? remainingPositionTags);
         public static event CalibrationEvent onCalibrationEnd;
+        public static event PositionTagEvent onUpdatePositionTag;
         /// <summary>
         /// Prefab of a position tag
         /// </summary>
@@ -38,6 +41,8 @@ namespace CRI.HelloHouston.Calibration
         [Tooltip("Contains all the rooms that can be instantiated during the calibration.")]
         private VirtualRoom[] _virtualRoomPrefabs;
 
+        private VirtualRoom _currentVirtualRoom;
+
         private VirtualItem _currentVirtualItem;
         /// <summary>
         /// The calibration controller.
@@ -54,6 +59,16 @@ namespace CRI.HelloHouston.Calibration
             get
             {
                 return _currentVirtualItem != null && _positionTags.Count < _currentVirtualItem.virtualPositionTags.Length;
+            }
+        }
+
+        public int? remainingPositionTags
+        {
+            get
+            {
+                if (!canCreatePositionTag)
+                    return null;
+                return _currentVirtualItem.virtualPositionTags.Length - _positionTags.Count;
             }
         }
         
@@ -80,18 +95,25 @@ namespace CRI.HelloHouston.Calibration
             positionTag.index = count;
             positionTag.GetComponent<Renderer>().material.color = new Color(count * 0.2f, count * 0.2f, count * 0.2f, 0.6f);
             _positionTags.Add(positionTag);
+            if (onUpdatePositionTag != null)
+                onUpdatePositionTag(_positionTags.Count, remainingPositionTags);
         }
 
         public void CalibrateCurrentVirtualItem()
         {
             if (_currentVirtualItem != null)
             {
+                _currentVirtualItem.gameObject.SetActive(true);
                 _currentVirtualItem.Calibrate(_positionTags.ToArray());
                 _currentVirtualItem.lastUpdate = DateTime.Now;
                 if (_currentVirtualItem.virtualItemType == VirtualItem.VirtualItemType.Room)
                     XMLManager.instance.InsertOrReplace(((VirtualRoom)_currentVirtualItem).ToRoomEntry());
-                else if (_currentVirtualItem.virtualItemType == VirtualItem.VirtualItemType.Block)
+                else if (_currentVirtualItem.virtualItemType == VirtualItem.VirtualItemType.Block && _currentVirtualItem.GetComponentInParent<VirtualRoom>() != null)
                     XMLManager.instance.InsertOrReplace(_currentVirtualItem.GetComponentInParent<VirtualRoom>().ToRoomEntry());
+            }
+            else
+            {
+                Debug.LogError("No current virtual item");
             }
         }
 
@@ -169,6 +191,8 @@ namespace CRI.HelloHouston.Calibration
             {
                 _positionTags[i].index = i;
             }
+            if (onUpdatePositionTag != null)
+                onUpdatePositionTag(_positionTags.Count, remainingPositionTags);
         }
 
         /// <summary>
@@ -208,6 +232,13 @@ namespace CRI.HelloHouston.Calibration
                 onCalibrationEnd();
         }
 
+        public void ResetVirtualItems()
+        {
+            _currentVirtualRoom.ResetAllTags();
+            StopCalibration();
+            XMLManager.instance.InsertOrReplace(_currentVirtualRoom.ToRoomEntry());
+        }
+
         /// <summary>
         /// Instantiates and inits a VirtualRoom from a RoomEntry.
         /// </summary>
@@ -216,11 +247,12 @@ namespace CRI.HelloHouston.Calibration
         public VirtualRoom CreateVirtualRoom(RoomEntry roomEntry)
         {
             VirtualRoom vroom = Instantiate(GetVirtualRoomPrefab(roomEntry));
+            _currentVirtualRoom = vroom;
             vroom.Init(roomEntry);
             vroom.blocks = new VirtualBlock[roomEntry.blocks.Length];
             for (int i = 0; i < roomEntry.blocks.Length; i++)
             {
-                vroom.blocks[i] = Instantiate(GetVirtualBlockPrefab(roomEntry.blocks[i]), vroom.transform);
+                vroom.blocks[i] = Instantiate(GetVirtualBlockPrefab(roomEntry.blocks[i]), vroom.calibrated ? vroom.transform : null);
                 vroom.blocks[i].Init(roomEntry.blocks[i], i);
             }
             return vroom;

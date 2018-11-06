@@ -208,6 +208,7 @@ namespace VRCalibrationTool
         public virtual void Calibrate(Vector3[] realPositions)
         {
             bool minDistanceRealObject = PointsWithinMinimumDistance(realPositions, virtualPositionTags, minimumDistanceToRealObject);
+            Debug.Log(minDistanceRealObject);
             bool minDistancePreviousApprox = false;
             Vector3[] previousPositions = null;
 

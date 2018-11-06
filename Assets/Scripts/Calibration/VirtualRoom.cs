@@ -1,6 +1,7 @@
 ﻿using CRI.HelloHouston.Calibration.XML;
 using System.Linq;
 using VRCalibrationTool;
+using UnityEngine;
 
 namespace CRI.HelloHouston.Calibration
 {
@@ -14,6 +15,20 @@ namespace CRI.HelloHouston.Calibration
             get
             {
                 return VirtualItemType.Room;
+            }
+        }
+
+        public override bool calibrated
+        {
+            get
+            {
+                return base.calibrated;
+            }
+
+            set
+            {
+                base.calibrated = value;
+                SetAllBlocksAsChild(value);
             }
         }
         /// <summary>
@@ -30,10 +45,20 @@ namespace CRI.HelloHouston.Calibration
         {
             this.index = room.index;
             this.lastUpdate = room.date;
-            if (virtualPositionTags.Length == 0)
-                calibrated = true;
             if (room.points.Length >= 3)
                 Calibrate(room.points);
+        }
+
+        /// <summary>
+        /// Set all blocks as child of the virtual block.
+        /// </summary>
+        /// <param name="set">If true, it will set all blocks as child of the virtual block. If false, the blocks' parent will be set up as null.</param>
+        public void SetAllBlocksAsChild(bool set = true)
+        {
+            foreach (var block in blocks)
+            {
+                block.transform.SetParent(set ? transform : null);
+            }
         }
 
         /// <summary>
@@ -58,6 +83,15 @@ namespace CRI.HelloHouston.Calibration
                 calibrated ? virtualPositionTags : new PositionTag[0],
                 lastUpdate
                 );
+        }
+
+        public override void ResetAllTags()
+        {
+            base.ResetAllTags();
+            foreach (var block in blocks)
+            {
+                block.ResetAllTags();
+            }
         }
     }
 }

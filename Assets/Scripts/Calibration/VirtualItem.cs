@@ -39,7 +39,7 @@ namespace CRI.HelloHouston.Calibration
         /// Date of the last calibration.
         /// </summary>
         protected DateTime _lastUpdate;
-        public bool calibrated
+        public virtual bool calibrated
         {
             get
             {
@@ -50,6 +50,7 @@ namespace CRI.HelloHouston.Calibration
                 _calibrated = value;
                 if (onCalibratedChange != null)
                     onCalibratedChange(value);
+                gameObject.SetActive(_calibrated);
             }
         }
         protected bool _calibrated;
@@ -65,8 +66,8 @@ namespace CRI.HelloHouston.Calibration
         public override void Calibrate(PositionTag[] realPositionTags)
         {
             lastUpdate = DateTime.Now;
-            calibrated = true;
             base.Calibrate(realPositionTags);
+            calibrated = true;
         }
 
         /// <summary>
@@ -76,8 +77,17 @@ namespace CRI.HelloHouston.Calibration
         public override void Calibrate(Vector3[] realPositions)
         {
             lastUpdate = DateTime.Now;
-            calibrated = true;
             base.Calibrate(realPositions);
+            calibrated = true;
+        }
+
+        public virtual void ResetAllTags()
+        {
+            foreach (var positionTag in virtualPositionTags)
+            {
+                positionTag.ResetPosition();
+            }
+            calibrated = false;
         }
     }
 }
