@@ -25,14 +25,24 @@ namespace VRCalibrationTool
 
         public Vector3 normal { get { return Vector3.Cross(ij, ik); } }
 
+        /// <summary>
+        /// Creates a CalibrationPlane from 3 Vector3
+        /// </summary>
+        /// <param name="i">Vector3 i</param>
+        /// <param name="j">Vector3 j</param>
+        /// <param name="k">Vector3 k</param>
         public CalibrationPlane(Vector3 i, Vector3 j, Vector3 k)
         {
             SetPoints(i, j, k);
         }
 
-        public CalibrationPlane(Transform[] transforms)
+        /// <summary>
+        /// Creates a CalibrationPlane from 3 Transform
+        /// </summary>
+        /// <param name="transforms"></param>
+        public CalibrationPlane(Transform i, Transform j, Transform k)
         {
-            SetPoints(transforms);
+            SetPoints(i, j, k);
         }
 
         public Vector3 PivotPoint(Pivot pivot)
@@ -63,11 +73,9 @@ namespace VRCalibrationTool
             return Vector3.zero;
         }
 
-        public void SetPoints(Transform[] transforms)
+        public void SetPoints(Transform i, Transform j, Transform k)
         {
-            if (transforms.Length != 3)
-                throw new UnityException("Length of the transform array should be 3");
-            SetPoints(transforms[0].position, transforms[1].position, transforms[2].position);
+            SetPoints(i.position, j.position, k.position);
         }
 
         public void SetPoints(Vector3 i, Vector3 j, Vector3 k)

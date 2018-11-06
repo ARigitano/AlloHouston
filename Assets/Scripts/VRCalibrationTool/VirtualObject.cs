@@ -106,7 +106,7 @@ namespace VRCalibrationTool
             Vector3 n = Vector3.Cross(r.normal, v.normal);
 
             // We make sure that all the points in the virtual calibration plane are corresponding to their transform value
-            v.SetPoints(vtrans);
+            v.SetPoints(vtrans[0], vtrans[1], vtrans[2]);
 
             // We compute the 3 euler angles.
             // Alpha is the rotation to align the virtual plane to the intersection of the two planes.
@@ -120,13 +120,13 @@ namespace VRCalibrationTool
             this.transform.RotateAround(v.PivotPoint(pivot), v.normal, alpha);
 
             // Once the rotation is done, we update the points
-            v.SetPoints(vtrans);
+            v.SetPoints(vtrans[0], vtrans[1], vtrans[2]);
 
             // Beta rotation around the pivot vect
             this.transform.RotateAround(v.PivotPoint(pivot), v.PivotVect(pivot), beta);
 
             // Once the rotation is done
-            v.SetPoints(vtrans);
+            v.SetPoints(vtrans[0], vtrans[1], vtrans[2]);
 
             // Gamma rotation
             this.transform.RotateAround(v.PivotPoint(pivot), v.normal, gamma);
@@ -140,7 +140,7 @@ namespace VRCalibrationTool
             this.transform.position = startPosition;
 
             // We then reset the point in the virtual plane
-            v.SetPoints(vtrans);
+            v.SetPoints(vtrans[0], vtrans[1], vtrans[2]);
 
             return rigidTransformation;
         }
@@ -266,13 +266,13 @@ namespace VRCalibrationTool
 
                         var r = new CalibrationPlane(realPositions [i], realPositions[j], realPositions[k]);
 
-                        var v = new CalibrationPlane(vtrans);
+                        var v = new CalibrationPlane(vtrans[0], vtrans[1], vtrans[2]);
 
                         var rigidTransformation = CalcRotation(r, v, vtrans);
 
                         var scale = CalcScale(r.normal, v.normal);
 
-                        v.SetPoints(vtrans);
+                        v.SetPoints(vtrans[0], vtrans[1], vtrans[2]);
 
                         var dist = CalcDist(r, v);
                         count++;
