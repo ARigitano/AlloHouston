@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class ExperiencesTotalPanel : MonoBehaviour {
 
-    public Text totalWallTop, totalWallBottom, totalCorner, totalDoor, totalDuration;
+    public Text totalWallTop, totalWallBottom, totalCorner, totalDoor, totalHologram, totalDuration;
 
     // Use this for initialization
     void Start () {

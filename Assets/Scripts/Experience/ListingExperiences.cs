@@ -30,6 +30,7 @@ namespace CRI.HelloHouston.Experience
                                     _totalWallBottomNumber,                     //The total number of wall bottom placeholders required
                                     _totalCornerNumber,                         //The total number of corner placeholders required
                                     _totalDoorNumber,                           //The total number of door placeholders required
+                                    _totalHologramNumber,
                                     _totalDurationNumber;                       //The total estimated duration of the game
         public int roomWallTop, roomWallBottom, roomCorner, roomDoor;           //Number of placeholders offered by the room
         [SerializeField] private Button _nextButton;                            //Button to end the installation of the experiments
@@ -151,6 +152,15 @@ namespace CRI.HelloHouston.Experience
                     xpPanel.door.text = "0";
                 }
 
+                if(contextSelected.hologramZonePrefab.hologramPrefabs != null)
+                {
+                    xpPanel.hologram.text = contextSelected.hologramZonePrefab.hologramPrefabs.Length.ToString();
+                }
+                else
+                {
+                    xpPanel.hologram.text = "0";
+                }
+
                 xpPanel.duration.text = contextSelected.duration.ToString();
             }
             else
@@ -159,6 +169,7 @@ namespace CRI.HelloHouston.Experience
                 xpPanel.wallbottom.text = "0";
                 xpPanel.corner.text = "0";
                 xpPanel.door.text = "0";
+                xpPanel.hologram.text = "0";
                 xpPanel.duration.text = "0";
             }
         }
@@ -178,6 +189,7 @@ namespace CRI.HelloHouston.Experience
                 _totalWallBottomNumber = 0;
                 _totalCornerNumber = 0;
                 _totalDoorNumber = 0;
+                _totalHologramNumber = 0;
                 _totalDurationNumber = 0;
 
                 foreach (XpContext context in _contextsTotal)
@@ -187,8 +199,9 @@ namespace CRI.HelloHouston.Experience
                         _totalWallTopNumber += 1;
                         _totalWallBottomNumber += context.wallBottomZonePrefab.bottomPlaceholders.Count;
                         _totalCornerNumber += context.cornerZonePrefab.cornerPlaceholders.Count;
-                        if (context.doorZonePrefab != null)
+                        if (context.doorZonePrefab.doorPrefab != null)
                             _totalDoorNumber += 1;
+                        _totalHologramNumber += context.hologramZonePrefab.hologramPrefabs.Length;
                         _totalDurationNumber += context.duration;
                     }
                 }
@@ -203,6 +216,8 @@ namespace CRI.HelloHouston.Experience
 
                 _experiencesTotalPanel.totalDoor.text = _totalDoorNumber.ToString() + "/" + roomDoor.ToString();
                 NextGray(_totalDoorNumber, roomDoor, _experiencesTotalPanel.totalDoor);
+
+                _experiencesTotalPanel.totalHologram.text = _totalHologramNumber.ToString();
 
                 _experiencesTotalPanel.totalDuration.text = _totalDurationNumber.ToString();
             }
