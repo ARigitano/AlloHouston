@@ -92,6 +92,7 @@ namespace CRI.HelloHouston.Calibration
         {
             int count = _positionTags.Count;
             PositionTag positionTag = (PositionTag)Instantiate(_positionTagPrefab, position, Quaternion.identity);
+            positionTag.managerTag = true;
             positionTag.index = count;
             positionTag.GetComponent<Renderer>().material.color = new Color(count * 0.2f, count * 0.2f, count * 0.2f, 0.6f);
             _positionTags.Add(positionTag);

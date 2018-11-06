@@ -30,7 +30,7 @@ namespace CRI.HelloHouston.Calibration
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.tag == "PositionTag")
+            if (other.tag == "PositionTag" && other.gameObject.GetComponent<PositionTag>() && other.gameObject.GetComponent<PositionTag>().managerTag)
             {
                 isTouchingPoint = true;
                 incorrectPoint = other.gameObject.GetComponent<PositionTag>();
@@ -43,7 +43,7 @@ namespace CRI.HelloHouston.Calibration
 
         private void OnTriggerExit(Collider other)
         {
-            if (other.tag == "PositionTag")
+            if (other.tag == "PositionTag" && other.gameObject.GetComponent<PositionTag>() && other.gameObject.GetComponent<PositionTag>().managerTag)
             {
                 isTouchingPoint = false;
                 incorrectPoint = null;
