@@ -20,10 +20,6 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         private XPGroup[] _allExperiences;
         /// <summary>
-        /// The context scriptable objects of all the available experiences
-        /// </summary>
-        private XPContext[] _allContexts;
-        /// <summary>
         /// Path of the experiences folder
         /// </summary>
         private static string _path = "AllExperiences";
@@ -44,14 +40,6 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         [SerializeField] private GameObject _panelToAttachDropdown1To = null;
         /// <summary>
-        /// List of contexts for the selected experience
-        /// </summary>
-        private List<XPContext> _contexts = new List<XPContext>();
-        /// <summary>
-        /// List of contexts of the experiments selected for this game
-        /// </summary>
-        private List<XPContext> _contextsTotal = new List<XPContext>();
-        /// <summary>
         /// The number of experiments that have been added
         /// </summary>
         private int _experimentsCounter = 0;
@@ -59,17 +47,17 @@ namespace CRI.HelloHouston.Experience
         /// Panel that displays the total number of placeholders and duration
         /// </summary>
         [SerializeField] private UIExperienceTotalPanel _experiencesTotalPanel = null;
-
-        private List<UIExperimentPanel> _experimentPanels = new List<UIExperimentPanel>();
         /// <summary>
-        /// Number of placeholders offered by the room
+        /// All the experiments panel instantiated by the UIListingExperience.
         /// </summary>
-        public int roomWallTop, roomWallBottom, roomCorner, roomDoor;
+        private List<UIExperimentPanel> _experimentPanels = new List<UIExperimentPanel>();
         /// <summary>
         /// Button to end the installation of the experiments
         /// </summary>
         [SerializeField] private Button _nextButton = null;
-
+        /// <summary>
+        /// The current room.
+        /// </summary>
         private VirtualRoom _currentRoom;                    
 
         /// <summary>
@@ -124,6 +112,9 @@ namespace CRI.HelloHouston.Experience
             Init(new VirtualRoom());
         }
 
+        /// <summary>
+        /// Checks if the next button is interactable.
+        /// </summary>
         public void CheckNext()
         {
             int totalWallTop = 0;
