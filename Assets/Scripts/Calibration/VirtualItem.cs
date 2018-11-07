@@ -80,7 +80,9 @@ namespace CRI.HelloHouston.Calibration
             base.Calibrate(realPositions);
             calibrated = true;
         }
-
+        /// <summary>
+        /// Resets the position of all the tags.
+        /// </summary>
         public virtual void ResetAllTags()
         {
             foreach (var positionTag in virtualPositionTags)

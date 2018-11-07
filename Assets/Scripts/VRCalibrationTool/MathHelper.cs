@@ -6,11 +6,20 @@ namespace VRCalibrationTool
 {
     public class MathHelper
     {
+        /// <summary>
+        /// Get the average quaternion a list of quaternions.
+        /// </summary>
+        /// <param name="quaternions"></param>
+        /// <returns></returns>
         public static Quaternion AverageQuaternion(List<Quaternion> quaternions)
         {
             return AverageQuaternion(quaternions.ToArray());
         }
-
+        /// <summary>
+        /// Get the average of an array of quaternions.
+        /// </summary>
+        /// <param name="quaternions"></param>
+        /// <returns></returns>
         public static Quaternion AverageQuaternion(Quaternion[] quaternions)
         {
             if (quaternions.Length == 1)
@@ -26,12 +35,20 @@ namespace VRCalibrationTool
 
             return average;
         }
-
+        /// <summary>
+        /// Get the average vector of a list of vector.
+        /// </summary>
+        /// <param name="vector3List"></param>
+        /// <returns></returns>
         public static Vector3 AverageVector3(List<Vector3> vector3List)
         {
             return AverageVector3(vector3List.ToArray());
         }
-
+        /// <summary>
+        /// Get the average vector of an array of vector.
+        /// </summary>
+        /// <param name="vector3Array"></param>
+        /// <returns></returns>
         public static Vector3 AverageVector3(Vector3[] vector3Array)
         {
             if (vector3Array.Length == 1)

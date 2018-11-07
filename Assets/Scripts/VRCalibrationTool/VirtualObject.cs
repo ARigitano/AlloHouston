@@ -18,13 +18,16 @@ namespace VRCalibrationTool
         /// The calibration will be validated if the distance of a virtual position tag to its real life counterpart is lower than this value.
         /// </summary>
         [Tooltip("The calibration will validated if the distance of a virtual position tag to its real life counterpart is lower than this value.")]
-        public float minimumDistanceToRealObject = 1.0f;
+        public float minimumDistanceToRealObject = 0.01f;
         /// <summary>
         /// The calibration will be validated if the distance between two consecutive approximations is lower than this value.
         /// </summary>
         [Tooltip("The calibration will be validated if the distance between two consecutive approximations is lower than this value.")]
-        public float minimumDistanceToPreviousApprox = 0.01f;
-
+        public float minimumDistanceToPreviousApprox = 0.001f;
+        /// <summary>
+        /// The calibration repetition limit. If the number of repetition reaches this value, the calibration will end.
+        /// </summary>
+        [Tooltip("The calibration repetition limit. If the number of repetition reaches this value, the calibration will end.")]
         public int calibrationRepetitionLimit = 20;
 
         private void Reset()
@@ -130,7 +133,6 @@ namespace VRCalibrationTool
 
             // Gamma rotation
             this.transform.RotateAround(v.PivotPoint(pivot), v.normal, gamma);
-
 
             // The two planes are now parallel and aligned, we can compute the difference in rotation between the start and now.
             var rigidTransformation = new RigidTransformation(Quaternion.Inverse(startRotation) * this.transform.rotation, this.transform.position - startPosition);

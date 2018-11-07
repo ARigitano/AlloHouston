@@ -116,7 +116,13 @@ namespace CRI.HelloHouston.Calibration
 
     public abstract class VirtualZone : MonoBehaviour
     {
+        /// <summary>
+        /// Gets the type of virtual zone.
+        /// </summary>
         public abstract VirtualZoneType type { get; }
+        /// <summary>
+        /// Gets all the placeholders inside the zone.
+        /// </summary>
         public abstract VirtualPlaceholder[] placeholders { get; }
     }
 }

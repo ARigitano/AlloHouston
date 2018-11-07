@@ -85,6 +85,9 @@ namespace CRI.HelloHouston.Calibration
                 );
         }
 
+        /// <summary>
+        /// Reset all tags.ssss
+        /// </summary>
         public override void ResetAllTags()
         {
             base.ResetAllTags();

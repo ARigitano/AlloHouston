@@ -40,7 +40,7 @@ namespace CRI.HelloHouston.Calibration
         /// <summary>
         /// Index of the block inside the room.
         /// </summary>
-        [Tooltip("Index of the block inside the room.")]
+        [HideInInspector]
         public int indexInRoom;
         /// <summary>
         /// All the zones inside the block.
@@ -59,7 +59,7 @@ namespace CRI.HelloHouston.Calibration
             }
         }
 
-        public void Start()
+        private void Start()
         {
             zones = GetComponentsInChildren<VirtualZone>();
         }

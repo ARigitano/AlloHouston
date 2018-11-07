@@ -26,8 +26,6 @@ public class ViveInputs : MonoBehaviour
         }
         _trackedController.TriggerClicked -= HandleTriggerClicked;
         _trackedController.TriggerClicked += HandleTriggerClicked;
-
-        
     }
 
     private void HandleTriggerClicked(object sender, ClickedEventArgs e)

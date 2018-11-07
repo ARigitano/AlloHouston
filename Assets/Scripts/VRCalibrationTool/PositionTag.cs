@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace VRCalibrationTool
 {
@@ -10,8 +8,6 @@ namespace VRCalibrationTool
         /// <summary>
         /// Stating position.
         /// </summary>
-        [SerializeField]
-        [Tooltip("Starting position.")]
         private Vector3 _startingPosition;
         /// <summary>
         /// Position tag index text prefab.
@@ -38,7 +34,9 @@ namespace VRCalibrationTool
             if (_positionTagIndexText != null)
                 _positionTagIndexText.transform.LookAt(2 * _positionTagIndexText.transform.position - Camera.main.transform.position);
         }
-
+        /// <summary>
+        /// Resets the position of a tag.
+        /// </summary>
         public void ResetPosition()
         {
             this.transform.position = _startingPosition;

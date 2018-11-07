@@ -29,11 +29,18 @@ namespace CRI.HelloHouston.Calibration
             _device = SteamVR_Controller.Input((int)_trackedObject.index);
         }
 
+        /// <summary>
+        /// True if the calibration reset button is up.
+        /// </summary>
+        /// <returns></returns>
         public bool GetCalibrationResetUp()
         {
             return _device.GetTouchUp(SteamVR_Controller.ButtonMask.Grip);
         }
-
+        /// <summary>
+        /// True if the trigger button is up.
+        /// </summary>
+        /// <returns></returns>
         public bool GetCalibrationTriggerUp()
         {
             return _device.GetPressUp(SteamVR_Controller.ButtonMask.Trigger);

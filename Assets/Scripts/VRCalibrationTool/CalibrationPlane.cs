@@ -23,6 +23,9 @@ namespace VRCalibrationTool
 
         public Vector3 ik { get { return k - i; } }
 
+        /// <summary>
+        /// The normal of the calibration plane.
+        /// </summary>
         public Vector3 normal { get { return Vector3.Cross(ij, ik); } }
 
         /// <summary>
@@ -45,6 +48,11 @@ namespace VRCalibrationTool
             SetPoints(i, j, k);
         }
 
+        /// <summary>
+        /// Gets the pivot point of the CalibrationPlane
+        /// </summary>
+        /// <param name="pivot"></param>
+        /// <returns></returns>
         public Vector3 PivotPoint(Pivot pivot)
         {
             switch (pivot)
@@ -59,6 +67,11 @@ namespace VRCalibrationTool
             return Vector3.zero;
         }
 
+        /// <summary>
+        /// Get the pivot vector of the calibration plane.
+        /// </summary>
+        /// <param name="pivot"></param>
+        /// <returns></returns>
         public Vector3 PivotVect(Pivot pivot)
         {
             switch (pivot)
@@ -73,11 +86,23 @@ namespace VRCalibrationTool
             return Vector3.zero;
         }
 
+        /// <summary>
+        /// Set the points of the calibration plane.
+        /// </summary>
+        /// <param name="i"></param>
+        /// <param name="j"></param>
+        /// <param name="k"></param>
         public void SetPoints(Transform i, Transform j, Transform k)
         {
             SetPoints(i.position, j.position, k.position);
         }
 
+        /// <summary>
+        /// Set the points of the calibration plane.
+        /// </summary>
+        /// <param name="i"></param>
+        /// <param name="j"></param>
+        /// <param name="k"></param>
         public void SetPoints(Vector3 i, Vector3 j, Vector3 k)
         {
             this.i = i;

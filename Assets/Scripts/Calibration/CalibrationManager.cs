@@ -40,9 +40,13 @@ namespace CRI.HelloHouston.Calibration
         [SerializeField]
         [Tooltip("Contains all the rooms that can be instantiated during the calibration.")]
         private VirtualRoom[] _virtualRoomPrefabs;
-
+        /// <summary>
+        /// The currrent virtual room.
+        /// </summary>
         private VirtualRoom _currentVirtualRoom;
-
+        /// <summary>
+        /// The current virtual item.
+        /// </summary>
         private VirtualItem _currentVirtualItem;
         /// <summary>
         /// The calibration controller.
@@ -100,6 +104,9 @@ namespace CRI.HelloHouston.Calibration
                 onUpdatePositionTag(_positionTags.Count, remainingPositionTags);
         }
 
+        /// <summary>
+        /// Calibrates the current virtual item.
+        /// </summary>
         public void CalibrateCurrentVirtualItem()
         {
             if (_currentVirtualItem != null)
