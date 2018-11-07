@@ -25,12 +25,13 @@ public class UIExperimentPanel : MonoBehaviour {
     [SerializeField]
     private Dropdown _contextDropdown;
     [SerializeField]
-    private Toggle _startText;
+    private Toggle _startToggle;
     [SerializeField]
     public Button removeButton;
 
     private XPContext[] _contexts;
-    private XPContext _currentContext;
+    public XPContext currentContext { get; private set; }
+    public bool start { get; private set; }
     public int id { get; private set; }
     private bool isStart = true;
 
@@ -44,13 +45,20 @@ public class UIExperimentPanel : MonoBehaviour {
         totalPanel.AddContext(id);
         LoadAllContexts(name, experiencePath);
         removeButton.onClick.AddListener(() => { listingExperiences.RemoveExperiment(this); });
+        _startToggle.onValueChanged.AddListener((bool val) =>
+        {
+            start = val;
+            listingExperiences.CheckNext();
+        });
+        start = _startToggle.isOn;
         _contextDropdown.options.Add(new Dropdown.OptionData() { text = TextManager.instance.GetText("CHOOSE") });
         foreach (var option in _contexts)
         {
             _contextDropdown.options.Add(new Dropdown.OptionData() { text = option.context });
             _contextDropdown.onValueChanged.AddListener((int value) => {
                 ChooseContext(_contextDropdown.options[value].text);
-                totalPanel.SetContext(id, _currentContext);
+                totalPanel.SetContext(id, currentContext);
+                listingExperiences.CheckNext();
             });
         }
     }
@@ -70,8 +78,8 @@ public class UIExperimentPanel : MonoBehaviour {
 
     private void ChooseContext(string option)
     {
-        _currentContext = _contexts.FirstOrDefault(x => x.context == option);
-        SetPlaceholderText(_currentContext);
+        currentContext = _contexts.FirstOrDefault(x => x.context == option);
+        SetPlaceholderText(currentContext);
     }
 
     private void SetPlaceholderText(XPContext context)

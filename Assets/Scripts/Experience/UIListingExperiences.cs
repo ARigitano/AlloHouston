@@ -59,6 +59,8 @@ namespace CRI.HelloHouston.Experience
         /// Panel that displays the total number of placeholders and duration
         /// </summary>
         [SerializeField] private UIExperienceTotalPanel _experiencesTotalPanel = null;
+
+        private List<UIExperimentPanel> _experimentPanels = new List<UIExperimentPanel>();
         /// <summary>
         /// Number of placeholders offered by the room
         /// </summary>
@@ -66,7 +68,9 @@ namespace CRI.HelloHouston.Experience
         /// <summary>
         /// Button to end the installation of the experiments
         /// </summary>
-        [SerializeField] private Button _nextButton = null;                       
+        [SerializeField] private Button _nextButton = null;
+
+        private VirtualRoom _currentRoom;                    
 
         /// <summary>
         /// Removes the selected experiment
@@ -75,7 +79,9 @@ namespace CRI.HelloHouston.Experience
         public void RemoveExperiment(UIExperimentPanel panel)
         {
             _experiencesTotalPanel.RemoveContext(panel.id);
+            _experimentPanels.Remove(panel);
             Destroy(panel.gameObject);
+            CheckNext();
         }
 
         /// <summary>
@@ -99,6 +105,8 @@ namespace CRI.HelloHouston.Experience
         {
             UIExperimentPanel xpPanel = Instantiate(_experimentsPanelPrefab, panel.transform);
             xpPanel.Init(name, _experimentsCounter, _experiencesTotalPanel, this, _path);
+            _experimentPanels.Add(xpPanel);
+            CheckNext();
             _experimentsCounter++;
         }
 
@@ -116,6 +124,26 @@ namespace CRI.HelloHouston.Experience
             Init(new VirtualRoom());
         }
 
+        public void CheckNext()
+        {
+            int totalWallTop = 0;
+            bool emptyPanel = false;
+            foreach (UIExperimentPanel panel in _experimentPanels)
+            {
+                if (panel.start && panel.currentContext != null)
+                {
+                    totalWallTop += panel.currentContext.totalWallTop;
+                }
+                if (panel.currentContext == null)
+                {
+                    emptyPanel = true;
+                    break;
+                }
+            }
+            Debug.Log(string.Format("{0} {1} {2} {3}", totalWallTop, !_experiencesTotalPanel.overflow, emptyPanel, _experimentPanels.Count));
+            _nextButton.interactable = !_experiencesTotalPanel.overflow && totalWallTop <= _currentRoom.GetZones(ZoneType.WallTop).Length && !emptyPanel;
+        }
+
         // Use this for initialization
         public void Init(VirtualRoom room)
         {
@@ -123,6 +151,7 @@ namespace CRI.HelloHouston.Experience
             try
             {
                 _allExperiences = Resources.LoadAll(_path, typeof(XPGroup)).Cast<XPGroup>().ToArray();
+                _currentRoom = room;
                 _experiencesTotalPanel.virtualRoom = room;
 
                 foreach (XPGroup experience in _allExperiences)

@@ -24,6 +24,8 @@ public class UIExperienceTotalPanel : MonoBehaviour {
 
     private Dictionary<int, XPContext> _contextTable = new Dictionary<int, XPContext>();
 
+    public bool overflow { get; private set; }
+
     public void UpdateValues()
     {
         int totalWallTop = 0;
@@ -44,12 +46,17 @@ public class UIExperienceTotalPanel : MonoBehaviour {
                 totalDuration += context.duration;
             }
         }
-        SetText(_totalWallTopText, totalWallTop, virtualRoom.GetZones(ZoneType.WallTop).Length);
-        SetText(_totalWallBottomText, totalWallBottom, virtualRoom.GetZones(ZoneType.WallBottom).Length);
-        SetText(_totalCornerText, totalCorner, virtualRoom.GetZones(ZoneType.Corner).Length);
-        SetText(_totalDoorText, totalDoor, virtualRoom.GetZones(ZoneType.Door).Length);
+        int roomWallTop = virtualRoom.GetZones(ZoneType.WallTop).Length;
+        int roomWallBottom = virtualRoom.GetZones(ZoneType.WallBottom).Length;
+        int roomCorner = virtualRoom.GetZones(ZoneType.Corner).Length;
+        int roomDoor = virtualRoom.GetZones(ZoneType.Door).Length;
+        SetText(_totalWallTopText, totalWallTop, roomWallTop);
+        SetText(_totalWallBottomText, totalWallBottom, roomWallBottom);
+        SetText(_totalCornerText, totalCorner, roomCorner);
+        SetText(_totalDoorText, totalDoor, roomDoor);
         SetText(_totalHologramText, totalHologram);
         SetText(_totalDurationText, totalDuration);
+        overflow = totalWallBottom > roomWallBottom || totalDoor > roomDoor || totalCorner > roomCorner;
     }
 
     /// <summary>
