@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Linq;
 using UnityEngine;
 
 namespace CRI.HelloHouston.Experience
@@ -10,10 +11,10 @@ namespace CRI.HelloHouston.Experience
     public class XPContext : ScriptableObject
     {
         /// <summary>
-        /// The name of the experiment. The same for all difficiculties and audiences versions of the experiment.
+        /// The group of the experiment. The same for all difficiculties and audiences versions of the experiment.
         /// </summary>
-        [Tooltip("The name of the experiment. The same for all difficiculties and audiences versions of the experiment.")]
-        public string contextName;
+        [Tooltip("The group of the experiment. The same for all difficiculties and audiences versions of the experiment.")]
+        public XPGroup xpGroup;
 
         /// <summary>
         /// A description of the audience for the experiment.
@@ -49,7 +50,7 @@ namespace CRI.HelloHouston.Experience
         /// The bottom part of the wall, to add additional elements linked to the experiment.
         /// </summary>
         [Tooltip("The bottom part of the wall, to add additional elements linked to the experiment.")]
-        public WallBottomZonePrefab wallBottomZonePrefab;
+        public WallBottomZonePrefab[] wallBottomZonesPrefab;
 
         /// <summary>
         /// The holograms linked to the experiment, to be displayed on the table.
@@ -61,12 +62,52 @@ namespace CRI.HelloHouston.Experience
         /// The corner zones on each side of the modules, to display static elements linked to the experiment.
         /// </summary>
         [Tooltip("The corner zones on each side of the modules, to display static elements linked to the experiment.")]
-        public CornerZonePrefab cornerZonePrefab;
+        public CornerZonePrefab[] cornerZonesPrefab;
 
         /// <summary>
         /// The door at the entrance of the room.
         /// </summary>
         [Tooltip("The door at the entrance of the room.")]
-        public DoorZonePrefab doorZonePrefab;               
+        public DoorZonePrefab doorZonePrefab;     
+        
+        public int totalWallTop
+        {
+            get
+            {
+                return wallTopZonePrefab.placeholders.Count != 0 ? 1 : 0;
+            }
+        }      
+        
+        public int totalWallBottom
+        {
+            get
+            {
+                return wallBottomZonesPrefab.Count(x => x.placeholders.Count != 0);
+            }
+        }    
+
+        public int totalCorners
+        {
+            get
+            {
+                return cornerZonesPrefab.Count(x => x.placeholders.Count != 0);
+            }
+        }
+
+        public int totalDoors
+        {
+            get
+            {
+                return doorZonePrefab.placeholders.Count != 0 ? 1 : 0;
+            }
+        }
+
+        public int totalHolograms
+        {
+            get
+            {
+                return hologramZonePrefab.placeholders.Count;
+            }
+        }
     }
 }

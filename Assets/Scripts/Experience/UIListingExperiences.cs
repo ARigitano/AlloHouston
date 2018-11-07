@@ -6,6 +6,7 @@ using System.Linq;
 using CRI.HelloHouston.Experience;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using CRI.HelloHouston.Calibration;
 
 namespace CRI.HelloHouston.Experience
 {
@@ -31,13 +32,9 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         [SerializeField] private GameObject _buttonPrefab = null;
         /// <summary>
-        /// Prefab for a dropdown menu
-        /// </summary>
-        [SerializeField] private GameObject _dropdownPrefab = null;
-        /// <summary>
         /// Prefab for an experiment panel
         /// </summary>
-        [SerializeField] private GameObject _experimentsPanelPrefab = null;
+        [SerializeField] private UIExperimentPanel _experimentsPanelPrefab = null;
         /// <summary>
         /// Panel for the experiences buttons
         /// </summary>
@@ -61,7 +58,7 @@ namespace CRI.HelloHouston.Experience
         /// <summary>
         /// Panel that displays the total number of placeholders and duration
         /// </summary>
-        [SerializeField] private ExperiencesTotalPanel _experiencesTotalPanel = null;
+        [SerializeField] private UIExperienceTotalPanel _experiencesTotalPanel = null;
         /// <summary>
         /// Number of placeholders offered by the room
         /// </summary>
@@ -75,12 +72,10 @@ namespace CRI.HelloHouston.Experience
         /// Removes the selected experiment
         /// </summary>
         /// <param name="panel">The panel of the experiment to be destroyed</param>
-        public void RemoveExperiment(ExperimentsPanel panel)
+        public void RemoveExperiment(UIExperimentPanel panel)
         {
-            _contextsTotal.Insert(panel.id, null);
-            _contextsTotal.RemoveAt(panel.id+1);
+            _experiencesTotalPanel.RemoveContext(panel.id);
             Destroy(panel.gameObject);
-            TotalPlaceholder();
         }
 
         /// <summary>
@@ -100,201 +95,11 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         /// <param name="options">Contexts as options for the dropdown menu</param>
         /// <param name="panel">Panel to attach the dropdown menu to</param>
-        private void CreateDropDown(string name, List<XPContext> options, GameObject panel)
+        private void CreateExperimentPanel(string name, GameObject panel)
         {
-            GameObject dropdown = (GameObject)Instantiate(_experimentsPanelPrefab);
-            dropdown.transform.SetParent(panel.transform);
-            ExperimentsPanel xpPanel = dropdown.GetComponent<ExperimentsPanel>();
-            xpPanel.experiment.text = name;
-            xpPanel.id = _experimentsCounter;
-            xpPanel.removeButton.onClick.AddListener(delegate { RemoveExperiment(xpPanel); });
-
-            _contextsTotal.Add(null);
+            UIExperimentPanel xpPanel = Instantiate(_experimentsPanelPrefab, panel.transform);
+            xpPanel.Init(name, _experimentsCounter, _experiencesTotalPanel, this, _path);
             _experimentsCounter++;
-            
-            xpPanel.contexts.options.Add(new Dropdown.OptionData() { text = "Choose" });
-            foreach (XPContext option in options)
-            {
-                xpPanel.contexts.options.Add(new Dropdown.OptionData() { text = option.context });
-                xpPanel.contexts.onValueChanged.AddListener(delegate {ChooseContext(xpPanel.contexts.options[xpPanel.contexts.value].text, dropdown); });
-            }
-        }
-
-        /// <summary>
-        /// Checks if there are enough placeholders in the room for a certain category. If not, the user can not end the installation of the experiments.
-        /// </summary>
-        /// <param name="numberPlaceholder">Number of placeholders required</param>
-        /// <param name="numberRoom">Number of placeholders offered by the room</param>
-        /// <param name="placeholderText">The text that displays the number of placeholders</param>
-        private void NextGray(int numberPlaceholder, int numberRoom, Text placeholderText)
-        {
-            if (numberPlaceholder > numberRoom)
-            {
-                placeholderText.fontStyle = FontStyle.BoldAndItalic;
-                _nextButton.interactable = false;
-                Debug.Log("Not enough placeholders");
-            }
-            else
-            {
-                placeholderText.fontStyle = FontStyle.Normal;
-                _nextButton.interactable = true;
-            }
-        }
-
-        /// <summary>
-        /// Fills the fields related to the placeholders required by the experiment 
-        /// </summary>
-        /// <param name="xpPanel">The panel to be filled</param>
-        /// <param name="contextSelected">The XpContext of the selected experiment</param>
-        public void PlaceholdersTextsFill(ExperimentsPanel xpPanel, XPContext contextSelected)
-        {
-            if (contextSelected != null)
-            {
-                if (contextSelected.wallTopZonePrefab.placeholderLeft != null || contextSelected.wallTopZonePrefab.placeholderRight != null || contextSelected.wallTopZonePrefab.placeholderTablet != null)
-                {
-                    xpPanel.walltop.text = "1";
-                }
-                else
-                {
-                    xpPanel.walltop.text = "0";
-                }
-
-                if (!contextSelected.wallBottomZonePrefab.bottomPlaceholders.Count.Equals(0))
-                {
-                    xpPanel.wallbottom.text = contextSelected.wallBottomZonePrefab.bottomPlaceholders.Count.ToString();
-                }
-                else
-                {
-                    xpPanel.wallbottom.text = "0";
-                }
-
-                if (!contextSelected.cornerZonePrefab.cornerPlaceholders.Count.Equals(0))
-                {
-                    xpPanel.corner.text = contextSelected.cornerZonePrefab.cornerPlaceholders.Count.ToString();
-                }
-                else
-                {
-                    xpPanel.corner.text = "0";
-                }
-
-                if (contextSelected.doorZonePrefab.doorPrefab != null)
-                {
-                    xpPanel.door.text = "1";
-                }
-                else
-                {
-                    xpPanel.door.text = "0";
-                }
-
-                if(contextSelected.hologramZonePrefab.hologramPrefabs != null)
-                {
-                    xpPanel.hologram.text = contextSelected.hologramZonePrefab.hologramPrefabs.Length.ToString();
-                }
-                else
-                {
-                    xpPanel.hologram.text = "0";
-                }
-
-                xpPanel.duration.text = contextSelected.duration.ToString();
-            }
-            else
-            {
-                xpPanel.walltop.text = "0";
-                xpPanel.wallbottom.text = "0";
-                xpPanel.corner.text = "0";
-                xpPanel.door.text = "0";
-                xpPanel.hologram.text = "0";
-                xpPanel.duration.text = "0";
-            }
-        }
-
-        /// <summary>
-        /// Check and displays the total number of placeholders used
-        /// </summary>
-        private void TotalPlaceholder()
-        {
-            if (_contextsTotal.Count == 0)
-            {
-                _nextButton.interactable = false;
-            }
-            else
-            {
-                int totalWallTopNumber = 0;
-                int totalWallBottomNumber = 0;
-                int totalCornerNumber = 0;
-                int totalDoorNumber = 0;
-                int totalHologramNumber = 0;
-                int totalDurationNumber = 0;
-
-                foreach (XPContext context in _contextsTotal)
-                {
-                    if (context != null)
-                    {
-                        totalWallTopNumber += 1;
-                        totalWallBottomNumber += context.wallBottomZonePrefab.bottomPlaceholders.Count;
-                        totalCornerNumber += context.cornerZonePrefab.cornerPlaceholders.Count;
-                        if (context.doorZonePrefab.doorPrefab != null)
-                            totalDoorNumber += 1;
-                        totalHologramNumber += context.hologramZonePrefab.hologramPrefabs.Length;
-                        totalDurationNumber += context.duration;
-                    }
-                }
-                _experiencesTotalPanel.totalWallTop.text = totalWallTopNumber.ToString() + "/" + roomWallTop.ToString();
-                NextGray(totalWallTopNumber, roomWallTop, _experiencesTotalPanel.totalWallTop);
-
-                _experiencesTotalPanel.totalWallBottom.text = totalWallBottomNumber.ToString() + "/" + roomWallBottom.ToString();
-                NextGray(totalWallBottomNumber, roomWallBottom, _experiencesTotalPanel.totalWallBottom);
-
-                _experiencesTotalPanel.totalCorner.text = totalCornerNumber.ToString() + "/" + roomCorner.ToString();
-                NextGray(totalCornerNumber, roomCorner, _experiencesTotalPanel.totalCorner);
-
-                _experiencesTotalPanel.totalDoor.text = totalDoorNumber.ToString() + "/" + roomDoor.ToString();
-                NextGray(totalDoorNumber, roomDoor, _experiencesTotalPanel.totalDoor);
-
-                _experiencesTotalPanel.totalHologram.text = totalHologramNumber.ToString();
-
-                _experiencesTotalPanel.totalDuration.text = totalDurationNumber.ToString();
-            }
-        }
-
-        /// <summary>
-        /// When the context of an experiment is selected, displays the placeholders required and all other relevant informations on the GameManager canvas.
-        /// </summary>
-        /// <param name="option">The chosen context of the experiment.</param>
-        /// <param name="dropdown">Reference to the dropdown menu which value has been changed.</param>
-        public void ChooseContext(string option, GameObject dropdown)
-        {
-            ExperimentsPanel xpPanel = dropdown.GetComponent<ExperimentsPanel>();
-
-            XPContext contextSelected = null;
-            XPContext[] allContextsTemp = null;
-
-            try
-            {
-                allContextsTemp = Resources.LoadAll(_path, typeof(XPContext)).Cast<XPContext>().ToArray();
-
-                int i = 0;
-
-                foreach (XPContext context in allContextsTemp)
-                {
-                    if (context.context == option)
-                    {
-                        contextSelected = context;
-                        break;
-                    }
-                    i++;
-                }
-                _contextsTotal.RemoveAt(xpPanel.id);
-                _contextsTotal.Insert(xpPanel.id, contextSelected);
-            }
-            catch (Exception e)
-            {
-                Debug.Log(e.ToString());
-            }
-
-            PlaceholdersTextsFill(xpPanel, contextSelected);
-
-            TotalPlaceholder();
         }
 
         /// <summary>
@@ -303,38 +108,22 @@ namespace CRI.HelloHouston.Experience
         /// <param name="name">Name of the selected experience</param>
         public void DisplayContexts(string name)
         {
-                try
-                {
-                    _allContexts = Resources.LoadAll(_path, typeof(XPContext)).Cast<XPContext>().ToArray();
+            CreateExperimentPanel(name, _panelToAttachDropdown1To);
+        }
 
-                    int i = 0;
-
-                    foreach (XPContext context in _allContexts)
-                    {
-                    if (context.contextName == name)
-                    {
-                        _contexts.Add(context);
-                        i++;
-                    }
-                    }
-
-                    CreateDropDown(name, _contexts, _panelToAttachDropdown1To);
-                _contexts.Clear();
-
-                }
-                catch (Exception e)
-                {
-                    Debug.Log(e.ToString());
-                }
+        private void Start()
+        {
+            Init(new VirtualRoom());
         }
 
         // Use this for initialization
-        void Start()
+        public void Init(VirtualRoom room)
         {
             //Creates a button for each available experience
             try
             {
                 _allExperiences = Resources.LoadAll(_path, typeof(XPGroup)).Cast<XPGroup>().ToArray();
+                _experiencesTotalPanel.virtualRoom = room;
 
                 foreach (XPGroup experience in _allExperiences)
                 {

@@ -69,6 +69,8 @@ namespace CRI.HelloHouston.Calibration
         /// <returns></returns>
         public VirtualZone[] GetZones(ZoneType type)
         {
+            if (blocks == null || blocks.Length == 0)
+                return new VirtualZone[0];
             return blocks.SelectMany(x => x.GetZones(type)).ToArray();
         }
 

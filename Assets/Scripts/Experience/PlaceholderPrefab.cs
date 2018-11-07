@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace CRI.HelloHouston.Experience
@@ -11,6 +13,22 @@ namespace CRI.HelloHouston.Experience
         public GameObject placeholderRight;
         public GameObject placeholderTablet;
 
+
+        public override List<GameObject> placeholders
+        {
+            get
+            {
+                var list = new List<GameObject>();
+                if (placeholderLeft != null)
+                    list.Add(placeholderLeft);
+                if (placeholderRight != null)
+                    list.Add(placeholderRight);
+                if (placeholderTablet != null)
+                    list.Add(placeholderTablet);
+                return list;
+            }
+        }
+
         public override ZoneType GetZoneType()
         {
             return ZoneType.WallTop;
@@ -18,16 +36,23 @@ namespace CRI.HelloHouston.Experience
     }
 
     [System.Serializable]
-    public class BottomPlaceholder
+    public class WallBottomZonePrefab : ZonePrefab
     {
         public GameObject placeholderLeft;
         public GameObject placeholderRight;
-    }
 
-    [System.Serializable]
-    public class WallBottomZonePrefab : ZonePrefab
-    {
-        public List<BottomPlaceholder> bottomPlaceholders;
+        public override List<GameObject> placeholders
+        {
+            get
+            {
+                var list = new List<GameObject>();
+                if (placeholderLeft != null)
+                    list.Add(placeholderLeft);
+                if (placeholderRight != null)
+                    list.Add(placeholderRight);
+                return list;
+            }
+        }
 
         public override ZoneType GetZoneType()
         {
@@ -40,6 +65,14 @@ namespace CRI.HelloHouston.Experience
     {
         public GameObject[] hologramPrefabs;
 
+        public override List<GameObject> placeholders
+        {
+            get
+            {
+                return hologramPrefabs.ToList();
+            }
+        }
+
         public override ZoneType GetZoneType()
         {
             return ZoneType.Hologram;
@@ -47,15 +80,20 @@ namespace CRI.HelloHouston.Experience
     }
 
     [System.Serializable]
-    public class CornerPlaceholder
-    {
-        public GameObject screenPrefab;
-    }
-
-    [System.Serializable]
     public class CornerZonePrefab : ZonePrefab
     {
-        public List<CornerPlaceholder> cornerPlaceholders;
+        public GameObject screenPrefab;
+
+        public override List<GameObject> placeholders
+        {
+            get
+            {
+                var list = new List<GameObject>();
+                if (screenPrefab != null)
+                    list.Add(screenPrefab);
+                return list;
+            }
+        }
 
         public override ZoneType GetZoneType()
         {
@@ -68,6 +106,17 @@ namespace CRI.HelloHouston.Experience
     {
         public GameObject doorPrefab;
 
+        public override List<GameObject> placeholders
+        {
+            get
+            {
+                var list = new List<GameObject>();
+                if (doorPrefab != null)
+                    list.Add(doorPrefab);
+                return list;
+            }
+        }
+
         public override ZoneType GetZoneType()
         {
             return ZoneType.Door;
@@ -78,6 +127,7 @@ namespace CRI.HelloHouston.Experience
     public abstract class ZonePrefab
     {
         public abstract ZoneType GetZoneType();
+        public abstract List<GameObject> placeholders { get; }
     }
 }
 
