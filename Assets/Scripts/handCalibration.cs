@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Assets.ManusVR.Scripts;
 
-public class handCalibration : MonoBehaviour {
+public class HandCalibration : MonoBehaviour {
 
     public GameObject cube;
     public float moveNumber;
