@@ -12,29 +12,64 @@ namespace CRI.HelloHouston.Experience
     /// <summary>
     /// Lists all the available experiences and allows the gamemaster to browse them by audience and difficulty.
     /// </summary>
-    public class ListingExperiences : MonoBehaviour
+    public class UIListingExperiences : MonoBehaviour
     {
-        [SerializeField] private XpGroup[] _allExperiences;                     //All experiences available
-        [SerializeField] private XpContext[] _allContexts;                      //The context scriptable objects of all the available experiences
-        [SerializeField] private static string _path = "AllExperiences";        //Path of the experiences folder
-        [SerializeField] private GameObject _buttonPrefab,                      //Prefab for a button
-                                            _dropdownPrefab,                    //Prefab for a dropdown menu
-                                            _experimentsPanelPrefab;            //Prefab for an experiment panel
-        [SerializeField] private GameObject _panelToAttachButtonsTo,            //Panel for the experiences buttons
-                                            _panelToAttachDropdown1To;          //Panel for the contexts dropdown menus
-        [SerializeField] private List<XpContext> _contexts;                     //List of contexts for the selected experience
-        [SerializeField] private List<XpContext> _contextsTotal;                //List of contexts of the experiments selected for this game
-        [SerializeField] private int _experimentsCounter = 0;                   //The number of experiments that have been added
-        [SerializeField] private ExperiencesTotalPanel _experiencesTotalPanel;  //Panel that displays the total number of placeholders and duration
-        [SerializeField] private int _totalWallTopNumber,                       //The total number of wall top placeholders required
-                                    _totalWallBottomNumber,                     //The total number of wall bottom placeholders required
-                                    _totalCornerNumber,                         //The total number of corner placeholders required
-                                    _totalDoorNumber,                           //The total number of door placeholders required
-                                    _totalHologramNumber,
-                                    _totalDurationNumber;                       //The total estimated duration of the game
-        public int roomWallTop, roomWallBottom, roomCorner, roomDoor;           //Number of placeholders offered by the room
-        [SerializeField] private Button _nextButton;                            //Button to end the installation of the experiments
-        [SerializeField] private UIListingExperiences _uiExperiences;
+        /// <summary>
+        /// All experiences available
+        /// </summary>
+        private XpGroup[] _allExperiences;
+        /// <summary>
+        /// The context scriptable objects of all the available experiences
+        /// </summary>
+        private XpContext[] _allContexts;
+        /// <summary>
+        /// Path of the experiences folder
+        /// </summary>
+        private static string _path = "AllExperiences";
+        /// <summary>
+        /// Prefab for a button
+        /// </summary>
+        [SerializeField] private GameObject _buttonPrefab = null;
+        /// <summary>
+        /// Prefab for a dropdown menu
+        /// </summary>
+        [SerializeField] private GameObject _dropdownPrefab = null;
+        /// <summary>
+        /// Prefab for an experiment panel
+        /// </summary>
+        [SerializeField] private GameObject _experimentsPanelPrefab = null;
+        /// <summary>
+        /// Panel for the experiences buttons
+        /// </summary>
+        [SerializeField] private GameObject _panelToAttachButtonsTo = null;
+        /// <summary>
+        /// Panel for the contexts dropdown menus
+        /// </summary>
+        [SerializeField] private GameObject _panelToAttachDropdown1To = null;
+        /// <summary>
+        /// List of contexts for the selected experience
+        /// </summary>
+        private List<XpContext> _contexts = new List<XpContext>();
+        /// <summary>
+        /// List of contexts of the experiments selected for this game
+        /// </summary>
+        private List<XpContext> _contextsTotal = new List<XpContext>();
+        /// <summary>
+        /// The number of experiments that have been added
+        /// </summary>
+        private int _experimentsCounter = 0;
+        /// <summary>
+        /// Panel that displays the total number of placeholders and duration
+        /// </summary>
+        [SerializeField] private ExperiencesTotalPanel _experiencesTotalPanel = null;
+        /// <summary>
+        /// Number of placeholders offered by the room
+        /// </summary>
+        public int roomWallTop, roomWallBottom, roomCorner, roomDoor;
+        /// <summary>
+        /// Button to end the installation of the experiments
+        /// </summary>
+        [SerializeField] private Button _nextButton = null;                       
 
         /// <summary>
         /// Removes the selected experiment
@@ -45,7 +80,6 @@ namespace CRI.HelloHouston.Experience
             _contextsTotal.Insert(panel.id, null);
             _contextsTotal.RemoveAt(panel.id+1);
             Destroy(panel.gameObject);
-
             TotalPlaceholder();
         }
 
@@ -185,41 +219,41 @@ namespace CRI.HelloHouston.Experience
             }
             else
             {
-                _totalWallTopNumber = 0;
-                _totalWallBottomNumber = 0;
-                _totalCornerNumber = 0;
-                _totalDoorNumber = 0;
-                _totalHologramNumber = 0;
-                _totalDurationNumber = 0;
+                int totalWallTopNumber = 0;
+                int totalWallBottomNumber = 0;
+                int totalCornerNumber = 0;
+                int totalDoorNumber = 0;
+                int totalHologramNumber = 0;
+                int totalDurationNumber = 0;
 
                 foreach (XpContext context in _contextsTotal)
                 {
                     if (context != null)
                     {
-                        _totalWallTopNumber += 1;
-                        _totalWallBottomNumber += context.wallBottomZonePrefab.bottomPlaceholders.Count;
-                        _totalCornerNumber += context.cornerZonePrefab.cornerPlaceholders.Count;
+                        totalWallTopNumber += 1;
+                        totalWallBottomNumber += context.wallBottomZonePrefab.bottomPlaceholders.Count;
+                        totalCornerNumber += context.cornerZonePrefab.cornerPlaceholders.Count;
                         if (context.doorZonePrefab.doorPrefab != null)
-                            _totalDoorNumber += 1;
-                        _totalHologramNumber += context.hologramZonePrefab.hologramPrefabs.Length;
-                        _totalDurationNumber += context.duration;
+                            totalDoorNumber += 1;
+                        totalHologramNumber += context.hologramZonePrefab.hologramPrefabs.Length;
+                        totalDurationNumber += context.duration;
                     }
                 }
-                _experiencesTotalPanel.totalWallTop.text = _totalWallTopNumber.ToString() + "/" + roomWallTop.ToString();
-                NextGray(_totalWallTopNumber, roomWallTop, _experiencesTotalPanel.totalWallTop);
+                _experiencesTotalPanel.totalWallTop.text = totalWallTopNumber.ToString() + "/" + roomWallTop.ToString();
+                NextGray(totalWallTopNumber, roomWallTop, _experiencesTotalPanel.totalWallTop);
 
-                _experiencesTotalPanel.totalWallBottom.text = _totalWallBottomNumber.ToString() + "/" + roomWallBottom.ToString();
-                NextGray(_totalWallBottomNumber, roomWallBottom, _experiencesTotalPanel.totalWallBottom);
+                _experiencesTotalPanel.totalWallBottom.text = totalWallBottomNumber.ToString() + "/" + roomWallBottom.ToString();
+                NextGray(totalWallBottomNumber, roomWallBottom, _experiencesTotalPanel.totalWallBottom);
 
-                _experiencesTotalPanel.totalCorner.text = _totalCornerNumber.ToString() + "/" + roomCorner.ToString();
-                NextGray(_totalCornerNumber, roomCorner, _experiencesTotalPanel.totalCorner);
+                _experiencesTotalPanel.totalCorner.text = totalCornerNumber.ToString() + "/" + roomCorner.ToString();
+                NextGray(totalCornerNumber, roomCorner, _experiencesTotalPanel.totalCorner);
 
-                _experiencesTotalPanel.totalDoor.text = _totalDoorNumber.ToString() + "/" + roomDoor.ToString();
-                NextGray(_totalDoorNumber, roomDoor, _experiencesTotalPanel.totalDoor);
+                _experiencesTotalPanel.totalDoor.text = totalDoorNumber.ToString() + "/" + roomDoor.ToString();
+                NextGray(totalDoorNumber, roomDoor, _experiencesTotalPanel.totalDoor);
 
-                _experiencesTotalPanel.totalHologram.text = _totalHologramNumber.ToString();
+                _experiencesTotalPanel.totalHologram.text = totalHologramNumber.ToString();
 
-                _experiencesTotalPanel.totalDuration.text = _totalDurationNumber.ToString();
+                _experiencesTotalPanel.totalDuration.text = totalDurationNumber.ToString();
             }
         }
 
