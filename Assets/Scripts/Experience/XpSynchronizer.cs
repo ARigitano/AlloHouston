@@ -8,7 +8,7 @@ namespace CRI.HelloHouston.Experience
     /// <summary>
     /// The XpSynchronizer is responsible for the communication of every prefabs of one particular experiment among themselves as well as with the Gamecontroller.
     /// </summary>
-    public class XpSynchronizer : MonoBehaviour
+    public class XPSynchronizer : MonoBehaviour
     {
         /// <summary>
         /// Every possible errors that could be displayed on the table screen for the experiment.

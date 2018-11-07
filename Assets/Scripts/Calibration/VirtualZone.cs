@@ -1,24 +1,15 @@
-﻿using UnityEngine;
+﻿using CRI.HelloHouston.Experience;
+using UnityEngine;
 
 namespace CRI.HelloHouston.Calibration
 {
-    public enum VirtualZoneType
-    {
-        Corner,
-        WallTop,
-        WallBottom,
-        Door,
-        Hologram,
-        Unknown
-    }
-
     public class VirtualCornerZone : VirtualZone
     {
-        public override VirtualZoneType type
+        public override ZoneType type
         {
             get
             {
-                return VirtualZoneType.Corner;
+                return ZoneType.Corner;
             }
         }
         public override VirtualPlaceholder[] placeholders
@@ -34,11 +25,11 @@ namespace CRI.HelloHouston.Calibration
 
     public class VirtualWallTopZone : VirtualZone
     {
-        public override VirtualZoneType type
+        public override ZoneType type
         {
             get
             {
-                return VirtualZoneType.WallTop;
+                return ZoneType.WallTop;
             }
         }
         public override VirtualPlaceholder[] placeholders
@@ -56,11 +47,11 @@ namespace CRI.HelloHouston.Calibration
 
     public class VirtualWallBottomZone : VirtualZone
     {
-        public override VirtualZoneType type
+        public override ZoneType type
         {
             get
             {
-                return VirtualZoneType.WallBottom;
+                return ZoneType.WallBottom;
             }
         }
         public override VirtualPlaceholder[] placeholders
@@ -76,11 +67,11 @@ namespace CRI.HelloHouston.Calibration
 
     public class VirtualDoorZone : VirtualZone
     {
-        public override VirtualZoneType type
+        public override ZoneType type
         {
             get
             {
-                return VirtualZoneType.Door;
+                return ZoneType.Door;
             }
         }
         public override VirtualPlaceholder[] placeholders
@@ -96,11 +87,11 @@ namespace CRI.HelloHouston.Calibration
 
     public class VirtualHologramZone : VirtualZone
     {
-        public override VirtualZoneType type
+        public override ZoneType type
         {
             get
             {
-                return VirtualZoneType.Hologram;
+                return ZoneType.Hologram;
             }
         }
 
@@ -119,7 +110,7 @@ namespace CRI.HelloHouston.Calibration
         /// <summary>
         /// Gets the type of virtual zone.
         /// </summary>
-        public abstract VirtualZoneType type { get; }
+        public abstract ZoneType type { get; }
         /// <summary>
         /// Gets all the placeholders inside the zone.
         /// </summary>

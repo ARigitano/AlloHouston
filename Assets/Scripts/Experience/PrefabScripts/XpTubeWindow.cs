@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace CRI.HelloHouston.Experience
 {
-    public class XpTubeWindow : XpPrefab
+    public class XPTubeWindow : XPPrefab
     {
 
         // Use this for initialization

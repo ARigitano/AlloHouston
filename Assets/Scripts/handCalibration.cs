@@ -11,8 +11,6 @@ public class HandCalibration : MonoBehaviour {
 
     public TrackingManager manus;
 
-	
-
     public void XMoveLeft()
     {
         manus.LCustomPositionOffset += new Vector3(-moveNumber, 0f, 0f);

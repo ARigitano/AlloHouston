@@ -17,11 +17,11 @@ namespace CRI.HelloHouston.Experience
         /// <summary>
         /// All experiences available
         /// </summary>
-        private XpGroup[] _allExperiences;
+        private XPGroup[] _allExperiences;
         /// <summary>
         /// The context scriptable objects of all the available experiences
         /// </summary>
-        private XpContext[] _allContexts;
+        private XPContext[] _allContexts;
         /// <summary>
         /// Path of the experiences folder
         /// </summary>
@@ -49,11 +49,11 @@ namespace CRI.HelloHouston.Experience
         /// <summary>
         /// List of contexts for the selected experience
         /// </summary>
-        private List<XpContext> _contexts = new List<XpContext>();
+        private List<XPContext> _contexts = new List<XPContext>();
         /// <summary>
         /// List of contexts of the experiments selected for this game
         /// </summary>
-        private List<XpContext> _contextsTotal = new List<XpContext>();
+        private List<XPContext> _contextsTotal = new List<XPContext>();
         /// <summary>
         /// The number of experiments that have been added
         /// </summary>
@@ -100,7 +100,7 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         /// <param name="options">Contexts as options for the dropdown menu</param>
         /// <param name="panel">Panel to attach the dropdown menu to</param>
-        private void CreateDropDown(string name, List<XpContext> options, GameObject panel)
+        private void CreateDropDown(string name, List<XPContext> options, GameObject panel)
         {
             GameObject dropdown = (GameObject)Instantiate(_experimentsPanelPrefab);
             dropdown.transform.SetParent(panel.transform);
@@ -113,7 +113,7 @@ namespace CRI.HelloHouston.Experience
             _experimentsCounter++;
             
             xpPanel.contexts.options.Add(new Dropdown.OptionData() { text = "Choose" });
-            foreach (XpContext option in options)
+            foreach (XPContext option in options)
             {
                 xpPanel.contexts.options.Add(new Dropdown.OptionData() { text = option.context });
                 xpPanel.contexts.onValueChanged.AddListener(delegate {ChooseContext(xpPanel.contexts.options[xpPanel.contexts.value].text, dropdown); });
@@ -146,7 +146,7 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         /// <param name="xpPanel">The panel to be filled</param>
         /// <param name="contextSelected">The XpContext of the selected experiment</param>
-        public void PlaceholdersTextsFill(ExperimentsPanel xpPanel, XpContext contextSelected)
+        public void PlaceholdersTextsFill(ExperimentsPanel xpPanel, XPContext contextSelected)
         {
             if (contextSelected != null)
             {
@@ -226,7 +226,7 @@ namespace CRI.HelloHouston.Experience
                 int totalHologramNumber = 0;
                 int totalDurationNumber = 0;
 
-                foreach (XpContext context in _contextsTotal)
+                foreach (XPContext context in _contextsTotal)
                 {
                     if (context != null)
                     {
@@ -266,16 +266,16 @@ namespace CRI.HelloHouston.Experience
         {
             ExperimentsPanel xpPanel = dropdown.GetComponent<ExperimentsPanel>();
 
-            XpContext contextSelected = null;
-            XpContext[] allContextsTemp = null;
+            XPContext contextSelected = null;
+            XPContext[] allContextsTemp = null;
 
             try
             {
-                allContextsTemp = Resources.LoadAll(_path, typeof(XpContext)).Cast<XpContext>().ToArray();
+                allContextsTemp = Resources.LoadAll(_path, typeof(XPContext)).Cast<XPContext>().ToArray();
 
                 int i = 0;
 
-                foreach (XpContext context in allContextsTemp)
+                foreach (XPContext context in allContextsTemp)
                 {
                     if (context.context == option)
                     {
@@ -305,13 +305,13 @@ namespace CRI.HelloHouston.Experience
         {
                 try
                 {
-                    _allContexts = Resources.LoadAll(_path, typeof(XpContext)).Cast<XpContext>().ToArray();
+                    _allContexts = Resources.LoadAll(_path, typeof(XPContext)).Cast<XPContext>().ToArray();
 
                     int i = 0;
 
-                    foreach (XpContext context in _allContexts)
+                    foreach (XPContext context in _allContexts)
                     {
-                    if (context.name == name)
+                    if (context.contextName == name)
                     {
                         _contexts.Add(context);
                         i++;
@@ -334,11 +334,11 @@ namespace CRI.HelloHouston.Experience
             //Creates a button for each available experience
             try
             {
-                _allExperiences = Resources.LoadAll(_path, typeof(XpGroup)).Cast<XpGroup>().ToArray();
+                _allExperiences = Resources.LoadAll(_path, typeof(XPGroup)).Cast<XPGroup>().ToArray();
 
-                foreach (XpGroup experience in _allExperiences)
+                foreach (XPGroup experience in _allExperiences)
                 {
-                    CreateButton(experience.name);
+                    CreateButton(experience.experimentName);
                 }
             }
             catch (Exception e)

@@ -1,4 +1,5 @@
 ﻿using CRI.HelloHouston.Calibration.XML;
+using CRI.HelloHouston.Experience;
 using System;
 using System.Linq;
 using UnityEngine;
@@ -88,7 +89,7 @@ namespace CRI.HelloHouston.Calibration
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public VirtualZone[] GetZones(VirtualZoneType type)
+        public VirtualZone[] GetZones(ZoneType type)
         {
             if (zones.Length == 0)
                 return new VirtualZone[0];

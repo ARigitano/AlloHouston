@@ -1,39 +1,5 @@
-﻿using UnityEngine;
-
-public class XPPrefab
-{
-
-}
-
-public class XPDoor : XPPrefab
-{
-
-}
-
-public class XPWallTop : XPPrefab
-{
-
-}
-
-public class XPWallBottom : XPPrefab
-{
-
-}
-
-public class XPTablet : XPPrefab
-{
-
-}
-
-public class XPCorner : XPPrefab
-{
-
-}
-
-public class XPHologram : XPPrefab
-{
-
-}
+﻿using CRI.HelloHouston.Experience;
+using UnityEngine;
 
 namespace CRI.HelloHouston.Calibration
 {

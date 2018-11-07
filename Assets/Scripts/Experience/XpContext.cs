@@ -7,13 +7,13 @@ namespace CRI.HelloHouston.Experience
     /// Constructor for XpDifficulty scriptable object.
     /// </summary>
     [CreateAssetMenu(fileName = "New XpContext", menuName = "Experience/New XpContext", order = 2)]
-    public class XpContext : ScriptableObject
+    public class XPContext : ScriptableObject
     {
         /// <summary>
         /// The name of the experiment. The same for all difficiculties and audiences versions of the experiment.
         /// </summary>
         [Tooltip("The name of the experiment. The same for all difficiculties and audiences versions of the experiment.")]
-        public string name;
+        public string contextName;
 
         /// <summary>
         /// A description of the audience for the experiment.
@@ -37,7 +37,7 @@ namespace CRI.HelloHouston.Experience
         /// An empty object with the XpSynchronizer inhreting script of the experiment.
         /// </summary>
         [Tooltip("An empty object with the XpSynchronizer inhreting script of the experiment.")]
-        public XpSynchronizer xpSynchronizer;
+        public XPSynchronizer xpSynchronizer;
 
         /// <summary>
         /// The screen, window and tablet on the top part of the wall, to interact with the experiment.

@@ -2,6 +2,7 @@
 using System.Linq;
 using VRCalibrationTool;
 using UnityEngine;
+using CRI.HelloHouston.Experience;
 
 namespace CRI.HelloHouston.Calibration
 {
@@ -66,7 +67,7 @@ namespace CRI.HelloHouston.Calibration
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public VirtualZone[] GetZones(VirtualZoneType type)
+        public VirtualZone[] GetZones(ZoneType type)
         {
             return blocks.SelectMany(x => x.GetZones(type)).ToArray();
         }

@@ -11,7 +11,7 @@ namespace CRI.HelloHouston.Experience
         public GameObject placeholderRight;
         public GameObject placeholderTablet;
 
-        public override ZoneType GetType()
+        public override ZoneType GetZoneType()
         {
             return ZoneType.WallTop;
         }
@@ -29,7 +29,7 @@ namespace CRI.HelloHouston.Experience
     {
         public List<BottomPlaceholder> bottomPlaceholders;
 
-        public override ZoneType GetType()
+        public override ZoneType GetZoneType()
         {
             return ZoneType.WallBottom;
         }
@@ -40,7 +40,7 @@ namespace CRI.HelloHouston.Experience
     {
         public GameObject[] hologramPrefabs;
 
-        public override ZoneType GetType()
+        public override ZoneType GetZoneType()
         {
             return ZoneType.Hologram;
         }
@@ -57,7 +57,7 @@ namespace CRI.HelloHouston.Experience
     {
         public List<CornerPlaceholder> cornerPlaceholders;
 
-        public override ZoneType GetType()
+        public override ZoneType GetZoneType()
         {
             return ZoneType.Corner;
         }
@@ -68,16 +68,16 @@ namespace CRI.HelloHouston.Experience
     {
         public GameObject doorPrefab;
 
-        public override ZoneType GetType()
+        public override ZoneType GetZoneType()
         {
-            throw new System.NotImplementedException();
+            return ZoneType.Door;
         }
     }
 
     [System.Serializable]
     public abstract class ZonePrefab
     {
-        public abstract ZoneType GetType();
+        public abstract ZoneType GetZoneType();
     }
 }
 
