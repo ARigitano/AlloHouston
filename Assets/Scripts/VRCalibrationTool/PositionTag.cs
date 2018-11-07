@@ -24,7 +24,7 @@ namespace VRCalibrationTool
         /// </summary>
         private TextMesh _positionTagIndexText= null;
 
-        public bool managerTag;
+        public bool managerTag { get; set; }
 
         private void Start()
         {
