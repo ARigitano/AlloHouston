@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace CRI.HelloHouston.Calibration.UI
 {
-    public class UICalibrationPanel : MonoBehaviour
+    public class UICalibrationPanel : UIPanel
     {
         /// <summary>
         /// Prefab of a calibration entry.
@@ -24,7 +24,7 @@ namespace CRI.HelloHouston.Calibration.UI
         /// </summary>
         [SerializeField]
         [Tooltip("Next button.")]
-        private Button _nextButton = null;
+        private UINextButton _nextButton = null;
         /// <summary>
         /// Reset button.
         /// </summary>
@@ -35,6 +35,10 @@ namespace CRI.HelloHouston.Calibration.UI
         /// List of calibration entries.
         /// </summary>
         private List<UICalibrationEntry> _calibrationEntryList = new List<UICalibrationEntry>();
+        /// <summary>
+        /// The virtual room.
+        /// </summary>
+        private VirtualRoom _virtualRoom = null;
 
         private void OnEnable()
         {
@@ -59,6 +63,10 @@ namespace CRI.HelloHouston.Calibration.UI
                 interactable &= calibrationEntry.virtualItem.calibrated;
             }
             _nextButton.interactable = interactable;
+            if (_nextButton.interactable)
+            {
+                _nextButton.nextObject = _virtualRoom;
+            }
         }
 
         private void Reset()
@@ -81,6 +89,7 @@ namespace CRI.HelloHouston.Calibration.UI
         /// <param name="calibrationManager"></param>
         public void Init(VirtualRoom vroom, CalibrationManager calibrationManager)
         {
+            _virtualRoom = vroom;
             UICalibrationEntry roomCalEntry = Instantiate(_calibrationEntryPrefab, _panelTransform);
             _resetButton.onClick.AddListener(() => calibrationManager.ResetVirtualItems());
             roomCalEntry.Init(vroom, calibrationManager);

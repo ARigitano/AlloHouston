@@ -8,12 +8,12 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using CRI.HelloHouston.Calibration;
 
-namespace CRI.HelloHouston.Experience
+namespace CRI.HelloHouston.Experience.UI
 {
     /// <summary>
     /// Lists all the available experiences and allows the gamemaster to browse them by audience and difficulty.
     /// </summary>
-    public class UIListingExperiences : MonoBehaviour
+    public class UIExperimentListing : UIPanel
     {
         /// <summary>
         /// All experiences available
@@ -34,11 +34,11 @@ namespace CRI.HelloHouston.Experience
         /// <summary>
         /// Panel for the experiences buttons
         /// </summary>
-        [SerializeField] private GameObject _panelToAttachButtonsTo = null;
+        [SerializeField] private Transform _transformToAttachButtonsTO = null;
         /// <summary>
         /// Panel for the contexts dropdown menus
         /// </summary>
-        [SerializeField] private GameObject _panelToAttachDropdown1To = null;
+        [SerializeField] private Transform _transformToAttachDropdown = null;
         /// <summary>
         /// The number of experiments that have been added
         /// </summary>
@@ -46,7 +46,7 @@ namespace CRI.HelloHouston.Experience
         /// <summary>
         /// Panel that displays the total number of placeholders and duration
         /// </summary>
-        [SerializeField] private UIExperienceTotalPanel _experiencesTotalPanel = null;
+        [SerializeField] private UIExperimentTotalPanel _experimentTotalPanel = null;
         /// <summary>
         /// All the experiments panel instantiated by the UIListingExperience.
         /// </summary>
@@ -54,7 +54,7 @@ namespace CRI.HelloHouston.Experience
         /// <summary>
         /// Button to end the installation of the experiments
         /// </summary>
-        [SerializeField] private Button _nextButton = null;
+        [SerializeField] private UINextButton _nextButton = null;
         /// <summary>
         /// The current room.
         /// </summary>
@@ -66,7 +66,7 @@ namespace CRI.HelloHouston.Experience
         /// <param name="panel">The panel of the experiment to be destroyed</param>
         public void RemoveExperiment(UIExperimentPanel panel)
         {
-            _experiencesTotalPanel.RemoveContext(panel.id);
+            _experimentTotalPanel.RemoveContext(panel.id);
             _experimentPanels.Remove(panel);
             Destroy(panel.gameObject);
             CheckNext();
@@ -78,8 +78,7 @@ namespace CRI.HelloHouston.Experience
         /// <param name="name">Name of the selectable experience</param>
         private void CreateButton(string name)
         {
-            GameObject button = (GameObject)Instantiate(_buttonPrefab);
-            button.transform.SetParent(_panelToAttachButtonsTo.transform);
+            GameObject button = (GameObject)Instantiate(_buttonPrefab, _transformToAttachButtonsTO);
             button.GetComponent<Button>().onClick.AddListener(() => DisplayContexts(name));
             button.transform.GetChild(0).GetComponent<Text>().text = name;
         }
@@ -89,10 +88,10 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         /// <param name="options">Contexts as options for the dropdown menu</param>
         /// <param name="panel">Panel to attach the dropdown menu to</param>
-        private void CreateExperimentPanel(string name, GameObject panel)
+        private void CreateExperimentPanel(string name, Transform panel)
         {
-            UIExperimentPanel xpPanel = Instantiate(_experimentsPanelPrefab, panel.transform);
-            xpPanel.Init(name, _experimentsCounter, _experiencesTotalPanel, this, _path);
+            UIExperimentPanel xpPanel = Instantiate(_experimentsPanelPrefab, panel);
+            xpPanel.Init(name, _experimentsCounter, _experimentTotalPanel, this, _path);
             _experimentPanels.Add(xpPanel);
             CheckNext();
             _experimentsCounter++;
@@ -104,12 +103,7 @@ namespace CRI.HelloHouston.Experience
         /// <param name="name">Name of the selected experience</param>
         public void DisplayContexts(string name)
         {
-            CreateExperimentPanel(name, _panelToAttachDropdown1To);
-        }
-
-        private void Start()
-        {
-            Init(new VirtualRoom());
+            CreateExperimentPanel(name, _transformToAttachDropdown);
         }
 
         /// <summary>
@@ -131,8 +125,14 @@ namespace CRI.HelloHouston.Experience
                     break;
                 }
             }
-            Debug.Log(string.Format("{0} {1} {2} {3}", totalWallTop, !_experiencesTotalPanel.overflow, emptyPanel, _experimentPanels.Count));
-            _nextButton.interactable = !_experiencesTotalPanel.overflow && totalWallTop <= _currentRoom.GetZones(ZoneType.WallTop).Length && !emptyPanel;
+            Debug.Log(string.Format("{0} {1} {2} {3}", totalWallTop, !_experimentTotalPanel.overflow, emptyPanel, _experimentPanels.Count));
+            _nextButton.interactable = !_experimentTotalPanel.overflow && totalWallTop <= _currentRoom.GetZones(ZoneType.WallTop).Length && !emptyPanel;
+        }
+
+        public override void Init(object obj)
+        {
+            base.Init(obj);
+            Init((VirtualRoom)obj);
         }
 
         // Use this for initialization
@@ -143,7 +143,7 @@ namespace CRI.HelloHouston.Experience
             {
                 _allExperiences = Resources.LoadAll(_path, typeof(XPGroup)).Cast<XPGroup>().ToArray();
                 _currentRoom = room;
-                _experiencesTotalPanel.virtualRoom = room;
+                _experimentTotalPanel.Init(room);
 
                 foreach (XPGroup experience in _allExperiences)
                 {
@@ -152,7 +152,7 @@ namespace CRI.HelloHouston.Experience
             }
             catch (Exception e)
             {
-                Debug.Log(e.ToString());
+                Debug.LogError(e.Message);
             }
         }
     }
