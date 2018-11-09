@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CRI.HelloHouston.Action
+namespace CRI.HelloHouston.GameManager
 {
     public class GameActionController
     {
-        public Queue<GameAction> actionQueue = new Queue<GameAction>();
+        public GameManager gameManager { get; private set; }
+
+        public Queue<GameAction> actionQueue;
         /// <summary>
         /// Time when the last action resolved
         /// </summary>
@@ -53,6 +55,12 @@ namespace CRI.HelloHouston.Action
         public void AddAction(GameAction action)
         {
             actionQueue.Enqueue(action);
+        }
+
+        public GameActionController(GameManager gameManager)
+        {
+            actionQueue = new Queue<GameAction>();
+            this.gameManager = gameManager;
         }
     }
 }

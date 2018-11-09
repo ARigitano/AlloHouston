@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CRI.HelloHouston.Action
+namespace CRI.HelloHouston.GameManager
 {
     public abstract class GameAction : ScriptableObject
     {
