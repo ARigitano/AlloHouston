@@ -82,7 +82,8 @@ namespace Assets.ManusVR.Scripts
 
         //public Dictionary<device_type_t, float> HandYawOffset = new Dictionary<device_type_t, float>();
 
-        [SerializeField] private TrackingValues _trackingValues;
+        [SerializeField]
+        private TrackingValues _trackingValues = null;
 
         public bool ShouldAcceptApolloData = true;
 

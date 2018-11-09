@@ -10,7 +10,7 @@ namespace Assets.ManusVR.Scripts.ManusInterface
     {
         public Action<float> OnValueChanged;
         [SerializeField]
-        private CustomEvents.UnityEventFloat _valueChangedEvent;
+        private CustomEvents.UnityEventFloat _valueChangedEvent = null;
 
         private Quaternion _minRotation, _midRotation, _maxRotation;
         private float _angleRange;

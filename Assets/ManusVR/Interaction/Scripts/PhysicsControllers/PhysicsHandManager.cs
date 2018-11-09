@@ -12,11 +12,11 @@ namespace Assets.ManusVR.Scripts.PhysicalInteraction
         public HandManager TargetManager;
 
         [SerializeField]
-        private PhysicsHandSettings _physicsHandSettings;
+        private PhysicsHandSettings _physicsHandSettings = null;
         [SerializeField]
-        private PhysicsWristSettings _physicsWristSettings;
+        private PhysicsWristSettings _physicsWristSettings = null;
         [SerializeField]
-        private PhysicsFingerSettings _physicsFingerSettings;
+        private PhysicsFingerSettings _physicsFingerSettings = null;
 
         public Action<PhysicsObject, device_type_t> OnGrabbedItem;
         [Header("Handcontrollers")] public List<PhysicsHand> HandControllers = new List<PhysicsHand>();

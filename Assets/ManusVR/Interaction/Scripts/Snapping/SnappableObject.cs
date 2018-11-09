@@ -32,8 +32,10 @@ namespace Assets.ManusVR.Scripts.PhysicalInteraction
         public Action OnRelease;
 
         //UnityEvents
-        [SerializeField] private UnityEvent _onSnapEvent;
-        [SerializeField] private UnityEvent _onReleaseEvent;
+        [SerializeField]
+        private UnityEvent _onSnapEvent = null;
+        [SerializeField]
+        private UnityEvent _onReleaseEvent = null;
 
         //Snap Settings
         [Header("Snap Settings")]

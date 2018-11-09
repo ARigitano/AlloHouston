@@ -63,7 +63,8 @@ namespace Assets.ManusVR.Scripts
 
         SteamVR_Events.Action newPosesAction;
 
-        [SerializeField] private TrackingValues _trackingValues;
+        [SerializeField]
+        private TrackingValues _trackingValues = null;
         public KeyCode switchArmsButton = KeyCode.None;
 
         // Use this for initialization

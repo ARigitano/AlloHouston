@@ -39,7 +39,7 @@ namespace Assets.ManusVR.Scripts.PhysicalInteraction
         private Dictionary<Transform, Transform> _childs = new Dictionary<Transform, Transform>();
 
         [SerializeField]
-        private EditorPhysicsPreferences editorPhysicsPreferences;
+        private EditorPhysicsPreferences editorPhysicsPreferences = null;
 
         /// <summary>
         ///     Register a physics object to the physics manager.

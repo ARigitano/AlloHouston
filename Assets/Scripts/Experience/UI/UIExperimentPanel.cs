@@ -157,6 +157,7 @@ namespace CRI.HelloHouston.Experience.UI
                 _cornerText.text = context.totalCorners.ToString();
                 _doorText.text = context.totalDoors.ToString();
                 _hologramText.text = context.totalHolograms.ToString();
+                _durationText.text = context.duration.ToString();
             }
             else
                 ResetAllText();
@@ -164,7 +165,7 @@ namespace CRI.HelloHouston.Experience.UI
 
         private void ResetAllText()
         {
-            _wallTopText.text = _wallBottomText.text = _cornerText.text = _doorText.text = _hologramText.text = "0";
+            _wallTopText.text = _wallBottomText.text = _cornerText.text = _doorText.text = _hologramText.text = _durationText.text = "0";
         }
     }
 }
