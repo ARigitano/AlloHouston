@@ -1,22 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace CRI.HelloHouston.Experience
+﻿namespace CRI.HelloHouston.Experience
 {
-    public class XPHologram : XPPrefab
+    public class XPHologram : XPContent
     {
+        public override void OnActivated() { }
 
-        // Use this for initialization
-        void Start()
-        {
+        public override void OnFailed() { }
 
-        }
+        public override void OnPause() { }
 
-        // Update is called once per frame
-        void Update()
-        {
+        public override void OnResolved() { }
 
-        }
+        public override void OnUnpause() { }
     }
 }

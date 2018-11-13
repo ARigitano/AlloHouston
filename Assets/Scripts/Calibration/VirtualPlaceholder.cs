@@ -18,7 +18,7 @@ namespace CRI.HelloHouston.Calibration
 
     public class VirtualPlaceholder : MonoBehaviour
     {
-        private XPPrefab _currentPrefab;
+        private XPContent _currentPrefab;
         /// <summary>
         /// The type of placeholder.
         /// </summary>
@@ -28,7 +28,7 @@ namespace CRI.HelloHouston.Calibration
         /// Places an object on a placeholder.
         /// </summary>
         /// <param name="prefab"></param>
-        public void PlaceObject(XPPrefab prefab)
+        public void PlaceObject(XPContent prefab)
         {
             _currentPrefab = prefab;
         }
@@ -37,7 +37,7 @@ namespace CRI.HelloHouston.Calibration
         /// </summary>
         /// <typeparam name="T">The type of XPPrefab</typeparam>
         /// <returns>An instance of XPPrefab</returns>
-        public T GetObject<T>() where T : XPPrefab, new()
+        public T GetObject<T>() where T : XPContent, new()
         {
             return _currentPrefab as T;
         }

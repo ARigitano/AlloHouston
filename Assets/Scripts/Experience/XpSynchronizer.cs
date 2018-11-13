@@ -1,14 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using VRCalibrationTool;
+﻿using UnityEngine;
+using CRI.HelloHouston.Experience;
 
 namespace CRI.HelloHouston.Experience
 {
     /// <summary>
     /// The XpSynchronizer is responsible for the communication of every prefabs of one particular experiment among themselves as well as with the Gamecontroller.
     /// </summary>
-    public class XPSynchronizer : MonoBehaviour
+    [System.Serializable]
+    public abstract class XPSynchronizer : MonoBehaviour
     {
         /// <summary>
         /// Every possible errors that could be displayed on the table screen for the experiment.
@@ -16,10 +15,9 @@ namespace CRI.HelloHouston.Experience
         [Tooltip("Every possible errors that could be displayed on the table screen for the experiment.")]
         [SerializeField] protected string[] _possibleErrors;
         /// <summary>
-        /// Sound prefabs that will play in case of success or failure of the experiment.
+        /// All the contents.
         /// </summary>
-        [Tooltip("Sound prefabs that will play in case of success or failure of the experiment.")]
-        [SerializeField] protected AudioSource _successSound, _failSound;
+        public abstract XPContent[] contents { get; }
         /// <summary>
         /// The error of the experiment chosen randomly that will be displayed on the table screen for this game.
         /// </summary>
@@ -31,59 +29,64 @@ namespace CRI.HelloHouston.Experience
         /// <summary>
         /// The gamemanager that will allow the experiment to communicate with the rest of the station.
         /// </summary>
-        //protected GameManager _gameManager;
+        protected GameManager _gameManager;
 
         /// <summary>
         /// To be called in case of success of the experiment.
         /// </summary>
-        public virtual void Resolved()
-        {
-            _successSound.Play();
+        public virtual void OnResolved() {
+            foreach (var content in contents)
+            {
+                content.OnResolved();
+            }
         }
 
         /// <summary>
         /// To be called in case of failure of the experiment.
         /// </summary>
-        public virtual void Failed()
-        {
-            _failSound.Play();
+        public virtual void OnFailed() {
+            foreach (var content in contents)
+            {
+                content.OnFailed();
+            }
         }
-
         /// <summary>
         /// To be called to activate the incident of the experiment.
         /// </summary>
-        public virtual void Activated()
-        {
-
+        public virtual void Activated() {
+            foreach (var content in contents)
+            {
+                content.OnActivated();
+            }
         }
 
         /// <summary>
         /// To be called to pause the experiment during the game.
         /// </summary>
-        public virtual void Paused()
+        public virtual void OnPause()
         {
-
+            foreach (var content in contents)
+            {
+                content.OnPause();
+            }
         }
 
         /// <summary>
-        /// To be called to call bacl the experiment after it has been paused.
+        /// To be called to call back the experiment after it has been paused.
         /// </summary>
-        public virtual void Unpaused()
+        public virtual void OnUnpause()
         {
-
+            foreach (var content in contents)
+            {
+                content.OnUnpause();
+            }
         }
-
-        // Use this for initialization
-        void Start()
+        
+        protected virtual void Start()
         {
-            //_gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
             error = _possibleErrors[Random.Range(0, _possibleErrors.Length)];
         }
 
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
+        protected virtual void Update() { }
     }
 }

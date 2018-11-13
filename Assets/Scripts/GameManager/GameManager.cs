@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace CRI.HelloHouston.GameManager
+namespace CRI.HelloHouston.Experience
 {
     public class GameManager : MonoBehaviour
     {

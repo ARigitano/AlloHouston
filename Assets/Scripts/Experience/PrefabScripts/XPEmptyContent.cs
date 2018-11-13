@@ -1,6 +1,6 @@
 ﻿namespace CRI.HelloHouston.Experience
 {
-    public class XPTubeWindow : XPContent
+    public class XPEmptyContent : XPContent
     {
         public override void OnActivated() { }
 

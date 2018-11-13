@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CRI.HelloHouston.GameManager
+namespace CRI.HelloHouston.Experience
 {
     public class GameActionController
     {

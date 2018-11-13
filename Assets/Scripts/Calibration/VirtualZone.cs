@@ -36,13 +36,13 @@ namespace CRI.HelloHouston.Calibration
         {
             get
             {
-                return new VirtualPlaceholder[] { wallTopLeftPlaceholder, wallTopRightPlaceholder, tabletPlaceholder };
+                return new VirtualPlaceholder[] { wallTopLeftPlaceholder, wallTopRightPlaceholder, wallTopTabletPlaceholder };
             }
         }
 
         public VirtualPlaceholder wallTopLeftPlaceholder;
         public VirtualPlaceholder wallTopRightPlaceholder;
-        public VirtualPlaceholder tabletPlaceholder;
+        public VirtualPlaceholder wallTopTabletPlaceholder;
     }
 
     public class VirtualWallBottomZone : VirtualZone
@@ -99,10 +99,10 @@ namespace CRI.HelloHouston.Calibration
         {
             get
             {
-                return hologramPlaceholders;
+                return new VirtualPlaceholder[] { hologramPlaceholder };
             }
         }
-        public VirtualPlaceholder[] hologramPlaceholders;
+        public VirtualPlaceholder hologramPlaceholder;
     }
 
     public abstract class VirtualZone : MonoBehaviour
