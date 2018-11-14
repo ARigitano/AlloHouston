@@ -17,7 +17,7 @@ namespace CRI.HelloHouston.Experience
         /// <summary>
         /// All the contents.
         /// </summary>
-        public abstract XPContent[] contents { get; }
+        public abstract XPElement[] contents { get; }
         /// <summary>
         /// The error of the experiment chosen randomly that will be displayed on the table screen for this game.
         /// </summary>

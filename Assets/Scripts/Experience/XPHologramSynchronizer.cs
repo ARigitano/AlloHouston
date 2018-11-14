@@ -7,7 +7,7 @@ namespace CRI.HelloHouston.Experience
     [Serializable]
     public class XPHologramSynchronizer : XPSynchronizer
     {
-        public override XPContent[] contents
+        public override XPElement[] contents
         {
             get
             {
@@ -19,17 +19,17 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         [SerializeField]
         [Tooltip("The holograms.")]
-        public XPContent[] hologramContent;
+        public XPElement[] hologramContent;
 
-        public void Init(HologramZoneContent zoneContent, VirtualHologramZone virtualZone)
+        public void Init(XPHologramZone zoneContent, VirtualHologramZone virtualZone)
         {
-            hologramContent = new XPContent[zoneContent.hologramContentPrefabs.Length];
+            hologramContent = new XPElement[zoneContent.hologramElementPrefabs.Length];
             for (int i = 0; i < hologramContent.Length; i++)
             {
                 if (hologramContent[i] != null)
                 {
-                    hologramContent[i] = Instantiate(zoneContent.hologramContentPrefabs[i]);
-                    virtualZone.hologramPlaceholder.PlaceObject(hologramContent[i]);
+                    hologramContent[i] = Instantiate(zoneContent.hologramElementPrefabs[i]);
+                    virtualZone.hologramVirtualElement.PlaceObject(hologramContent[i]);
                 }
             }
         }

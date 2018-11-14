@@ -2,7 +2,7 @@
 
 namespace CRI.HelloHouston.Experience
 {
-    public abstract class XPContent : MonoBehaviour
+    public abstract class XPElement : MonoBehaviour
     {
         /// <summary>
         /// The experience synchronizer.

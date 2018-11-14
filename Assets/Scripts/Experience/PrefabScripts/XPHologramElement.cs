@@ -1,6 +1,6 @@
 ﻿namespace CRI.HelloHouston.Experience
 {
-    public class XPEmptyContent : XPContent
+    public class XPHologramElement : XPElement
     {
         public override void OnActivated() { }
 

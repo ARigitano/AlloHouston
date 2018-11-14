@@ -7,11 +7,11 @@ namespace CRI.HelloHouston.Experience
     [System.Serializable]
     public class XPWallTopSynchronizer : XPSynchronizer
     {
-        public override XPContent[] contents
+        public override XPElement[] contents
         {
             get
             {
-                var list = new List<XPContent>();
+                var list = new List<XPElement>();
                 if (contentLeft != null)
                     list.Add(contentLeft);
                 if (contentRight != null)
@@ -24,32 +24,32 @@ namespace CRI.HelloHouston.Experience
         /// <summary>
         /// The left side of the wall top.
         /// </summary>
-        public XPContent contentLeft { get; protected set; }
+        public XPElement contentLeft { get; protected set; }
         /// <summary>
         /// The right side of the wall top.
         /// </summary>
-        public XPContent contentRight { get; protected set; }
+        public XPElement contentRight { get; protected set; }
         /// <summary>
         /// The tablet of the wall top.
         /// </summary>
-        public XPContent contentTablet { get; protected set; }
+        public XPElement contentTablet { get; protected set; }
 
-        public void Init(WallTopZoneContent zoneContent, VirtualWallTopZone virtualZone)
+        public void Init(XPWallTopZone zoneContent, VirtualWallTopZone virtualZone)
         {
             if (contentLeft != null)
             {
-                contentLeft = Instantiate(zoneContent.contentLeftPrefab);
-                virtualZone.wallTopLeftPlaceholder.PlaceObject(contentLeft);
+                contentLeft = Instantiate(zoneContent.elementLeftPrefab);
+                virtualZone.wallTopLeftVirtualElement.PlaceObject(contentLeft);
             }
             if (contentRight != null)
             {
-                contentRight = Instantiate(zoneContent.contentRightPrefab);
-                virtualZone.wallTopRightPlaceholder.PlaceObject(contentRight);
+                contentRight = Instantiate(zoneContent.elementRightPrefab);
+                virtualZone.wallTopRightVirtualElement.PlaceObject(contentRight);
             }
             if (contentTablet != null)
             {
-                contentTablet = Instantiate(zoneContent.contentTabletPrefab);
-                virtualZone.wallTopTabletPlaceholder.PlaceObject(contentTablet);
+                contentTablet = Instantiate(zoneContent.elementTabletPrefab);
+                virtualZone.wallTopTabletVirtualElement.PlaceObject(contentTablet);
             }
         }
     }

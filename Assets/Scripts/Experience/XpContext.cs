@@ -44,37 +44,37 @@ namespace CRI.HelloHouston.Experience
         /// The screen, window and tablet on the top part of the wall, to interact with the experiment.
         /// </summary>
         [Tooltip("The screen, window and tablet on the top part of the wall, to interact with the experiment.")]
-        public WallTopZoneContent wallTopZonePrefab;
+        public XPWallTopZone wallTopZonePrefab;
 
         /// <summary>
         /// The bottom part of the wall, to add additional elements linked to the experiment.
         /// </summary>
         [Tooltip("The bottom part of the wall, to add additional elements linked to the experiment.")]
-        public WallBottomZoneContent[] wallBottomZonesPrefab;
+        public XPWallBottomZone[] wallBottomZonesPrefab;
 
         /// <summary>
         /// The holograms linked to the experiment, to be displayed on the table.
         /// </summary>
         [Tooltip("The holograms linked to the experiment, to be displayed on the table.")]
-        public HologramZoneContent hologramZonePrefab;
+        public XPHologramZone hologramZonePrefab;
 
         /// <summary>
         /// The corner zones on each side of the modules, to display static elements linked to the experiment.
         /// </summary>
         [Tooltip("The corner zones on each side of the modules, to display static elements linked to the experiment.")]
-        public CornerZoneContent[] cornerZonesPrefab;
+        public XPCornerZone[] cornerZonesPrefab;
 
         /// <summary>
         /// The door at the entrance of the room.
         /// </summary>
         [Tooltip("The door at the entrance of the room.")]
-        public DoorZoneContent doorZonePrefab;     
+        public XPDoorZone doorZonePrefab;     
         
         public int totalWallTop
         {
             get
             {
-                return wallTopZonePrefab.contentPrefabs.Length != 0 ? 1 : 0;
+                return wallTopZonePrefab.elementPrefabs.Length != 0 ? 1 : 0;
             }
         }      
         
@@ -82,7 +82,7 @@ namespace CRI.HelloHouston.Experience
         {
             get
             {
-                return wallBottomZonesPrefab.Count(x => x.contentPrefabs.Length != 0);
+                return wallBottomZonesPrefab.Count(x => x.elementPrefabs.Length != 0);
             }
         }    
 
@@ -90,7 +90,7 @@ namespace CRI.HelloHouston.Experience
         {
             get
             {
-                return cornerZonesPrefab.Count(x => x.contentPrefabs.Length != 0);
+                return cornerZonesPrefab.Count(x => x.elementPrefabs.Length != 0);
             }
         }
 
@@ -98,7 +98,7 @@ namespace CRI.HelloHouston.Experience
         {
             get
             {
-                return doorZonePrefab.contentPrefabs.Length != 0 ? 1 : 0;
+                return doorZonePrefab.elementPrefabs.Length != 0 ? 1 : 0;
             }
         }
 
@@ -106,7 +106,7 @@ namespace CRI.HelloHouston.Experience
         {
             get
             {
-                return hologramZonePrefab.contentPrefabs.Length;
+                return hologramZonePrefab.elementPrefabs.Length;
             }
         }
     }

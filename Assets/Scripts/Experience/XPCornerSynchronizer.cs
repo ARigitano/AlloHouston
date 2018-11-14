@@ -6,27 +6,27 @@ namespace CRI.HelloHouston.Experience
 {
     public class XPCornerSynchronizer : XPSynchronizer
     {
-        public override XPContent[] contents
+        public override XPElement[] contents
         {
             get
             {
                 if (cornerContent != null)
-                    return new XPContent[] { cornerContent };
-                return new XPContent[0];
+                    return new XPElement[] { cornerContent };
+                return new XPElement[0];
             }
         }
 
         /// <summary>
         /// The corner content.
         /// </summary>
-        public XPContent cornerContent { get; private set; }
+        public XPElement cornerContent { get; private set; }
 
-        public void Init(CornerZoneContent zoneContent, VirtualCornerZone virtualZone)
+        public void Init(XPCornerZone zoneContent, VirtualCornerZone virtualZone)
         {
             if (cornerContent != null)
             {
                 cornerContent = Instantiate(zoneContent.cornerContentPrefab);
-                virtualZone.wallCornerPlaceholder.PlaceObject(cornerContent);
+                virtualZone.wallCornerVirtualElement.PlaceObject(cornerContent);
             }
         }
     }

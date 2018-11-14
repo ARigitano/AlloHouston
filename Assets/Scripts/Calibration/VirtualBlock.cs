@@ -50,13 +50,13 @@ namespace CRI.HelloHouston.Calibration
         /// <summary>
         /// All the placeholders inside the zones inside the block.
         /// </summary>
-        public VirtualPlaceholder[] placeholders
+        public VirtualElement[] placeholders
         {
             get
             {
                 if (zones.Length == 0)
-                    return new VirtualPlaceholder[0];
-                return zones.SelectMany(x => x.placeholders).ToArray();
+                    return new VirtualElement[0];
+                return zones.SelectMany(x => x.virtualElements).ToArray();
             }
         }
 
