@@ -5,7 +5,7 @@ namespace CRI.HelloHouston.Experience
     /// <summary>
     /// Constructor for XpGroup scriptable object.
     /// </summary>
-    [CreateAssetMenu(fileName = "New XpGroup", menuName = "Experience/New XpGroup", order = 1)]
+    [CreateAssetMenu(fileName = "New XpGroup", menuName = "Experience/XpGroup", order = 1)]
     public class XPGroup : ScriptableObject
     {
         /// <summary>

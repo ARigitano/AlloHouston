@@ -3,7 +3,7 @@
 namespace CRI.HelloHouston.Experience
 {
     [CreateAssetMenu(fileName = "New HologramZone", menuName = "Experience/Zone/HologramZone", order = 1)]
-    public class XPHologramZone : XPZone<XPHologramSynchronizer>
+    public class XPHologramZone : XPZone
     {
         public override XPElement[] elementPrefabs
         {

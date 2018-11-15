@@ -11,9 +11,8 @@ namespace CRI.HelloHouston.Translation
     /// <summary>
     /// Contains all the text of a specific language. Is loaded from an XML files.
     /// </summary>
-    [System.Serializable]
-    [XmlRoot(ElementName = "lang_text")]
-    public class LangText
+    [CreateAssetMenu(fileName = "New LangText", menuName = "Translation/LangText", order = 1)]
+    public class LangText : ScriptableObject
     {
         /// <summary>
         /// The code ISO 639-1 of the language.
@@ -23,8 +22,6 @@ namespace CRI.HelloHouston.Translation
         /// <summary>
         /// All the text entries of a specific language.
         /// </summary>
-        [XmlArray("lang_text_entries")]
-        [XmlArrayItem(typeof(LangTextEntry), ElementName = "text_entry")]
         public LangTextEntry[] arrayOfLangTextEntry;
 
         public LangText() { }
@@ -39,43 +36,41 @@ namespace CRI.HelloHouston.Translation
         }
 
         /// <summary>
-        /// Save the data to an XML file.
+        /// Save the data to an json file.
         /// </summary>
-        /// <param name="path">The path where the XML file will be saved.</param>
+        /// <param name="path">The path where the json file will be saved.</param>
         public void Save(string path)
         {
-            var serializer = new XmlSerializer(typeof(LangText));
-            using (var stream = new FileStream(Path.Combine(Application.dataPath, path), FileMode.Create))
-            using (var xmlWriter = new XmlTextWriter(stream, Encoding.UTF8))
+            string dataJson = JsonUtility.ToJson(this, true);
+            string filePath = Path.Combine(Application.dataPath, path);
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            using (var streamWriter = new StreamWriter(fileStream))
             {
-                xmlWriter.Formatting = Formatting.Indented;
-                serializer.Serialize(xmlWriter, this);
+                streamWriter.Write(dataJson);
             }
         }
 
         /// <summary>
-        /// Loads a lang text data from the XML file at the specified path.
+        /// Loads a lang text data from the json file at the specified path.
         /// </summary>
         /// <returns>The lang text data.</returns>
         /// <param name="path">The path here the XML file is located.</param>
         public static LangText Load(string path)
         {
-            var serializer = new XmlSerializer(typeof(LangText));
-            using (var stream = new FileStream(Path.Combine(Application.dataPath, path), FileMode.Open))
-            {
-                return serializer.Deserialize(stream) as LangText;
-            }
+            string filePath = Path.Combine(Application.dataPath, path);
+            return LoadFromText(File.ReadAllText(filePath));
         }
 
         /// <summary>
-        /// Loads a lang text from an XML text.
+        /// Loads a lang text from a json text.
         /// </summary>
         /// <returns>The lang setting data.</returns>
         /// <param name="text">A text in XML format that contains the data that will be loaded.</param>
         public static LangText LoadFromText(string text)
         {
-            var serializer = new XmlSerializer(typeof(LangText));
-            return serializer.Deserialize(new StringReader(text)) as LangText;
+            LangText res = CreateInstance<LangText>();
+            JsonUtility.FromJsonOverwrite(text, res);
+            return res;
         }
     }
 }

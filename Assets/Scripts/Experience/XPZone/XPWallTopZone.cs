@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace CRI.HelloHouston.Experience
 {
     [CreateAssetMenu(fileName = "New WallTopZone", menuName = "Experience/Zone/WallTop", order = 1)]
-    public class XPWallTopZone : XPZone<XPWallTopSynchronizer>
+    public class XPWallTopZone : XPZone
     {
         public override XPElement[] elementPrefabs
         {

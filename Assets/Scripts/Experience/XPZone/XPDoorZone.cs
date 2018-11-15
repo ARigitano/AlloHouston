@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace CRI.HelloHouston.Experience
 {
     [CreateAssetMenu(fileName = "New DoorZone", menuName = "Experience/Zone/DoorZone", order = 1)]
-    public class XPDoorZone : XPZone<XPDoorSynchronizer>
+    public class XPDoorZone : XPZone
     {
         public override XPElement[] elementPrefabs
         {

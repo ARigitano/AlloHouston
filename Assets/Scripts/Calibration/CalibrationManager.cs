@@ -105,7 +105,7 @@ namespace CRI.HelloHouston.Calibration
         }
 
         /// <summary>
-        /// Calibrates the current virtual item.
+        /// Calibrates the current virtual item.  
         /// </summary>
         public void CalibrateCurrentVirtualItem()
         {
@@ -115,9 +115,9 @@ namespace CRI.HelloHouston.Calibration
                 _currentVirtualItem.Calibrate(_positionTags.ToArray());
                 _currentVirtualItem.lastUpdate = DateTime.Now;
                 if (_currentVirtualItem.virtualItemType == VirtualItem.VirtualItemType.Room)
-                    XMLManager.instance.InsertOrReplace(((VirtualRoom)_currentVirtualItem).ToRoomEntry());
+                    DataManager.instance.InsertOrReplace(((VirtualRoom)_currentVirtualItem).ToRoomEntry());
                 else if (_currentVirtualItem.virtualItemType == VirtualItem.VirtualItemType.Block && _currentVirtualItem.GetComponentInParent<VirtualRoom>() != null)
-                    XMLManager.instance.InsertOrReplace(_currentVirtualItem.GetComponentInParent<VirtualRoom>().ToRoomEntry());
+                    DataManager.instance.InsertOrReplace(_currentVirtualItem.GetComponentInParent<VirtualRoom>().ToRoomEntry());
             }
             else
             {
@@ -244,7 +244,7 @@ namespace CRI.HelloHouston.Calibration
         {
             _currentVirtualRoom.ResetAllTags();
             StopCalibration();
-            XMLManager.instance.InsertOrReplace(_currentVirtualRoom.ToRoomEntry());
+            DataManager.instance.InsertOrReplace(_currentVirtualRoom.ToRoomEntry());
         }
 
         /// <summary>

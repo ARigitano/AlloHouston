@@ -7,13 +7,27 @@ namespace CRI.HelloHouston.Experience
         /// <summary>
         /// The experience synchronizer.
         /// </summary>
-        protected XPSynchronizer _xpSynchronizer;
-
-        public string index;
-
-        public virtual void Init(XPSynchronizer xpSynchronizer)
+        public XPMainSynchronizer synchronizer { get; protected set; }
+        /// <summary>
+        /// The element name
+        /// </summary>
+        [SerializeField]
+        [Tooltip("The element name.")]
+        private string _elementName;
+        /// <summary>
+        /// The element name.
+        /// </summary>
+        public string elementName
         {
-            _xpSynchronizer = xpSynchronizer;
+            get
+            {
+                return _elementName;
+            }
+        }
+
+        public virtual void Init(XPMainSynchronizer synchronizer)
+        {
+            this.synchronizer = synchronizer;
         }
 
         public abstract void OnResolved();

@@ -77,7 +77,7 @@ namespace CRI.HelloHouston.Calibration.UI
         private void Start()
         {
             var calibrationManager = FindObjectOfType<CalibrationManager>();
-            VirtualRoom vroom = calibrationManager.CreateVirtualRoom(XMLManager.instance.blockDB.rooms[0]);
+            VirtualRoom vroom = calibrationManager.CreateVirtualRoom(DataManager.instance.blockDB.rooms[0]);
             Init(vroom, calibrationManager);
             CheckInteractable();
         }

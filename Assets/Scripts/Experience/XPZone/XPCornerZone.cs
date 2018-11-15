@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace CRI.HelloHouston.Experience
 {
     [CreateAssetMenu(fileName = "New CornerZone", menuName = "Experience/Zone/CornerZone", order = 1)]
-    public class XPCornerZone : XPZone<XPCornerSynchronizer>
+    public class XPCornerZone : XPZone
     {
         public override XPElement[] elementPrefabs
         {
             get
             {
-                if (cornerContentPrefab != null)
-                    return new XPElement[] { cornerContentPrefab };
+                if (cornerElementPrefab != null)
+                    return new XPElement[] { cornerElementPrefab };
                 return new XPElement[0];
             }
         }
@@ -23,7 +19,7 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         [SerializeField]
         [Tooltip("The corner content.")]
-        public XPElement cornerContentPrefab;
+        public XPElement cornerElementPrefab;
 
         public override ZoneType GetZoneType()
         {

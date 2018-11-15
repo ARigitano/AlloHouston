@@ -50,7 +50,7 @@ namespace CRI.HelloHouston.Calibration
         /// <summary>
         /// All the placeholders inside the zones inside the block.
         /// </summary>
-        public VirtualElement[] placeholders
+        public VirtualElement[] elements
         {
             get
             {
@@ -93,7 +93,7 @@ namespace CRI.HelloHouston.Calibration
         {
             if (zones.Length == 0)
                 return new VirtualZone[0];
-            return zones.Where(x => x.type == type).ToArray();
+            return zones.Where(x => x.zoneType == type).ToArray();
         }
 
         /// <summary>

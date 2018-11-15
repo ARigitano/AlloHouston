@@ -40,6 +40,8 @@ namespace CRI.HelloHouston.Translation
         /// The path of the text data for all the text that is common between all languages.
         /// </summary>
         public const string text_lang_common_path = "Lang/Common/text/text";
+
+        private const string default_setting_path = "DefaultSettings";
         /// <summary>
         /// The current language of the application.
         /// </summary>
@@ -63,6 +65,7 @@ namespace CRI.HelloHouston.Translation
         /// <summary>
         /// A list of all the LangText.
         /// </summary>
+        [SerializeField]
         private List<LangText> _langTextList = new List<LangText>();
         /// <summary>
         /// The app settings of the project.
@@ -74,21 +77,34 @@ namespace CRI.HelloHouston.Translation
         private void Awake()
         {
             Init();
-            foreach (var langEnable in _appSettings.langAppAvailable)
+            if (_langTextList.Count == 0)
             {
-                var langText = LoadLangText(langEnable.code);
-                _langTextList.Add(langText);
+                foreach (var langEnable in _appSettings.langAppAvailable)
+                {
+                    var langText = LoadLangText(langEnable.code);
+                    _langTextList.Add(langText);
+                }
+
+                var commonText = LoadCommonLangText();
+                _langTextList.Add(commonText);
             }
-            var commonText = LoadCommonLangText();
-            _langTextList.Add(commonText);
+            else
+            {
+                foreach (var langText in _langTextList)
+                {
+                    langText.Save(string.Format("Resources/{0}.json", GetLangTextPath(langText.code)));
+                }
+            }
             _currentLang = _appSettings.defaultLanguage;
         }
 
         private void Init()
         {
-            if (s_instance == null)
+            if (!s_instance)
             {
                 s_instance = this;
+                if (!_appSettings)
+                    _appSettings = Resources.Load<AppSettings>(default_setting_path);
                 DontDestroyOnLoad(gameObject);
             }
             else if (s_instance != this)
