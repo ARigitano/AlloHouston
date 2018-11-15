@@ -63,10 +63,13 @@ namespace CRI.HelloHouston.Translation
         /// <summary>
         /// A list of all the LangText.
         /// </summary>
-        public List<LangText> langTextList = new List<LangText>();
-
+        private List<LangText> _langTextList = new List<LangText>();
+        /// <summary>
+        /// The app settings of the project.
+        /// </summary>
         [SerializeField]
-        private AppSettings _appSettings;
+        [Tooltip("The app settings of the project.")]
+        private AppSettings _appSettings = null;
 
         private void Awake()
         {
@@ -74,10 +77,10 @@ namespace CRI.HelloHouston.Translation
             foreach (var langEnable in _appSettings.langAppAvailable)
             {
                 var langText = LoadLangText(langEnable.code);
-                langTextList.Add(langText);
+                _langTextList.Add(langText);
             }
             var commonText = LoadCommonLangText();
-            langTextList.Add(commonText);
+            _langTextList.Add(commonText);
             _currentLang = _appSettings.defaultLanguage;
         }
 
@@ -145,7 +148,7 @@ namespace CRI.HelloHouston.Translation
             string res = "";
             try
             {
-                res = langTextList.First(x => x.code == langCode).arrayOfLangTextEntry.First(x => x.key == key).text;
+                res = _langTextList.First(x => x.code == langCode).arrayOfLangTextEntry.First(x => x.key == key).text;
             }
             catch (InvalidOperationException)
             {

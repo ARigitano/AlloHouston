@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace CRI.HelloHouston.Experience
 {
-    public class XpHologram : XpPrefab
+    public class XPHologram : XPPrefab
     {
 
         // Use this for initialization

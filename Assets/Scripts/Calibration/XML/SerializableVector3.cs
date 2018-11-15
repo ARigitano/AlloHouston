@@ -3,32 +3,31 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-namespace VRCalibrationTool
+namespace CRI.HelloHouston.Calibration.XML
 {
     /// <summary>
     /// Makes Vector3 serializable to be stored in XML file
     /// </summary>
-    [Serializable] public class SerializableVector3
+    [Serializable]
+    public struct SerializableVector3
     {
-        public double X;
-		public double Y;
-		public double Z;
+        public double x { get; private set; }
+		public double y { get; private set; }
+		public double z { get; private set; }
 
         public Vector3 Vector3
         {
             get
             {
-                return new Vector3((float)X, (float)Y, (float)Z);
+                return new Vector3((float)x, (float)y, (float)z);
             }
         }
 
-        public SerializableVector3() { }
         public SerializableVector3(Vector3 vector)
         {
-			double val;
-			X = double.TryParse(vector.x.ToString(), out val) ? val : 0.0;
-			Y = double.TryParse(vector.y.ToString(), out val) ? val : 0.0;
-			Z = double.TryParse(vector.z.ToString(), out val) ? val : 0.0;
+            x = vector.x;
+            y = vector.y;
+            z = vector.z;
         }
     }
 }

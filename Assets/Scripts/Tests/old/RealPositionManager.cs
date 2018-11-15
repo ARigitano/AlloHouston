@@ -19,7 +19,7 @@ namespace VRCalibrationTool
         {
             get
             {
-                return _realPositionTagList.OrderBy(x => x.positionTagIndex).ToArray();
+                return _realPositionTagList.OrderBy(x => x.index).ToArray();
             }
         }
 
@@ -40,7 +40,7 @@ namespace VRCalibrationTool
         {
             foreach (var realPositionTag in _realPositionTagList)
             {
-                realPositionTag.Reset();
+                realPositionTag.ResetPosition();
             }
         }
     }

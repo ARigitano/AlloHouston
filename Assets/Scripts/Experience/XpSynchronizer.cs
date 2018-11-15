@@ -8,7 +8,7 @@ namespace CRI.HelloHouston.Experience
     /// <summary>
     /// The XpSynchronizer is responsible for the communication of every prefabs of one particular experiment among themselves as well as with the Gamecontroller.
     /// </summary>
-    public class XpSynchronizer : MonoBehaviour
+    public class XPSynchronizer : MonoBehaviour
     {
         /// <summary>
         /// Every possible errors that could be displayed on the table screen for the experiment.
@@ -31,7 +31,7 @@ namespace CRI.HelloHouston.Experience
         /// <summary>
         /// The gamemanager that will allow the experiment to communicate with the rest of the station.
         /// </summary>
-        protected GameManager _gameManager;
+        //protected GameManager _gameManager;
 
         /// <summary>
         /// To be called in case of success of the experiment.
@@ -76,7 +76,7 @@ namespace CRI.HelloHouston.Experience
         // Use this for initialization
         void Start()
         {
-            _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+            //_gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
             error = _possibleErrors[Random.Range(0, _possibleErrors.Length)];
         }
 

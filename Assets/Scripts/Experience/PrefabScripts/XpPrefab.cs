@@ -4,15 +4,15 @@ using UnityEngine;
 
 namespace CRI.HelloHouston.Experience
 {
-    public class XpPrefab : MonoBehaviour
+    public class XPPrefab : MonoBehaviour
     {
-        protected XpSynchronizer _xpSynchronizer;
+        protected XPSynchronizer _xpSynchronizer;
         public string index;
 
         // Use this for initialization
         void Start()
         {
-            XpSynchronizer[] xpSynchronizers = FindObjectsOfType<XpSynchronizer>();
+            XPSynchronizer[] xpSynchronizers = FindObjectsOfType<XPSynchronizer>();
 
             //foreach(XpSynchronizer xpSynch)
         }

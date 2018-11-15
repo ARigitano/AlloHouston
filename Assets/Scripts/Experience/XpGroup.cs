@@ -7,13 +7,13 @@ namespace CRI.HelloHouston.Experience
     /// Constructor for XpGroup scriptable object.
     /// </summary>
     [CreateAssetMenu(fileName = "New XpGroup", menuName = "Experience/New XpGroup", order = 1)]
-    public class XpGroup : ScriptableObject
+    public class XPGroup : ScriptableObject
     {
         /// <summary>
         /// The name of the experiment.
         /// </summary>
         [Tooltip("The name of the experiment.")]
-        public string name;
+        public string experimentName;
 
         /// <summary>
         /// A description of the experiment.
