@@ -18,25 +18,32 @@ namespace CRI.HelloHouston.Experience
 
         public override void OnFailed()
         {
-
+            Debug.Log(name + "Failed");
         }
 
         public override void OnActivated()
         {
             Debug.Log(name + "Activated");
-            var tempColor = _panelImage.color;
-            tempColor.a = 1f;
-            _panelImage.color = tempColor;
+            ChangeOpacity(1f);
         }
 
         public override void OnPause()
         {
-
+            Debug.Log(name + "Paused");
+            ChangeOpacity(0f);
         }
 
         public override void OnUnpause()
         {
+            Debug.Log(name + "Unpaused");
+            ChangeOpacity(1f);
+        }
 
+        private void ChangeOpacity(float opacity)
+        {
+            var tempColor = _panelImage.color;
+            tempColor.a = opacity;
+            _panelImage.color = tempColor;
         }
 
         // Use this for initialization

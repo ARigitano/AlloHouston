@@ -15,7 +15,7 @@ namespace CRI.HelloHouston.Experience
 
         public override void OnFailed()
         {
-
+            Debug.Log(name + "Failed");
         }
 
         public override void OnActivated()
@@ -25,12 +25,12 @@ namespace CRI.HelloHouston.Experience
 
         public override void OnPause()
         {
-
+            Debug.Log(name + "Paused");
         }
 
         public override void OnUnpause()
         {
-
+            Debug.Log(name + "Unpaused");
         }
 
         // Use this for initialization
