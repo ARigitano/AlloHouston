@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace CRI.HelloHouston.GameManager.UI
+namespace CRI.HelloHouston.Experience.UI
 {
     public class UICameraDisplay : MonoBehaviour
     {

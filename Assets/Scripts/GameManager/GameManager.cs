@@ -1,9 +1,24 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 namespace CRI.HelloHouston.Experience
 {
     public class GameManager : MonoBehaviour
     {
+        private static GameManager s_instance;
+
+        public static GameManager instance
+        {
+            get
+            {
+                if (!s_instance)
+                    s_instance = GameObject.FindObjectOfType<GameManager>();
+                if (!s_instance)
+                    s_instance = new GameObject("GameManager").AddComponent<GameManager>();
+                return s_instance;
+            }
+        }
         /// <summary>
         /// The Game action controller.
         /// </summary>
@@ -26,10 +41,29 @@ namespace CRI.HelloHouston.Experience
         /// <summary>
         /// Adds a log that will be displayed on the GameManager UI and saved in the log file.
         /// </summary>
-        /// <param name="str">The message of the log.</param>
-        public void AddLog(string str)
+        public void AddLog(string str,
+            Log.LogOrigin logOrigin,
+            Log.LogContent logContent,
+            Log.LogType logType = Log.LogType.Default,
+            bool gmIndication = false,
+            XPContext xpContext = null)
         {
-            _logController.AddLog(str, timeSinceGameStart);
+            _logController.AddLog(str, timeSinceGameStart, logType, logOrigin, logContent, gmIndication, xpContext);
+        }
+
+        public Log[] GetAllLogs()
+        {
+            return _logController.logs.ToArray();
+        }
+
+        public Log[] GetAllLogs(int n)
+        {
+            return _logController.logs.Take(n).ToArray();
+        }
+
+        public void ClearLogs()
+        {
+            _logController.logs.Clear();
         }
 
         /// <summary>
