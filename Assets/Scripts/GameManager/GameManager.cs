@@ -43,12 +43,10 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         public void AddLog(string str,
             Log.LogOrigin logOrigin,
-            Log.LogContent logContent,
             Log.LogType logType = Log.LogType.Default,
-            bool gmIndication = false,
             XPContext xpContext = null)
         {
-            _logController.AddLog(str, timeSinceGameStart, logType, logOrigin, logContent, gmIndication, xpContext);
+            _logController.AddLog(str, timeSinceGameStart, logType, logOrigin, xpContext);
         }
 
         public Log[] GetAllLogs()

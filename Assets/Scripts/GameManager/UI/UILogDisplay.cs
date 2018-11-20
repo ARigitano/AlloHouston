@@ -55,11 +55,11 @@ namespace CRI.HelloHouston.Experience.UI
             new LogTypeFilter("Default", (x) => x.logType == Log.LogType.Default),
             new LogTypeFilter("Important", (x) => x.logType == Log.LogType.Important),
             new LogTypeFilter("Error", (x) => x.logType == Log.LogType.Error),
+            new LogTypeFilter("Automatic", (x) => x.logType == Log.LogType.Automatic),
+            new LogTypeFilter("Input", (x) => x.logType == Log.LogType.Input),
+            new LogTypeFilter("Hint", (x) => x.logType == Log.LogType.Hint),
             new LogOriginFilter("Experience", (x) => x.logOrigin == Log.LogOrigin.Experience),
             new LogOriginFilter("General", (x) => x.logOrigin == Log.LogOrigin.General),
-            new LogContentFilter("Automatic", (x) => x.logContent == Log.LogContent.Automatic),
-            new LogContentFilter("Input", (x) => x.logContent == Log.LogContent.Input),
-            new LogIndicationFilter("GM Indication", (x) => x.gmIndication),
         };
 
         private void OnEnable()
@@ -69,8 +69,7 @@ namespace CRI.HelloHouston.Experience.UI
 
         private void OnLogAdded(Log log)
         {
-            if (_allFilters.GroupBy(allFilter => allFilter.GetType()).All(
-                    filterGroup => filterGroup.Any(filter => filter.Filter(log))))
+            if (FilterLog(log))
             {
                 var go = Instantiate(_logPrefab, _logPanel);
                 go.Init(log);
@@ -93,9 +92,17 @@ namespace CRI.HelloHouston.Experience.UI
                     filter.enabled = value;
                     RefreshList();
                 });
+                go.isOn = true;
                 go.GetComponentInChildren<Text>().text = filter.filterName;
                 go.name = "Toggle " + filter.filterName;
             }
+        }
+
+        private bool FilterLog(Log log)
+        {
+            return _allFilters
+                .GroupBy(allFilter => allFilter.GetType())
+                .All(filterGroup => filterGroup.Any(filter => filter.Filter(log)));
         }
 
         private void RefreshList()
@@ -107,9 +114,7 @@ namespace CRI.HelloHouston.Experience.UI
             }
             uiLogs.Clear();
             Log[] logs = GameManager.instance.GetAllLogs().Where(
-                log => _allFilters.GroupBy(allFilter => allFilter.GetType()).All(
-                    filterGroup => filterGroup.Any(filter => filter.Filter(log)))
-                ).Take(_logLimit).ToArray();
+                log => FilterLog(log)).Take(_logLimit).ToArray();
             foreach (var log in logs)
             {
                 var go = Instantiate(_logPrefab, _logPanel);
@@ -121,7 +126,12 @@ namespace CRI.HelloHouston.Experience.UI
         private void Update()
         {
             if (Input.GetKey(KeyCode.A))
-                GameManager.instance.AddLog("TESTTESTTEST", Extensions.RandomEnumValue<Log.LogOrigin>(), Extensions.RandomEnumValue<Log.LogContent>(), Extensions.RandomEnumValue<Log.LogType>(), UnityEngine.Random.Range(0, 2) == 1);
+            {
+                var logOrigin = Extensions.RandomEnumValue<Log.LogOrigin>();
+                var logType = Extensions.RandomEnumValue<Log.LogType>();
+                string name = string.Format("{0} {1}", logType, logOrigin);
+                GameManager.instance.AddLog(name, logOrigin, logType);
+            }
         }
     }
 }

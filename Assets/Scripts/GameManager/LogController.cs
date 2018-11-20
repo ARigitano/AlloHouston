@@ -9,7 +9,10 @@ namespace CRI.HelloHouston.Experience
         {
             Error,
             Important,
-            Default
+            Default,
+            Hint,
+            Input,
+            Automatic
         }
 
         public enum LogOrigin
@@ -18,11 +21,6 @@ namespace CRI.HelloHouston.Experience
             Experience
         }
 
-        public enum LogContent
-        {
-            Input,
-            Automatic
-        }
         /// <summary>
         /// The content of the log.
         /// </summary>
@@ -47,16 +45,8 @@ namespace CRI.HelloHouston.Experience
         /// The log origin.
         /// </summary>
         public LogOrigin logOrigin;
-        /// <summary>
-        /// The log contenu.
-        /// </summary>
-        public LogContent logContent;
-        /// <summary>
-        /// True if the log is an indication for the gm.
-        /// </summary>
-        public bool gmIndication;
 
-        public Log(string message, float time, Color color, XPContext xpContext, LogType logType, LogOrigin logOrigin, LogContent logContent, bool gmIndication)
+        public Log(string message, float time, Color color, XPContext xpContext, LogType logType, LogOrigin logOrigin)
         {
             this.message = message;
             this.time = time;
@@ -64,8 +54,6 @@ namespace CRI.HelloHouston.Experience
             this.xpContext = xpContext;
             this.logType = logType;
             this.logOrigin = logOrigin;
-            this.logContent = logContent;
-            this.gmIndication = gmIndication;
         }
 
         private string TimeFormat(float time)
@@ -111,11 +99,9 @@ namespace CRI.HelloHouston.Experience
             float timeSinceGameStart,
             Log.LogType logType,
             Log.LogOrigin logOrigin,
-            Log.LogContent logContent,
-            bool gmIndication = false,
             XPContext xpContext = null)
         {
-            var log = new Log(message, Time.time - timeSinceGameStart, Color.black, xpContext, logType, logOrigin, logContent, gmIndication);
+            var log = new Log(message, Time.time - timeSinceGameStart, Color.black, xpContext, logType, logOrigin);
             AddLog(log);
         }
  
@@ -123,12 +109,10 @@ namespace CRI.HelloHouston.Experience
             float timeSinceGameStart,
             Log.LogType logType,
             Log.LogOrigin logOrigin,
-            Log.LogContent logContent,
-            bool gmIndication,
             XPContext xpContext,
             Color color)
         {
-            var log = new Log(message, Time.time - timeSinceGameStart, color, xpContext, logType, logOrigin, logContent, gmIndication);
+            var log = new Log(message, Time.time - timeSinceGameStart, color, xpContext, logType, logOrigin);
             AddLog(log);
         }
 

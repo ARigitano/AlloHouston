@@ -34,8 +34,9 @@ namespace CRI.HelloHouston.Experience.UI
     [SerializeField]
     public abstract class LogFilter
     {
-        public string filterName;
+        public string filterName { get; protected set; }
         protected Func<Log, bool> _filter;
+
         public bool enabled = true;
 
         public virtual bool Filter(Log log)
