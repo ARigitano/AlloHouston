@@ -42,11 +42,11 @@ namespace CRI.HelloHouston.Experience
         /// Adds a log that will be displayed on the GameManager UI and saved in the log file.
         /// </summary>
         public void AddLog(string str,
-            Log.LogType[] logTypes = null,
-            bool gmIndication = false,
+            Log.LogOrigin logOrigin,
+            Log.LogType logType = Log.LogType.Default,
             XPContext xpContext = null)
         {
-            _logController.AddLog(str, timeSinceGameStart, logTypes);
+            _logController.AddLog(str, timeSinceGameStart, logType, logOrigin, xpContext);
         }
 
         public Log[] GetAllLogs()

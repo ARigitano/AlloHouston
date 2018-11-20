@@ -10,11 +10,15 @@ namespace CRI.HelloHouston.Experience
             Error,
             Important,
             Default,
-            General,
-            Experience,
+            Hint,
             Input,
-            Automatic,
-            GMIndication
+            Automatic
+        }
+
+        public enum LogOrigin
+        {
+            General,
+            Experience
         }
 
         /// <summary>
@@ -36,15 +40,20 @@ namespace CRI.HelloHouston.Experience
         /// <summary>
         /// The log type.
         /// </summary>
-        public LogType[] logType;
+        public LogType logType;
+        /// <summary>
+        /// The log origin.
+        /// </summary>
+        public LogOrigin logOrigin;
 
-        public Log(string message, float time, Color color, XPContext xpContext, LogType[] logType)
+        public Log(string message, float time, Color color, XPContext xpContext, LogType logType, LogOrigin logOrigin)
         {
             this.message = message;
             this.time = time;
             this.color = color;
             this.xpContext = xpContext;
             this.logType = logType;
+            this.logOrigin = logOrigin;
         }
 
         private string TimeFormat(float time)
@@ -88,20 +97,22 @@ namespace CRI.HelloHouston.Experience
 
         public void AddLog(string message,
             float timeSinceGameStart,
-            Log.LogType[] logType,
+            Log.LogType logType,
+            Log.LogOrigin logOrigin,
             XPContext xpContext = null)
         {
-            var log = new Log(message, Time.time - timeSinceGameStart, Color.black, xpContext, logType);
+            var log = new Log(message, Time.time - timeSinceGameStart, Color.black, xpContext, logType, logOrigin);
             AddLog(log);
         }
  
         public void AddLog(string message,
             float timeSinceGameStart,
-            Log.LogType[] logType,
+            Log.LogType logType,
+            Log.LogOrigin logOrigin,
             XPContext xpContext,
             Color color)
         {
-            var log = new Log(message, Time.time - timeSinceGameStart, color, xpContext, logType);
+            var log = new Log(message, Time.time - timeSinceGameStart, color, xpContext, logType, logOrigin);
             AddLog(log);
         }
 
