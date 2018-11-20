@@ -50,17 +50,7 @@ namespace CRI.HelloHouston.Experience.UI
         [Tooltip("Transform of the log filter panel.")]
         private Transform _logFilterPanel = null;
 
-        private LogFilter[] _allFilters = new LogFilter[]
-        {
-            new LogTypeFilter("Default", (x) => x.logType == Log.LogType.Default),
-            new LogTypeFilter("Important", (x) => x.logType == Log.LogType.Important),
-            new LogTypeFilter("Error", (x) => x.logType == Log.LogType.Error),
-            new LogOriginFilter("Experience", (x) => x.logOrigin == Log.LogOrigin.Experience),
-            new LogOriginFilter("General", (x) => x.logOrigin == Log.LogOrigin.General),
-            new LogContentFilter("Automatic", (x) => x.logContent == Log.LogContent.Automatic),
-            new LogContentFilter("Input", (x) => x.logContent == Log.LogContent.Input),
-            new LogIndicationFilter("GM Indication", (x) => x.gmIndication),
-        };
+        private List<Log.LogType> _filters = new List<Log.LogType>();
 
         private void OnEnable()
         {
@@ -69,8 +59,7 @@ namespace CRI.HelloHouston.Experience.UI
 
         private void OnLogAdded(Log log)
         {
-            if (_allFilters.GroupBy(allFilter => allFilter.GetType()).All(
-                    filterGroup => filterGroup.Any(filter => filter.Filter(log))))
+            if (log.logType.All(x => _filters.Any(filter => filter == x)))
             {
                 var go = Instantiate(_logPrefab, _logPanel);
                 go.Init(log);
@@ -85,17 +74,32 @@ namespace CRI.HelloHouston.Experience.UI
 
         public void Init()
         {
-            foreach (var filter in _allFilters)
+            foreach (var filter in Enum.GetValues(typeof(Log.LogType)))
             {
                 var go = Instantiate(_togglePrefab, _logFilterPanel);
                 go.onValueChanged.AddListener((value) =>
                 {
-                    filter.enabled = value;
-                    RefreshList();
+                    if (value)
+                        AddFilter((Log.LogType)filter);
+                    else
+                        RemoveFilter((Log.LogType)filter);
                 });
-                go.GetComponentInChildren<Text>().text = filter.filterName;
-                go.name = "Toggle " + filter.filterName;
+                go.isOn = false;
+                go.GetComponentInChildren<Text>().text = filter.ToString();
+                go.name = "Toggle " + filter.ToString();
             }
+        }
+
+        private void AddFilter(Log.LogType logType)
+        {
+            _filters.Add(logType);
+            RefreshList();
+        }
+
+        private void RemoveFilter(Log.LogType logType)
+        {
+            _filters.Remove(logType);
+            RefreshList();
         }
 
         private void RefreshList()
@@ -107,8 +111,7 @@ namespace CRI.HelloHouston.Experience.UI
             }
             uiLogs.Clear();
             Log[] logs = GameManager.instance.GetAllLogs().Where(
-                log => _allFilters.GroupBy(allFilter => allFilter.GetType()).All(
-                    filterGroup => filterGroup.Any(filter => filter.Filter(log)))
+                log => log.logType.All(x => _filters.Any(filter => filter == x))
                 ).Take(_logLimit).ToArray();
             foreach (var log in logs)
             {
@@ -121,7 +124,16 @@ namespace CRI.HelloHouston.Experience.UI
         private void Update()
         {
             if (Input.GetKey(KeyCode.A))
-                GameManager.instance.AddLog("TESTTESTTEST", Extensions.RandomEnumValue<Log.LogOrigin>(), Extensions.RandomEnumValue<Log.LogContent>(), Extensions.RandomEnumValue<Log.LogType>(), UnityEngine.Random.Range(0, 2) == 1);
+            {
+                var logTypes = new List<Log.LogType>();
+                for (int i = 0; i < UnityEngine.Random.Range(0, 5); i++)
+                {
+                    logTypes.Add(Extensions.RandomEnumValue<Log.LogType>());
+                }
+                string logStr = logTypes.Select(x => x.ToString()).Aggregate((x, y) => x + " " + y);
+                Debug.Log(logStr);
+                GameManager.instance.AddLog(logStr, logTypes.ToArray());
+            }
         }
     }
 }

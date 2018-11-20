@@ -5,6 +5,11 @@ namespace CRI.HelloHouston.Experience.UI
 {
     public class LogIndicationFilter : LogFilter
     {
+        public override bool Filter(Log log)
+        {
+            return enabled == _filter(log);
+        }
+
         public LogIndicationFilter(string filterName, Func<Log, bool> filter) : base(filterName, filter)
         {
         }

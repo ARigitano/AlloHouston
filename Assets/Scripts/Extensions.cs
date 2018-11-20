@@ -9,7 +9,7 @@ namespace CRI.HelloHouston
             if (!typeof(TEnum).IsEnum)
                 throw new Exception("TEnum must be an enum.");
             var v = Enum.GetValues(typeof(TEnum));
-            return (TEnum)v.GetValue(new Random().Next(v.Length));
+            return (TEnum)v.GetValue(UnityEngine.Random.Range(0, v.Length));
         }
     }
 }

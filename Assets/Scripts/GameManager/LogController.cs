@@ -9,20 +9,14 @@ namespace CRI.HelloHouston.Experience
         {
             Error,
             Important,
-            Default
-        }
-
-        public enum LogOrigin
-        {
+            Default,
             General,
-            Experience
+            Experience,
+            Input,
+            Automatic,
+            GMIndication
         }
 
-        public enum LogContent
-        {
-            Input,
-            Automatic
-        }
         /// <summary>
         /// The content of the log.
         /// </summary>
@@ -42,30 +36,15 @@ namespace CRI.HelloHouston.Experience
         /// <summary>
         /// The log type.
         /// </summary>
-        public LogType logType;
-        /// <summary>
-        /// The log origin.
-        /// </summary>
-        public LogOrigin logOrigin;
-        /// <summary>
-        /// The log contenu.
-        /// </summary>
-        public LogContent logContent;
-        /// <summary>
-        /// True if the log is an indication for the gm.
-        /// </summary>
-        public bool gmIndication;
+        public LogType[] logType;
 
-        public Log(string message, float time, Color color, XPContext xpContext, LogType logType, LogOrigin logOrigin, LogContent logContent, bool gmIndication)
+        public Log(string message, float time, Color color, XPContext xpContext, LogType[] logType)
         {
             this.message = message;
             this.time = time;
             this.color = color;
             this.xpContext = xpContext;
             this.logType = logType;
-            this.logOrigin = logOrigin;
-            this.logContent = logContent;
-            this.gmIndication = gmIndication;
         }
 
         private string TimeFormat(float time)
@@ -109,26 +88,20 @@ namespace CRI.HelloHouston.Experience
 
         public void AddLog(string message,
             float timeSinceGameStart,
-            Log.LogType logType,
-            Log.LogOrigin logOrigin,
-            Log.LogContent logContent,
-            bool gmIndication = false,
+            Log.LogType[] logType,
             XPContext xpContext = null)
         {
-            var log = new Log(message, Time.time - timeSinceGameStart, Color.black, xpContext, logType, logOrigin, logContent, gmIndication);
+            var log = new Log(message, Time.time - timeSinceGameStart, Color.black, xpContext, logType);
             AddLog(log);
         }
  
         public void AddLog(string message,
             float timeSinceGameStart,
-            Log.LogType logType,
-            Log.LogOrigin logOrigin,
-            Log.LogContent logContent,
-            bool gmIndication,
+            Log.LogType[] logType,
             XPContext xpContext,
             Color color)
         {
-            var log = new Log(message, Time.time - timeSinceGameStart, color, xpContext, logType, logOrigin, logContent, gmIndication);
+            var log = new Log(message, Time.time - timeSinceGameStart, color, xpContext, logType);
             AddLog(log);
         }
 
