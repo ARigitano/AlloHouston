@@ -1,14 +1,16 @@
-﻿using System.Collections;
+﻿using CRI.HelloHouston.Experience.Actions;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using UnityEngine;
 
 namespace CRI.HelloHouston.Experience.Actions
 {
-    public class GameActionController
+    public class ExperienceActionController
     {
-        public GameManager gameManager { get; private set; }
-
-        public Queue<GameAction> actionQueue;
+        public XPMainSynchronizer synchronizer { get; private set; }
+        public Queue<ExperienceAction> actionQueue;
         /// <summary>
         /// Time when the last action resolved
         /// </summary>
@@ -16,9 +18,7 @@ namespace CRI.HelloHouston.Experience.Actions
         /// <summary>
         /// The current action.
         /// </summary>
-        private GameAction _currentAction = null;
-        
-        public List<Light> lights;
+        private ExperienceAction _currentAction = null;
         /// <summary>
         /// Returns true if there's at least one action if the action queue and the currentAction is null or has finished.
         /// </summary>
@@ -39,7 +39,7 @@ namespace CRI.HelloHouston.Experience.Actions
         {
             if (actionQueue.Peek() != null && (force || canResolveFirstAction))
             {
-                GameAction action = actionQueue.Dequeue();
+                var action = actionQueue.Dequeue();
                 _currentAction = action;
                 _currentAction.Act(this);
                 _lastActionResolutionTime = Time.time;
@@ -52,15 +52,15 @@ namespace CRI.HelloHouston.Experience.Actions
         /// Adds an action to the queue of actions.
         /// </summary>
         /// <param name="action">An instance of GameAction</param>
-        public void AddAction(GameAction action)
+        public void AddAction(ExperienceAction action)
         {
             actionQueue.Enqueue(action);
         }
 
-        public GameActionController(GameManager gameManager)
+        public ExperienceActionController(XPMainSynchronizer synchronizer)
         {
-            actionQueue = new Queue<GameAction>();
-            this.gameManager = gameManager;
+            actionQueue = new Queue<ExperienceAction>();
+            this.synchronizer = synchronizer;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using CRI.HelloHouston.Experience.Actions;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -62,6 +63,11 @@ namespace CRI.HelloHouston.Experience
         public void ClearLogs()
         {
             _logController.logs.Clear();
+        }
+
+        public void SendHintToPlayers()
+        {
+
         }
 
         /// <summary>

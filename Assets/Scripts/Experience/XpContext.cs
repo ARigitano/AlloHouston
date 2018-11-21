@@ -28,12 +28,11 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         [Tooltip("The audience of this version of the experiment. Either mainstream public or researchers.")]
         public string context;
-
         /// <summary>
-        /// The estimated duration (in minutes) of this version of the experiment.
+        /// All the parameters of this particular experience.
         /// </summary>
-        [Tooltip("The estimated duration (in minutes) of this version of the experiment.")]
-        public int duration;
+        [Tooltip("All the parameters of this particular experience.")]
+        public XPParameter xpParameter;
 
         /// <summary>
         /// An empty object with the XpSynchronizer inhreting script of the experiment.

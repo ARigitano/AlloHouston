@@ -23,6 +23,11 @@ namespace CRI.HelloHouston.Experience.UI
         [Tooltip("The icon of the message.")]
         private Image _icon = null;
 
+        public void Init(string text)
+        {
+            _text.text = text;
+        }
+
         public void Init(Log log, bool showDate = true)
         {
             this.log = log;

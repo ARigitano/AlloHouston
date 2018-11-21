@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CRI.HelloHouston.Experience
+namespace CRI.HelloHouston.Experience.Actions
 {
     [CreateAssetMenu(menuName = "GameActions/TurnLightOnAction")]
     public class TurnLightOnAction : GameAction

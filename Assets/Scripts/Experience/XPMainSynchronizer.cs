@@ -16,10 +16,6 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         public XPContext xpContext { get; protected set; }
         /// <summary>
-        /// All the actions available for the experience.
-        /// </summary>
-        public List<GameAction> actions;
-        /// <summary>
         /// Every possible errors that could be displayed on the table screen for the experiment.
         /// </summary>
         [Tooltip("Every possible errors that could be displayed on the table screen for the experiment.")]
@@ -34,10 +30,6 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         [HideInInspector]
         public string error;
-        /// <summary>
-        /// The gamemanager that will allow the experiment to communicate with the rest of the station.
-        /// </summary>
-        protected GameManager _gameManager;
 
         /// <summary>
         /// To be called in case of success of the experiment.

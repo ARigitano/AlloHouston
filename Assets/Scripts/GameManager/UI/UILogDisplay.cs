@@ -24,7 +24,7 @@ namespace CRI.HelloHouston.Experience.UI
                 return _logLimit;
             }
         }
-        public List<UILog> uiLogs = new List<UILog>();
+        public Queue<UILog> uiLogs = new Queue<UILog>();
         /// <summary>
         /// The prefab of the logs.
         /// </summary>
@@ -43,6 +43,9 @@ namespace CRI.HelloHouston.Experience.UI
         [SerializeField]
         [Tooltip("Transform of the log panel.")]
         private Transform _logPanel = null;
+
+        [SerializeField]
+        private ScrollRect _scrollRect = null;
         /// <summary>
         /// Transform of the log filter panel.
         /// </summary>
@@ -71,9 +74,7 @@ namespace CRI.HelloHouston.Experience.UI
         {
             if (FilterLog(log))
             {
-                var go = Instantiate(_logPrefab, _logPanel);
-                go.Init(log);
-                uiLogs.Add(go);
+                AddLog(log);
             }
         }
 
@@ -100,6 +101,23 @@ namespace CRI.HelloHouston.Experience.UI
                 .All(filterGroup => filterGroup.Any(filter => filter.Filter(log)));
         }
 
+        private void AddLog(Log log)
+        {
+            bool scrollToBottom = false;
+            scrollToBottom = _scrollRect.normalizedPosition.y < 0.1f;
+            var go = Instantiate(_logPrefab, _logPanel);
+            go.Init(log);
+            uiLogs.Enqueue(go);
+            if (uiLogs.Count > _logLimit)
+            {
+                var uiLog = uiLogs.Dequeue();
+                Destroy(uiLog.gameObject);
+                Destroy(uiLog);
+            }
+            if (scrollToBottom)
+                _scrollRect.ScrollToBottom();
+        }
+        
         public void RefreshList()
         {
             foreach (var log in uiLogs)
@@ -109,12 +127,16 @@ namespace CRI.HelloHouston.Experience.UI
             }
             uiLogs.Clear();
             Log[] logs = GameManager.instance.GetAllLogs().Where(
-                log => FilterLog(log)).Take(_logLimit).ToArray();
-            foreach (var log in logs)
+                log => FilterLog(log)).Reverse().Take(_logLimit).Reverse().ToArray();
+            if (logs.Length == 0)
             {
                 var go = Instantiate(_logPrefab, _logPanel);
-                go.Init(log);
-                uiLogs.Add(go);
+                go.Init("There's nothing in this list!");
+                uiLogs.Enqueue(go);
+            }
+            foreach (var log in logs)
+            {
+                AddLog(log);
             }
         }
 

@@ -157,7 +157,7 @@ namespace CRI.HelloHouston.Experience.UI
                 _cornerText.text = context.totalCorners.ToString();
                 _doorText.text = context.totalDoors.ToString();
                 _hologramText.text = context.totalHolograms.ToString();
-                _durationText.text = context.duration.ToString();
+                _durationText.text = context.xpParameter.duration.ToString();
             }
             else
                 ResetAllText();
