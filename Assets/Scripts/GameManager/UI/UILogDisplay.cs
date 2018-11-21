@@ -36,7 +36,7 @@ namespace CRI.HelloHouston.Experience.UI
         /// </summary>
         [SerializeField]
         [Tooltip("The prefab of the filter toggle.")]
-        private Toggle _togglePrefab = null;
+        private UIFilterCategoryPanel _categoryPrefab = null;
         /// <summary>
         /// Transform of the log panel.
         /// </summary>
@@ -84,17 +84,12 @@ namespace CRI.HelloHouston.Experience.UI
 
         public void Init()
         {
-            foreach (var filter in _allFilters)
+            foreach (var category in _allFilters.GroupBy(x => x.logCategoryKey,
+                (key, group) => new { CategoryName = key, Filters = group.ToArray() }))
             {
-                var go = Instantiate(_togglePrefab, _logFilterPanel);
-                go.onValueChanged.AddListener((value) =>
-                {
-                    filter.enabled = value;
-                    RefreshList();
-                });
-                go.isOn = true;
-                go.GetComponentInChildren<Text>().text = filter.filterName;
-                go.name = "Toggle " + filter.filterName;
+                var go = Instantiate(_categoryPrefab);
+                go.Init(this, category.Filters, category.CategoryName);
+                go.transform.SetParent(_logFilterPanel);
             }
         }
 
@@ -105,7 +100,7 @@ namespace CRI.HelloHouston.Experience.UI
                 .All(filterGroup => filterGroup.Any(filter => filter.Filter(log)));
         }
 
-        private void RefreshList()
+        public void RefreshList()
         {
             foreach (var log in uiLogs)
             {

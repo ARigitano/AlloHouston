@@ -3,34 +3,32 @@ using UnityEngine;
 
 namespace CRI.HelloHouston.Experience.UI
 {
-    public class LogIndicationFilter : LogFilter
-    {
-        public override bool Filter(Log log)
-        {
-            return enabled == _filter(log);
-        }
-
-        public LogIndicationFilter(string filterName, Func<Log, bool> filter) : base(filterName, filter)
-        {
-        }
-    }
-
-    public class LogContentFilter : LogFilter
-    {
-        public LogContentFilter(string filterName, Func<Log, bool> filter) : base(filterName, filter)
-        {
-        }
-    }
-
     public class LogOriginFilter : LogFilter
     {
+        public override string logCategoryKey
+        {
+            get
+            {
+                return "Origin";
+            }
+        }
+
         public LogOriginFilter(string filterName, Func<Log, bool> filter) : base(filterName, filter)
         {
         }
+        
     }
 
     public class LogTypeFilter : LogFilter
     {
+        public override string logCategoryKey
+        {
+            get
+            {
+                return "Type";
+            }
+        }
+
         public LogTypeFilter(string filterName, Func<Log, bool> filter) : base(filterName, filter)
         {
         }
@@ -39,6 +37,7 @@ namespace CRI.HelloHouston.Experience.UI
     [SerializeField]
     public abstract class LogFilter
     {
+        public abstract string logCategoryKey { get; }
         public string filterName { get; protected set; }
         protected Func<Log, bool> _filter;
 
