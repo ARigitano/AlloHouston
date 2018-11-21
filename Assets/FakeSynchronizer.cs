@@ -21,6 +21,7 @@ namespace CRI.HelloHouston.Experience
         private FakeCornerScreen[] _fakeCornerScreens;
         [SerializeField]
         private FakeDoor _fakeDoor;
+        
 
         private void Launched()
         {
@@ -38,6 +39,24 @@ namespace CRI.HelloHouston.Experience
                 if (fakeCornerScreen != null) fakeCornerScreen.OnActivated();
 
             if (_fakeDoor != null) _fakeDoor.OnActivated();
+        }
+
+        public void SynchronizeScreens(string state)
+        {
+            switch(state)
+            {
+                case "loadingBarFinished":
+                    _fakeTabletScreen.WaitingConfirmation();
+                    break;
+                case "StartButtonClicked":
+                    _fakeTopScreen.ManualOverride();
+                    break;
+                case "OverrideButtonClicked":
+                    _fakeTopScreen.AccessCode();
+                    break;
+                default:
+                    break;
+            }
         }
 
         private void Paused()
