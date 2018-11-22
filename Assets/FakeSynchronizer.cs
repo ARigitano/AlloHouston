@@ -54,6 +54,18 @@ namespace CRI.HelloHouston.Experience
                 case "OverrideButtonClicked":
                     _fakeTopScreen.AccessCode();
                     break;
+                case "PasswordCorrect":
+                    _fakeTopScreen.Access(true);
+                    break;
+                case "PasswordInCorrect":
+                    _fakeTopScreen.Access(false);
+                    break;
+                case "EnteringDigit":
+                    _fakeTopScreen.DisplayPassword(_fakeTabletScreen.enteredPassword);
+                    break;
+                case "AccessGranted":
+
+                    break;
                 default:
                     break;
             }

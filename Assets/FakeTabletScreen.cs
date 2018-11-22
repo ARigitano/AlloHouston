@@ -15,6 +15,13 @@ namespace CRI.HelloHouston.Experience
         private Slider _slider;
         [SerializeField]
         private float _speed = 0.2f;
+        [SerializeField]
+        private string _realPassword;
+        public string enteredPassword;
+        [SerializeField]
+        private Button[] _digitButtons;
+        
+        
 
         IEnumerator FakeLoading()
         {
@@ -24,6 +31,41 @@ namespace CRI.HelloHouston.Experience
                 i += Time.deltaTime * _speed;
                 _slider.value = Mathf.Sqrt(i);
                 yield return null;
+            }
+        }
+
+        public void EnteringDigit(int number)
+        {
+            if(enteredPassword.Length < _realPassword.Length)
+            {
+                enteredPassword += number.ToString();
+                Debug.Log(enteredPassword);
+                _synchronizer.SynchronizeScreens("EnteringDigit");
+
+                if (enteredPassword.Length == _realPassword.Length && enteredPassword == _realPassword)
+                {
+                    Debug.Log("correct");
+                    Debug.Log(enteredPassword);
+                    _synchronizer.SynchronizeScreens("PasswordCorrect");
+                }
+                else if(enteredPassword.Length == _realPassword.Length && enteredPassword != _realPassword)
+                {
+                    Debug.Log("mistake");
+                    Debug.Log(enteredPassword);
+                    _synchronizer.SynchronizeScreens("PasswordInCorrect");
+                    enteredPassword = null;
+                }
+            }
+            else if (enteredPassword == _realPassword)
+            {
+                Debug.Log("correct");
+                Debug.Log(enteredPassword);
+                _synchronizer.SynchronizeScreens("PasswordCorrect");
+            } else
+            {
+                Debug.Log("mistake");
+                Debug.Log(enteredPassword);
+                _synchronizer.SynchronizeScreens("PasswordInCorrect");
             }
         }
 

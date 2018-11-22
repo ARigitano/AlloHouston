@@ -16,12 +16,49 @@ namespace CRI.HelloHouston.Experience
         [SerializeField]
         private float _speed = 0.2f;
         [SerializeField]
-        private Text _percentage;
+        private Text _percentage, _passwordText;
         [SerializeField]
-        private GameObject _b1A2, _b1A3, _b1A4, _b1A5;
+        private GameObject _b1A2, _b1A3, _b1A4, _b1A5, _b1A6, _b1A5bis, _b1A7;
+        
+        public void DisplayPassword(string password)
+        {
+            string displayedPassword = password;
+            while(displayedPassword.Length<4)
+            {
+                displayedPassword += "-";
+            }
+
+
+            _passwordText.text = "[" + displayedPassword + "]";
+        }
+
+        IEnumerator Wait()
+        {
+            yield return new WaitForSeconds(2);
+        }
+
+        public void Access(bool access)
+        {
+            if(access)
+            {
+                _b1A6.SetActive(true);
+                StartCoroutine("Wait");
+                _b1A6.SetActive(false);
+                _synchronizer.SynchronizeScreens("AccessGranted");
+
+            } else
+            {
+                _b1A5bis.SetActive(true);
+                StartCoroutine("Wait");
+                _b1A6.SetActive(false);
+                _b1A7.SetActive(true);
+                _b1A5.SetActive(false);
+            }
+        }
 
         IEnumerator Loading()
         {
+            Debug.Log("evolved");
             while (_slider.value <= 1f)
             {
                 _slider.value += Time.deltaTime * _speed;
