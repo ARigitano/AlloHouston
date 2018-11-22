@@ -1,125 +1,72 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace CRI.HelloHouston.Experience
 {
-    public struct Log
+
+    public class LogGeneralController : LogController
     {
-        public enum LogType
+
+        protected override Log.LogOrigin logOrigin
         {
-            Error,
-            Important,
-            Default,
-            Hint,
-            Input,
-            Automatic
+            get
+            {
+                return Log.LogOrigin.General;
+            }
+        }
+        /// <summary>
+        /// Adds a log that will be displayed on the GameManager UI and saved in the log file.
+        /// </summary>
+        public void AddLog(string str,
+            Log.LogType logType = Log.LogType.Default)
+        {
+            _logManager.AddLog(str, _gameManager.timeSinceGameStart, logType, logOrigin);
         }
 
-        public enum LogOrigin
+        public LogGeneralController(GameManager gameManager, LogManager logManager) : base(gameManager, logManager)
         {
-            General,
-            Experience
-        }
-
-        /// <summary>
-        /// The content of the log.
-        /// </summary>
-        public string message;
-        /// <summary>
-        /// The time of the log.
-        /// </summary>
-        public float time;
-        /// <summary>
-        /// The color of the log.
-        /// </summary>
-        public Color color;
-        /// <summary>
-        /// The name of the xpContext.
-        /// </summary>
-        public XPContext xpContext;
-        /// <summary>
-        /// The log type.
-        /// </summary>
-        public LogType logType;
-        /// <summary>
-        /// The log origin.
-        /// </summary>
-        public LogOrigin logOrigin;
-
-        public Log(string message, float time, Color color, XPContext xpContext, LogType logType, LogOrigin logOrigin)
-        {
-            this.message = message;
-            this.time = time;
-            this.color = color;
-            this.xpContext = xpContext;
-            this.logType = logType;
-            this.logOrigin = logOrigin;
-        }
-
-        private string TimeFormat(float time)
-        {
-            return string.Format("[{0}:{1:00}]", (int)(time / 60), (int)(time % 60));
-        }
-
-        private string ContextNameFormat(XPContext xpContext)
-        {
-            return string.Format("[{0}]", xpContext ? xpContext.xpGroup.experimentName.ToUpper() : "Room");
-        }
-
-        public string ToString(bool displayTime)
-        {
-            if (displayTime)
-                return this.ToString();
-            return string.Format("<color=#{0}>{1} - {2}</color>", ColorUtility.ToHtmlStringRGB(color), ContextNameFormat(xpContext), message);
-        }
-
-        public override string ToString()
-        { 
-            return string.Format("<color=#{0}>{1}{2} - {3}</color>", ColorUtility.ToHtmlStringRGB(color), TimeFormat(time), ContextNameFormat(xpContext), message);
         }
     }
 
-    public class LogController
+    public class LogExperienceController : LogController
     {
-        public delegate void LogEvent(Log log);
-        public static LogEvent onLogAdded;
 
-        public GameManager gameManager { get; private set; }
-
-        public Queue<Log> logs { get; private set; }
-
-        private void AddLog(Log log)
+        protected override Log.LogOrigin logOrigin
         {
-            Debug.Log(log);
-            logs.Enqueue(log);
-            onLogAdded(log);
+            get
+            {
+                return Log.LogOrigin.Experience;
+            }
         }
 
-        public void AddLog(string message,
-            float timeSinceGameStart,
-            Log.LogType logType,
-            Log.LogOrigin logOrigin,
-            XPContext xpContext = null)
-        {
-            var log = new Log(message, Time.time - timeSinceGameStart, Color.black, xpContext, logType, logOrigin);
-            AddLog(log);
-        }
- 
-        public void AddLog(string message,
-            float timeSinceGameStart,
-            Log.LogType logType,
-            Log.LogOrigin logOrigin,
+        /// <summary>
+        /// Adds a log that will be displayed on the GameManager UI and saved in the log file.
+        /// </summary>
+        public void AddLog(string str,
             XPContext xpContext,
-            Color color)
+            Log.LogType logType = Log.LogType.Default)
         {
-            var log = new Log(message, Time.time - timeSinceGameStart, color, xpContext, logType, logOrigin);
-            AddLog(log);
+            _logManager.AddLog(str, _gameManager.timeSinceGameStart, logType, logOrigin, xpContext);
         }
 
-        public LogController(GameManager gameManager)
+        public LogExperienceController(GameManager gameManager, LogManager logManager) : base(gameManager, logManager)
         {
-            logs = new Queue<Log>();
-            this.gameManager = gameManager;
+        }
+    }
+
+    public abstract class LogController
+    {
+        protected LogManager _logManager;
+        protected GameManager _gameManager;
+
+        protected abstract Log.LogOrigin logOrigin { get; }
+
+        public LogController(GameManager gameManager, LogManager logManager)
+        {
+            _gameManager = gameManager;
+            _logManager = logManager;
         }
     }
 }

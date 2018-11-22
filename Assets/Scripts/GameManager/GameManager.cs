@@ -27,7 +27,19 @@ namespace CRI.HelloHouston.Experience
         /// <summary>
         /// The Log controller.
         /// </summary>
-        private LogController _logController;
+        public LogManager logManager { get; private set; }
+        /// <summary>
+        /// The log general controller.
+        /// </summary>
+        public LogGeneralController logGeneralController { get { return logManager.logGeneralController; } }
+        /// <summary>
+        /// The log experience controller.
+        /// </summary>
+        public LogExperienceController logExperienceController { get { return logManager.logExperienceController; } }
+        /// <summary>
+        /// Experience list.
+        /// </summary>
+        private XPContext[] _xpContext;
         /// <summary>
         /// Time since the game start.
         /// </summary>
@@ -36,33 +48,12 @@ namespace CRI.HelloHouston.Experience
         private void Awake()
         {
             _gameActionController = new GameActionController(this);
-            _logController = new LogController(this);
+            logManager = new LogManager(this);
         }
 
-        /// <summary>
-        /// Adds a log that will be displayed on the GameManager UI and saved in the log file.
-        /// </summary>
-        public void AddLog(string str,
-            Log.LogOrigin logOrigin,
-            Log.LogType logType = Log.LogType.Default,
-            XPContext xpContext = null)
+        public void Init(XPContext[] xpContext)
         {
-            _logController.AddLog(str, timeSinceGameStart, logType, logOrigin, xpContext);
-        }
-
-        public Log[] GetAllLogs()
-        {
-            return _logController.logs.ToArray();
-        }
-
-        public Log[] GetAllLogs(int n)
-        {
-            return _logController.logs.Take(n).ToArray();
-        }
-
-        public void ClearLogs()
-        {
-            _logController.logs.Clear();
+            _xpContext = xpContext;
         }
 
         public void SendHintToPlayers()

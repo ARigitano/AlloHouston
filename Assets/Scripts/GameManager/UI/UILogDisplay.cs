@@ -53,6 +53,8 @@ namespace CRI.HelloHouston.Experience.UI
         [Tooltip("Transform of the log filter panel.")]
         private Transform _logFilterPanel = null;
 
+        private LogManager _logManager;
+
         private LogFilter[] _allFilters = new LogFilter[]
         {
             new LogTypeFilter("Default", (x) => x.logType == Log.LogType.Default),
@@ -67,7 +69,12 @@ namespace CRI.HelloHouston.Experience.UI
 
         private void OnEnable()
         {
-            LogController.onLogAdded += OnLogAdded;
+            LogManager.onLogAdded += OnLogAdded;
+        }
+
+        private void OnDisable()
+        {
+            LogManager.onLogAdded -= OnLogAdded;
         }
 
         private void OnLogAdded(Log log)
@@ -80,11 +87,12 @@ namespace CRI.HelloHouston.Experience.UI
 
         private void Start()
         {
-            Init();
+            Init(GameManager.instance.logManager);
         }
 
-        public void Init()
+        public void Init(LogManager logManager)
         {
+            _logManager = logManager;
             foreach (var category in _allFilters.GroupBy(x => x.logCategoryKey,
                 (key, group) => new { CategoryName = key, Filters = group.ToArray() }))
             {
@@ -126,12 +134,12 @@ namespace CRI.HelloHouston.Experience.UI
                 Destroy(log);
             }
             uiLogs.Clear();
-            Log[] logs = GameManager.instance.GetAllLogs().Where(
+            Log[] logs = _logManager.GetAllLogs().Where(
                 log => FilterLog(log)).Reverse().Take(_logLimit).Reverse().ToArray();
             if (logs.Length == 0)
             {
                 var go = Instantiate(_logPrefab, _logPanel);
-                go.Init("There's nothing in this list!");
+                go.Init("There's nothing in this list! Please verify your filters.");
                 uiLogs.Enqueue(go);
             }
             foreach (var log in logs)
@@ -147,7 +155,10 @@ namespace CRI.HelloHouston.Experience.UI
                 var logOrigin = Extensions.RandomEnumValue<Log.LogOrigin>();
                 var logType = Extensions.RandomEnumValue<Log.LogType>();
                 string name = string.Format("{0} {1}", logType, logOrigin);
-                GameManager.instance.AddLog(name, logOrigin, logType);
+                if (logOrigin == Log.LogOrigin.Experience)
+                    _logManager.logExperienceController.AddLog(name, null, logType);
+                else
+                    _logManager.logGeneralController.AddLog(name, logType);
             }
         }
     }
