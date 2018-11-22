@@ -10,7 +10,7 @@ namespace CRI.HelloHouston.Experience
         [SerializeField]
         private FakeSynchronizer _synchronizer;
         [SerializeField]
-        private GameObject _panel, _b1C2, _b1C4, _b1C4Left, _b1C5Left;
+        private GameObject _panel, _b1C2, _b1C4, _b1C4Left, _b1C5Left, _b1C6Left;
         [SerializeField]
         private Slider _slider;
         [SerializeField]
@@ -53,7 +53,7 @@ namespace CRI.HelloHouston.Experience
                     Debug.Log("mistake");
                     Debug.Log(enteredPassword);
                     _synchronizer.SynchronizeScreens("PasswordInCorrect");
-                    enteredPassword = null;
+                    enteredPassword = "";
                 }
             }
             else if (enteredPassword == _realPassword)
@@ -67,6 +67,12 @@ namespace CRI.HelloHouston.Experience
                 Debug.Log(enteredPassword);
                 _synchronizer.SynchronizeScreens("PasswordInCorrect");
             }
+        }
+
+        public void AccessGranted()
+        {
+            _b1C5Left.SetActive(false);
+            _b1C6Left.SetActive(true);
         }
 
         public void WaitingConfirmation()

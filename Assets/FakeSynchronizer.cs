@@ -64,7 +64,7 @@ namespace CRI.HelloHouston.Experience
                     _fakeTopScreen.DisplayPassword(_fakeTabletScreen.enteredPassword);
                     break;
                 case "AccessGranted":
-
+                    _fakeTabletScreen.AccessGranted();
                     break;
                 default:
                     break;

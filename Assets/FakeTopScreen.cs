@@ -32,9 +32,20 @@ namespace CRI.HelloHouston.Experience
             _passwordText.text = "[" + displayedPassword + "]";
         }
 
-        IEnumerator Wait()
+        IEnumerator Wait1()
         {
             yield return new WaitForSeconds(2);
+            _b1A6.SetActive(false);
+            _synchronizer.SynchronizeScreens("AccessGranted");
+            _b1A7.SetActive(true);
+            _b1A5.SetActive(false);
+        }
+
+        IEnumerator Wait2()
+        {
+            yield return new WaitForSeconds(2);
+            _b1A5bis.SetActive(false);
+            _passwordText.text = "[----]";
         }
 
         public void Access(bool access)
@@ -42,17 +53,15 @@ namespace CRI.HelloHouston.Experience
             if(access)
             {
                 _b1A6.SetActive(true);
-                StartCoroutine("Wait");
-                _b1A6.SetActive(false);
-                _synchronizer.SynchronizeScreens("AccessGranted");
+                StartCoroutine(Wait1());
+                
 
             } else
             {
                 _b1A5bis.SetActive(true);
-                StartCoroutine("Wait");
-                _b1A6.SetActive(false);
-                _b1A7.SetActive(true);
-                _b1A5.SetActive(false);
+                StartCoroutine(Wait2());
+                
+                
             }
         }
 
