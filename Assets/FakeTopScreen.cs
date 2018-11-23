@@ -16,10 +16,20 @@ namespace CRI.HelloHouston.Experience
         [SerializeField]
         private float _speed = 0.2f;
         [SerializeField]
-        private Text _percentage, _passwordText;
+        private Text _percentage, _passwordText, _particlesText;
         [SerializeField]
-        private GameObject _b1A2, _b1A3, _b1A4, _b1A5, _b1A6, _b1A5bis, _b1A7;
+        private GameObject _b1A2, _b1A3, _b1A4, _b1A5, _b1A6, _b1A5bis, _b1A7, _b1A7bis, _b1A8;
         
+        public void CorrectParticle()
+        {
+            _b1A7bis.SetActive(true);
+        }
+
+        public void IncorrectParticle()
+        {
+            _b1A8.SetActive(true);
+        }
+
         public void DisplayPassword(string password)
         {
             string displayedPassword = password;
@@ -46,6 +56,27 @@ namespace CRI.HelloHouston.Experience
             yield return new WaitForSeconds(2);
             _b1A5bis.SetActive(false);
             _passwordText.text = "[----]";
+        }
+
+        public void DisplayParticles(string[] particles)
+        {
+            string displayedParticles = "";
+            Debug.Log("part");
+
+            for (int i = 0; i<particles.Length; i++)
+            {
+                if(particles[i] != "")
+                {
+                    displayedParticles += particles[i];
+                    Debug.Log("ok");
+                }
+                else
+                {
+                    displayedParticles += ".";
+                    Debug.Log("yes");
+                }
+                _particlesText.text = displayedParticles;
+            }
         }
 
         public void Access(bool access)

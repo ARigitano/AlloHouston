@@ -18,8 +18,11 @@ namespace CRI.HelloHouston.Experience
         [SerializeField]
         private string _realPassword;
         public string enteredPassword;
+        public string realParticles;
+        public string[] _enteredParticles;
         [SerializeField]
-        private Button[] _digitButtons;
+        private Button[] _digitButtons, _particleButtons;
+        public string[] result;
         
         
 
@@ -34,38 +37,81 @@ namespace CRI.HelloHouston.Experience
             }
         }
 
+        public void ClearParticles()
+        {
+            for(int i = 0; i < _enteredParticles.Length; i++)
+            {
+                _enteredParticles[i] = "";
+            }
+            _synchronizer.SynchronizeScreens("EnteringParticle");
+        }
+
+        public void SubmitParticles()
+        {
+            string particles = "";
+
+            for (int i = 0; i < _enteredParticles.Length; i++) 
+            {
+                particles+=_enteredParticles[i];
+            }
+
+            if (particles == realParticles)
+            {
+                _synchronizer.SynchronizeScreens("ParticleCorrect");
+            }
+            else if (particles != realParticles)
+            {
+                if (particles.Length != realParticles.Length)
+                {
+
+                }
+                else
+                {
+                    string[] particleBreak = new string[realParticles.Length];
+                    particleBreak = realParticles.Split(" "[0]);
+
+                    for(int i = 0; i < particleBreak.Length; i++)
+                    {
+                        //if(particleBreak)
+                    }
+                }
+                  
+                _synchronizer.SynchronizeScreens("ParticleInCorrect");
+                enteredPassword = "";
+            }
+        }
+
+        public void EnteringParticle(string particle)
+        {
+            Debug.Log("touched");
+            for(int i = 0; i < _enteredParticles.Length; i++)
+            {
+                if(_enteredParticles[i] == "")
+                {
+                    _enteredParticles[i] = particle;
+                    _synchronizer.SynchronizeScreens("EnteringParticle");
+                    Debug.Log(particle);
+                    break;
+                }
+            }
+        }
+
         public void EnteringDigit(int number)
         {
             if(enteredPassword.Length < _realPassword.Length)
             {
                 enteredPassword += number.ToString();
-                Debug.Log(enteredPassword);
                 _synchronizer.SynchronizeScreens("EnteringDigit");
 
                 if (enteredPassword.Length == _realPassword.Length && enteredPassword == _realPassword)
                 {
-                    Debug.Log("correct");
-                    Debug.Log(enteredPassword);
                     _synchronizer.SynchronizeScreens("PasswordCorrect");
                 }
                 else if(enteredPassword.Length == _realPassword.Length && enteredPassword != _realPassword)
                 {
-                    Debug.Log("mistake");
-                    Debug.Log(enteredPassword);
                     _synchronizer.SynchronizeScreens("PasswordInCorrect");
                     enteredPassword = "";
                 }
-            }
-            else if (enteredPassword == _realPassword)
-            {
-                Debug.Log("correct");
-                Debug.Log(enteredPassword);
-                _synchronizer.SynchronizeScreens("PasswordCorrect");
-            } else
-            {
-                Debug.Log("mistake");
-                Debug.Log(enteredPassword);
-                _synchronizer.SynchronizeScreens("PasswordInCorrect");
             }
         }
 

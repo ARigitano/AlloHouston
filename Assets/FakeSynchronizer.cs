@@ -66,6 +66,15 @@ namespace CRI.HelloHouston.Experience
                 case "AccessGranted":
                     _fakeTabletScreen.AccessGranted();
                     break;
+                case "EnteringParticle":
+                    _fakeTopScreen.DisplayParticles(_fakeTabletScreen._enteredParticles);
+                    break;
+                case "ParticleCorrect":
+                    _fakeTopScreen.CorrectParticle();
+                    break;
+                case "ParticleInCorrect":
+                    _fakeTopScreen.IncorrectParticle();
+                    break;
                 default:
                     break;
             }

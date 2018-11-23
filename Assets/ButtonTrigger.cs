@@ -14,7 +14,6 @@ public class ButtonTrigger : MonoBehaviour {
 	void Start ()
     {
         _time = Time.time;
-        Debug.Log("Start");
 	}
 	
 	// Update is called once per frame
@@ -22,7 +21,6 @@ public class ButtonTrigger : MonoBehaviour {
     {
         if(Time.time - _time > 1.0f && !_activated && !_controllerIn)
         {
-            Debug.Log("Activation");
             _activated = true;
         }
 	}
@@ -32,13 +30,10 @@ public class ButtonTrigger : MonoBehaviour {
         if (other.tag == "ViveController" && !_activated && enabled)
         {
             _controllerIn = true;
-            Debug.Log("already in");
         }
         else if (other.tag == "ViveController" && enabled)
         {
-            this.gameObject.GetComponent<Button>().onClick.Invoke();
-            Debug.Log("done2");
-            
+            this.gameObject.GetComponent<Button>().onClick.Invoke();            
         }
     }
 
@@ -47,7 +42,6 @@ public class ButtonTrigger : MonoBehaviour {
         if (other.tag == "ViveController" && enabled)
         {
             _controllerIn = false;
-            Debug.Log("now ok");
         }
     }
 }
