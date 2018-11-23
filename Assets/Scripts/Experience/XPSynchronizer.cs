@@ -9,18 +9,12 @@ namespace CRI.HelloHouston.Experience
     /// The XpSynchronizer is responsible for the communication of every prefabs of one particular experiment among themselves as well as with the Gamecontroller.
     /// </summary>
     [System.Serializable]
-    public abstract class XPMainSynchronizer : ScriptableObject
+    public abstract class XPSynchronizer : ScriptableObject
     {
         /// <summary>
         /// The xp context.
         /// </summary>
         public XPContext xpContext { get; protected set; }
-        /// <summary>
-        /// Every possible errors that could be displayed on the table screen for the experiment.
-        /// </summary>
-        [Tooltip("Every possible errors that could be displayed on the table screen for the experiment.")]
-        [SerializeField]
-        protected string[] _possibleErrors;
         /// <summary>
         /// All the contents.
         /// </summary>
@@ -31,16 +25,7 @@ namespace CRI.HelloHouston.Experience
         [HideInInspector]
         public string error;
 
-        /// <summary>
-        /// To be called in case of success of the experiment.
-        /// </summary>
-        public virtual void OnResolved()
-        {
-            foreach (var element in elements)
-            {
-                element.OnResolved();
-            }
-        }
+        public bool active { get; protected set; }
 
         public T GetElement<T>(string name) where T : XPElement, new()
         {
@@ -50,6 +35,18 @@ namespace CRI.HelloHouston.Experience
         public T[] GetElements<T>() where T : XPElement, new()
         {
             return (T[]) elements.Where(x => x.GetType() == typeof(T)).ToArray();
+        }
+
+
+        /// <summary>
+        /// To be called in case of success of the experiment.
+        /// </summary>
+        public virtual void OnResolved()
+        {
+            foreach (var element in elements)
+            {
+                element.OnResolved();
+            }
         }
 
         /// <summary>
@@ -67,6 +64,7 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         public virtual void OnActivated()
         {
+            active = true;
             foreach (var element in elements)
             {
                 element.OnActivated();
@@ -78,6 +76,7 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         public virtual void OnPause()
         {
+            active = false;
             foreach (var element in elements)
             {
                 element.OnPause();

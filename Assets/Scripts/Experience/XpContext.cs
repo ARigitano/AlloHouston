@@ -38,7 +38,7 @@ namespace CRI.HelloHouston.Experience
         /// An empty object with the XpSynchronizer inhreting script of the experiment.
         /// </summary>
         [Tooltip("An empty object with the XpSynchronizer inhreting script of the experiment.")]
-        public XPMainSynchronizer xpSynchronizer;
+        public XPSynchronizer xpSynchronizer;
 
         /// <summary>
         /// The screen, window and tablet on the top part of the wall, to interact with the experiment.

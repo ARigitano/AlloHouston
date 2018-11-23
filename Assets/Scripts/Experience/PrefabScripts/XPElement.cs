@@ -7,7 +7,7 @@ namespace CRI.HelloHouston.Experience
         /// <summary>
         /// The experience synchronizer.
         /// </summary>
-        public XPMainSynchronizer synchronizer { get; protected set; }
+        public XPSynchronizer synchronizer { get; protected set; }
         /// <summary>
         /// The element name
         /// </summary>
@@ -25,7 +25,7 @@ namespace CRI.HelloHouston.Experience
             }
         }
 
-        public virtual void Init(XPMainSynchronizer synchronizer)
+        public virtual void Init(XPSynchronizer synchronizer)
         {
             this.synchronizer = synchronizer;
         }

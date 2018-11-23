@@ -1,5 +1,4 @@
 ﻿using CRI.HelloHouston.Experience.Actions;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -24,6 +23,8 @@ namespace CRI.HelloHouston.Experience
         /// The Game action controller.
         /// </summary>
         private GameActionController _gameActionController;
+        [SerializeField]
+        private XPMainParameter _mainParameter = null;
         /// <summary>
         /// The Log controller.
         /// </summary>
@@ -39,7 +40,7 @@ namespace CRI.HelloHouston.Experience
         /// <summary>
         /// Experience list.
         /// </summary>
-        private XPContext[] _xpContext;
+        private XPContext[] _xpContexts;
         /// <summary>
         /// Time since the game start.
         /// </summary>
@@ -51,9 +52,14 @@ namespace CRI.HelloHouston.Experience
             logManager = new LogManager(this);
         }
 
-        public void Init(XPContext[] xpContext)
+        public void Init(XPContext[] xpContexts)
         {
-            _xpContext = xpContext;
+            _xpContexts = xpContexts;
+        }
+
+        public string[] GetAllCurrentHints()
+        {
+            return _mainParameter.hints.Concat(_xpContexts.Where(x => x.xpSynchronizer != null && x.xpSynchronizer.active).SelectMany(x => x.xpParameter.availableHints)).ToArray();
         }
 
         public void SendHintToPlayers()

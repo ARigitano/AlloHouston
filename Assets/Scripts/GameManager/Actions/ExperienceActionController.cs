@@ -9,7 +9,7 @@ namespace CRI.HelloHouston.Experience.Actions
 {
     public class ExperienceActionController
     {
-        public XPMainSynchronizer synchronizer { get; private set; }
+        public XPSynchronizer synchronizer { get; private set; }
         public Queue<ExperienceAction> actionQueue;
         /// <summary>
         /// Time when the last action resolved
@@ -57,7 +57,7 @@ namespace CRI.HelloHouston.Experience.Actions
             actionQueue.Enqueue(action);
         }
 
-        public ExperienceActionController(XPMainSynchronizer synchronizer)
+        public ExperienceActionController(XPSynchronizer synchronizer)
         {
             actionQueue = new Queue<ExperienceAction>();
             this.synchronizer = synchronizer;

@@ -11,14 +11,13 @@ namespace CRI.HelloHouston.Experience
         /// All the possible actions for this experiment.
         /// </summary>
         [Tooltip("All the possible actions for this experiment.")]
-        public List<ExperienceAction> actions;
+        public ExperienceAction[] actions;
         /// <summary>
         /// The estimated duration (in minutes) of this version of the experiment.
         /// </summary>
         [Tooltip("The estimated duration (in minutes) of this version of the experiment.")]
         public int duration;
 
-        public List<string> availableHints;
-
+        public string[] availableHints;
     }
 }
