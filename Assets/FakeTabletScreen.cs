@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 namespace CRI.HelloHouston.Experience
-{
+{ 
     public class FakeTabletScreen : XPElement
     {
         [SerializeField]
@@ -18,13 +18,26 @@ namespace CRI.HelloHouston.Experience
         [SerializeField]
         private string _realPassword;
         public string enteredPassword;
-        public string realParticles;
+        public string[] realParticles;
         public string[] _enteredParticles;
         [SerializeField]
         private Button[] _digitButtons, _particleButtons;
         public string[] result;
+        public Text partic, partic2;
         
-        
+        private void GenerateParticles()
+        {
+            string[] particleTypes = new string[] { "e", "μ", "q", "γ", "e-", "μ-", "q-", "v" };
+            string type = "";
+
+            for(int i = 0; i < realParticles.Length; i++)
+            {
+                realParticles[i] = particleTypes[Random.Range(0, particleTypes.Length)];
+                type += realParticles[i];
+            }
+
+            partic2.text = type;
+        }
 
         IEnumerator FakeLoading()
         {
@@ -48,32 +61,77 @@ namespace CRI.HelloHouston.Experience
 
         public void SubmitParticles()
         {
+            Debug.Log("fired");
+
             string particles = "";
+            string realPart = "";
 
             for (int i = 0; i < _enteredParticles.Length; i++) 
             {
                 particles+=_enteredParticles[i];
             }
 
-            if (particles == realParticles)
-            {
-                _synchronizer.SynchronizeScreens("ParticleCorrect");
+            for (int i = 0; i < realParticles.Length; i++) {
+                realPart += realParticles[i];
             }
-            else if (particles != realParticles)
-            {
-                if (particles.Length != realParticles.Length)
-                {
 
+            if (particles == realPart)
+            {
+                //_synchronizer.SynchronizeScreens("ParticleCorrect");
+                //meme longueur
+                partic.text = "meme longueur";
+                Debug.Log("meme longueur");
+            }
+            else if (particles != realPart)
+            {
+                bool isSign = false;
+
+                if (particles.Length != realPart.Length)
+                {
+                    //pas meme longueur
+                    Debug.Log("pas meme longueur");
+                    partic.text = "pas meme longueur";
                 }
                 else
                 {
-                    string[] particleBreak = new string[realParticles.Length];
-                    particleBreak = realParticles.Split(" "[0]);
-
-                    for(int i = 0; i < particleBreak.Length; i++)
+                    for (int i = 0; i < realParticles.Length; i++)
                     {
-                        //if(particleBreak)
+                        string particle = _enteredParticles[i];
+                        char sign = particle[0];
+
+                        string realParticle = realParticles[i];
+                        char realSign = realParticle[0];
+
+                        if (sign != realSign)
+                        {
+                            //pas meme symbol
+                            Debug.Log("pas meme symbol");
+                            isSign = true;
+                            partic.text = "pas meme symbol";
+                            break;
+                        }
                     }
+                    if (!isSign)
+                    {
+                        for (int i = 0; i < realParticles.Length; i++)
+                        {
+                            string particle = _enteredParticles[i];
+                            char sign = particle[1];
+
+                            string realParticle = realParticles[i];
+                            char realSign = realParticle[1];
+
+                            if (sign != null && realSign != null && sign != realSign)
+                            {
+                                //pas meme charge
+                                Debug.Log("pas meme charge");
+                                partic.text = "pas meme charge";
+                                break;
+                            }
+                        }
+                    }
+
+                    
                 }
                   
                 _synchronizer.SynchronizeScreens("ParticleInCorrect");
@@ -83,7 +141,6 @@ namespace CRI.HelloHouston.Experience
 
         public void EnteringParticle(string particle)
         {
-            Debug.Log("touched");
             for(int i = 0; i < _enteredParticles.Length; i++)
             {
                 if(_enteredParticles[i] == "")
@@ -170,7 +227,7 @@ namespace CRI.HelloHouston.Experience
         // Use this for initialization
         void Start()
         {
-
+            GenerateParticles();
         }
 
         // Update is called once per frame
