@@ -2,11 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
+using System.Linq;
 
 namespace CRI.HelloHouston.Experience
-{ 
+{
     public class FakeTabletScreen : XPElement
     {
+        [SerializeField]
+        private Particle[] _allParticles;
+
+        private static string _path = "Particle";
+
+        [SerializeField]
+        private string[] particleTypes;
+
         [SerializeField]
         private FakeSynchronizer _synchronizer;
         [SerializeField]
@@ -24,15 +34,35 @@ namespace CRI.HelloHouston.Experience
         private Button[] _digitButtons, _particleButtons;
         public string[] result;
         public Text partic, partic2;
-        
-        private void GenerateParticles()
+
+        private void GenerateParticles(string[] particleTypes)
         {
-            string[] particleTypes = new string[] { "e", "μ", "q", "γ", "e-", "μ-", "q-", "v" };
+
+            try
+            {
+                _allParticles = Resources.LoadAll(_path, typeof(Particle)).Cast<Particle>().ToArray();
+
+                particleTypes = new string[_allParticles.Length];
+
+                for(int i = 0; i<particleTypes.Length; i++)
+                {
+                    particleTypes[i] = _allParticles[i].symbol + _allParticles[i];
+
+                    if (_allParticles[i].negative)
+                        particleTypes[i] += "-";
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e.Message);
+            }
+
+            //particleTypes = new string[] { "e", "μ", "q", "γ", "e-", "μ-", "q-", "v" };
             string type = "";
 
             for(int i = 0; i < realParticles.Length; i++)
             {
-                realParticles[i] = particleTypes[Random.Range(0, particleTypes.Length)];
+                realParticles[i] = particleTypes[UnityEngine.Random.Range(0, particleTypes.Length)];
                 type += realParticles[i];
             }
 
@@ -79,20 +109,26 @@ namespace CRI.HelloHouston.Experience
             {
                 //_synchronizer.SynchronizeScreens("ParticleCorrect");
                 //meme longueur
-                partic.text = "meme longueur";
-                Debug.Log("meme longueur");
+                partic.text = "meme string";
+                Debug.Log("meme string");
             }
             else if (particles != realPart)
             {
                 bool isSign = false;
+                int particleCounter = 0;
 
-                if (particles.Length != realPart.Length)
+                for (int i = 0; i < _enteredParticles.Length; i++) {
+                    if(_enteredParticles[i] != "")
+                        particleCounter++;
+                }
+
+                if (particleCounter != realParticles.Length)
                 {
                     //pas meme longueur
                     Debug.Log("pas meme longueur");
                     partic.text = "pas meme longueur";
                 }
-                else
+                else 
                 {
                     for (int i = 0; i < realParticles.Length; i++)
                     {
@@ -115,13 +151,21 @@ namespace CRI.HelloHouston.Experience
                     {
                         for (int i = 0; i < realParticles.Length; i++)
                         {
-                            string particle = _enteredParticles[i];
-                            char sign = particle[1];
+                            char sign = '\0';
+                            char realSign = '\0';
+                            if (_enteredParticles[i].Length == 2)
+                            {
+                                string particle = _enteredParticles[i];
+                                sign = particle[1];
+                            }
 
-                            string realParticle = realParticles[i];
-                            char realSign = realParticle[1];
+                            if (realParticles[i].Length == 2)
+                            {
+                                string realParticle = realParticles[i];
+                                realSign = realParticle[1];
+                            }
 
-                            if (sign != null && realSign != null && sign != realSign)
+                            if (sign != realSign)
                             {
                                 //pas meme charge
                                 Debug.Log("pas meme charge");
@@ -227,7 +271,7 @@ namespace CRI.HelloHouston.Experience
         // Use this for initialization
         void Start()
         {
-            GenerateParticles();
+            GenerateParticles(particleTypes);
         }
 
         // Update is called once per frame
