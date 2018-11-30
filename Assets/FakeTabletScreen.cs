@@ -12,10 +12,9 @@ namespace CRI.HelloHouston.Experience
         [SerializeField]
         private Particle[] _allParticles;
 
-        private static string _path = "Particle";
+        private static string _path = "Particles";
 
-        [SerializeField]
-        private string[] particleTypes;
+        public Particle[] particleTypes;
 
         [SerializeField]
         private FakeSynchronizer _synchronizer;
@@ -35,38 +34,44 @@ namespace CRI.HelloHouston.Experience
         public string[] result;
         public Text partic, partic2;
 
-        private void GenerateParticles(string[] particleTypes)
+        private Particle[] GenerateParticles()
         {
-
+            Particle[] particleTypes = new Particle[0];
             try
             {
+                
+
                 _allParticles = Resources.LoadAll(_path, typeof(Particle)).Cast<Particle>().ToArray();
 
-                particleTypes = new string[_allParticles.Length];
+                particleTypes = new Particle[_allParticles.Length];
 
-                for(int i = 0; i<particleTypes.Length; i++)
+                for (int i = 0; i<particleTypes.Length; i++)
                 {
-                    particleTypes[i] = _allParticles[i].symbol + _allParticles[i];
-
-                    if (_allParticles[i].negative)
-                        particleTypes[i] += "-";
+                    particleTypes[i] = _allParticles[i];
                 }
+
+                string type = "";
+
+                for (int i = 0; i < 18; i++)
+                {
+                    int j = UnityEngine.Random.Range(0, particleTypes.Length);
+
+                    realParticles[i] = particleTypes[j].symbol;
+
+                    if (particleTypes[j].negative)
+                        realParticles[i] += "-";
+
+                    type += realParticles[i];
+                }
+
+                partic2.text = type;
             }
             catch (Exception e)
             {
                 Debug.LogError(e.Message);
             }
 
-            //particleTypes = new string[] { "e", "μ", "q", "γ", "e-", "μ-", "q-", "v" };
-            string type = "";
-
-            for(int i = 0; i < realParticles.Length; i++)
-            {
-                realParticles[i] = particleTypes[UnityEngine.Random.Range(0, particleTypes.Length)];
-                type += realParticles[i];
-            }
-
-            partic2.text = type;
+            return particleTypes;
         }
 
         IEnumerator FakeLoading()
@@ -271,7 +276,7 @@ namespace CRI.HelloHouston.Experience
         // Use this for initialization
         void Start()
         {
-            GenerateParticles(particleTypes);
+           particleTypes = GenerateParticles();
         }
 
         // Update is called once per frame

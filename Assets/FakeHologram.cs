@@ -22,14 +22,59 @@ namespace CRI.HelloHouston.Experience
         [SerializeField]
         private GameObject _hologram;
 
-        private void createLine(int i)
+        public void AnimHologram(Particle[] particles)
+        {
+            int i = 0;
+            int zone = 3;
+            foreach(Particle particle in particles)
+            {
+                createLine(i, particle.destination);
+                i++;
+            }
+        }
+
+        private void createLine(int i, int zone)
         {
             lines[i] = new GameObject();
             lines[i].transform.parent = this.gameObject.transform;
 
             pointsB[i] = new GameObject();
             pointsB[i].transform.parent = this.gameObject.transform;
-            pointsB[i].transform.localPosition = new Vector3(Random.Range(-0.1f, 0.1f), Random.Range(-0.2f, 0.2f), Random.Range(-0.1f, 0.1f));
+
+            if (zone == 3)
+            {
+                pointsB[i].transform.localPosition = new Vector3(Random.Range(0f, 0.2f), Random.Range(0f, 0.3f), Random.Range(0.14f, 0.22f));
+            } else if (zone == 3)
+            {
+                pointsB[i].transform.localPosition = new Vector3(Random.Range(0.21f, 0.37f), Random.Range(0.3f, 0.49f), Random.Range(0.25f, 0.35f));
+            }
+
+                int negationX = Random.Range(0, 2);
+                int negationY = Random.Range(0, 2);
+                int negationZ = Random.Range(0, 2);
+                float x, y, z;
+
+                if (negationX == 0)
+                    x = -pointsB[i].transform.localPosition.x;
+                else
+                    x = pointsB[i].transform.localPosition.x;
+
+                if (negationY == 0)
+                    y = -pointsB[i].transform.localPosition.y;
+                else
+                    y = pointsB[i].transform.localPosition.y;
+
+                if (negationZ == 0)
+                    z = -pointsB[i].transform.localPosition.z;
+                else
+                    z = pointsB[i].transform.localPosition.z;
+
+                pointsB[i].transform.localPosition = new Vector3(x, y, z);
+                
+
+       
+
+            //pointsB[i].transform.localPosition = new Vector3(Random.Range(-0.1f, 0.1f), Random.Range(-0.2f, 0.2f), Random.Range(-0.1f, 0.1f));
 
             lines[i].AddComponent<LineRenderer>();
             lines[i].GetComponent<LineRenderer>().SetWidth(0.01f, 0.01f);
@@ -66,12 +111,16 @@ namespace CRI.HelloHouston.Experience
 
         private void Start()
         {
-            createLine(0);
+            //createLine(0);
         }
 
         private void Update()
         {
-            lines[0].GetComponent<LineRenderer>().SetPosition(1, pointsB[0].transform.position);
+
+            for(int i = 0; i < lines.Length; i++)
+            {
+                lines[i].GetComponent<LineRenderer>().SetPosition(1, pointsB[i].transform.position);
+            }
         }
 
 

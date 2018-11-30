@@ -74,6 +74,7 @@ namespace CRI.HelloHouston.Experience
                     break;
                 case "ParticleInCorrect":
                     _fakeTopScreen.IncorrectParticle();
+                    _fakeHolograms[0].AnimHologram(_fakeTabletScreen.particleTypes);
                     break;
                 default:
                     break;
@@ -161,6 +162,7 @@ namespace CRI.HelloHouston.Experience
         void Start()
         {
             Launched();
+            _fakeHolograms[0].AnimHologram(_fakeTabletScreen.particleTypes);
         }
 
         // Update is called once per frame
