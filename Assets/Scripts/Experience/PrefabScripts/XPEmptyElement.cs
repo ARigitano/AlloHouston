@@ -2,14 +2,14 @@
 {
     public class XPEmptyElement : XPElement
     {
-        public override void OnActivated() { }
+        public override void OnActivation() { }
 
-        public override void OnFailed() { }
+        public override void OnFailure() { }
 
-        public override void OnPause() { }
+        public override void OnHide() { }
 
-        public override void OnResolved() { }
+        public override void OnSuccess() { }
 
-        public override void OnUnpause() { }
+        public override void OnShow() { }
     }
 }

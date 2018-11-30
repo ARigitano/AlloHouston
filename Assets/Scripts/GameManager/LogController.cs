@@ -20,9 +20,10 @@ namespace CRI.HelloHouston.Experience
         /// Adds a log that will be displayed on the GameManager UI and saved in the log file.
         /// </summary>
         public void AddLog(string str,
+            ISource source,
             Log.LogType logType = Log.LogType.Default)
         {
-            _logManager.AddLog(str, _gameManager.timeSinceGameStart, logType, logOrigin);
+            _logManager.AddLog(str, _gameManager.timeSinceGameStart, logType, logOrigin, source);
         }
 
         public LogGeneralController(GameManager gameManager, LogManager logManager) : base(gameManager, logManager)
@@ -45,10 +46,10 @@ namespace CRI.HelloHouston.Experience
         /// Adds a log that will be displayed on the GameManager UI and saved in the log file.
         /// </summary>
         public void AddLog(string str,
-            XPContext xpContext,
+            XPContext context,
             Log.LogType logType = Log.LogType.Default)
         {
-            _logManager.AddLog(str, _gameManager.timeSinceGameStart, logType, logOrigin, xpContext);
+            _logManager.AddLog(str, _gameManager.timeSinceGameStart, logType, logOrigin, context);
         }
 
         public LogExperienceController(GameManager gameManager, LogManager logManager) : base(gameManager, logManager)

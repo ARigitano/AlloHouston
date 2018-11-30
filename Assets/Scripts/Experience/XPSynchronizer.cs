@@ -2,15 +2,27 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using System;
 
 namespace CRI.HelloHouston.Experience
 {
+    public enum XPState
+    {
+        Inactive,
+        Visible,
+        Hidden,
+        Success,
+        Failure,
+    }
+
     /// <summary>
     /// The XpSynchronizer is responsible for the communication of every prefabs of one particular experiment among themselves as well as with the Gamecontroller.
     /// </summary>
     [System.Serializable]
-    public abstract class XPSynchronizer : ScriptableObject
+    public abstract class XPSynchronizer : MonoBehaviour
     {
+        public delegate void XPStateEvent(XPState state);
+        public XPStateEvent onStateChange;
         /// <summary>
         /// The xp context.
         /// </summary>
@@ -24,8 +36,28 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         [HideInInspector]
         public string error;
+        /// <summary>
+        /// The state of the XPSynchronizer.
+        /// </summary>
+        public XPState state { get; protected set; }
 
-        public bool active { get; protected set; }
+        protected XPState _stateOnActivation;
+
+        public bool active
+        {
+            get
+            {
+                return state == XPState.Visible || state == XPState.Hidden;
+            }
+        }
+
+        public string sourceName
+        {
+            get
+            {
+                return xpContext.xpGroup.experimentName;
+            }
+        }
 
         public T GetElement<T>(string name) where T : XPElement, new()
         {
@@ -41,62 +73,123 @@ namespace CRI.HelloHouston.Experience
         /// <summary>
         /// To be called in case of success of the experiment.
         /// </summary>
-        public virtual void OnResolved()
+        public void Success()
         {
+            SuccessImplementation();
+            state = XPState.Success;
+            if (onStateChange != null)
+                onStateChange(state);
             foreach (var element in elements)
             {
-                element.OnResolved();
+                element.OnSuccess();
             }
+        }
+
+        /// <summary>
+        /// Called before the state changed to the success state.
+        /// </summary>
+        protected virtual void SuccessImplementation()
+        {
+
         }
 
         /// <summary>
         /// To be called in case of failure of the experiment.
         /// </summary>
-        public virtual void OnFailed()
+        public void Fail()
         {
+            FailImplementation();
+            state = XPState.Failure;
+            if (onStateChange != null)
+                onStateChange(state);
             foreach (var element in elements)
             {
-                element.OnFailed();
+                element.OnFailure();
             }
         }
+
+        /// <summary>
+        /// Called before the state changes to failure.
+        /// </summary>
+        protected virtual void FailImplementation()
+        {
+
+        }
+
         /// <summary>
         /// To be called to activate the incident of the experiment.
         /// </summary>
-        public virtual void OnActivated()
+        public void Activate()
         {
-            active = true;
+            ActivateImplementation();
+            state = _stateOnActivation;
+            if (onStateChange != null)
+                onStateChange(state);
             foreach (var element in elements)
             {
-                element.OnActivated();
+                element.OnActivation();
             }
+        }
+
+        /// <summary>
+        /// Called before the state changes to the default state on activation.
+        /// </summary>
+        protected virtual void ActivateImplementation()
+        {
+
         }
 
         /// <summary>
         /// To be called to pause the experiment during the game.
         /// </summary>
-        public virtual void OnPause()
+        public void Hide()
         {
-            active = false;
+            HideImplementation();
+            state = XPState.Hidden;
+            if (onStateChange != null)
+                onStateChange(state);
             foreach (var element in elements)
             {
-                element.OnPause();
+                element.OnHide();
             }
+        }
+
+        /// <summary>
+        /// Called before the state changes to the hidden state.
+        /// </summary>
+        protected virtual void HideImplementation()
+        {
+
         }
 
         /// <summary>
         /// To be called to call back the experiment after it has been paused.
         /// </summary>
-        public virtual void OnUnpause()
+        public void Show()
         {
+            ShowImplementation();
+            state = XPState.Visible;
+            if (onStateChange != null)
+                onStateChange(state);
             foreach (var element in elements)
             {
-                element.OnUnpause();
+                element.OnShow();
             }
         }
 
-        public virtual void Init(XPContext xpContext)
+        /// <summary>
+        /// Called before the state changes to the visible state.
+        /// </summary>
+        protected virtual void ShowImplementation()
+        {
+
+        }
+
+        public virtual void Init(XPContext xpContext, XPState stateOnActivation = XPState.Hidden)
         {
             this.xpContext = xpContext;
+            state = XPState.Inactive;
+            _stateOnActivation = stateOnActivation;
         }
     }
 }

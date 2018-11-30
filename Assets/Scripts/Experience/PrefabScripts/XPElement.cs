@@ -30,14 +30,14 @@ namespace CRI.HelloHouston.Experience
             this.synchronizer = synchronizer;
         }
 
-        public abstract void OnResolved();
+        public abstract void OnSuccess();
 
-        public abstract void OnFailed();
+        public abstract void OnFailure();
 
-        public abstract void OnActivated();
+        public abstract void OnActivation();
 
-        public abstract void OnPause();
+        public abstract void OnHide();
 
-        public abstract void OnUnpause();
+        public abstract void OnShow();
     }
 }

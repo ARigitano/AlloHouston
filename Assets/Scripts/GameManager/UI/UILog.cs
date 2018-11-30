@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace CRI.HelloHouston.Experience.UI
 {
-    public class UILog : MonoBehaviour
+    internal class UILog : MonoBehaviour
     {
         /// <summary>
         /// The log.

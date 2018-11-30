@@ -7,6 +7,6 @@ namespace CRI.HelloHouston.Experience
 {
     public class XPMain
     {
-        public XPMainParameter parameter;
+        public XPMainSettings parameter;
     }
 }

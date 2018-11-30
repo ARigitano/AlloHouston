@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace CRI.HelloHouston.Experience
 {
@@ -9,8 +10,13 @@ namespace CRI.HelloHouston.Experience
     /// Constructor for XpDifficulty scriptable object.
     /// </summary>
     [CreateAssetMenu(fileName = "New XpContext", menuName = "Experience/XpContext", order = 2)]
-    public class XPContext : ScriptableObject
+    public class XPContext : ScriptableObject, ISource
     {
+        /// <summary>
+        /// Name of the context.
+        /// </summary>
+        [Tooltip("Name of the context.")]
+        public string contextName;
         /// <summary>
         /// The group of the experiment. The same for all difficiculties and audiences versions of the experiment.
         /// </summary>
@@ -29,16 +35,17 @@ namespace CRI.HelloHouston.Experience
         [Tooltip("The audience of this version of the experiment. Either mainstream public or researchers.")]
         public string context;
         /// <summary>
-        /// All the parameters of this particular experience.
+        /// All the settings of this particular experience.
         /// </summary>
-        [Tooltip("All the parameters of this particular experience.")]
-        public XPParameter xpParameter;
+        [Tooltip("All the settings of this particular experience.")]
+        public XPSettings xpSettings;
 
         /// <summary>
         /// An empty object with the XpSynchronizer inhreting script of the experiment.
         /// </summary>
+        [SerializeField]
         [Tooltip("An empty object with the XpSynchronizer inhreting script of the experiment.")]
-        public XPSynchronizer xpSynchronizer;
+        private XPSynchronizer _xpSynchronizerPrefab = null;
 
         /// <summary>
         /// The screen, window and tablet on the top part of the wall, to interact with the experiment.
@@ -110,6 +117,22 @@ namespace CRI.HelloHouston.Experience
             }
         }
 
+        public string sourceName
+        {
+            get
+            {
+                return xpGroup.experimentName;
+            }
+        }
+
+        public GameHint[] hints
+        {
+            get
+            {
+                return xpSettings.availableHints.Select(x => new GameHint(x, this)).ToArray();
+            }
+        }
+
         public List<XPZone> zones
         {
             get
@@ -125,6 +148,17 @@ namespace CRI.HelloHouston.Experience
                     res.Add(xpDoorZone);
                 return res;
             }
+        }
+        
+        /// <summary>
+        /// Initializes and returns the synchronizer.
+        /// </summary>
+        /// <returns></returns>
+        public XPSynchronizer InitSynchronizer()
+        {
+            XPSynchronizer res = GameObject.Instantiate(_xpSynchronizerPrefab);
+            res.Init(this);
+            return res;
         }
     }
 }

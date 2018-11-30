@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace CRI.HelloHouston.Experience.UI
 {
-    public class UILogDisplay : MonoBehaviour
+    internal class UILogDisplay : MonoBehaviour
     {
         /// <summary>
         /// The limit of log. If the number of logs goes over this value, the log will delete the oldest logs.
@@ -24,6 +24,7 @@ namespace CRI.HelloHouston.Experience.UI
                 return _logLimit;
             }
         }
+
         public Queue<UILog> uiLogs = new Queue<UILog>();
         /// <summary>
         /// The prefab of the logs.
@@ -52,6 +53,8 @@ namespace CRI.HelloHouston.Experience.UI
         [SerializeField]
         [Tooltip("Transform of the log filter panel.")]
         private Transform _logFilterPanel = null;
+        [SerializeField]
+        private string _logMessage = "There's nothing in this list! Please verify your filters.";
 
         private LogManager _logManager;
 
@@ -113,6 +116,12 @@ namespace CRI.HelloHouston.Experience.UI
         {
             bool scrollToBottom = false;
             scrollToBottom = _scrollRect.normalizedPosition.y < 0.1f;
+            if (uiLogs.Count == 1 && uiLogs.Peek().log.message == null)
+            {
+                var uiLog = uiLogs.Dequeue();
+                Destroy(uiLog.gameObject);
+                Destroy(uiLog);
+            }
             var go = Instantiate(_logPrefab, _logPanel);
             go.Init(log);
             uiLogs.Enqueue(go);
@@ -139,7 +148,7 @@ namespace CRI.HelloHouston.Experience.UI
             if (logs.Length == 0)
             {
                 var go = Instantiate(_logPrefab, _logPanel);
-                go.Init("There's nothing in this list! Please verify your filters.");
+                go.Init(_logMessage);
                 uiLogs.Enqueue(go);
             }
             foreach (var log in logs)
@@ -158,7 +167,7 @@ namespace CRI.HelloHouston.Experience.UI
                 if (logOrigin == Log.LogOrigin.Experience)
                     _logManager.logExperienceController.AddLog(name, null, logType);
                 else
-                    _logManager.logGeneralController.AddLog(name, logType);
+                    _logManager.logGeneralController.AddLog(name, null, logType);
             }
         }
     }

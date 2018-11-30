@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace CRI.HelloHouston.Experience.UI
 {
-    public class LogOriginFilter : LogFilter
+    internal class LogOriginFilter : LogFilter
     {
         public override string logCategoryKey
         {
@@ -19,7 +19,7 @@ namespace CRI.HelloHouston.Experience.UI
         
     }
 
-    public class LogTypeFilter : LogFilter
+    internal class LogTypeFilter : LogFilter
     {
         public override string logCategoryKey
         {
@@ -35,7 +35,7 @@ namespace CRI.HelloHouston.Experience.UI
     }
 
     [SerializeField]
-    public abstract class LogFilter
+    internal abstract class LogFilter
     {
         public abstract string logCategoryKey { get; }
         public string filterName { get; protected set; }

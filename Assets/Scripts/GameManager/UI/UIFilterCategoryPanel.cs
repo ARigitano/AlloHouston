@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 namespace CRI.HelloHouston.Experience.UI {
-    public class UIFilterCategoryPanel : MonoBehaviour {
+    internal class UIFilterCategoryPanel : MonoBehaviour {
         /// <summary>
         /// The prefab of the filter toggle.
         /// </summary>

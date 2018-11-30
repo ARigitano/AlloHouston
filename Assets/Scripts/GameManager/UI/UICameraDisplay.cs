@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace CRI.HelloHouston.Experience.UI
 {
-    public class UICameraDisplay : MonoBehaviour
+    internal class UICameraDisplay : MonoBehaviour
     {
         /// <summary>
         /// The image on which the camera view will be displayed.

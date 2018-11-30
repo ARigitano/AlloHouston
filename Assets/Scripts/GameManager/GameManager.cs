@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace CRI.HelloHouston.Experience
 {
-    public class GameManager : MonoBehaviour
+    public class GameManager : MonoBehaviour, ISource
     {
         private static GameManager s_instance;
 
@@ -19,12 +19,15 @@ namespace CRI.HelloHouston.Experience
                 return s_instance;
             }
         }
+
+        public delegate void GameManagerEvent();
+        public static GameManagerEvent onExperienceChange;
         /// <summary>
         /// The Game action controller.
         /// </summary>
         private GameActionController _gameActionController;
         [SerializeField]
-        private XPMainParameter _mainParameter = null;
+        private XPMainSettings _mainSettings = null;
         /// <summary>
         /// The Log controller.
         /// </summary>
@@ -40,31 +43,56 @@ namespace CRI.HelloHouston.Experience
         /// <summary>
         /// Experience list.
         /// </summary>
-        private XPContext[] _xpContexts;
+        private XPSynchronizer[] _xpSynchronizers;
+        private float _startTime;
         /// <summary>
         /// Time since the game start.
         /// </summary>
-        public float timeSinceGameStart { get; private set; }
+        public float timeSinceGameStart {
+            get
+            {
+                return Time.time - _startTime;
+            }
+        }
+
+        public int xpTimeEstimate
+        {
+            get
+            {
+                return _xpSynchronizers.Sum(x => x.xpContext.xpSettings.duration);
+            }
+        }
+
+        public string sourceName
+        {
+            get
+            {
+                return "Main";
+            }
+        }
 
         private void Awake()
         {
             _gameActionController = new GameActionController(this);
             logManager = new LogManager(this);
+            _mainSettings = Resources.Load<XPMainSettings>("Settings/MainSettings");
+            Init(Resources.LoadAll<XPContext>("AllExperiences/Electricity/XpContext"));
         }
 
         public void Init(XPContext[] xpContexts)
         {
-            _xpContexts = xpContexts;
+            _xpSynchronizers = xpContexts.Select(x => x.InitSynchronizer()).ToArray();
+            _startTime = Time.time;
         }
 
-        public string[] GetAllCurrentHints()
+        public GameHint[] GetAllCurrentHints()
         {
-            return _mainParameter.hints.Concat(_xpContexts.Where(x => x.xpSynchronizer != null && x.xpSynchronizer.active).SelectMany(x => x.xpParameter.availableHints)).ToArray();
+            return _mainSettings.hints.Select(hint => new GameHint(hint, this)).Concat(_xpSynchronizers.Where(x => x.active).SelectMany(x => x.xpContext.hints)).ToArray();
         }
 
-        public void SendHintToPlayers()
+        public void SendHintToPlayers(string hint)
         {
-
+            Debug.Log(hint);
         }
 
         /// <summary>
