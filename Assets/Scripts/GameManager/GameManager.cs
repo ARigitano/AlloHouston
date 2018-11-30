@@ -43,7 +43,7 @@ namespace CRI.HelloHouston.Experience
         /// <summary>
         /// Experience list.
         /// </summary>
-        private XPSynchronizer[] _xpSynchronizers;
+        public XPSynchronizer[] xpSynchronizers { get; private set; }
         private float _startTime;
         /// <summary>
         /// Time since the game start.
@@ -59,7 +59,7 @@ namespace CRI.HelloHouston.Experience
         {
             get
             {
-                return _xpSynchronizers.Sum(x => x.xpContext.xpSettings.duration);
+                return xpSynchronizers.Sum(x => x.xpContext.xpSettings.duration);
             }
         }
 
@@ -81,13 +81,13 @@ namespace CRI.HelloHouston.Experience
 
         public void Init(XPContext[] xpContexts)
         {
-            _xpSynchronizers = xpContexts.Select(x => x.InitSynchronizer()).ToArray();
+            xpSynchronizers = xpContexts.Select(x => x.InitSynchronizer(logManager.logExperienceController)).ToArray();
             _startTime = Time.time;
         }
 
         public GameHint[] GetAllCurrentHints()
         {
-            return _mainSettings.hints.Select(hint => new GameHint(hint, this)).Concat(_xpSynchronizers.Where(x => x.active).SelectMany(x => x.xpContext.hints)).ToArray();
+            return _mainSettings.hints.Select(hint => new GameHint(hint, this)).Concat(xpSynchronizers.Where(x => x.active).SelectMany(x => x.xpContext.hints)).ToArray();
         }
 
         public void SendHintToPlayers(string hint)

@@ -22,7 +22,10 @@ namespace CRI.HelloHouston.Experience
     public abstract class XPSynchronizer : MonoBehaviour
     {
         public delegate void XPStateEvent(XPState state);
+        public delegate void XPSynchronizerEvent(XPSynchronizer synchronizer);
         public XPStateEvent onStateChange;
+        public static XPSynchronizerEvent onActivation;
+        public static XPSynchronizerEvent onEnd;
         /// <summary>
         /// The xp context.
         /// </summary>
@@ -40,6 +43,8 @@ namespace CRI.HelloHouston.Experience
         /// The state of the XPSynchronizer.
         /// </summary>
         public XPState state { get; protected set; }
+        
+        public LogExperienceController logController { get; protected set; }
 
         protected XPState _stateOnActivation;
 
@@ -79,6 +84,9 @@ namespace CRI.HelloHouston.Experience
             state = XPState.Success;
             if (onStateChange != null)
                 onStateChange(state);
+            if (onEnd != null)
+                onEnd(this);
+            logController.AddLog("Success", xpContext, Log.LogType.Automatic);
             foreach (var element in elements)
             {
                 element.OnSuccess();
@@ -102,6 +110,9 @@ namespace CRI.HelloHouston.Experience
             state = XPState.Failure;
             if (onStateChange != null)
                 onStateChange(state);
+            if (onEnd != null)
+                onEnd(this);
+            logController.AddLog("Failure", xpContext, Log.LogType.Automatic);
             foreach (var element in elements)
             {
                 element.OnFailure();
@@ -125,6 +136,9 @@ namespace CRI.HelloHouston.Experience
             state = _stateOnActivation;
             if (onStateChange != null)
                 onStateChange(state);
+            if (onActivation != null)
+                onActivation(this);
+            logController.AddLog("Activation", xpContext, Log.LogType.Automatic);
             foreach (var element in elements)
             {
                 element.OnActivation();
@@ -136,7 +150,6 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         protected virtual void ActivateImplementation()
         {
-
         }
 
         /// <summary>
@@ -148,6 +161,7 @@ namespace CRI.HelloHouston.Experience
             state = XPState.Hidden;
             if (onStateChange != null)
                 onStateChange(state);
+            logController.AddLog("Hide", xpContext, Log.LogType.Automatic);
             foreach (var element in elements)
             {
                 element.OnHide();
@@ -171,6 +185,7 @@ namespace CRI.HelloHouston.Experience
             state = XPState.Visible;
             if (onStateChange != null)
                 onStateChange(state);
+            logController.AddLog("Show", xpContext, Log.LogType.Automatic);
             foreach (var element in elements)
             {
                 element.OnShow();
@@ -185,11 +200,20 @@ namespace CRI.HelloHouston.Experience
 
         }
 
-        public virtual void Init(XPContext xpContext, XPState stateOnActivation = XPState.Hidden)
+        public void Init(XPContext xpContext, LogExperienceController logController, XPState stateOnActivation = XPState.Hidden)
         {
             this.xpContext = xpContext;
             state = XPState.Inactive;
             _stateOnActivation = stateOnActivation;
+            this.logController = logController;
+            InitImplementation();
+            if (logController != null)
+                logController.AddLog("Ready", xpContext, Log.LogType.Automatic);
+        }
+
+        public virtual void InitImplementation()
+        {
+
         }
     }
 }

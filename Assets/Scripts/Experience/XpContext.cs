@@ -154,10 +154,10 @@ namespace CRI.HelloHouston.Experience
         /// Initializes and returns the synchronizer.
         /// </summary>
         /// <returns></returns>
-        public XPSynchronizer InitSynchronizer()
+        public XPSynchronizer InitSynchronizer(LogExperienceController logExperienceController)
         {
             XPSynchronizer res = GameObject.Instantiate(_xpSynchronizerPrefab);
-            res.Init(this);
+            res.Init(this, logExperienceController);
             return res;
         }
     }

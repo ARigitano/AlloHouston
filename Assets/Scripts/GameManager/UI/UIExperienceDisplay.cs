@@ -20,7 +20,7 @@ namespace CRI.HelloHouston.Experience.UI
 
         private void Start()
         {
-            Init(Resources.LoadAll<XPContext>("AllExperiences/Electricity/XpContext").Select(x => x.InitSynchronizer()).ToArray());
+            Init(GameManager.instance.xpSynchronizers);
         }
 
         public void Init(XPSynchronizer[] xpSynchronizers)
@@ -28,7 +28,7 @@ namespace CRI.HelloHouston.Experience.UI
             foreach (var xpSynchronizer in xpSynchronizers)
             {
                 UIExperienceStatus go = GameObject.Instantiate(_experienceStatusPrefab, _experienceStatusContentTransform);
-                go.Init(xpSynchronizer);
+                go.Init(GameManager.instance, xpSynchronizer);
             }
         }
     }

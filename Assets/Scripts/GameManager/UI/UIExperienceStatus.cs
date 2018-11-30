@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace CRI.HelloHouston.Experience.UI
@@ -67,56 +68,72 @@ namespace CRI.HelloHouston.Experience.UI
         /// </summary>
         [SerializeField]
         [Tooltip("Text of the fail popup.")]
-        private string _failPopupText;
+        private string _failPopupText = null;
         /// <summary>
         /// Text of the success popup.
         /// </summary>
         [SerializeField]
         [Tooltip("Text of the success popup.")]
         private string _successPopupText = null;
+        /// <summary>
+        /// Text of the popup when there's not enough time left.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("Text of the popup when there's not enough time left.")]
+        private string _notEnoughTimeText = null;
 
         private XPSynchronizer _xpSynchronizer;
 
-        public void Init(XPSynchronizer xpSynchronizer)
+        public void Init(GameManager gameManager, XPSynchronizer xpSynchronizer)
         {
             _xpSynchronizer = xpSynchronizer;
             _nameText.text = xpSynchronizer.xpContext.contextName;
             _launchButton.onClick.AddListener(() =>
             {
-                xpSynchronizer.Activate();
-                _launchButton.GetComponent<CanvasGroup>().Hide();
-                _failButton.GetComponent<CanvasGroup>().Show();
-                _successButton.GetComponent<CanvasGroup>().Show();
+                if (gameManager.xpTimeEstimate * 60 < gameManager.timeSinceGameStart + (xpSynchronizer.xpContext.xpSettings.duration * 60))
+                    CreatePopup(_notEnoughTimeText, LaunchAction);
+                else
+                    LaunchAction();
             });
             _launchButton.GetComponent<CanvasGroup>().Show();
-            _failButton.onClick.AddListener(() =>
-            {
-                UIPopup popup = GameObject.Instantiate(_popupPrefab, GetComponentInParent<Canvas>().transform);
-                popup.Init(_failPopupText, () => { }, () =>
-                {
-                    xpSynchronizer.Fail();
-                    _successButton.interactable = false;
-                    _failButton.interactable = false;
-                    if (_successButton.GetComponentInChildren<Text>())
-                        _successButton.GetComponentInChildren<Text>().color = _unselectedButtonColor;
-                });
-            });
+            _failButton.onClick.AddListener(() => CreatePopup(_failPopupText, FailAction));
             _failButton.GetComponent<CanvasGroup>().Hide();
-            _successButton.onClick.AddListener(() =>
-            {
-                UIPopup popup = GameObject.Instantiate(_popupPrefab, GetComponentInParent<Canvas>().transform);
-                popup.Init(_successPopupText, () => { }, () =>
-                {
-                    xpSynchronizer.Success();
-                    _successButton.interactable = false;
-                    _failButton.interactable = false;
-                    if (_failButton.GetComponentInChildren<Text>())
-                        _failButton.GetComponentInChildren<Text>().color = _unselectedButtonColor;
-                });
-            });
+            _successButton.onClick.AddListener(() => CreatePopup(_successPopupText, SuccessAction));
             _successButton.GetComponent<CanvasGroup>().Hide();
             SetState(xpSynchronizer.state);
             xpSynchronizer.onStateChange += SetState;
+        }
+
+        private void CreatePopup(string popupText, UnityAction action)
+        {
+            UIPopup popup = GameObject.Instantiate(_popupPrefab, GetComponentInParent<Canvas>().transform);
+            popup.Init(popupText, action);
+        }
+
+        private void LaunchAction()
+        {
+            _xpSynchronizer.Activate();
+            _launchButton.GetComponent<CanvasGroup>().Hide();
+            _failButton.GetComponent<CanvasGroup>().Show();
+            _successButton.GetComponent<CanvasGroup>().Show();
+        }
+
+        private void FailAction()
+        {
+            _xpSynchronizer.Fail();
+            _successButton.interactable = false;
+            _failButton.interactable = false;
+            if (_successButton.GetComponentInChildren<Text>())
+                _successButton.GetComponentInChildren<Text>().color = _unselectedButtonColor;
+        }
+
+        private void SuccessAction()
+        {
+            _xpSynchronizer.Success();
+            _successButton.interactable = false;
+            _failButton.interactable = false;
+            if (_failButton.GetComponentInChildren<Text>())
+                _failButton.GetComponentInChildren<Text>().color = _unselectedButtonColor;
         }
 
         private void SetState(XPState state)

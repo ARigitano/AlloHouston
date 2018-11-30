@@ -26,17 +26,53 @@ namespace CRI.HelloHouston.Experience.UI
         /// </summary>
         [SerializeField]
         [Tooltip("OK button of the popup.")]
-        private Button _okButton = null;
+        private Button _okButton = null; 
 
+        /// <summary>
+        /// Initializes the popup and set the action for the ok button.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="okButtonAction"></param>
         public void Init(string text,
-            UnityAction cancelButtonAction,
             UnityAction okButtonAction)
         {
             _text.text = text;
             _cancelButton.onClick.AddListener(() => Destroy(gameObject));
-            _cancelButton.onClick.AddListener(cancelButtonAction);
             _okButton.onClick.AddListener(() => Destroy(gameObject));
             _okButton.onClick.AddListener(okButtonAction);
+        }
+
+        /// <summary>
+        /// Initializes the popup and set the action for the ok button and the cancel button.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="okButtonAction"></param>
+        /// <param name="cancelButtonAction"></param>
+        public void Init(string text,
+            UnityAction okButtonAction,
+            UnityAction cancelButtonAction)
+        {
+            Init(text, okButtonAction);
+            _cancelButton.onClick.AddListener(cancelButtonAction);
+        }
+
+        /// <summary>
+        /// Initializes the popup and set the actions and texts for the ok button and the cancel button.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="okButtonAction"></param>
+        /// <param name="cancelButtonAction"></param>
+        /// <param name="okButtonText"></param>
+        /// <param name="cancelButtonText"></param>
+        public void Init(string text,
+            UnityAction okButtonAction,
+            UnityAction cancelButtonAction,
+            string okButtonText,
+            string cancelButtonText)
+        {
+            Init(text, okButtonAction, cancelButtonAction);
+            _okButton.GetComponent<Text>().text = okButtonText;
+            _cancelButton.GetComponent<Text>().text = cancelButtonText;
         }
     }
 }
