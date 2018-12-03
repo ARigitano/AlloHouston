@@ -8,12 +8,14 @@ namespace CRI.HelloHouston.Experience.Actions
     [CreateAssetMenu(menuName = "GameActions/TurnLightOffAction")]
     public class TurnLightOffAction : GameAction
     {
-        public override void Act(GameActionController controller)
+        public override void Act(GameManager controller)
         {
+            /*
             foreach (Light light in controller.lights)
             {
                 light.enabled = false;
             }
+            */
         }
     }
 }

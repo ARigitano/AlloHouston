@@ -64,6 +64,12 @@ namespace CRI.HelloHouston.Experience.UI
         [Tooltip("Prefab of a popup.")]
         private UIPopup _popupPrefab = null;
         /// <summary>
+        /// Prefab of a tooltip.ssss
+        /// </summary>
+        [SerializeField]
+        [Tooltip("Prefab of a tooltip.")]
+        private UITooltip _tooltipPrefab = null;
+        /// <summary>
         /// Text of the fail popup.
         /// </summary>
         [SerializeField]

@@ -2,7 +2,7 @@
 
 namespace CRI.HelloHouston.Experience.Actions
 {
-    public abstract class GeneralAction : ScriptableObject
+    public abstract class GeneralAction: ScriptableObject
     {
         /// <summary>
         /// Icon of the game action.
@@ -21,3 +21,4 @@ namespace CRI.HelloHouston.Experience.Actions
         public float actionDuration;
     }
 }
+

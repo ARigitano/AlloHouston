@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using System;
+using CRI.HelloHouston.Experience.Actions;
 
 namespace CRI.HelloHouston.Experience
 {
@@ -46,6 +47,8 @@ namespace CRI.HelloHouston.Experience
         
         public LogExperienceController logController { get; protected set; }
 
+        public ExperienceActionController actionController { get; protected set;}
+
         protected XPState _stateOnActivation;
 
         public bool active
@@ -80,7 +83,7 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         public void Success()
         {
-            SuccessImplementation();
+            CustomSuccess();
             state = XPState.Success;
             if (onStateChange != null)
                 onStateChange(state);
@@ -96,7 +99,7 @@ namespace CRI.HelloHouston.Experience
         /// <summary>
         /// Called before the state changed to the success state.
         /// </summary>
-        protected virtual void SuccessImplementation()
+        protected virtual void CustomSuccess()
         {
 
         }
@@ -106,7 +109,7 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         public void Fail()
         {
-            FailImplementation();
+            CustomFail();
             state = XPState.Failure;
             if (onStateChange != null)
                 onStateChange(state);
@@ -122,7 +125,7 @@ namespace CRI.HelloHouston.Experience
         /// <summary>
         /// Called before the state changes to failure.
         /// </summary>
-        protected virtual void FailImplementation()
+        protected virtual void CustomFail()
         {
 
         }
@@ -132,7 +135,7 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         public void Activate()
         {
-            ActivateImplementation();
+            CustomActivate();
             state = _stateOnActivation;
             if (onStateChange != null)
                 onStateChange(state);
@@ -148,7 +151,7 @@ namespace CRI.HelloHouston.Experience
         /// <summary>
         /// Called before the state changes to the default state on activation.
         /// </summary>
-        protected virtual void ActivateImplementation()
+        protected virtual void CustomActivate()
         {
         }
 
@@ -157,7 +160,7 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         public void Hide()
         {
-            HideImplementation();
+            CustomHide();
             state = XPState.Hidden;
             if (onStateChange != null)
                 onStateChange(state);
@@ -171,7 +174,7 @@ namespace CRI.HelloHouston.Experience
         /// <summary>
         /// Called before the state changes to the hidden state.
         /// </summary>
-        protected virtual void HideImplementation()
+        protected virtual void CustomHide()
         {
 
         }
@@ -181,7 +184,7 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         public void Show()
         {
-            ShowImplementation();
+            CustomShow();
             state = XPState.Visible;
             if (onStateChange != null)
                 onStateChange(state);
@@ -195,7 +198,7 @@ namespace CRI.HelloHouston.Experience
         /// <summary>
         /// Called before the state changes to the visible state.
         /// </summary>
-        protected virtual void ShowImplementation()
+        protected virtual void CustomShow()
         {
 
         }
@@ -205,15 +208,21 @@ namespace CRI.HelloHouston.Experience
             this.xpContext = xpContext;
             state = XPState.Inactive;
             _stateOnActivation = stateOnActivation;
+            actionController = new ExperienceActionController(this);
             this.logController = logController;
-            InitImplementation();
+            CustomInit(xpContext, logController, stateOnActivation);
             if (logController != null)
                 logController.AddLog("Ready", xpContext, Log.LogType.Automatic);
         }
 
-        public virtual void InitImplementation()
+        protected virtual void CustomInit(XPContext xpContext, LogExperienceController logController, XPState stateOnActivation)
         {
 
+        }
+
+        public void AddAction(ExperienceAction action)
+        {
+            actionController.AddAction(action);
         }
     }
 }
