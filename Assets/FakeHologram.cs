@@ -8,6 +8,7 @@ namespace CRI.HelloHouston.Experience
 
 
     {
+
         [SerializeField]
         private Particle[] _allParticles;
 
@@ -22,15 +23,24 @@ namespace CRI.HelloHouston.Experience
         [SerializeField]
         private GameObject _hologram;
 
+        [SerializeField]
+        private GameObject _sphere;
+
         public void AnimHologram(Particle[] particles)
         {
-            int i = 0;
+            //int i = 0;
             int zone = 3;
-            foreach(Particle particle in particles)
+
+            for(int i = 0; i<18; i++)
+            {
+                createLine(i, 2);
+            }
+
+            /*foreach(Particle particle in particles)
             {
                 createLine(i, particle.destination);
                 i++;
-            }
+            }*/
         }
 
         private void createLine(int i, int zone)
@@ -41,7 +51,7 @@ namespace CRI.HelloHouston.Experience
             pointsB[i] = new GameObject();
             pointsB[i].transform.parent = this.gameObject.transform;
 
-            if (zone == 3)
+            if (zone == 2)
             {
                 pointsB[i].transform.localPosition = new Vector3(Random.Range(0f, 0.2f), Random.Range(0f, 0.3f), Random.Range(0.14f, 0.22f));
             } else if (zone == 3)
@@ -70,15 +80,30 @@ namespace CRI.HelloHouston.Experience
                     z = pointsB[i].transform.localPosition.z;
 
                 pointsB[i].transform.localPosition = new Vector3(x, y, z);
-                
 
-       
+
+
 
             //pointsB[i].transform.localPosition = new Vector3(Random.Range(-0.1f, 0.1f), Random.Range(-0.2f, 0.2f), Random.Range(-0.1f, 0.1f));
+            GameObject line = lines[i];
+            line.AddComponent<BezierSpline>();
+            BezierSpline spline = lines[i].GetComponent<BezierSpline>();
+            spline.Reset();
+            spline.points[0] = this.gameObject.transform.position;
+            spline.points[3] = pointsB[i].transform.position;
 
-            lines[i].AddComponent<LineRenderer>();
-            lines[i].GetComponent<LineRenderer>().SetWidth(0.01f, 0.01f);
-            lines[i].GetComponent<LineRenderer>().SetPosition(0, this.gameObject.transform.position);
+            pointsB[i].transform.localPosition = new Vector3(x/2, y, z);
+
+            spline.points[1] = pointsB[i].transform.position;
+            spline.points[2] = pointsB[i].transform.position;
+            
+            line.AddComponent<SplineDecorator>();
+            SplineDecorator decorator = line.GetComponent<SplineDecorator>();
+            decorator.spline = spline;
+            decorator.frequency = 75;
+            decorator.items = new Transform[1];
+            decorator.items[0] = _sphere.transform;
+            decorator.Populate();
         }
 
         public override void OnResolved()
@@ -116,11 +141,6 @@ namespace CRI.HelloHouston.Experience
 
         private void Update()
         {
-
-            for(int i = 0; i < lines.Length; i++)
-            {
-                lines[i].GetComponent<LineRenderer>().SetPosition(1, pointsB[i].transform.position);
-            }
         }
 
 
