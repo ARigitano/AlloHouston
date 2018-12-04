@@ -24,26 +24,23 @@ namespace CRI.HelloHouston.Experience
         private GameObject _hologram;
 
         [SerializeField]
-        private GameObject _sphere;
+        private GameObject _sphere, _head;
 
         public void AnimHologram(Particle[] particles)
         {
-            //int i = 0;
-            int zone = 3;
-
             for(int i = 0; i<18; i++)
             {
-                createLine(i, 2);
+                int randomParticle = Random.Range(0, particles.Length);
+                Vector3 headPosition = createLine(i, particles[randomParticle]);
+
+                if (particles[randomParticle].head)
+                {
+                    GameObject lineHead =  (GameObject) Instantiate(_head, headPosition, Quaternion.identity);
+                    lineHead.transform.parent = this.gameObject.transform;
+                }
             }
-
-            /*foreach(Particle particle in particles)
-            {
-                createLine(i, particle.destination);
-                i++;
-            }*/
         }
-
-        private void createLine(int i, int zone)
+        private Vector3 createLine(int i, Particle particle)
         {
             lines[i] = new GameObject();
             lines[i].transform.parent = this.gameObject.transform;
@@ -51,10 +48,10 @@ namespace CRI.HelloHouston.Experience
             pointsB[i] = new GameObject();
             pointsB[i].transform.parent = this.gameObject.transform;
 
-            if (zone == 2)
+            if (particle.destination == 2)
             {
                 pointsB[i].transform.localPosition = new Vector3(Random.Range(0f, 0.2f), Random.Range(0f, 0.3f), Random.Range(0.14f, 0.22f));
-            } else if (zone == 3)
+            } else if (particle.destination == 3)
             {
                 pointsB[i].transform.localPosition = new Vector3(Random.Range(0.21f, 0.37f), Random.Range(0.3f, 0.49f), Random.Range(0.25f, 0.35f));
             }
@@ -96,14 +93,24 @@ namespace CRI.HelloHouston.Experience
 
             spline.points[1] = pointsB[i].transform.position;
             spline.points[2] = pointsB[i].transform.position;
-            
-            line.AddComponent<SplineDecorator>();
-            SplineDecorator decorator = line.GetComponent<SplineDecorator>();
-            decorator.spline = spline;
-            decorator.frequency = 75;
-            decorator.items = new Transform[1];
-            decorator.items[0] = _sphere.transform;
-            decorator.Populate();
+
+            /*if(particle.secondLine)
+            {
+                spline.AddCurve();
+            }*/
+
+            if (particle.line)
+            {
+                line.AddComponent<SplineDecorator>();
+                SplineDecorator decorator = line.GetComponent<SplineDecorator>();
+                decorator.spline = spline;
+                decorator.frequency = 75;
+                decorator.items = new Transform[1];
+                decorator.items[0] = _sphere.transform;
+                decorator.Populate();
+            }
+
+            return spline.points[3];
         }
 
         public override void OnResolved()
