@@ -37,6 +37,7 @@ namespace CRI.HelloHouston.Experience.Actions
         public void AddAction(T action)
         {
             actionQueue.Enqueue(action);
+            ResolveFirstAction();
         }
     }
 }

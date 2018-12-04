@@ -8,7 +8,7 @@ namespace CRI.HelloHouston.Experience.Actions
         /// Icon of the game action.
         /// </summary>
         [Tooltip("Icon of the game action.")]
-        public Texture2D menuIcon;
+        public Sprite menuIcon;
         /// <summary>
         /// Tooltip of the action.
         /// </summary>

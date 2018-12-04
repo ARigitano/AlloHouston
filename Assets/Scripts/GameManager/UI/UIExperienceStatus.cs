@@ -9,6 +9,12 @@ namespace CRI.HelloHouston.Experience.UI
     internal class UIExperienceStatus : MonoBehaviour
     {
         /// <summary>
+        /// Button to display all the actions available for this experience.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("Button to display all the actions available for this experience.")]
+        private UIExperienceActionButton _actionButton;
+        /// <summary>
         /// Text field for the name of the experience.
         /// </summary>
         [SerializeField]
@@ -64,12 +70,6 @@ namespace CRI.HelloHouston.Experience.UI
         [Tooltip("Prefab of a popup.")]
         private UIPopup _popupPrefab = null;
         /// <summary>
-        /// Prefab of a tooltip.ssss
-        /// </summary>
-        [SerializeField]
-        [Tooltip("Prefab of a tooltip.")]
-        private UITooltip _tooltipPrefab = null;
-        /// <summary>
         /// Text of the fail popup.
         /// </summary>
         [SerializeField]
@@ -94,6 +94,7 @@ namespace CRI.HelloHouston.Experience.UI
         {
             _xpSynchronizer = xpSynchronizer;
             _nameText.text = xpSynchronizer.xpContext.contextName;
+            _actionButton.Init(xpSynchronizer.xpContext.xpSettings.actions, xpSynchronizer.actionController);
             _launchButton.onClick.AddListener(() =>
             {
                 if (gameManager.xpTimeEstimate * 60 < gameManager.timeSinceGameStart + (xpSynchronizer.xpContext.xpSettings.duration * 60))

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace CRI.HelloHouston.Experience.Actions
 {
-    [CreateAssetMenu(menuName = "GameActions/TurnLightOffAction")]
+    [CreateAssetMenu(fileName = "New TurnLightOff Action", menuName = "Actions/Game/Turn Light Off")]
     public class TurnLightOffAction : GameAction
     {
         public override void Act(GameManager controller)

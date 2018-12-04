@@ -220,9 +220,19 @@ namespace CRI.HelloHouston.Experience
 
         }
 
-        public void AddAction(ExperienceAction action)
+        public virtual void SkipToStep(int step)
         {
-            actionController.AddAction(action);
+            logController.AddLog(string.Format("Skip to step {0}", step), xpContext, Log.LogType.Automatic);
+        }
+
+        public virtual void PlaySound(AudioSource sound)
+        {
+            logController.AddLog(string.Format("Play sound {0}", sound), xpContext, Log.LogType.Automatic);
+        }
+
+        public virtual void PlayMusic(AudioSource music)
+        {
+            logController.AddLog(string.Format("Play music {0}", music), xpContext, Log.LogType.Automatic);
         }
     }
 }
