@@ -2,25 +2,52 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Particle", menuName = "PhysicsParticle/NewParticle", order = 1)]
-public class Particle : ScriptableObject {
+namespace CRI.HelloHouston.ParticlePhysics
+{
+    /// <summary>
+    /// Constructor for a particle scriptable object.
+    /// </summary>
+    [CreateAssetMenu(fileName = "New Particle", menuName = "PhysicsParticle/NewParticle", order = 1)]
+    public class Particle : ScriptableObject
+    {
+        /// <summary>
+        /// The name of the particle.
+        /// </summary>
+        public string particleName;
 
-    public string particleName;
+        /// <summary>
+        /// The symbol of the particle.
+        /// </summary>
+        public string symbol;
 
-    public string symbol;
+        /// <summary>
+        /// Does the particle have a negative charge?
+        /// </summary>
+        public bool negative;
 
-    public bool negative;
+        /// <summary>
+        /// Does the particle display a line during the reaction?
+        /// </summary>
+        public bool line;
 
-    public bool line;
+        /// <summary>
+        /// The zone in which the particle will stop during the reaction.
+        /// </summary>
+        public int destination;
 
-    public int destination;
+        /// <summary>
+        /// Does the particle display a second line during the reaction?
+        /// </summary>
+        public bool secondLine;
 
-    public bool secondLine;
+        /// <summary>
+        /// The second zone in which a particle with a second line will stop during the reaction.
+        /// </summary>
+        public int secondDestination;
 
-    public int secondDestination;
-
-    public bool head;
-
-
-
+        /// <summary>
+        /// Does the particle display a head during the reaction?
+        /// </summary>
+        public bool head;
+    }
 }

@@ -1,39 +1,88 @@
-﻿using System.Collections;
+﻿using CRI.HelloHouston.Experience;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
 using System.Linq;
 
-namespace CRI.HelloHouston.Experience
+namespace CRI.HelloHouston.ParticlePhysics
 {
+    /// <summary>
+    /// The tablet screen of the experiment block for the particle physics experiment.
+    /// </summary>
     public class FakeTabletScreen : XPElement
     {
+        /// <summary>
+        /// All the particle scriptable objects.
+        /// </summary>
         [SerializeField]
         private Particle[] _allParticles;
-
+        /// <summary>
+        /// Path to the particle scriptable objects folder.
+        /// </summary>
         private static string _path = "Particles";
-
+        /// <summary>
+        /// Contains the combination of particles randomly generated.
+        /// </summary>
         public Particle[] particleTypes;
-
+        /// <summary>
+        /// Synchronizer for this experiment.
+        /// </summary>
         [SerializeField]
         private FakeSynchronizer _synchronizer;
+        /// <summary>
+        /// All the panels for the tablet screen.
+        /// </summary>
         [SerializeField]
         private GameObject _panel, _b1C2, _b1C4, _b1C4Left, _b1C5Left, _b1C6Left;
+        /// <summary>
+        /// Loading bar to display the time remaining.
+        /// </summary>
         [SerializeField]
         private Slider _slider;
+        /// <summary>
+        /// Speed of the time remaining loading bar.
+        /// </summary>
         [SerializeField]
         private float _speed = 0.2f;
+        /// <summary>
+        /// Real password to get access.
+        /// </summary>
         [SerializeField]
         private string _realPassword;
+        /// <summary>
+        /// Password entered by the player.
+        /// </summary>
         public string enteredPassword;
+        /// <summary>
+        /// The combination of particles randomly generated rewritten as a string.
+        /// </summary>
         public string[] realParticles;
+        /// <summary>
+        /// The particles entered by the player.
+        /// </summary>
         public string[] _enteredParticles;
         [SerializeField]
-        private Button[] _digitButtons, _particleButtons;
+        /// <summary>
+        /// The buttons to enter digits for the password.
+        /// </summary>
+        private Button[] _digitButtons,
+        /// <summary>
+        /// The buttons to enter particles.
+        /// </summary>
+                         _particleButtons;
+        /// <summary>
+        /// String displayed depending on the particles combination entered.
+        /// </summary>
         public string[] result;
+        //TO DO: those should be accessed by the synchronizer
         public Text partic, partic2;
 
+        /// <summary>
+        /// Randomly generates a combination of particles.
+        /// </summary>
+        /// <returns>The particles combination</returns>
         private Particle[] GenerateParticles()
         {
             Particle[] particleTypes = new Particle[0];
@@ -74,6 +123,10 @@ namespace CRI.HelloHouston.Experience
             return particleTypes;
         }
 
+        /// <summary>
+        /// Fake delay that can never be attained.
+        /// </summary>
+        /// <returns>null</returns>
         IEnumerator FakeLoading()
         {
             float i = 0f;
@@ -85,6 +138,9 @@ namespace CRI.HelloHouston.Experience
             }
         }
 
+        /// <summary>
+        /// Clears the particles combination entered.
+        /// </summary>
         public void ClearParticles()
         {
             for(int i = 0; i < _enteredParticles.Length; i++)
@@ -94,6 +150,9 @@ namespace CRI.HelloHouston.Experience
             _synchronizer.SynchronizeScreens("EnteringParticle");
         }
 
+        /// <summary>
+        /// Submits the particles combination entered.
+        /// </summary>
         public void SubmitParticles()
         {
             Debug.Log("fired");
@@ -179,8 +238,6 @@ namespace CRI.HelloHouston.Experience
                             }
                         }
                     }
-
-                    
                 }
                   
                 _synchronizer.SynchronizeScreens("ParticleInCorrect");
@@ -188,6 +245,10 @@ namespace CRI.HelloHouston.Experience
             }
         }
 
+        /// <summary>
+        /// Adds a particle to the combination.
+        /// </summary>
+        /// <param name="particle">The particle to add.</param>
         public void EnteringParticle(string particle)
         {
             for(int i = 0; i < _enteredParticles.Length; i++)
@@ -202,6 +263,10 @@ namespace CRI.HelloHouston.Experience
             }
         }
 
+        /// <summary>
+        /// Adds a number to the password.
+        /// </summary>
+        /// <param name="number">The number to add.</param>
         public void EnteringDigit(int number)
         {
             if(enteredPassword.Length < _realPassword.Length)
@@ -221,18 +286,27 @@ namespace CRI.HelloHouston.Experience
             }
         }
 
+        /// <summary>
+        /// Displays particle selection panel after the correct password have been entered.
+        /// </summary>
         public void AccessGranted()
         {
             _b1C5Left.SetActive(false);
             _b1C6Left.SetActive(true);
         }
 
+        /// <summary>
+        /// Displays start panel after the splash screen has finished loading.
+        /// </summary>
         public void WaitingConfirmation()
         {
             _b1C2.SetActive(true);
             _panel.SetActive(false);
         }
 
+        /// <summary>
+        /// Displays password panel adter override button has been clicked.
+        /// </summary>
         public void OverrideButtonClicked()
         {
             _synchronizer.SynchronizeScreens("OverrideButtonClicked");
@@ -240,6 +314,9 @@ namespace CRI.HelloHouston.Experience
             _b1C4Left.SetActive(false);
         }
 
+        /// <summary>
+        /// Displays override panel after start button has been clicked.
+        /// </summary>
         public void StartButtonClicked()
         {
             _synchronizer.SynchronizeScreens("StartButtonClicked");
@@ -247,27 +324,42 @@ namespace CRI.HelloHouston.Experience
             _b1C2.SetActive(false);
             StartCoroutine("FakeLoading");
         }
-
+        //TO DO
+        /// <summary>
+        /// Effect when the experiment is correctly resolved.
+        /// </summary>
         public override void OnResolved()
         {
             Debug.Log(name + "Resolved");
         }
-
+        //TO DO
+        /// <summary>
+        /// Effect when the experiment is failed.
+        /// </summary>
         public override void OnFailed()
         {
             Debug.Log(name + "Failed");
         }
-
+        //TO DO
+        /// <summary>
+        /// Effect when the experiment is activated the first time.
+        /// </summary>
         public override void OnActivated()
         {
             Debug.Log(name + "Activated");
         }
-
+        //TO DO
+        /// <summary>
+        /// Effect when the experiment is paused.
+        /// </summary>
         public override void OnPause()
         {
             Debug.Log(name + "Paused");
         }
-
+        //TO DO
+        /// <summary>
+        /// Effect when the experiment is unpaused.
+        /// </summary>
         public override void OnUnpause()
         {
             Debug.Log(name + "Unpaused");
@@ -277,12 +369,6 @@ namespace CRI.HelloHouston.Experience
         void Start()
         {
            particleTypes = GenerateParticles();
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
         }
     }
 }

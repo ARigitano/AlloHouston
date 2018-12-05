@@ -1,28 +1,54 @@
-﻿using System.Collections;
+﻿using CRI.HelloHouston.Experience;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CRI.HelloHouston.Experience
+/// <summary>
+/// The synchronizer of the particle physics experiment.
+/// </summary>
+namespace CRI.HelloHouston.ParticlePhysics
 {
     public class FakeSynchronizer : MonoBehaviour
     {
-
+        /// <summary>
+        /// The top left script of the experiment block.
+        /// </summary>
         [SerializeField]
         private FakeTopScreen _fakeTopScreen;
+        /// <summary>
+        /// The top right script of the experiment block.
+        /// </summary>
         [SerializeField]
         private FakeTubeScreen _fakeTubeScreen;
+        /// <summary>
+        /// The tablet script of the experiment block.
+        /// </summary>
         [SerializeField]
         private FakeTabletScreen _fakeTabletScreen;
+        /// <summary>
+        /// The bottom scripts of the experiment block.
+        /// </summary>
         [SerializeField]
         private FakeBottomElement[] _fakeBottomElements;
+        /// <summary>
+        /// The hologram scripts of the table block.
+        /// </summary>
         [SerializeField]
         private FakeHologram[] _fakeHolograms;
+        /// <summary>
+        /// The corner scripts of the corner block.
+        /// </summary>
         [SerializeField]
         private FakeCornerScreen[] _fakeCornerScreens;
+        /// <summary>
+        /// The door script of the door block.
+        /// </summary>
         [SerializeField]
         private FakeDoor _fakeDoor;
-        
 
+        /// <summary>
+        /// Effect when the experiment is activated the first time.
+        /// </summary>
         private void Launched()
         {
             if(_fakeTopScreen != null) _fakeTopScreen.OnActivated();
@@ -41,6 +67,10 @@ namespace CRI.HelloHouston.Experience
             if (_fakeDoor != null) _fakeDoor.OnActivated();
         }
 
+        /// <summary>
+        /// Synchronizes all the blocks of the experiment when a block sends data.
+        /// </summary>
+        /// <param name="state"></param>
         public void SynchronizeScreens(string state)
         {
             switch(state)
@@ -81,6 +111,9 @@ namespace CRI.HelloHouston.Experience
             }
         }
 
+        /// <summary>
+        /// Effect when the experiment is paused.
+        /// </summary>
         private void Paused()
         {
             if (_fakeTopScreen != null) _fakeTopScreen.OnPause();
@@ -99,6 +132,9 @@ namespace CRI.HelloHouston.Experience
             if (_fakeDoor != null) _fakeDoor.OnPause();
         }
 
+        /// <summary>
+        /// Effect when the experiment is unpaused.
+        /// </summary>
         private void UnPaused()
         {
             if (_fakeTopScreen != null) _fakeTopScreen.OnUnpause();
@@ -117,11 +153,17 @@ namespace CRI.HelloHouston.Experience
             if (_fakeDoor != null) _fakeDoor.OnUnpause();
         }
 
+        /// <summary>
+        /// Launches an action related to the experiment.
+        /// </summary>
         private void LaunchAction()
         {
             
         }
 
+        /// <summary>
+        /// Effect when the experiment is correctly resolved.
+        /// </summary>
         private void Resolved()
         {
             if (_fakeTopScreen != null) _fakeTopScreen.OnResolved();
@@ -140,6 +182,9 @@ namespace CRI.HelloHouston.Experience
             if (_fakeDoor != null) _fakeDoor.OnResolved();
         }
 
+        /// <summary>
+        /// Effect when the experiment is failed.
+        /// </summary>
         private void Failed()
         {
             if (_fakeTopScreen != null) _fakeTopScreen.OnFailed();
@@ -163,12 +208,6 @@ namespace CRI.HelloHouston.Experience
         {
             Launched();
             _fakeHolograms[0].AnimHologram(_fakeTabletScreen.particleTypes);
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
         }
     }
 }
