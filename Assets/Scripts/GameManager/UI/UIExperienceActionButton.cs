@@ -30,8 +30,6 @@ namespace CRI.HelloHouston.Experience.UI
         [Tooltip("UIAction prefab.")]
         private UIAction _actionPrefab = null;
 
-        private ExperienceAction[] _actions;
-
         private bool _visible = false;
 
         private void Reset()
@@ -56,8 +54,7 @@ namespace CRI.HelloHouston.Experience.UI
 
         public void Init(ExperienceAction[] actions, ExperienceActionController actionController)
         {
-            _actions = actions;
-            foreach (var action in _actions)
+            foreach (var action in actions)
             {
                 var go = Instantiate(_actionPrefab, _displayPanel.transform);
                 go.Init(action, actionController);

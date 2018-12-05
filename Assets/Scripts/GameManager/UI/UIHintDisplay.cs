@@ -1,8 +1,7 @@
-﻿using CRI.HelloHouston.Experience;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace CRI.HelloHouston.Experiences.UI
+namespace CRI.HelloHouston.Experience.UI
 {
     internal class UIHintDisplay : MonoBehaviour
     {
@@ -48,9 +47,9 @@ namespace CRI.HelloHouston.Experiences.UI
             _enterButton = GetComponentInChildren<Button>();
         }
 
-        private void Start()
+        public void Init(GameManager gameManager)
         {
-            _gameManager = GameManager.instance;
+            _gameManager = gameManager;
             _enterButton.onClick.AddListener(Validate);
             _dropdown.onValueChanged.AddListener((value) =>
             {

@@ -88,11 +88,6 @@ namespace CRI.HelloHouston.Experience.UI
             }
         }
 
-        private void Start()
-        {
-            Init(GameManager.instance.logManager);
-        }
-
         public void Init(LogManager logManager)
         {
             _logManager = logManager;
@@ -115,7 +110,7 @@ namespace CRI.HelloHouston.Experience.UI
         private void AddLog(Log log)
         {
             bool scrollToBottom = false;
-            scrollToBottom = _scrollRect.normalizedPosition.y < 0.1f;
+            scrollToBottom = _scrollRect.normalizedPosition.y < 0.2f;
             if (uiLogs.Count == 1 && uiLogs.Peek().log.message == null)
             {
                 var uiLog = uiLogs.Dequeue();
@@ -156,7 +151,7 @@ namespace CRI.HelloHouston.Experience.UI
                 AddLog(log);
             }
         }
-
+#if UNITY_EDITOR
         private void Update()
         {
             if (Input.GetKey(KeyCode.A))
@@ -170,5 +165,6 @@ namespace CRI.HelloHouston.Experience.UI
                     _logManager.logGeneralController.AddLog(name, null, logType);
             }
         }
+#endif
     }
 }

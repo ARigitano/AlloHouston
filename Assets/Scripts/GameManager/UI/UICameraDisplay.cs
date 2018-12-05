@@ -23,15 +23,9 @@ namespace CRI.HelloHouston.Experience.UI
         [SerializeField]
         [Tooltip("Transform of the button panel on which the buttons are to be displayed.")]
         private Transform _buttonPanel = null;
-
-        private void Start()
+        
+        public void Init(GameObject[] cameraGos)
         {
-            Init();
-        }
-
-        public void Init()
-        {
-            var cameraGos = GameObject.FindGameObjectsWithTag("DisplayCamera");
             foreach (var cameraGo in cameraGos)
             {
                 var camera = cameraGo.GetComponent<Camera>();

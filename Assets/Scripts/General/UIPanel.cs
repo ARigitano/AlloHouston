@@ -32,17 +32,13 @@ namespace CRI.HelloHouston
         public void Hide()
         {
             _hidden = true;
-            _canvasGroup.alpha = 0;
-            _canvasGroup.interactable = false;
-            _canvasGroup.blocksRaycasts = false;
+            _canvasGroup.Hide();
         }
 
         public void Show()
         {
             _hidden = false;
-            _canvasGroup.alpha = 1;
-            _canvasGroup.interactable = true;
-            _canvasGroup.blocksRaycasts = true;
+            _canvasGroup.Show();
         }
 
         public virtual void Init(object obj)

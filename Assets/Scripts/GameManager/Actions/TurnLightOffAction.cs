@@ -10,12 +10,7 @@ namespace CRI.HelloHouston.Experience.Actions
     {
         public override void Act(GameManager controller)
         {
-            /*
-            foreach (Light light in controller.lights)
-            {
-                light.enabled = false;
-            }
-            */
+            controller.TurnLightOff();
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using CRI.HelloHouston.Experience.Actions;
 using System.Linq;
 using UnityEngine;
+using System;
 
 namespace CRI.HelloHouston.Experience
 {
@@ -19,13 +20,12 @@ namespace CRI.HelloHouston.Experience
                 return s_instance;
             }
         }
-
         public delegate void GameManagerEvent();
         public static GameManagerEvent onExperienceChange;
         /// <summary>
         /// The Game action controller.
         /// </summary>
-        private GameActionController _gameActionController;
+        public GameActionController gameActionController { get; private set; }
         [SerializeField]
         private XPMainSettings _mainSettings = null;
         /// <summary>
@@ -37,13 +37,19 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         public LogGeneralController logGeneralController { get { return logManager.logGeneralController; } }
         /// <summary>
-        /// The log experience controller.
-        /// </summary>
-        public LogExperienceController logExperienceController { get { return logManager.logExperienceController; } }
-        /// <summary>
         /// Experience list.
         /// </summary>
         public XPSynchronizer[] xpSynchronizers { get; private set; }
+        /// <summary>
+        /// All the available game actions.
+        /// </summary>
+        public GameAction[] actions
+        {
+            get
+            {
+                return _mainSettings.actions;
+            }
+        }
         private float _startTime;
         /// <summary>
         /// Time since the game start.
@@ -73,7 +79,7 @@ namespace CRI.HelloHouston.Experience
 
         private void Awake()
         {
-            _gameActionController = new GameActionController(this);
+            gameActionController = new GameActionController(this);
             logManager = new LogManager(this);
             _mainSettings = Resources.Load<XPMainSettings>("Settings/MainSettings");
             Init(Resources.LoadAll<XPContext>("AllExperiences/Electricity/XpContext"));
@@ -95,23 +101,30 @@ namespace CRI.HelloHouston.Experience
             Debug.Log(hint);
         }
 
-        /// <summary>
-        /// Resolve the first action of the queue if there's at least one action in the queue and the current action has finished.
-        /// </summary>
-        /// <param name="force">If true, it will resolve the first action of the queue even if the current action didn't finish yet.</param>
-        /// <returns>True if an action was resolved. False if it didn't.</returns>
-        public bool ResolveFirstAction()
+        public void TurnLightOn()
         {
-            return _gameActionController.ResolveFirstAction();
+            logGeneralController.AddLog("Turn Light On", this, Log.LogType.Automatic);
         }
 
-        /// <summary>
-        /// Adds an action to the queue of actions.
-        /// </summary>
-        /// <param name="action">An instance of GameAction</param>
-        public void AddAction(GameAction action)
+        public void TurnLightOff()
         {
-            _gameActionController.AddAction(action);
+            logGeneralController.AddLog("Turn Light Off", this, Log.LogType.Automatic);
         }
+
+        public void PlaySound(AudioSource source)
+        {
+            logGeneralController.AddLog(string.Format("Play Sound {0}", source), this, Log.LogType.Automatic);
+        }
+
+        public void PlayMusic(AudioSource source)
+        {
+            logGeneralController.AddLog(string.Format("Play Music {0}", source), this, Log.LogType.Automatic);
+        }
+
+        public void StopMusic()
+        {
+            logGeneralController.AddLog(string.Format("Stop Music"), this, Log.LogType.Automatic);
+        }
+
     }
 }
