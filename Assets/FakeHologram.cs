@@ -41,6 +41,62 @@ namespace CRI.HelloHouston.ParticlePhysics
         /// Prefab of the head of a particle line.
         /// </summary>
                            _head;
+        /// <summary>
+        /// 
+        /// </summary>
+        private float _thetaMin = 0f;
+            //Mathf.PI / 6;
+        /// <summary>
+        /// 
+        /// </summary>
+        private float _thetaMax = 0f;
+        //Mathf.PI / 3;
+        /// <summary>
+        /// 
+        /// </summary>
+        private float _phiMin = 0f;
+        //Mathf.PI / 6;
+        /// <summary>
+        /// 
+        /// </summary>
+        private float _phiMax = 0f;
+        //Mathf.PI / 3;
+        /// <summary>
+        /// 
+        /// </summary>
+        private float _amplitudeA = 1f;
+        /// <summary>
+        /// 
+        /// </summary>
+        private float _amplitudeB = 1f;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="amplitude"></param>
+        /// <param name="angleMin"></param>
+        /// <param name="angleMax"></param>
+        /// <returns></returns>
+        private float BezierX(float amplitude, float angleMin, float angleMax)
+        {
+            float x = amplitude * Mathf.Sin(Random.Range(angleMin, angleMax));
+
+            return x;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="amplitude"></param>
+        /// <param name="angleMin"></param>
+        /// <param name="angleMax"></param>
+        /// <returns></returns>
+        private float BezierY(float amplitude, float angleMin, float angleMax)
+        {
+            float y = amplitude * Mathf.Cos(Random.Range(angleMin, angleMax));
+
+            return y;
+        }
 
         /// <summary>
         /// Animates the particle reaction hologram.
@@ -48,7 +104,7 @@ namespace CRI.HelloHouston.ParticlePhysics
         /// <param name="particles">The combination of particles.</param>
         public void AnimHologram(Particle[] particles)
         {
-            for(int i = 0; i<18; i++)
+            for(int i = 0; i<1; i++)
             {
                 int randomParticle = Random.Range(0, particles.Length);
                 Vector3 headPosition = createLine(i, particles[randomParticle]);
@@ -110,20 +166,36 @@ namespace CRI.HelloHouston.ParticlePhysics
             line.AddComponent<BezierSpline>();
             BezierSpline spline = lines[i].GetComponent<BezierSpline>();
             spline.Reset();
+
             spline.points[0] = this.gameObject.transform.position;
+
+            spline.points[1].x = BezierX(_amplitudeA, _thetaMin, _thetaMax) - spline.points[0].x;
+            spline.points[1].y = BezierY(_amplitudeA, _thetaMin, _thetaMax) - spline.points[0].y;
+            spline.points[1].z = spline.points[0].z;
+
             spline.points[3] = pointsB[i].transform.position;
 
-            pointsB[i].transform.localPosition = new Vector3(x/2, y, z);
+            spline.points[2].x = BezierX(_amplitudeB, _phiMin, _phiMax) - spline.points[3].x;
+            spline.points[2].y = BezierY(_amplitudeB, _phiMin, _phiMax) - spline.points[3].y;
+            spline.points[2].z = pointsB[i].transform.position.z;
 
-            spline.points[1] = pointsB[i].transform.position;
-            spline.points[2] = pointsB[i].transform.position;
+            Debug.Log(spline.points[1]);
+            Debug.Log(spline.points[2]);
+
+            
+
+            //pointsB[i].transform.localPosition = new Vector3(x/2, y, z);
+
+            //spline.points[1] = pointsB[i].transform.position;
+            //spline.points[2] = pointsB[i].transform.position;
 
             /*if(particle.secondLine)
             {
                 spline.AddCurve();
             }*/
 
-            if (particle.line)
+            if (true)
+                //particle.line)
             {
                 line.AddComponent<SplineDecorator>();
                 SplineDecorator decorator = line.GetComponent<SplineDecorator>();
