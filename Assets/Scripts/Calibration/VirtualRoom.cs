@@ -3,6 +3,7 @@ using System.Linq;
 using VRCalibrationTool;
 using UnityEngine;
 using CRI.HelloHouston.Experience;
+using System.Collections.Generic;
 
 namespace CRI.HelloHouston.Calibration
 {
@@ -36,6 +37,10 @@ namespace CRI.HelloHouston.Calibration
         /// The block of the room.
         /// </summary>
         public VirtualBlock[] blocks;
+        /// <summary>
+        /// Checklist for the room.
+        /// </summary>
+        public List<string> checklist;
 
         /// <summary>
         /// Init a VirtualRoom
@@ -48,6 +53,7 @@ namespace CRI.HelloHouston.Calibration
             this.lastUpdate = room.date;
             if (room.points.Length >= 3)
                 Calibrate(room.points);
+            this.checklist = room.checklist;
         }
 
         /// <summary>
@@ -91,7 +97,8 @@ namespace CRI.HelloHouston.Calibration
                 index,
                 blocks.Select(x => x.ToBlockEntry()).ToArray(),
                 calibrated ? virtualPositionTags : new PositionTag[0],
-                lastUpdate
+                lastUpdate,
+                checklist
                 );
         }
 

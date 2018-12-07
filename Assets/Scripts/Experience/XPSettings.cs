@@ -17,7 +17,15 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         [Tooltip("The estimated duration (in minutes) of this version of the experiment.")]
         public int duration;
-
+        /// <summary>
+        /// All the hints available for the experiment.
+        /// </summary>
+        [Tooltip("All the hints available for the experiment.")]
         public string[] availableHints;
+        /// <summary>
+        /// The checklist of the experiment.
+        /// </summary>
+        [Tooltip("The checklist of the experiment.")]
+        public string[] checklist;
     }
 }

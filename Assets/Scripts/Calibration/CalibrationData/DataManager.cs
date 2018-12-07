@@ -15,7 +15,6 @@ namespace CRI.HelloHouston.Calibration.XML
                 return s_instance;
             }
         }
-
         public ItemDatabase blockDB;
 
         private void Awake()

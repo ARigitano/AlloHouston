@@ -8,6 +8,18 @@ namespace CRI.HelloHouston.Experience.UI
 {
     internal class UILogDisplay : MonoBehaviour
     {
+        [Serializable]
+        internal class LogColor
+        {
+            public Log.LogType logType;
+            public Color color;
+
+            public LogColor(Log.LogType logType, Color color)
+            {
+                this.logType = logType;
+                this.color = color;
+            }
+        }
         /// <summary>
         /// The limit of log. If the number of logs goes over this value, the log will delete the oldest logs.
         /// </summary>
@@ -58,6 +70,9 @@ namespace CRI.HelloHouston.Experience.UI
 
         private LogManager _logManager;
 
+        [SerializeField]
+        private LogColor[] _logColors;
+
         private LogFilter[] _allFilters = new LogFilter[]
         {
             new LogTypeFilter("Default", (x) => x.logType == Log.LogType.Default),
@@ -69,6 +84,16 @@ namespace CRI.HelloHouston.Experience.UI
             new LogOriginFilter("Experience", (x) => x.logOrigin == Log.LogOrigin.Experience),
             new LogOriginFilter("General", (x) => x.logOrigin == Log.LogOrigin.General),
         };
+
+        private void Reset()
+        {
+            var logTypes = Enum.GetValues(typeof(Log.LogType));
+            _logColors = new LogColor[logTypes.Length];
+            for (int i = 0; i < _logColors.Length; i++)
+            {
+                _logColors[i] = new LogColor((Log.LogType)logTypes.GetValue(i), Color.black);
+            }
+        }
 
         private void OnEnable()
         {
@@ -109,6 +134,9 @@ namespace CRI.HelloHouston.Experience.UI
 
         private void AddLog(Log log)
         {
+            var logColor = _logColors.FirstOrDefault(x => x.logType == log.logType);
+            if (logColor != null)
+                log.color = logColor.color;
             bool scrollToBottom = false;
             scrollToBottom = _scrollRect.normalizedPosition.y < 0.2f;
             if (uiLogs.Count == 1 && uiLogs.Peek().log.message == null)

@@ -29,6 +29,12 @@ namespace CRI.HelloHouston.Experience.UI
         [SerializeField]
         [Tooltip("UIAction prefab.")]
         private UIAction _actionPrefab = null;
+        /// <summary>
+        /// Time (in seconds) until the panel is hidden when no longer hovered.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("Time (in seconds) until the panel is hidden when no longer hovered.")]
+        private float _hideDelay = 1.0f;
 
         private bool _visible = false;
 
@@ -46,10 +52,8 @@ namespace CRI.HelloHouston.Experience.UI
 
         private void OnHoverDisplayPanel(bool hovered)
         {
-            Debug.Log(hovered);
-            if (!hovered && !_visible)
-                _displayPanel.Hide();
-            _visible = false;
+            if (!hovered)
+                StartCoroutine(HideWithDelay());
         }
 
         public void Init(ExperienceAction[] actions, ExperienceActionController actionController)
@@ -61,6 +65,7 @@ namespace CRI.HelloHouston.Experience.UI
             }
             _button.onClick.AddListener(() =>
             {
+                StopAllCoroutines();
                 if (_visible)
                 {
                     _displayPanel.Hide();
@@ -68,17 +73,16 @@ namespace CRI.HelloHouston.Experience.UI
                 else
                 {
                     _displayPanel.Show();
-                    StopAllCoroutines();
                     _displayPanel.transform.SetParent(GetComponentInParent<Canvas>().transform);
                 }
                 _visible = !_visible;
             });
         }
 
-        private IEnumerator Hide()
+        private IEnumerator HideWithDelay()
         {
-            yield return new WaitForSeconds(0.2f);
-            if (!_displayPanel.GetComponent<UIHoveredItem>().hovered && _visible)
+            yield return new WaitForSeconds(_hideDelay);
+            if (!_displayPanel.GetComponent<UIHoveredItem>().hovered)
             {
                 _displayPanel.Hide();
                 _visible = false;
@@ -87,7 +91,17 @@ namespace CRI.HelloHouston.Experience.UI
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            StartCoroutine(Hide());
+            StartCoroutine(HideWithDelay());
+        }
+
+        public void Update()
+        {
+            if (Input.GetMouseButtonDown(0) && !_displayPanel.GetComponent<UIHoveredItem>().hovered)
+            {
+                StopAllCoroutines();
+                _displayPanel.Hide();
+                _visible = false;
+            }
         }
     }
 }

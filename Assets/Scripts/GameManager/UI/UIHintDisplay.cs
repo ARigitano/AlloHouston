@@ -60,8 +60,6 @@ namespace CRI.HelloHouston.Experience.UI
 
         private void RefreshDropdown(XPSynchronizer xpSynchronizer = null)
         {
-            if (xpSynchronizer != null)
-                Debug.Log(xpSynchronizer.active);
             GameHint[] hints = _gameManager.GetAllCurrentHints();
             _dropdown.ClearOptions();
             _currentHints = hints;
