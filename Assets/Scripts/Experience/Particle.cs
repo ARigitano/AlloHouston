@@ -49,5 +49,10 @@ namespace CRI.HelloHouston.ParticlePhysics
         /// Does the particle display a head during the reaction?
         /// </summary>
         public bool head;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public Material debugMaterial;
     }
 }
