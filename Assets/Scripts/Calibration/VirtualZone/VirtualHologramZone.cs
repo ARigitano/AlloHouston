@@ -1,4 +1,6 @@
-﻿using CRI.HelloHouston.Experience;
+﻿using System;
+using CRI.HelloHouston.Experience;
+using System.Collections.Generic;
 
 namespace CRI.HelloHouston.Calibration
 {
@@ -16,7 +18,7 @@ namespace CRI.HelloHouston.Calibration
         {
             get
             {
-                return new VirtualElement[] { hologramVirtualElement };
+                return hologramVirtualElements;
             }
         }
 
@@ -24,11 +26,15 @@ namespace CRI.HelloHouston.Calibration
         {
             get
             {
-                return xpHologramZone;
+                return null;
+            }
+            protected set
+            {
+                hologramZones.Add((XPHologramZone)value);
             }
         }
 
-        public VirtualElement hologramVirtualElement;
-        public XPHologramZone xpHologramZone;
+        public VirtualElement[] hologramVirtualElements;
+        public List<XPHologramZone> hologramZones;
     }
 }

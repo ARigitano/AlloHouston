@@ -25,6 +25,10 @@ namespace CRI.HelloHouston.Calibration
             {
                 return xpCornerZone;
             }
+            protected set
+            {
+                xpCornerZone = (XPCornerZone)value;
+            }
         }
 
         public VirtualElement wallCornerVirtualElement;

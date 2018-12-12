@@ -10,7 +10,7 @@ public struct ClickedEventArgs
 
 public delegate void ClickedEventHandler(object sender, ClickedEventArgs e);
 
-public class SteamVR_TrackedController : MonoBehaviour
+public class SteamVR_TrackedController : MonoBehaviour, ITrackedController
 {
 	public uint controllerIndex;
 	public VRControllerState_t controllerState;

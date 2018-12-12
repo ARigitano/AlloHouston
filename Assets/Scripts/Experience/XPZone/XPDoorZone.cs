@@ -21,9 +21,12 @@ namespace CRI.HelloHouston.Experience
         [Tooltip("The door content.")]
         public XPElement doorContentPrefab;
 
-        public override ZoneType GetZoneType()
+        public override ZoneType zoneType
         {
-            return ZoneType.Door;
+            get
+            {
+                return ZoneType.Door;
+            }
         }
     }
 }

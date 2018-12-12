@@ -25,6 +25,10 @@ namespace CRI.HelloHouston.Calibration
             {
                 return xpWallBottomZone;
             }
+            protected set
+            {
+                xpWallBottomZone = (XPWallBottomZone)value;
+            }
         }
 
         public VirtualElement wallBottomVirtualElement;

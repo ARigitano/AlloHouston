@@ -25,6 +25,10 @@ namespace CRI.HelloHouston.Calibration
             {
                 return xpDoorZone;
             }
+            protected set
+            {
+                xpDoorZone = (XPDoorZone)value;
+            }
         }
 
         public VirtualElement doorVirtualElement;

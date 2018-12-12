@@ -54,7 +54,7 @@ namespace CRI.HelloHouston.Experience.UI
         /// <summary>
         /// Button to end the installation of the experiments
         /// </summary>
-        [SerializeField] private UINextButton _nextButton = null;
+        [SerializeField] private Button _nextButton = null;
         /// <summary>
         /// The current room.
         /// </summary>
@@ -128,12 +128,13 @@ namespace CRI.HelloHouston.Experience.UI
             Debug.Log(string.Format("{0} {1} {2} {3}", totalWallTop, !_experimentTotalPanel.overflow, emptyPanel, _experimentPanels.Count));
             _nextButton.interactable = !_experimentTotalPanel.overflow && totalWallTop <= _currentRoom.GetZones(ZoneType.WallTop).Length && !emptyPanel;
             if (_nextButton.interactable)
-                _nextButton.nextObject = new RoomXPPair(_currentRoom, _experimentPanels.Select(x => x.currentContext).ToArray());
+                _nextObject = new RoomXPPair(_currentRoom, _experimentPanels.Select(x => x.currentContext).ToArray());
         }
 
         public override void Init(object obj)
         {
             base.Init(obj);
+            _nextButton.onClick.AddListener(Next);
             Init((VirtualRoom)obj);
         }
 

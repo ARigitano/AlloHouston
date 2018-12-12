@@ -24,7 +24,7 @@ namespace CRI.HelloHouston.Calibration.UI
         /// </summary>
         [SerializeField]
         [Tooltip("Next button.")]
-        private UINextButton _nextButton = null;
+        private Button _nextButton = null;
         /// <summary>
         /// Reset button.
         /// </summary>
@@ -65,7 +65,7 @@ namespace CRI.HelloHouston.Calibration.UI
             _nextButton.interactable = interactable;
             if (_nextButton.interactable)
             {
-                _nextButton.nextObject = _virtualRoom;
+                _nextObject = _virtualRoom;
             }
         }
 
@@ -78,6 +78,7 @@ namespace CRI.HelloHouston.Calibration.UI
         {
             var calibrationManager = FindObjectOfType<CalibrationManager>();
             VirtualRoom vroom = calibrationManager.CreateVirtualRoom(DataManager.instance.blockDB.rooms[0]);
+            _nextButton.onClick.AddListener(Next);
             Init(vroom, calibrationManager);
             CheckInteractable();
         }

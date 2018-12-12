@@ -39,9 +39,12 @@ namespace CRI.HelloHouston.Experience
         [Tooltip("The tablet of the wall top.")]
         public XPElement elementTabletPrefab;
 
-        public override ZoneType GetZoneType()
+        public override ZoneType zoneType
         {
-            return ZoneType.WallTop;
+            get
+            {
+                return ZoneType.WallTop;
+            }
         }
     }
 }

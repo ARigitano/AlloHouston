@@ -29,7 +29,7 @@ namespace CRI.HelloHouston.Checklist.UI
         /// </summary>
         [SerializeField]
         [Tooltip("Next button.")]
-        private UINextButton _nextButton = null;
+        private Button _nextButton = null;
         /// <summary>
         /// List of calibration entries.
         /// </summary>
@@ -44,7 +44,6 @@ namespace CRI.HelloHouston.Checklist.UI
             bool interactable = false;
 
             UIChecklistEntry[] checklistEntries = GetComponentsInChildren<UIChecklistEntry>();
-
             foreach (UIChecklistEntry checklistEntry in checklistEntries)
             {
                 if (!checklistEntry._doneToggle.isOn)
@@ -54,21 +53,15 @@ namespace CRI.HelloHouston.Checklist.UI
                 }
                 interactable = true;
             }
-
             _nextButton.interactable = interactable;
             if (_nextButton.interactable)
             {
-                _nextButton.nextObject = _virtualRoom;
+                _nextObject = _virtualRoom;
             }
         }
 
         private void Start()
         {
-            /*
-            var calibrationManager = FindObjectOfType<CalibrationManager>();
-            VirtualRoom vroom = calibrationManager.CreateVirtualRoom(DataManager.instance.blockDB.rooms[0]);
-            Init(vroom);
-            CheckInteractable();*/
         }
 
         /// <summary>

@@ -19,9 +19,12 @@ namespace CRI.HelloHouston.Experience
         [Tooltip("The holograms.")]
         public XPHologramElement[] hologramElementPrefabs;
 
-        public override ZoneType GetZoneType()
+        public override ZoneType zoneType
         {
-            return ZoneType.Hologram;
+            get
+            {
+                return ZoneType.Hologram;
+            }
         }
     }
 }

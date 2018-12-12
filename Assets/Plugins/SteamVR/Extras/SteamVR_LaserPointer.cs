@@ -24,6 +24,7 @@ public class SteamVR_LaserPointer : MonoBehaviour
     public Transform reference;
     public event PointerEventHandler PointerIn;
     public event PointerEventHandler PointerOut;
+    public LayerMask layerMask;
 
     Transform previousContact = null;
 
@@ -90,7 +91,7 @@ public class SteamVR_LaserPointer : MonoBehaviour
 
         Ray raycast = new Ray(transform.position, transform.forward);
         RaycastHit hit;
-        bool bHit = Physics.Raycast(raycast, out hit);
+        bool bHit = Physics.Raycast(raycast, out hit, layerMask);
 
         if(previousContact && previousContact != hit.transform)
         {

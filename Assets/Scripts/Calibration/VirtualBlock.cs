@@ -60,7 +60,7 @@ namespace CRI.HelloHouston.Calibration
             }
         }
 
-        private void Start()
+        private void Awake()
         {
             zones = GetComponentsInChildren<VirtualZone>();
         }

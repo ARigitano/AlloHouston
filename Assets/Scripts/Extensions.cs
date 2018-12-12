@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -35,6 +36,19 @@ namespace CRI.HelloHouston
             canvasGroup.alpha = 1.0f;
             canvasGroup.blocksRaycasts = true;
             canvasGroup.interactable = true;
+        }
+
+        public static void Shuffle<T>(this IList<T> ts)
+        {
+            var count = ts.Count;
+            var last = count - 1;
+            for (var i = 0; i < last; ++i)
+            {
+                var r = UnityEngine.Random.Range(i, count);
+                var tmp = ts[i];
+                ts[i] = ts[r];
+                ts[r] = tmp;
+            }
         }
     }
 }

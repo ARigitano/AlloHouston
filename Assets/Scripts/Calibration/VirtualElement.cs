@@ -18,7 +18,16 @@ namespace CRI.HelloHouston.Calibration
 
     public class VirtualElement : MonoBehaviour
     {
-        private XPElement _currentPrefab;
+        /// <summary>
+        /// Prefab of the element.
+        /// </summary>
+        private XPElement _elementPrefab;
+        /// <summary>
+        /// Instance of the element.
+        /// </summary>
+        public XPElement currentElement { get; protected set; }
+
+        public XPContext xpContext { get; protected set; }
         /// <summary>
         /// The type of element
         /// </summary>
@@ -28,9 +37,25 @@ namespace CRI.HelloHouston.Calibration
         /// Places an experience element on a virtual element.
         /// </summary>
         /// <param name="element"></param>
-        public void PlaceObject(XPElement element)
+        public void PlaceObject(XPElement element, XPContext xpContext)
         {
-            _currentPrefab = element;
+            _elementPrefab = element;
+            this.xpContext = xpContext;
+        }
+
+        public void Init()
+        {
+            Clean();
+            currentElement = Instantiate(_elementPrefab, transform);
+        }
+
+        public void Clean()
+        {
+            if (currentElement != null)
+            {
+                Destroy(currentElement.gameObject);
+                currentElement = null;
+            }
         }
         /// <summary>
         /// Return the experience element stored in the virtual element.
@@ -39,7 +64,7 @@ namespace CRI.HelloHouston.Calibration
         /// <returns>An instance of XPElement</returns>
         public T GetObject<T>() where T : XPElement, new()
         {
-            return _currentPrefab as T;
+            return _elementPrefab as T;
         }
     }
 }

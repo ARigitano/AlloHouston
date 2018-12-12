@@ -10,6 +10,24 @@ namespace CRI.HelloHouston
         /// If true, this panel is hidden.
         /// </summary>
         protected bool _hidden = false;
+        [SerializeField]
+        private UIPanel _previous;
+        public UIPanel previous
+        {
+            get
+            {
+                return _previous;
+            }
+        }
+        [SerializeField]
+        private UIPanel _next;
+        public UIPanel next
+        {
+            get
+            {
+                return _next; 
+            }
+        }
         /// <summary>
         /// The CanvasGroup component.
         /// </summary>
@@ -19,6 +37,8 @@ namespace CRI.HelloHouston
         /// </summary>
         [Tooltip("If true, hides the UIPanel on strt.")]
         public bool hideOnStart;
+
+        protected object _nextObject;
 
         protected virtual void Awake()
         {
@@ -39,6 +59,14 @@ namespace CRI.HelloHouston
         {
             _hidden = false;
             _canvasGroup.Show();
+        }
+
+        public virtual void Next()
+        {
+            Hide();
+            if (_nextObject != null)
+                _next.Init(_nextObject);
+            _next.Show();
         }
 
         public virtual void Init(object obj)

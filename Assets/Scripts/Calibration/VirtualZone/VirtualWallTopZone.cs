@@ -25,6 +25,10 @@ namespace CRI.HelloHouston.Experience
             {
                 return xpWallTopZone;
             }
+            protected set
+            {
+                xpWallTopZone = (XPWallTopZone)value;
+            }
         }
 
         public VirtualElement wallTopLeftVirtualElement;

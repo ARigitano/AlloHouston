@@ -21,9 +21,12 @@ namespace CRI.HelloHouston.Experience
         [Tooltip("The corner content.")]
         public XPElement cornerElementPrefab;
 
-        public override ZoneType GetZoneType()
+        public override ZoneType zoneType
         {
-            return ZoneType.Corner;
+            get
+            {
+                return ZoneType.Corner;
+            }
         }
     }
 }

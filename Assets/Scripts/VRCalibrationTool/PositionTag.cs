@@ -31,7 +31,7 @@ namespace VRCalibrationTool
         
         private void Update()
         {
-            if (_positionTagIndexText != null)
+            if (_positionTagIndexText != null && Camera.main != null)
                 _positionTagIndexText.transform.LookAt(2 * _positionTagIndexText.transform.position - Camera.main.transform.position);
         }
         /// <summary>

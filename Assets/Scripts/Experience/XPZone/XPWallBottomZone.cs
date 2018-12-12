@@ -21,9 +21,11 @@ namespace CRI.HelloHouston.Experience
         [Tooltip("The left side of the wall top.")]
         public XPElement element;
 
-        public override ZoneType GetZoneType()
-        {
-            return ZoneType.WallBottom;
+        public override ZoneType zoneType {
+            get
+            {
+                return ZoneType.WallBottom;
+            }
         }
     }
 }
