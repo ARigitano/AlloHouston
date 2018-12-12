@@ -31,6 +31,12 @@ namespace CRI.HelloHouston.Experience
         /// The pedagogical content of the experiment.
         /// </summary>
         [Tooltip("The pedagogical content of the experiment.")]
-        public string subject;             
+        public string subject;
+
+        /// <summary>
+        /// An int to identify the experiment.
+        /// </summary>
+        [Tooltip("An int to identify the experiment.")]
+        public int id;
     }
 }

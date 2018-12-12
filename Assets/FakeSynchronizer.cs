@@ -101,10 +101,10 @@ namespace CRI.HelloHouston.ParticlePhysics
                     break;
                 case "ParticleCorrect":
                     _fakeTopScreen.CorrectParticle();
+                    _fakeHolograms[0].AnimHologram(_fakeTabletScreen.particleTypes, 18);
                     break;
                 case "ParticleInCorrect":
                     _fakeTopScreen.IncorrectParticle();
-                    _fakeHolograms[0].AnimHologram(_fakeTabletScreen.particleTypes, 18);
                     break;
                 case "NewParticle":
                     Debug.Log("recreated");

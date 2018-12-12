@@ -51,7 +51,7 @@ namespace CRI.HelloHouston.ParticlePhysics
         public bool head;
 
         /// <summary>
-        /// 
+        /// Material used for easier debugging of the reactions.
         /// </summary>
         public Material debugMaterial;
     }

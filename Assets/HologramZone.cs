@@ -4,29 +4,26 @@ using UnityEngine;
 
 namespace CRI.HelloHouston.ParticlePhysics
 {
+    /// <summary>
+    /// A zone for the particle reactor hologram.
+    /// </summary>
     public class HologramZone : MonoBehaviour
     {
-
+        /// <summary>
+        /// The particle reactor hologram.
+        /// </summary>
         [SerializeField]
         private FakeHologram _hologram;
-
-        // Use this for initialization
-        void Start()
-        {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
+        /// <summary>
+        /// The type of particle to be detected.
+        /// </summary>
+        [SerializeField]
+        private string _particle;
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.tag == "ParticleHead")
+            if (other.tag == _particle)
             {
-                Debug.Log("wrong");
                 _hologram.DestroySpline(other.gameObject);
             }
         }
