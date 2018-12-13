@@ -37,6 +37,7 @@ namespace CRI.HelloHouston.Calibration.XML
         public RoomEntry(int index, BlockEntry[] blocks, PositionTag[] points, DateTime date, List<string> checklist) : base(index, points, date)
         {
             this.blocks = blocks;
+            this.checklist = checklist;
         }
     }
 }

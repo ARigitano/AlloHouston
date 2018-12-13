@@ -37,19 +37,8 @@ namespace CRI.HelloHouston.Calibration.UI
 
         private void CheckInteractable()
         {
-            bool interactable = false;
-
             UIChecklistEntry[] checklistEntries = GetComponentsInChildren<UIChecklistEntry>();
-            foreach (UIChecklistEntry checklistEntry in checklistEntries)
-            {
-                if (!checklistEntry._doneToggle.isOn)
-                {
-                    interactable = false;
-                    break;
-                }
-                interactable = true;
-            }
-            _nextButton.interactable = interactable;
+            _nextButton.interactable = checklistEntries.All(x => x.doneToggle.isOn);
         }
 
         public override void Init(object obj)
@@ -70,7 +59,7 @@ namespace CRI.HelloHouston.Calibration.UI
             {
                 UIChecklistEntry roomCalEntry = Instantiate(_checklistEntryPrefab, _panelTransform);
                 roomCalEntry.Init(check);
-                roomCalEntry._doneToggle.onValueChanged.AddListener((bool value) => CheckInteractable());
+                roomCalEntry.doneToggle.onValueChanged.AddListener((bool value) => CheckInteractable());
             }
             _nextObject = rxpp;
             _nextButton.onClick.AddListener(Next);

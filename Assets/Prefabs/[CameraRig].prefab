@@ -93,7 +93,6 @@ GameObject:
   - component: {fileID: 20503190686281722}
   - component: {fileID: 124739353937736656}
   - component: {fileID: 45085750424814690}
-  - component: {fileID: 114773333918595286}
   m_Layer: 0
   m_Name: Camera (eye)
   m_TagString: DisplayCamera
@@ -269,7 +268,7 @@ GameObject:
   - component: {fileID: 114187573806634358}
   - component: {fileID: 114339278490425148}
   - component: {fileID: 114804317499273076}
-  - component: {fileID: 114369865673782046}
+  - component: {fileID: 114313592111661692}
   m_Layer: 0
   m_Name: Controller (left)
   m_TagString: ViveController
@@ -393,8 +392,8 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1457627546981934}
-  m_LocalRotation: {x: 0.066694394, y: -0, z: -0, w: 0.99777347}
-  m_LocalPosition: {x: 0, y: 564.99976, z: 0.0033866537}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4146964513070924}
@@ -534,8 +533,8 @@ Camera:
   m_GameObject: {fileID: 1259723977275212}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0.019607844}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0.019607844}
   m_projectionMatrixMode: 1
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
@@ -923,6 +922,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90417480179dbaa40993ea525738ea56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114313592111661692
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1869805334225842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cbe6300fa5040046a52ebfdeb59dbe6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114339278490425148
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -959,17 +969,6 @@ MonoBehaviour:
   right: {fileID: 1370334662771136}
   objects: []
   assignAllBeforeIdentified: 0
---- !u!114 &114369865673782046
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1869805334225842}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 39c65daece6022c42a4cbb1785988324, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114385125749458574
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1058,20 +1057,6 @@ MonoBehaviour:
   verbose: 0
   createComponents: 1
   updateDynamically: 1
---- !u!114 &114773333918595286
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1313631322376486}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6bca9ccf900ccc84c887d783321d27e2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _head: {fileID: 4967541404016074}
-  _ears: {fileID: 4386960885470262}
-  wireframe: 0
 --- !u!114 &114804317499273076
 MonoBehaviour:
   m_ObjectHideFlags: 1

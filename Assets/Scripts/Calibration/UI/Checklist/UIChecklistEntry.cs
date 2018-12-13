@@ -10,7 +10,7 @@ namespace CRI.HelloHouston.Calibration.UI
         /// </summary>
         [Tooltip("Toggle if entry's sentence has been done.")]
         [SerializeField]
-        public Toggle _doneToggle = null;
+        public Toggle doneToggle = null;
         /// <summary>
         /// Text field of the entry's sentence.
         /// </summary>
