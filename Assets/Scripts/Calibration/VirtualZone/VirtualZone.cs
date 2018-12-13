@@ -1,10 +1,12 @@
 ﻿using CRI.HelloHouston.Experience;
+using System;
 using UnityEngine;
 
 namespace CRI.HelloHouston.Calibration
 {
     public abstract class VirtualZone : MonoBehaviour
     {
+        public class WrongZoneTypeException : Exception { }
         /// <summary>
         /// Gets the type of virtual zone.
         /// </summary>
@@ -12,7 +14,7 @@ namespace CRI.HelloHouston.Calibration
         /// <summary>
         /// Gets and set an xpZone on a virtualZone.
         /// </summary>
-        public abstract XPZone xpZone { get; protected set; }
+        public abstract XPZone xpZone { get;}
         /// <summary>
         /// Gets and set and xpContext on a virtualZone.
         /// </summary>
@@ -24,8 +26,10 @@ namespace CRI.HelloHouston.Calibration
 
         public virtual void Place(XPZone xpZone, XPContext xpContext)
         {
-            this.xpZone = xpZone;
+            AddXPZone(xpZone);
             this.xpContext = xpContext;
         }
+
+        protected abstract void AddXPZone(XPZone xpZone);
     }
 }

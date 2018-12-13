@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -53,13 +54,17 @@ namespace CRI.HelloHouston.Experience.UI
             _actionDisplay = GetComponentInChildren<UIActionDisplay>();
         }
 
-        private void Start()
+        public override void Init(object obj)
         {
-            Init(GameManager.instance, GameManager.instance.xpSynchronizers);
+            Debug.LogError(obj);
+            var rxpp = (RoomXPPair)obj;
+            Init(rxpp);
         }
 
-        public void Init(GameManager gameManager, XPSynchronizer[] synchronizers)
+        private void Init(RoomXPPair rxpp)
         {
+            GameManager gameManager = GameManager.instance;
+            XPSynchronizer[] synchronizers = gameManager.Init(rxpp.xpContexts);
             _cameraDisplay.Init(GameObject.FindGameObjectsWithTag("DisplayCamera"));
             _logDisplay.Init(gameManager.logManager);
             _hintDisplay.Init(gameManager);

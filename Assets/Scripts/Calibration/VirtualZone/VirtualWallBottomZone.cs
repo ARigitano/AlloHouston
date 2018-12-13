@@ -25,13 +25,17 @@ namespace CRI.HelloHouston.Calibration
             {
                 return xpWallBottomZone;
             }
-            protected set
-            {
-                xpWallBottomZone = (XPWallBottomZone)value;
-            }
+        }
+
+        protected override void AddXPZone(XPZone xpZone)
+        {
+            var xpWallBottomZone = xpZone as XPWallBottomZone;
+            if (!xpWallBottomZone)
+                throw new WrongZoneTypeException();
+            this.xpWallBottomZone = xpWallBottomZone;
         }
 
         public VirtualElement wallBottomVirtualElement;
-        public XPWallBottomZone xpWallBottomZone;
+        public XPWallBottomZone xpWallBottomZone { get; protected set; }
     }
 }

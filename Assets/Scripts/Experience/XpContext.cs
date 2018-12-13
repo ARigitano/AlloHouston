@@ -81,7 +81,7 @@ namespace CRI.HelloHouston.Experience
         {
             get
             {
-                return xpWallTopZone.elementPrefabs.Length != 0 ? 1 : 0;
+                return xpWallTopZone != null ? 1 : 0;
             }
         }      
         
@@ -89,7 +89,7 @@ namespace CRI.HelloHouston.Experience
         {
             get
             {
-                return xpWallBottomZones.Count(x => x.elementPrefabs.Length != 0);
+                return xpWallBottomZones.Count(x => x != null);
             }
         }    
 
@@ -97,7 +97,7 @@ namespace CRI.HelloHouston.Experience
         {
             get
             {
-                return xpCornerZone.Count(x => x.elementPrefabs.Length != 0);
+                return xpCornerZone.Count(x => x != null);
             }
         }
 
@@ -105,7 +105,7 @@ namespace CRI.HelloHouston.Experience
         {
             get
             {
-                return xpDoorZone.elementPrefabs.Length != 0 ? 1 : 0;
+                return xpDoorZone != null ? 1 : 0;
             }
         }
 
@@ -113,7 +113,7 @@ namespace CRI.HelloHouston.Experience
         {
             get
             {
-                return xpHologramZone.elementPrefabs.Length;
+                return xpHologramZone != null ? 1 : 0;
             }
         }
 
@@ -148,6 +148,12 @@ namespace CRI.HelloHouston.Experience
                     res.Add(xpDoorZone);
                 return res;
             }
+        }
+
+        private void OnValidate()
+        {
+            if (xpWallTopZone == null)
+                Debug.LogError("The context won't be considered as valid if it lacks a wall top zone.");
         }
         
         /// <summary>

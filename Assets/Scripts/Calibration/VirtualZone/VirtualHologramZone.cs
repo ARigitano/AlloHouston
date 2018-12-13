@@ -28,13 +28,17 @@ namespace CRI.HelloHouston.Calibration
             {
                 return null;
             }
-            protected set
-            {
-                hologramZones.Add((XPHologramZone)value);
-            }
+        }
+
+        protected override void AddXPZone(XPZone xpZone)
+        {
+            var hologramZone = xpZone as XPHologramZone;
+            if (!hologramZone)
+                throw new WrongZoneTypeException();
+            hologramZones.Add(hologramZone);
         }
 
         public VirtualElement[] hologramVirtualElements;
-        public List<XPHologramZone> hologramZones;
+        public List<XPHologramZone> hologramZones { get; protected set; }
     }
 }

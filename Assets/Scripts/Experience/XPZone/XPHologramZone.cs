@@ -9,7 +9,7 @@ namespace CRI.HelloHouston.Experience
         {
             get
             {
-                return elementPrefabs;
+                return hologramElementPrefabs;
             }
         }
         /// <summary>

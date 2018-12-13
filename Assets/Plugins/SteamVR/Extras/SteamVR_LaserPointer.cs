@@ -12,7 +12,7 @@ public struct PointerEventArgs
 public delegate void PointerEventHandler(object sender, PointerEventArgs e);
 
 
-public class SteamVR_LaserPointer : MonoBehaviour
+public class SteamVR_LaserPointer : MonoBehaviour, IPointer
 {
     public bool active = true;
     public Color color;
@@ -92,6 +92,7 @@ public class SteamVR_LaserPointer : MonoBehaviour
         Ray raycast = new Ray(transform.position, transform.forward);
         RaycastHit hit;
         bool bHit = Physics.Raycast(raycast, out hit, layerMask);
+        Debug.Log(bHit);
 
         if(previousContact && previousContact != hit.transform)
         {

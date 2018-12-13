@@ -1,4 +1,5 @@
-﻿using CRI.HelloHouston.Calibration;
+﻿using System;
+using CRI.HelloHouston.Calibration;
 
 namespace CRI.HelloHouston.Experience
 {
@@ -25,17 +26,20 @@ namespace CRI.HelloHouston.Experience
             {
                 return xpWallTopZone;
             }
-            protected set
-            {
-                xpWallTopZone = (XPWallTopZone)value;
-            }
+        }
+
+        protected override void AddXPZone(XPZone xpZone)
+        {
+            var xpWallTopZone = xpZone as XPWallTopZone;
+            if (!xpWallTopZone)
+                throw new WrongZoneTypeException();
+            this.xpWallTopZone = xpWallTopZone;
         }
 
         public VirtualElement wallTopLeftVirtualElement;
         public VirtualElement wallTopRightVirtualElement;
         public VirtualElement wallTopTabletVirtualElement;
-
-        public XPWallTopZone xpWallTopZone;
+        public XPWallTopZone xpWallTopZone { get; protected set; }
     }
 
 }

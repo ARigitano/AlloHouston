@@ -25,14 +25,18 @@ namespace CRI.HelloHouston.Calibration
             {
                 return xpDoorZone;
             }
-            protected set
-            {
-                xpDoorZone = (XPDoorZone)value;
-            }
+        }
+
+        protected override void AddXPZone(XPZone xpZone)
+        {
+            var xpDoorZone = xpZone as XPDoorZone;
+            if (!xpDoorZone)
+                throw new WrongZoneTypeException();
+            this.xpDoorZone = xpDoorZone;
         }
 
         public VirtualElement doorVirtualElement;
-        public XPDoorZone xpDoorZone;
+        public XPDoorZone xpDoorZone { get; protected set; }
     }
 
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 namespace CRI.HelloHouston.Calibration.UI
 {
@@ -76,9 +77,15 @@ namespace CRI.HelloHouston.Calibration.UI
 
         private void Start()
         {
+            Init(null);
+        }
+
+        public override void Init(object obj)
+        {
             var calibrationManager = FindObjectOfType<CalibrationManager>();
             VirtualRoom vroom = calibrationManager.CreateVirtualRoom(DataManager.instance.blockDB.rooms[0]);
-            _nextButton.onClick.AddListener(Next);
+            if (_nextButton != null)
+                _nextButton.onClick.AddListener(Next);
             Init(vroom, calibrationManager);
             CheckInteractable();
         }

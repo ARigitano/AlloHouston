@@ -85,10 +85,11 @@ namespace CRI.HelloHouston.Experience
             Init(Resources.LoadAll<XPContext>("AllExperiences/Electricity/XpContext"));
         }
 
-        public void Init(XPContext[] xpContexts)
+        public XPSynchronizer[] Init(XPContext[] xpContexts)
         {
             xpSynchronizers = xpContexts.Select(x => x.InitSynchronizer(logManager.logExperienceController)).ToArray();
             _startTime = Time.time;
+            return xpSynchronizers;
         }
 
         public GameHint[] GetAllCurrentHints()

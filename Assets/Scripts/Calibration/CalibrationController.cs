@@ -79,7 +79,7 @@ namespace CRI.HelloHouston.Calibration
 
         private void Update()
         {
-            if (_calibration)
+            if (_calibration && _calibrationManager)
             {
                 if (_calibrator.GetComponent<ICalibrator>().GetCalibrationTriggerUp())
                 {
