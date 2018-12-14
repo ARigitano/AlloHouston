@@ -13,7 +13,7 @@ namespace CRI.HelloHouston.Experience.UI
         /// </summary>
         [SerializeField]
         [Tooltip("Button to display all the actions available for this experience.")]
-        private UIExperienceActionButton _actionButton;
+        private UIExperienceActionButton _actionButton = null;
         /// <summary>
         /// Text field for the name of the experience.
         /// </summary>
@@ -102,11 +102,20 @@ namespace CRI.HelloHouston.Experience.UI
                 else
                     LaunchAction();
             });
-            _launchButton.GetComponent<CanvasGroup>().Show();
             _failButton.onClick.AddListener(() => CreatePopup(_failPopupText, FailAction));
-            _failButton.GetComponent<CanvasGroup>().Hide();
             _successButton.onClick.AddListener(() => CreatePopup(_successPopupText, SuccessAction));
-            _successButton.GetComponent<CanvasGroup>().Hide();
+            if (!xpSynchronizer.active)
+            {
+                _launchButton.GetComponent<CanvasGroup>().Show();
+                _failButton.GetComponent<CanvasGroup>().Hide();
+                _successButton.GetComponent<CanvasGroup>().Hide();
+            }
+            else
+            {
+                _launchButton.GetComponent<CanvasGroup>().Hide();
+                _failButton.GetComponent<CanvasGroup>().Show();
+                _successButton.GetComponent<CanvasGroup>().Show();
+            }
             SetState(xpSynchronizer.state);
             xpSynchronizer.onStateChange += SetState;
         }

@@ -8,6 +8,8 @@ namespace CRI.HelloHouston.Calibration.XML
         Experiment,
         Door,
         Corner,
+        FloorAndRoof,
+        Generic,
         Unknown,
     }
 }

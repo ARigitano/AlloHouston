@@ -119,9 +119,8 @@ namespace CRI.HelloHouston.Experience.UI
             foreach (var category in _allFilters.GroupBy(x => x.logCategoryKey,
                 (key, group) => new { CategoryName = key, Filters = group.ToArray() }))
             {
-                var go = Instantiate(_categoryPrefab);
+                var go = Instantiate(_categoryPrefab, _logFilterPanel);
                 go.Init(this, category.Filters, category.CategoryName);
-                go.transform.SetParent(_logFilterPanel);
             }
         }
 

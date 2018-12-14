@@ -112,7 +112,6 @@ GameObject:
   - component: {fileID: 222530982420099284}
   - component: {fileID: 114571959076009864}
   - component: {fileID: 114305409023238050}
-  - component: {fileID: 114567214275027540}
   m_Layer: 5
   m_Name: NextButton
   m_TagString: Untagged
@@ -358,11 +357,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b982a46b0266cfc4a9496db05ab2a7be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideOnStart: 0
+  _next: {fileID: 0}
+  hideOnStart: 1
   _checklistEntryPrefab: {fileID: 114988618049807370, guid: 26ea7861ab69feb44a67368edce62bda,
     type: 2}
   _panelTransform: {fileID: 224552973984779288}
-  _nextButton: {fileID: 114567214275027540}
+  _nextButton: {fileID: 114305409023238050}
 --- !u!114 &114305409023238050
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -462,19 +462,6 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: TEST
---- !u!114 &114567214275027540
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1738021108242558}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ced089cc2ac3ca4fbb4389f34256c00, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _current: {fileID: 0}
-  _next: {fileID: 0}
 --- !u!114 &114571959076009864
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -607,7 +594,7 @@ MonoBehaviour:
     m_Top: 30
     m_Bottom: 100
   m_ChildAlignment: 0
-  m_Spacing: 45
+  m_Spacing: 70
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 1
@@ -719,7 +706,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0.9761221, y: 1}
-  m_AnchoredPosition: {x: -0.00001858298, y: -0.000061035156}
+  m_AnchoredPosition: {x: -0.00001858298, y: -0.000030517578}
   m_SizeDelta: {x: 7, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!224 &224576877434033718
@@ -865,6 +852,6 @@ CanvasGroup:
   m_GameObject: {fileID: 1249024601406744}
   m_Enabled: 1
   m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0

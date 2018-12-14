@@ -77,16 +77,11 @@ namespace CRI.HelloHouston.Experience
             }
         }
 
-        private void Awake()
+        public XPSynchronizer[] Init(XPContext[] xpContexts)
         {
             gameActionController = new GameActionController(this);
             logManager = new LogManager(this);
             _mainSettings = Resources.Load<XPMainSettings>("Settings/MainSettings");
-            Init(Resources.LoadAll<XPContext>("AllExperiences/Electricity/XpContext"));
-        }
-
-        public XPSynchronizer[] Init(XPContext[] xpContexts)
-        {
             xpSynchronizers = xpContexts.Select(x => x.InitSynchronizer(logManager.logExperienceController)).ToArray();
             _startTime = Time.time;
             return xpSynchronizers;
@@ -99,7 +94,17 @@ namespace CRI.HelloHouston.Experience
 
         public void SendHintToPlayers(string hint)
         {
+            logGeneralController.AddLog(string.Format("Hint sent to players: \"{0}\"", hint), this, Log.LogType.Automatic);
             Debug.Log(hint);
+        }
+
+        public void StartGame(bool[] starting)
+        {
+            for (int i = 0; i < starting.Length; i++)
+            {
+                if (starting[i])
+                    xpSynchronizers[i].Activate();
+            }
         }
 
         public void TurnLightOn()

@@ -75,11 +75,6 @@ namespace CRI.HelloHouston.Calibration.UI
             _panelTransform = transform;
         }
 
-        private void Start()
-        {
-            Init(null);
-        }
-
         public override void Init(object obj)
         {
             var calibrationManager = FindObjectOfType<CalibrationManager>();

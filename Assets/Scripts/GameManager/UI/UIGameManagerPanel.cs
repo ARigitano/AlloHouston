@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace CRI.HelloHouston.Experience.UI
@@ -56,7 +57,6 @@ namespace CRI.HelloHouston.Experience.UI
 
         public override void Init(object obj)
         {
-            Debug.LogError(obj);
             var rxpp = (RoomXPPair)obj;
             Init(rxpp);
         }
@@ -65,10 +65,16 @@ namespace CRI.HelloHouston.Experience.UI
         {
             GameManager gameManager = GameManager.instance;
             XPSynchronizer[] synchronizers = gameManager.Init(rxpp.xpContexts);
-            _cameraDisplay.Init(GameObject.FindGameObjectsWithTag("DisplayCamera"));
+            _cameraDisplay.Init(rxpp.vroom.GetComponentsInChildren<Camera>(true));
+
+            // Needs to be initialized before the start of the game.
             _logDisplay.Init(gameManager.logManager);
             _hintDisplay.Init(gameManager);
             _timerDisplay.Init(gameManager);
+
+            gameManager.StartGame(rxpp.starting);
+            
+            //Needs to be initialized after the start of the game.
             _experienceDisplay.Init(synchronizers);
             _actionDisplay.Init(gameManager.actions, gameManager.gameActionController);
         }

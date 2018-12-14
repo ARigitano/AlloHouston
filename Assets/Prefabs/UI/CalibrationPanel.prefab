@@ -111,7 +111,6 @@ GameObject:
   - component: {fileID: 222237286344612190}
   - component: {fileID: 114439911576864082}
   - component: {fileID: 114458186467121256}
-  - component: {fileID: 114676786614904010}
   m_Layer: 5
   m_Name: NextButton
   m_TagString: Untagged
@@ -458,11 +457,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d1d056eb762b3e4db5b4a6df43ba448, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hideOnStart: 0
+  _next: {fileID: 0}
+  hideOnStart: 1
   _calibrationEntryPrefab: {fileID: 114317758705691954, guid: b87ef9bf8f8593f46b14d6496b76cd88,
     type: 2}
   _panelTransform: {fileID: 224730047043658078}
-  _nextButton: {fileID: 114676786614904010}
+  _nextButton: {fileID: 114458186467121256}
   _resetButton: {fileID: 114025805467329310}
 --- !u!114 &114436218017160256
 MonoBehaviour:
@@ -786,19 +786,6 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: TEST
---- !u!114 &114676786614904010
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1414823619264538}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ced089cc2ac3ca4fbb4389f34256c00, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _current: {fileID: 114420761873764348}
-  _next: {fileID: 0}
 --- !u!114 &114732141741703974
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1130,7 +1117,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.15028635}
   m_AnchorMax: {x: 1, y: 0.9364156}
-  m_AnchoredPosition: {x: 0, y: 0.94299316}
+  m_AnchoredPosition: {x: 0, y: 0.9428711}
   m_SizeDelta: {x: 2, y: -2.486}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224527531607873092
@@ -1307,7 +1294,7 @@ CanvasGroup:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1445513590061882}
   m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
+  m_Alpha: 0
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
