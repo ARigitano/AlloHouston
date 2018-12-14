@@ -101,14 +101,10 @@ namespace CRI.HelloHouston.ParticlePhysics
                     break;
                 case "ParticleCorrect":
                     _fakeTopScreen.CorrectParticle();
-                    _fakeHolograms[0].AnimHologram(_fakeTabletScreen.particleTypes, 18);
+                    _fakeHolograms[0].AnimHologram(_fakeTabletScreen.reactionExits);
                     break;
                 case "ParticleInCorrect":
                     _fakeTopScreen.IncorrectParticle();
-                    break;
-                case "NewParticle":
-                    Debug.Log("recreated");
-                    _fakeHolograms[0].AnimHologram(_fakeTabletScreen.particleTypes, 1);
                     break;
                 default:
                     break;
@@ -211,7 +207,7 @@ namespace CRI.HelloHouston.ParticlePhysics
         void Start()
         {
             Launched();
-            _fakeHolograms[0].AnimHologram(_fakeTabletScreen.particleTypes, 18);
+            _fakeHolograms[0].AnimHologram(_fakeTabletScreen.reactionExits);
         }
     }
 }

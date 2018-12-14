@@ -54,5 +54,15 @@ namespace CRI.HelloHouston.ParticlePhysics
         /// Material used for easier debugging of the reactions.
         /// </summary>
         public Material debugMaterial;
+
+        /// <summary>
+        /// Is the particle line straight?
+        /// </summary>
+        public bool straight;
+
+        /// <summary>
+        /// Does the particle stop at the extremity of its destination?
+        /// </summary>
+        public bool extremity;
     }
 }

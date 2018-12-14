@@ -13,17 +13,22 @@ namespace CRI.HelloHouston.ParticlePhysics
         /// <summary>
         /// List of entries of the reaction.
         /// </summary>
-        public List<entriesType> entries;
+        public entriesType entries;
 
         /// <summary>
         /// List of exits of the reaction.
         /// </summary>
-        public List<exitsType> exits;
+        public exitsType exits;
 
         /// <summary>
         /// Is the reaction fundamental?
         /// </summary>
         public bool fundamental;
+
+        /// <summary>
+        /// Image of the Feynman diagram.
+        /// </summary>
+        public Texture diagramImage;
     }
 
     /// <summary>
@@ -31,10 +36,10 @@ namespace CRI.HelloHouston.ParticlePhysics
     /// </summary>
     public enum entriesType
     {
-        blabla,
-        blibli,
-        blublu, 
-        bloblo
+        gluon_gluon_fusion,
+        top_top_bar_fusion,
+        Higgs_strahlung,
+        W_Z_fusion
     }
 
     /// <summary>
@@ -42,13 +47,9 @@ namespace CRI.HelloHouston.ParticlePhysics
     /// </summary>
     public enum exitsType
     {
-        blabla,
-        blibli,
-        blublu,
-        bloblo,
-        blabla2,
-        blibli2,
-        blublu2,
-        bloblo2
+       γ_γ_q_qBar_μBar_μ,
+       q_qBar_μ_μBar_e_vBar,
+       vBar_γ_e_eBar_v,
+       μ_eBar_v_v_vBar_vBar
     }
 }

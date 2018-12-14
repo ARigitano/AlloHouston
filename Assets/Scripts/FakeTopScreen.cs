@@ -107,11 +107,11 @@ namespace CRI.HelloHouston.ParticlePhysics
         /// Displays the particles combination while they are being opened.
         /// </summary>
         /// <param name="particles">The particles combination that is being entered.</param>
-        public void DisplayParticles(string[] particles)
+        public void DisplayParticles(List<string> particles)
         {
             string displayedParticles = "";
 
-            for (int i = 0; i<particles.Length; i++)
+            for (int i = 0; i<particles.Count; i++)
             {
                 if(particles[i] != "")
                 {

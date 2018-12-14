@@ -76,12 +76,12 @@ namespace CRI.HelloHouston.ParticlePhysics
         /// <summary>
         /// Number of particles to generate.
         /// </summary>
-        public int particleCount = 18;
+        public int particleCount = 25;
         /// <summary>
         /// Particle reactor zones margin.
         /// </summary>
         [SerializeField]
-        private float _factor = 0.1f;
+        private float _factor = 0.2f;
         /// <summary>
         /// Maximum radius of first zone.
         /// </summary>
@@ -122,44 +122,16 @@ namespace CRI.HelloHouston.ParticlePhysics
         /// </summary>
         [SerializeField]
         private float _lMaxCyl4 = 1f;
- 
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="head"></param>
-        public void DestroySpline(GameObject head)
-        {
-            //head.GetComponent<MeshRenderer>().material.color = Color.red;
-            Debug.Log("problem");
-
-            lines.Remove(head.transform.parent.gameObject);
-            _synchronizer.SynchronizeScreens("NewParticle");
-        }
 
         /// <summary>
         /// Animates the particle reaction hologram.
         /// </summary>
         /// <param name="particles">The combination of particles.</param>
-        public void AnimHologram(Particle[] particles, int particleCount)
+        public void AnimHologram(List<Particle> particles)
         {
-            for(int i = 0; i<particleCount; i++)
+            for(int i = 0; i<particles.Count; i++)
             {
-                    int randomParticle = Random.Range(0, particles.Length);
-                    Vector3 headPosition = createLine(i, particles[randomParticle]);
-
-                    /*if (particles[randomParticle].head)
-                    {
-                        if(particles[randomParticle].symbol=="q")
-                        {
-                         _head = _headQuark;
-                        }
-
-                        GameObject lineHead = (GameObject)Instantiate(_head, Vector3.zero, Quaternion.LookRotation(headPosition, Vector3.forward), lines[i].transform);
-                        lineHead.GetComponent<MeshRenderer>().material = particles[randomParticle].debugMaterial;
-
-                        lineHead.transform.localPosition = headPosition;
-                    } */
+                    Vector3 headPosition = createLine(i, particles[i]);
             }
         }
 
@@ -172,14 +144,23 @@ namespace CRI.HelloHouston.ParticlePhysics
         private Vector3 createLine(int i, Particle particle)
         {
             //Setting rotation angles.
-            _theta = Random.Range(Mathf.PI / 6f, Mathf.PI / 3f);
-            _phi = Random.Range(Mathf.PI / 6f, Mathf.PI / 3f);
-
-            if(particle.negative)
+            if(particle.straight)
             {
-                _theta = -1f * _theta;
-                _phi = -1f * _phi;
+                _theta = 0f;
+                _phi = 0f;
+            } else
+            {
+                _theta = Random.Range(Mathf.PI / 6f, Mathf.PI / 3f);
+                _phi = Random.Range(Mathf.PI / 4f, Mathf.PI / 3f);
+
+                if (particle.negative)
+                {
+                    _theta = -1f * _theta;
+                    _phi = -1f * _phi;
+                }
             }
+
+            
 
             //Generating the spline.
             GameObject lineParticle = (GameObject)Instantiate(_particleSpline, Vector3.zero, Quaternion.identity, transform);
@@ -233,25 +214,24 @@ namespace CRI.HelloHouston.ParticlePhysics
 
             do
             {
+               
+                
+                float r = Random.Range(1.5f*_factor, rMax * (1f - 1f * _factor));
+                float alpha = Random.Range(0, Mathf.PI*2f);
 
-                float r = Random.Range(0, rMax * (1f - 1f * _factor));
-                float alpha = Random.Range(0, Mathf.PI * 2f);
+
+                if (particle.extremity)
+                {
+                    _factor = 0f;
+                    r = rMax;
+                }
+
+
 
                 spline.points[3].x = r * Mathf.Cos(alpha);
-                spline.points[3].y = lMax * (1f - 1f * _factor) * Mathf.Cos(Random.Range(1f*Mathf.PI/6f,  5f*Mathf.PI/6f));
+                spline.points[3].y = lMax * (1f - 1f * _factor) * Random.Range(-lMax, lMax);
+                //Mathf.Cos(Random.Range(-1f * Mathf.PI , Mathf.PI ));
                 spline.points[3].z = r * Mathf.Sin(alpha);
-
-                /*if (particle.symbol == "μ")
-                 {
-                     rMax = 0.493f;
-                     lMax = 1f;
-                     Debug.Log("");
-
-                     spline.points[3].x = rMax * Mathf.Cos(alpha);
-                     spline.points[3].y = lMax * Mathf.Cos(Random.Range(Mathf.PI, -1f * Mathf.PI));
-                     spline.points[3].z = rMax * Mathf.Sin(alpha);
-                 }*/
-
 
                 lineParticle.name = particle.particleName + i;
 
@@ -269,22 +249,12 @@ namespace CRI.HelloHouston.ParticlePhysics
                 vDir.y = matrixRotation2 * spline.points[3].y;
                 vDir.z = matrixRotation2 * ((-1f * spline.points[3].x) * Mathf.Sin(-1f * _phi) + spline.points[3].z * Mathf.Cos(-1f * _phi));
 
-
                 spline.points[2].x = spline.points[3].x + vDir.x;
                 spline.points[2].y = spline.points[3].y + vDir.y;
                 spline.points[2].z = spline.points[3].z + vDir.z;
 
-                if (particle.particleName == "photon")
-                {
-                    Debug.Log("photon");
-
-                    spline.points[1] = new Vector3(0f, 0f, 0f);
-                    spline.points[2] = new Vector3(0f, 0f, 0f);
-                    spline.points[3] = new Vector3(0f, spline.points[3].y, 0f);
-                }
             } while ((Mathf.Abs(spline.points[3].y) <= lMaxPrevious * (1f + _factor)) && Mathf.Sqrt(Mathf.Pow(spline.points[3].x, 2) + Mathf.Pow(spline.points[3].z, 2)) <= rMaxPrevious * (1f + _factor));
 
-            
             //Displaying the lines.
             if (particle.line)
             {
