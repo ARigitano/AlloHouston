@@ -37,6 +37,10 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         public LogGeneralController logGeneralController { get { return logManager.logGeneralController; } }
         /// <summary>
+        /// globalSoundManager
+        /// </summary>
+        public SoundManager globalSoundManager { get; private set; }
+        /// <summary>
         /// Experience list.
         /// </summary>
         public XPSynchronizer[] xpSynchronizers { get; private set; }
@@ -79,6 +83,7 @@ namespace CRI.HelloHouston.Experience
 
         public XPSynchronizer[] Init(XPContext[] xpContexts)
         {
+            globalSoundManager = GetComponent<SoundManager>();
             gameActionController = new GameActionController(this);
             logManager = new LogManager(this);
             _mainSettings = Resources.Load<XPMainSettings>("Settings/MainSettings");
@@ -117,18 +122,21 @@ namespace CRI.HelloHouston.Experience
             logGeneralController.AddLog("Turn Light Off", this, Log.LogType.Automatic);
         }
 
-        public void PlaySound(AudioSource source)
+        public void PlaySound(PlayableSound source)
         {
-            logGeneralController.AddLog(string.Format("Play Sound {0}", source), this, Log.LogType.Automatic);
+            globalSoundManager.Play(source);
+            logGeneralController.AddLog(string.Format("Play Sound <{0}>", source.clip.name), this, Log.LogType.Automatic);
         }
 
-        public void PlayMusic(AudioSource source)
+        public void PlayMusic(PlayableMusic source)
         {
-            logGeneralController.AddLog(string.Format("Play Music {0}", source), this, Log.LogType.Automatic);
+            globalSoundManager.Play(source);
+            logGeneralController.AddLog(string.Format("Play Music <{0}>", source.clip.name), this, Log.LogType.Automatic);
         }
 
         public void StopMusic()
         {
+            globalSoundManager.StopAllMusic();
             logGeneralController.AddLog(string.Format("Stop Music"), this, Log.LogType.Automatic);
         }
 

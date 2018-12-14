@@ -9,7 +9,7 @@ namespace CRI.HelloHouston.Experience.Actions
         /// The music that will be played by the action.
         /// </summary>
         [Tooltip("The music that will be played by the action.")]
-        public AudioSource music;
+        public PlayableMusic music;
 
         public override void Act(GameManager controller)
         {
