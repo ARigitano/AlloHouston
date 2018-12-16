@@ -201,6 +201,8 @@ namespace CRI.HelloHouston.ParticlePhysics
                 }
 
                 partic2.text = type;
+
+            _synchronizer.SynchronizeScreens("ParticleCorrect");
         }
 
         /// <summary>

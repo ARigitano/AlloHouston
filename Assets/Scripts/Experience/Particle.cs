@@ -64,5 +64,10 @@ namespace CRI.HelloHouston.ParticlePhysics
         /// Does the particle stop at the extremity of its destination?
         /// </summary>
         public bool extremity;
+
+        /// <summary>
+        /// Image of the symbol of the particle.
+        /// </summary>
+        public Texture symbolImage;
     }
 }

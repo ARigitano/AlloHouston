@@ -100,8 +100,9 @@ namespace CRI.HelloHouston.ParticlePhysics
                     _fakeTopScreen.DisplayParticles(_fakeTabletScreen._enteredParticles);
                     break;
                 case "ParticleCorrect":
-                    _fakeTopScreen.CorrectParticle();
+                    //_fakeTopScreen.CorrectParticle();
                     _fakeHolograms[0].AnimHologram(_fakeTabletScreen.reactionExits);
+                    _fakeTopScreen.ParticleGrid(_fakeTabletScreen.reactionExits);
                     break;
                 case "ParticleInCorrect":
                     _fakeTopScreen.IncorrectParticle();
@@ -207,7 +208,7 @@ namespace CRI.HelloHouston.ParticlePhysics
         void Start()
         {
             Launched();
-            _fakeHolograms[0].AnimHologram(_fakeTabletScreen.reactionExits);
+            //_fakeHolograms[0].AnimHologram(_fakeTabletScreen.reactionExits);
         }
     }
 }

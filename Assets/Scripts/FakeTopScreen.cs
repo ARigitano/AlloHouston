@@ -25,7 +25,7 @@ namespace CRI.HelloHouston.ParticlePhysics
         /// The loading bar of the splash screen.
         /// </summary>
         [SerializeField]
-        private Slider _slider;
+        private Image _slider;
         [SerializeField]
         private float _speed = 0.2f;
         [SerializeField]
@@ -45,8 +45,24 @@ namespace CRI.HelloHouston.ParticlePhysics
         /// All the panels of the top left screen of the experiment.
         /// </summary>
         [SerializeField]
-        private GameObject _b1A2, _b1A3, _b1A4, _b1A5, _b1A6, _b1A5bis, _b1A7, _b1A7bis, _b1A8;
-        
+        private GameObject _Exile_Loading_Screen, _MAIA_Loading_Screen, _MAIA_overview, _Manual_override_access, _Popup_Access_granted, _PopupError_Access_denied, _Manual_override_1, _b1A7bis, _PopupError_Message_Particles;
+        [SerializeField]
+        private Text _loadingText;
+        [SerializeField]
+        private string[] _loadingStrings;
+        [SerializeField]
+        private GameObject _particlesGrid;
+        [SerializeField]
+        private GameObject _gridCase;
+
+        public void ParticleGrid(List<Particle> particles)
+        {
+            foreach (Particle particle in particles)
+            {
+                Instantiate(_gridCase, _particlesGrid.transform.position, _particlesGrid.transform.rotation, _particlesGrid.transform);
+            }
+        }
+
         /// <summary>
         /// Displays a popup if the correct combination of particles has been entered.
         /// </summary>
@@ -60,7 +76,7 @@ namespace CRI.HelloHouston.ParticlePhysics
         /// </summary>
         public void IncorrectParticle()
         {
-            _b1A8.SetActive(true);
+            _PopupError_Message_Particles.SetActive(true);
         }
 
         /// <summary>
@@ -69,7 +85,13 @@ namespace CRI.HelloHouston.ParticlePhysics
         /// <param name="password">The password being entered.</param>
         public void DisplayPassword(string password)
         {
-            string displayedPassword = password;
+            string displayedPassword = "";
+
+            for (int i = 0; i<password.Length; i++)
+            {
+                displayedPassword += "*";
+            }
+
             while(displayedPassword.Length<4)
             {
                 displayedPassword += "-";
@@ -85,10 +107,10 @@ namespace CRI.HelloHouston.ParticlePhysics
         IEnumerator WaitCorrect()
         {
             yield return new WaitForSeconds(2);
-            _b1A6.SetActive(false);
+            _Popup_Access_granted.SetActive(false);
             _synchronizer.SynchronizeScreens("AccessGranted");
-            _b1A7.SetActive(true);
-            _b1A5.SetActive(false);
+            _Manual_override_1.SetActive(true);
+            _Manual_override_access.SetActive(false);
         }
 
         /// <summary>
@@ -98,7 +120,7 @@ namespace CRI.HelloHouston.ParticlePhysics
         IEnumerator WaitDenied()
         {
             yield return new WaitForSeconds(2);
-            _b1A5bis.SetActive(false);
+            _PopupError_Access_denied.SetActive(false);
             _passwordText.text = "[----]";
         }
 
@@ -133,13 +155,13 @@ namespace CRI.HelloHouston.ParticlePhysics
         {
             if(access)
             {
-                _b1A6.SetActive(true);
+                _Popup_Access_granted.SetActive(true);
                 StartCoroutine(WaitCorrect());
                 
 
             } else
             {
-                _b1A5bis.SetActive(true);
+                _PopupError_Access_denied.SetActive(true);
                 StartCoroutine(WaitDenied());
                 
                 
@@ -152,15 +174,20 @@ namespace CRI.HelloHouston.ParticlePhysics
         /// <returns></returns>
         IEnumerator Loading()
         {
-            while (_slider.value <= 1f)
+            while (_slider.fillAmount <= 1f)
             {
-                _slider.value += Time.deltaTime * _speed;
-                _percentage.text = Mathf.Round(_slider.value * 100) + "%";
-                if (_slider.value >= 0.9f)
+                _slider.fillAmount += Time.deltaTime * _speed;
+                _percentage.text = Mathf.Round(_slider.fillAmount * 100) + "%";
+
+                if(_slider.fillAmount*10 <= _loadingStrings.Length)
                 {
-                    _slider.value = 1f;
-                    _b1A3.SetActive(true);
-                    _b1A2.SetActive(false);
+                    _loadingText.text = _loadingStrings[Mathf.FloorToInt(_slider.fillAmount * 10)];
+                }
+                if(_slider.fillAmount >=0.9f)
+                {
+                    _slider.fillAmount = 1f;
+                    _MAIA_Loading_Screen.SetActive(true);
+                    _Exile_Loading_Screen.SetActive(false);
                     _synchronizer.SynchronizeScreens("loadingBarFinished");
                 }
                 yield return null;
@@ -173,8 +200,8 @@ namespace CRI.HelloHouston.ParticlePhysics
         /// </summary>
         public void ManualOverride()
         {
-            _b1A4.SetActive(true);
-            _b1A3.SetActive(false);
+            _MAIA_overview.SetActive(true);
+            _MAIA_Loading_Screen.SetActive(false);
         }
 
         /// <summary>
@@ -182,8 +209,8 @@ namespace CRI.HelloHouston.ParticlePhysics
         /// </summary>
         public void AccessCode()
         {
-            _b1A5.SetActive(true);
-            _b1A4.SetActive(false);
+            _Manual_override_access.SetActive(true);
+            _MAIA_overview.SetActive(false);
         }
         //TO DO
         /// <summary>
