@@ -307,7 +307,8 @@ namespace CRI.HelloHouston.ParticlePhysics
                     {
                         Debug.Log("pas meme symbol");
                         symbols = false;
-                        particleErrorString = "";
+                        particleErrorString = "WRONG PARTICLES!";
+                        _synchronizer.SynchronizeScreens("ParticleWrongSymbol");
                         break;
                     }
                 }
@@ -318,6 +319,8 @@ namespace CRI.HelloHouston.ParticlePhysics
                         if (_enteredParticles[i].negative != reactionExits[i].negative)
                         {
                             Debug.Log("pas meme charge");
+                            particleErrorString = "WRONG NUMBER OF CHARGES!";
+                            _synchronizer.SynchronizeScreens("ParticleWrongCharge");
                             break;
                         }
                     }
@@ -326,6 +329,8 @@ namespace CRI.HelloHouston.ParticlePhysics
             else
             {
                 Debug.Log("pas meme longueur");
+                particleErrorString = "WRONG NUMBER OF PARTICLES!";
+                _synchronizer.SynchronizeScreens("ParticleWrongLength");
             }
         }
 

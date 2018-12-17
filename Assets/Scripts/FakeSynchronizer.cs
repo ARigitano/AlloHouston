@@ -130,13 +130,16 @@ namespace CRI.HelloHouston.ParticlePhysics
                     _fakeTubeScreen.SelectInteraction(_fakeTabletScreen.displayedDiagram);
                     break;
                 case "ParticleWrongLength":
-
+                    _fakeTopScreen.ErrorParticles(_fakeTabletScreen.particleErrorString);
                     break;
                 case "ParticleWrongSymbol":
-
+                    _fakeTopScreen.ErrorParticles(_fakeTabletScreen.particleErrorString);
                     break;
                 case "ParticleWrongCharge":
-
+                    _fakeTopScreen.ErrorParticles(_fakeTabletScreen.particleErrorString);
+                    break;
+                case "ParticleRightCombination":
+                    _fakeTopScreen.CorrectParticle();
                     break;
                 default:
                     break;

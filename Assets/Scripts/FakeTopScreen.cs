@@ -71,6 +71,12 @@ namespace CRI.HelloHouston.ParticlePhysics
         private Text _nbParticlesDetected;
         [SerializeField]
         private GameObject _errorParticles, _successParticles;
+        [SerializeField]
+        private GameObject _popupCrash, _popupErrorMessage, _popupInfoMessage;
+        [SerializeField]
+        private Sprite _starPasswword, _cursorPassword;
+        [SerializeField]
+        private SpriteRenderer[] _slotPassword;
 
         IEnumerator WaitGeneric(float time, Action action)
         {
@@ -102,10 +108,6 @@ namespace CRI.HelloHouston.ParticlePhysics
             _nbParticlesDetected.text = particles.Count + " particles have been detected.";
         }
 
-        private void Start()
-        {
-            StartCoroutine("ScrollingError");
-        }
 
         IEnumerator ScrollingError()
         {
@@ -235,19 +237,14 @@ namespace CRI.HelloHouston.ParticlePhysics
         /// <param name="password">The password being entered.</param>
         public void DisplayPassword(string password)
         {
-            string displayedPassword = "";
+            
 
             for (int i = 0; i<password.Length; i++)
             {
-                displayedPassword += "*";
+                _slotPassword[i].sprite = _starPasswword;
             }
 
-            while(displayedPassword.Length<4)
-            {
-                displayedPassword += "-";
-            }
-
-            _passwordText.text = "[" + displayedPassword + "]";
+          
         }
 
         /// <summary>
@@ -271,7 +268,10 @@ namespace CRI.HelloHouston.ParticlePhysics
         {
             yield return new WaitForSeconds(2);
             _PopupError_Access_denied.SetActive(false);
-            _passwordText.text = "[----]";
+            for (int i = 0; i < _slotPassword.Length; i++)
+            {
+                _slotPassword[i].sprite = _cursorPassword;
+            }
         }
 
         public void ClearParticles()
@@ -355,9 +355,17 @@ namespace CRI.HelloHouston.ParticlePhysics
         /// </summary>
         public void ManualOverride()
         {
-            _MAIA_overview.SetActive(true);
-            StartCoroutine("ScrollingError");
             _MAIA_Loading_Screen.SetActive(false);
+            _MAIA_overview.SetActive(true);
+            StartCoroutine(WaitGeneric(2f, () =>
+            {
+                _popupCrash.SetActive(true);
+                StartCoroutine("ScrollingError");
+                _popupErrorMessage.SetActive(true);
+                _popupInfoMessage.SetActive(true);
+            })
+            );
+            
         }
 
         /// <summary>
