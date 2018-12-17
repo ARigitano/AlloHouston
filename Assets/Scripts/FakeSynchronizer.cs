@@ -100,12 +100,32 @@ namespace CRI.HelloHouston.ParticlePhysics
                     _fakeTopScreen.DisplayParticles(_fakeTabletScreen._enteredParticles);
                     break;
                 case "ParticleCorrect":
+                    
                     //_fakeTopScreen.CorrectParticle();
                     _fakeHolograms[0].AnimHologram(_fakeTabletScreen.reactionExits);
+
                     _fakeTopScreen.ParticleGrid(_fakeTabletScreen.reactionExits);
+                    
+                    
+                    _fakeTopScreen.FillParticlesTable(_fakeTabletScreen.reactionExits);
+                    
+                    _fakeTopScreen.FillChosenDiagrams(_fakeTabletScreen._chosenReactions, _fakeTabletScreen._realReaction);
+                    _fakeTopScreen.FillInteractionType(_fakeTabletScreen._realReaction);
                     break;
                 case "ParticleInCorrect":
                     _fakeTopScreen.IncorrectParticle();
+                    break;
+                case "ClearParticles":
+                    _fakeTopScreen.ClearParticles();
+                    break;
+                case "OtherDiagram":
+                    _fakeTubeScreen.OtherDiagram(_fakeTabletScreen.displayedDiagram, _fakeTabletScreen._allReactions); 
+                    break;
+                case "SelectExit":
+                    _fakeTubeScreen.SelectExit(_fakeTabletScreen.displayedDiagram);
+                    break;
+                case "SelectInteraction":
+                    _fakeTubeScreen.SelectInteraction(_fakeTabletScreen.displayedDiagram);
                     break;
                 default:
                     break;

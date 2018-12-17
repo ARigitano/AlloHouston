@@ -22,7 +22,7 @@ namespace CRI.HelloHouston.ParticlePhysics
         /// All the reaction scriptable objects.
         /// </summary>
         [SerializeField]
-        private Reaction[] _allReactions;
+        public Reaction[] _allReactions;
         /// <summary>
         /// Path to the particle scriptable objects folder.
         /// </summary>
@@ -71,7 +71,7 @@ namespace CRI.HelloHouston.ParticlePhysics
         /// <summary>
         /// The particles entered by the player.
         /// </summary>
-        public List<string> _enteredParticles = new List<string>();
+        public List<Particle> _enteredParticles = new List<Particle>();
         [SerializeField]
         /// <summary>
         /// The buttons to enter digits for the password.
@@ -96,18 +96,75 @@ namespace CRI.HelloHouston.ParticlePhysics
         /// The ongoing reactions.
         /// </summary>
         [SerializeField]
-        private List<Reaction> _chosenReactions = new List<Reaction>();
+        public List<Reaction> _chosenReactions = new List<Reaction>();
         /// <summary>
         /// The reaction to idetify.
         /// </summary>
         [SerializeField]
-        private Reaction _realReaction;
+        public Reaction _realReaction;
         /// <summary>
         /// The particles produced by the ongoing reactions.
         /// </summary>
         [SerializeField]
         public List<Particle> reactionExits = new List<Particle>();
         private bool isTouched = false;
+        //TODO: not needed?
+        public Particle particleToEnter;
+        public int displayedDiagram = 0;
+
+        public void NextDiagram()
+        {
+            if (!isTouched)
+            {
+                isTouched = true;
+                if (displayedDiagram < _allReactions.Length)
+                {
+                    displayedDiagram++;
+                    _synchronizer.SynchronizeScreens("OtherDiagram");
+                }
+                StartCoroutine("WaitButton");
+            }
+        }
+
+        public void PreviousDiagram()
+        {
+            if (!isTouched)
+            {
+                isTouched = true;
+                Debug.Log("CALLED");
+                if (displayedDiagram > 0)
+                {
+                    displayedDiagram--;
+
+                    _synchronizer.SynchronizeScreens("OtherDiagram");
+                }
+                StartCoroutine("WaitButton");
+            }
+        }
+
+        public void PreselectExits()
+        {
+            if (!isTouched)
+            {
+                isTouched = true;
+                
+                    _synchronizer.SynchronizeScreens("SelectExit");
+                
+                StartCoroutine("WaitButton");
+            }
+        }
+
+        public void PreselectInteraction()
+        {
+            if (!isTouched)
+            {
+                isTouched = true;
+
+                _synchronizer.SynchronizeScreens("SelectInteraction");
+
+                StartCoroutine("WaitButton");
+            }
+        }
 
         IEnumerator WaitButton()
         {
@@ -158,10 +215,11 @@ namespace CRI.HelloHouston.ParticlePhysics
             try
             {
                 _allParticles = Resources.LoadAll(_path, typeof(Particle)).Cast<Particle>().ToArray();
-
+                
                 ReactionsCombination();
+                
 
-                foreach(Reaction reaction in _chosenReactions)
+                foreach (Reaction reaction in _chosenReactions)
                 {
                     string[] particlesStrings = reaction.exits.ToString().Split('_');
 
@@ -176,9 +234,10 @@ namespace CRI.HelloHouston.ParticlePhysics
                             }
                         }
                     }
-
-                    GenerateParticleString();
                 }
+                
+                GenerateParticleString();
+               
             }
             catch (Exception e)
             {
@@ -194,15 +253,16 @@ namespace CRI.HelloHouston.ParticlePhysics
         private void GenerateParticleString()
         {
                 string type = "";
-
-                for (int i = 0; i < realParticles.Count; i++)
+            
+            for (int i = 0; i < realParticles.Count; i++)
                 {
                     type += realParticles[i];
                 }
-
-                partic2.text = type;
-
+            
+            partic2.text = type;
+            
             _synchronizer.SynchronizeScreens("ParticleCorrect");
+            
         }
 
         /// <summary>
@@ -225,11 +285,10 @@ namespace CRI.HelloHouston.ParticlePhysics
         /// </summary>
         public void ClearParticles()
         {
-            for(int i = 0; i < _enteredParticles.Count; i++)
-            {
-                _enteredParticles[i] = "";
-            }
-            _synchronizer.SynchronizeScreens("EnteringParticle");
+           
+                _enteredParticles.Clear();
+            
+            _synchronizer.SynchronizeScreens("ClearParticles");
         }
 
         /// <summary>
@@ -237,112 +296,60 @@ namespace CRI.HelloHouston.ParticlePhysics
         /// </summary>
         public void SubmitParticles()
         {
-            Debug.Log("fired");
-
-            string particles = "";
-            string realPart = "";
-
-            for (int i = 0; i < _enteredParticles.Count; i++) 
+            if(_enteredParticles.Count == reactionExits.Count)
             {
-                particles+=_enteredParticles[i];
-            }
+                bool symbols = true;
 
-            for (int i = 0; i < realParticles.Count; i++) {
-                realPart += realParticles[i];
-            }
-
-            if (particles == realPart)
-            {
-                //_synchronizer.SynchronizeScreens("ParticleCorrect");
-                //meme longueur
-                partic.text = "meme string";
-                Debug.Log("meme string");
-            }
-            else if (particles != realPart)
-            {
-                bool isSign = false;
-                int particleCounter = 0;
-
-                for (int i = 0; i < _enteredParticles.Count; i++) {
-                    if(_enteredParticles[i] != "")
-                        particleCounter++;
-                }
-
-                if (particleCounter != realParticles.Count)
+               for(int i = 0; i<reactionExits.Count;i++)
                 {
-                    //pas meme longueur
-                    Debug.Log("pas meme longueur");
-                    partic.text = "pas meme longueur";
-                }
-                else 
-                {
-                    for (int i = 0; i < realParticles.Count; i++)
+                    if(_enteredParticles[i].symbol != reactionExits[i].symbol)
                     {
-                        string particle = _enteredParticles[i];
-                        char sign = particle[0];
-
-                        string realParticle = realParticles[i];
-                        char realSign = realParticle[0];
-
-                        if (sign != realSign)
+                        Debug.Log("pas meme symbol");
+                        symbols = false;
+                        break;
+                    }
+                }
+                if (symbols)
+                {
+                    for (int i = 0; i < reactionExits.Count; i++)
+                    {
+                        if (_enteredParticles[i].negative != reactionExits[i].negative)
                         {
-                            //pas meme symbol
-                            Debug.Log("pas meme symbol");
-                            isSign = true;
-                            partic.text = "pas meme symbol";
+                            Debug.Log("pas meme charge");
                             break;
                         }
                     }
-                    if (!isSign)
-                    {
-                        for (int i = 0; i < realParticles.Count; i++)
-                        {
-                            char sign = '\0';
-                            char realSign = '\0';
-                            if (_enteredParticles[i].Length == 2)
-                            {
-                                string particle = _enteredParticles[i];
-                                sign = particle[1];
-                            }
-
-                            if (realParticles[i].Length == 2)
-                            {
-                                string realParticle = realParticles[i];
-                                realSign = realParticle[1];
-                            }
-
-                            if (sign != realSign)
-                            {
-                                //pas meme charge
-                                Debug.Log("pas meme charge");
-                                partic.text = "pas meme charge";
-                                break;
-                            }
-                        }
-                    }
                 }
-                  
-                _synchronizer.SynchronizeScreens("ParticleInCorrect");
-                enteredPassword = "";
+            }
+            else
+            {
+                Debug.Log("pas meme longueur");
             }
         }
 
         /// <summary>
         /// Adds a particle to the combination.
         /// </summary>
-        /// <param name="particle">The particle to add.</param>
-        public void EnteringParticle(string particle)
+        /// <param name="particleButton">The particle to add.</param>
+        public void EnteringParticle(string particleButton)
         {
-            if (!isTouched)
+            if (!isTouched && _enteredParticles.Count < reactionExits.Count)
             {
                 isTouched = true;
-                if (_enteredParticles.Count < 23)
+
+                foreach(Particle particle in reactionExits)
                 {
-                _enteredParticles.Add(particle);
+                    if(particle.symbol == particleButton)
+                    {
+                        _enteredParticles.Add(particle);
+                        break;
+                    }
+                }
+
                 _synchronizer.SynchronizeScreens("EnteringParticle");
-            }
                 StartCoroutine("WaitButton");
             }
+                
         }
 
         /// <summary>

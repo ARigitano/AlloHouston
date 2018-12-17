@@ -68,6 +68,6 @@ namespace CRI.HelloHouston.ParticlePhysics
         /// <summary>
         /// Image of the symbol of the particle.
         /// </summary>
-        public Texture symbolImage;
+        public Sprite symbolImage;
     }
 }

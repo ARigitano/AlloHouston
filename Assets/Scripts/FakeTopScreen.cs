@@ -54,13 +54,127 @@ namespace CRI.HelloHouston.ParticlePhysics
         private GameObject _particlesGrid;
         [SerializeField]
         private GameObject _gridCase;
+        public List<Image> _particleCases = new List<Image>();
+        [SerializeField]
+        private Text _textQuark, _textAntiquark, _textMuon, _textAntimuon, _textElectron, _textAntielectron, _textNeutrino, _textPhoton;
+        [SerializeField]
+        private Image[] _diagrams;
+        [SerializeField]
+        private Text _textInteraction;
+        [SerializeField]
+        private string _scrollingText;
+        [SerializeField]
+        private Text _scrollError;
+
+        private void Start()
+        {
+            
+        }
+
+        IEnumerator ScrollingError()
+        {
+            int i = 0;
+            
+            while(i<_scrollingText.Length)
+            {
+                _scrollError.text += _scrollingText[i++];
+                yield return new WaitForSeconds(0.0001f);
+            }
+        }
+
+
+
+        public void FillInteractionType(Reaction chosenReaction)
+        {
+            _textInteraction.text = chosenReaction.entries.ToString();
+        }
+
+
+        public void FillChosenDiagrams(List<Reaction> reactions, Reaction chosenReaction)
+        {
+            int i = 0;
+            int j = 0;
+            foreach(Reaction reaction in reactions)
+            {
+                if (reactions[j].diagramImage != chosenReaction.diagramImage)
+                {
+                    _diagrams[i].sprite = reactions[j].diagramImage;
+                    i++;
+                }
+                j++;
+            }
+           
+        }
+
+        public void FillParticlesTable(List<Particle> particles)
+        {
+            int nbQuark = 0;
+            int nbAntiquark = 0;
+            int nbMuon = 0;
+            int nbAntimuon = 0;
+            int nbElectron = 0;
+            int nbAntielectron = 0;
+            int nbNeutrino = 0;
+            int nbPhoton = 0;
+                    
+                foreach(Particle particle in particles)
+                {
+                    switch(particle.symbol)
+                    {
+                        case "q":
+                            nbQuark++;
+                            break;
+                        case "qBar":
+                            nbAntiquark++;
+                            break;
+                        case "μ":
+                            nbMuon++;
+                            break;
+                        case "μBar":
+                            nbAntimuon++;
+                            break;
+                        case "e":
+                            nbElectron++;
+                            break;
+                        case "eBar":
+                            nbAntielectron++;
+                            break;
+                        case "v":
+                            nbNeutrino++;
+                            break;
+                        case "vBar":
+                            nbNeutrino++;
+                            break;
+                        case "γ":
+                            nbPhoton++;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+            
+            _textQuark.text = nbQuark.ToString();
+            _textAntiquark.text = nbAntiquark.ToString();
+            _textMuon.text = nbMuon.ToString();
+            _textAntimuon.text = nbAntimuon.ToString();
+            _textElectron.text = nbElectron.ToString();
+            _textAntielectron.text = nbAntielectron.ToString();
+            _textNeutrino.text = nbNeutrino.ToString();
+            _textPhoton.text = nbPhoton.ToString();
+            Debug.Log("LAOK");
+        }
 
         public void ParticleGrid(List<Particle> particles)
         {
+            
+            Debug.Log(particles.Count);
             foreach (Particle particle in particles)
             {
-                Instantiate(_gridCase, _particlesGrid.transform.position, _particlesGrid.transform.rotation, _particlesGrid.transform);
+                GameObject newCase = (GameObject)Instantiate(_gridCase, _particlesGrid.transform.position, _particlesGrid.transform.rotation, _particlesGrid.transform);
+                _particleCases.Add(newCase.GetComponentInChildren<Image>());
             }
+            
         }
 
         /// <summary>
@@ -124,26 +238,27 @@ namespace CRI.HelloHouston.ParticlePhysics
             _passwordText.text = "[----]";
         }
 
-        //TO MODIFY: Cases instead of field.
+        public void ClearParticles()
+        {
+            foreach(Image particleCase in _particleCases)
+            {
+                particleCase.enabled = false;
+            }
+        }
+
+        
         /// <summary>
         /// Displays the particles combination while they are being opened.
         /// </summary>
         /// <param name="particles">The particles combination that is being entered.</param>
-        public void DisplayParticles(List<string> particles)
+        public void DisplayParticles(List<Particle> particles)
         {
-            string displayedParticles = "";
+            
 
-            for (int i = 0; i<particles.Count; i++)
+            for(int i = 0; i<particles.Count; i++)
             {
-                if(particles[i] != "")
-                {
-                    displayedParticles += particles[i];
-                }
-                else
-                {
-                    displayedParticles += ".";
-                }
-                _particlesText.text = displayedParticles;
+                _particleCases[i].enabled = true;
+                _particleCases[i].sprite = particles[i].symbolImage;
             }
         }
 
@@ -201,6 +316,7 @@ namespace CRI.HelloHouston.ParticlePhysics
         public void ManualOverride()
         {
             _MAIA_overview.SetActive(true);
+            StartCoroutine("ScrollingError");
             _MAIA_Loading_Screen.SetActive(false);
         }
 
