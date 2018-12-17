@@ -1,4 +1,5 @@
 ﻿using CRI.HelloHouston.Experience;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -65,10 +66,45 @@ namespace CRI.HelloHouston.ParticlePhysics
         private string _scrollingText;
         [SerializeField]
         private Text _scrollError;
+        public bool _isLoaded = false;
+        [SerializeField]
+        private Text _nbParticlesDetected;
+        [SerializeField]
+        private GameObject _errorParticles, _successParticles;
+
+        IEnumerator WaitGeneric(float time, Action action)
+        {
+            yield return new WaitForSeconds(time);
+            action.Invoke();
+        }
+
+        public void ErrorParticles(string error)
+        {
+            _errorParticles.GetComponent<SpriteRenderer>().enabled = true;
+            _errorParticles.GetComponentInChildren<Text>().text = error;
+            StartCoroutine(WaitGeneric(2f, () =>
+                {
+                    _errorParticles.GetComponent<SpriteRenderer>().enabled = false;
+                }));
+
+                 
+        }
+
+        
+
+        private void SuccessParticles()
+        {
+
+        }
+
+        public void FillNbParticlesDetected(List<Particle> particles)
+        {
+            _nbParticlesDetected.text = particles.Count + " particles have been detected.";
+        }
 
         private void Start()
         {
-            
+            StartCoroutine("ScrollingError");
         }
 
         IEnumerator ScrollingError()
@@ -222,9 +258,9 @@ namespace CRI.HelloHouston.ParticlePhysics
         {
             yield return new WaitForSeconds(2);
             _Popup_Access_granted.SetActive(false);
-            _synchronizer.SynchronizeScreens("AccessGranted");
             _Manual_override_1.SetActive(true);
             _Manual_override_access.SetActive(false);
+            _synchronizer.SynchronizeScreens("AccessGranted");
         }
 
         /// <summary>
@@ -288,24 +324,28 @@ namespace CRI.HelloHouston.ParticlePhysics
         /// </summary>
         /// <returns></returns>
         IEnumerator Loading()
-        {
-            while (_slider.fillAmount <= 1f)
+        { if(!_isLoaded)
             {
-                _slider.fillAmount += Time.deltaTime * _speed;
-                _percentage.text = Mathf.Round(_slider.fillAmount * 100) + "%";
+                while (_slider.fillAmount < 1f)
+                {
+                    _slider.fillAmount += Time.deltaTime * _speed;
+                    _percentage.text = Mathf.Round(_slider.fillAmount * 100) + "%";
 
-                if(_slider.fillAmount*10 <= _loadingStrings.Length)
-                {
-                    _loadingText.text = _loadingStrings[Mathf.FloorToInt(_slider.fillAmount * 10)];
+                    if (_slider.fillAmount * 10 <= _loadingStrings.Length)
+                    {
+                        _loadingText.text = _loadingStrings[Mathf.FloorToInt(_slider.fillAmount * 10)];
+                    }
+                    if (_slider.fillAmount >= 0.9f)
+                    {
+                        _slider.fillAmount = 1f;
+                        _MAIA_Loading_Screen.SetActive(true);
+                        _Exile_Loading_Screen.SetActive(false);
+                        _isLoaded = true;
+                        _synchronizer.SynchronizeScreens("loadingBarFinished");
+                        yield return null;
+                    }
+                    
                 }
-                if(_slider.fillAmount >=0.9f)
-                {
-                    _slider.fillAmount = 1f;
-                    _MAIA_Loading_Screen.SetActive(true);
-                    _Exile_Loading_Screen.SetActive(false);
-                    _synchronizer.SynchronizeScreens("loadingBarFinished");
-                }
-                yield return null;
             }
         }
 

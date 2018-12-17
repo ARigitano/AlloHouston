@@ -111,6 +111,7 @@ namespace CRI.HelloHouston.ParticlePhysics
         //TODO: not needed?
         public Particle particleToEnter;
         public int displayedDiagram = 0;
+        public string particleErrorString;
 
         public void NextDiagram()
         {
@@ -209,7 +210,7 @@ namespace CRI.HelloHouston.ParticlePhysics
         /// Lists the particles produced by the ongoing reactions.
         /// </summary>
         /// <returns>The list of produced particles.</returns>
-        private List<Particle> ParticlesCombination()
+        public List<Particle> ParticlesCombination()
         {
 
             try
@@ -306,6 +307,7 @@ namespace CRI.HelloHouston.ParticlePhysics
                     {
                         Debug.Log("pas meme symbol");
                         symbols = false;
+                        particleErrorString = "";
                         break;
                     }
                 }
@@ -458,12 +460,6 @@ namespace CRI.HelloHouston.ParticlePhysics
         public override void OnUnpause()
         {
             Debug.Log(name + "Unpaused");
-        }
-
-        // Use this for initialization
-        void Start()
-        {
-            reactionExits = ParticlesCombination();
         }
     }
 }

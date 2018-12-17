@@ -95,6 +95,8 @@ namespace CRI.HelloHouston.ParticlePhysics
                     break;
                 case "AccessGranted":
                     _fakeTabletScreen.AccessGranted();
+                    _fakeTabletScreen.reactionExits = _fakeTabletScreen.ParticlesCombination();
+                    _fakeTopScreen.FillNbParticlesDetected(_fakeTabletScreen.reactionExits);
                     break;
                 case "EnteringParticle":
                     _fakeTopScreen.DisplayParticles(_fakeTabletScreen._enteredParticles);
@@ -126,6 +128,15 @@ namespace CRI.HelloHouston.ParticlePhysics
                     break;
                 case "SelectInteraction":
                     _fakeTubeScreen.SelectInteraction(_fakeTabletScreen.displayedDiagram);
+                    break;
+                case "ParticleWrongLength":
+
+                    break;
+                case "ParticleWrongSymbol":
+
+                    break;
+                case "ParticleWrongCharge":
+
                     break;
                 default:
                     break;
