@@ -105,7 +105,7 @@ namespace CRI.HelloHouston.Calibration
         }
 
         /// <summary>
-        /// Calibrates the current virtual item.  
+        /// Calibrates the current virtual item.
         /// </summary>
         public void CalibrateCurrentVirtualItem()
         {

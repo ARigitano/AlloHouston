@@ -1,7 +1,6 @@
-﻿using System;
-using CRI.HelloHouston.Calibration;
+﻿using CRI.HelloHouston.Experience;
 
-namespace CRI.HelloHouston.Experience
+namespace CRI.HelloHouston.Calibration
 {
     public class VirtualWallTopZone : VirtualZone
     {
@@ -12,6 +11,15 @@ namespace CRI.HelloHouston.Experience
                 return ZoneType.WallTop;
             }
         }
+
+        public override bool switchableZone
+        {
+            get
+            {
+                return true;
+            }
+        }
+
         public override VirtualElement[] virtualElements
         {
             get
@@ -28,12 +36,15 @@ namespace CRI.HelloHouston.Experience
             }
         }
 
-        protected override void AddXPZone(XPZone xpZone)
+        protected override void AddXPZone(XPZone xpZone, XPContext xpContext)
         {
             var xpWallTopZone = xpZone as XPWallTopZone;
             if (!xpWallTopZone)
                 throw new WrongZoneTypeException();
             this.xpWallTopZone = xpWallTopZone;
+            wallTopLeftVirtualElement.PlaceObject(xpWallTopZone.elementLeftPrefab, xpContext);
+            wallTopRightVirtualElement.PlaceObject(xpWallTopZone.elementRightPrefab, xpContext);
+            wallTopTabletVirtualElement.PlaceObject(xpWallTopZone.elementTabletPrefab, xpContext);
         }
 
         public VirtualElement wallTopLeftVirtualElement;

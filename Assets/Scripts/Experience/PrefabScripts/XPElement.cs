@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using CRI.HelloHouston.Calibration;
+using UnityEngine;
 
 namespace CRI.HelloHouston.Experience
 {
@@ -8,6 +9,14 @@ namespace CRI.HelloHouston.Experience
         /// The experience synchronizer.
         /// </summary>
         public XPSynchronizer synchronizer { get; protected set; }
+        /// <summary>
+        /// The virtual element.
+        /// </summary>
+        public VirtualElement virtualElement { get; protected set; }
+        /// <summary>
+        /// The element's type.
+        /// </summary>
+        public ElementType elementType { get; protected set; }
         /// <summary>
         /// The element name
         /// </summary>
@@ -25,19 +34,26 @@ namespace CRI.HelloHouston.Experience
             }
         }
 
-        public virtual void Init(XPSynchronizer synchronizer)
+        public virtual void Init(XPSynchronizer synchronizer, VirtualElement virtualElement)
         {
             this.synchronizer = synchronizer;
+            this.virtualElement = virtualElement;
+            elementType = virtualElement.elementType;
         }
 
-        public abstract void OnSuccess();
+        public virtual void Dismiss()
+        {
+            Destroy(gameObject);
+        }
 
-        public abstract void OnFailure();
+        public virtual void OnSuccess() { }
 
-        public abstract void OnActivation();
+        public virtual void OnFailure() { }
 
-        public abstract void OnHide();
+        public virtual void OnActivation() { }
 
-        public abstract void OnShow();
+        public virtual void OnHide() { }
+
+        public virtual void OnShow() { }
     }
 }

@@ -86,7 +86,6 @@ namespace CRI.HelloHouston.Calibration
                 return new VirtualZone[0];
             return blocks.SelectMany(x => x.zones).ToArray();
         }
-
         /// <summary>
         /// Gets the RoomEntry for the Virtual Room.
         /// </summary>

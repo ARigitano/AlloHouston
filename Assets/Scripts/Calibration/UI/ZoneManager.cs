@@ -55,15 +55,12 @@ namespace CRI.HelloHouston.Calibration.UI
             }
             foreach (ContextZone contextZone in contextZones)
             {
-                if (contextZone.xpZone.zoneType != ZoneType.WallTop || contextZone.start)
-                {
-                    Debug.Log(contextZone.xpZone);
-                    VirtualZone zone = virtualZones.FirstOrDefault(x => x.zoneType == contextZone.xpZone.zoneType && x.xpZone == null);
-                    if (zone != null && zone.GetComponent<UIZone>() != null)
-                        zone.GetComponent<UIZone>().Place(contextZone.xpZone, contextZone.xpContext);
-                    if (zone != null)
-                        zone.Place(contextZone.xpZone, contextZone.xpContext);
-                }
+                Debug.Log(contextZone.xpZone);
+                VirtualZone zone = virtualZones.FirstOrDefault(x => x.zoneType == contextZone.xpZone.zoneType && x.xpZone == null);
+                if (zone != null && zone.GetComponent<UIZone>() != null)
+                    zone.GetComponent<UIZone>().Place(contextZone.xpZone, contextZone.xpContext);
+                if (zone != null)
+                    zone.Place(contextZone.xpZone, contextZone.xpContext);
             }
         }
 

@@ -11,6 +11,15 @@ namespace CRI.HelloHouston.Calibration
                 return ZoneType.Door;
             }
         }
+
+        public override bool switchableZone
+        {
+            get
+            {
+                return false;
+            }
+        }
+
         public override VirtualElement[] virtualElements
         {
             get
@@ -27,12 +36,13 @@ namespace CRI.HelloHouston.Calibration
             }
         }
 
-        protected override void AddXPZone(XPZone xpZone)
+        protected override void AddXPZone(XPZone xpZone, XPContext xpContext)
         {
             var xpDoorZone = xpZone as XPDoorZone;
             if (!xpDoorZone)
                 throw new WrongZoneTypeException();
             this.xpDoorZone = xpDoorZone;
+            doorVirtualElement.PlaceObject(xpDoorZone.doorContentPrefab, xpContext);
         }
 
         public VirtualElement doorVirtualElement;

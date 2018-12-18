@@ -64,7 +64,7 @@ namespace CRI.HelloHouston.Experience.UI
         private void Init(RoomXPPair rxpp)
         {
             GameManager gameManager = GameManager.instance;
-            XPSynchronizer[] synchronizers = gameManager.Init(rxpp.xpContexts);
+            XPSynchronizer[] synchronizers = gameManager.Init(rxpp.xpContexts, rxpp.vroom);
             _cameraDisplay.Init(rxpp.vroom.GetComponentsInChildren<Camera>(true));
 
             // Needs to be initialized before the start of the game.

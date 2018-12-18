@@ -117,7 +117,7 @@ namespace CRI.HelloHouston.Calibration.UI
             _contextDropdown.options.Add(new Dropdown.OptionData() { text = TextManager.instance.GetText("CHOOSE") });
             foreach (var option in _contexts)
             {
-                _contextDropdown.options.Add(new Dropdown.OptionData() { text = option.context });
+                _contextDropdown.options.Add(new Dropdown.OptionData() { text = option.contextName });
                 _contextDropdown.onValueChanged.AddListener((int value) =>
                 {
                     ChooseContext(_contextDropdown.options[value].text);
@@ -142,7 +142,7 @@ namespace CRI.HelloHouston.Calibration.UI
 
         private void ChooseContext(string option)
         {
-            currentContext = _contexts.FirstOrDefault(x => x.context == option);
+            currentContext = _contexts.FirstOrDefault(x => x.contextName == option);
             SetPlaceholderText(currentContext);
         }
 

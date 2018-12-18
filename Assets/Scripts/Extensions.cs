@@ -7,7 +7,7 @@ namespace CRI.HelloHouston
 {
     public static class Extensions
     {
-        public static TEnum RandomEnumValue<TEnum>() where TEnum: struct, IConvertible, IComparable, IFormattable
+        public static TEnum RandomEnumValue<TEnum>() where TEnum : struct, IConvertible, IComparable, IFormattable
         {
             if (!typeof(TEnum).IsEnum)
                 throw new Exception("TEnum must be an enum.");

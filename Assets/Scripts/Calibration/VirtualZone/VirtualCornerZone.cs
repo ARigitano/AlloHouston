@@ -11,6 +11,14 @@ namespace CRI.HelloHouston.Calibration
                 return ZoneType.Corner;
             }
         }
+
+        public override bool switchableZone
+        {
+            get
+            {
+                return false;
+            }
+        }
         public override VirtualElement[] virtualElements
         {
             get
@@ -27,12 +35,13 @@ namespace CRI.HelloHouston.Calibration
             }
         }
 
-        protected override void AddXPZone(XPZone xpZone)
+        protected override void AddXPZone(XPZone xpZone, XPContext xpContext)
         {
             var xpCornerZone = xpZone as XPCornerZone;
             if (!xpCornerZone)
                 throw new WrongZoneTypeException();
             this.xpCornerZone = xpCornerZone;
+            wallCornerVirtualElement.PlaceObject(xpCornerZone.cornerElementPrefab, xpContext);
         }
 
         public VirtualElement wallCornerVirtualElement;

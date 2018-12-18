@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using CRI.HelloHouston.Calibration;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -28,7 +29,6 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         [Tooltip("A description of the audience for the experiment.")]
         public string description;
-
         /// <summary>
         /// The context(audience -ie mainstream or researchers-, physical place, event...) of this version of the experiment. 
         /// </summary>
@@ -75,7 +75,7 @@ namespace CRI.HelloHouston.Experience
         /// The door at the entrance of the room.
         /// </summary>
         [Tooltip("The door at the entrance of the room.")]
-        public XPDoorZone xpDoorZone;     
+        public XPDoorZone xpDoorZone;
         
         public int totalWallTop
         {
@@ -160,10 +160,10 @@ namespace CRI.HelloHouston.Experience
         /// Initializes and returns the synchronizer.
         /// </summary>
         /// <returns></returns>
-        public XPSynchronizer InitSynchronizer(LogExperienceController logExperienceController)
+        public XPSynchronizer InitSynchronizer(LogExperienceController logExperienceController, VirtualZone[] zones)
         {
             XPSynchronizer res = GameObject.Instantiate(_xpSynchronizerPrefab);
-            res.Init(this, logExperienceController);
+            res.Init(this, zones, logExperienceController);
             return res;
         }
     }

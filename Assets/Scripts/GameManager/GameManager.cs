@@ -2,6 +2,7 @@
 using System.Linq;
 using UnityEngine;
 using System;
+using CRI.HelloHouston.Calibration;
 
 namespace CRI.HelloHouston.Experience
 {
@@ -81,13 +82,13 @@ namespace CRI.HelloHouston.Experience
             }
         }
 
-        public XPSynchronizer[] Init(XPContext[] xpContexts)
+        public XPSynchronizer[] Init(XPContext[] xpContexts, VirtualRoom room)
         {
             globalSoundManager = GetComponent<SoundManager>();
             gameActionController = new GameActionController(this);
             logManager = new LogManager(this);
             _mainSettings = Resources.Load<XPMainSettings>("Settings/MainSettings");
-            xpSynchronizers = xpContexts.Select(x => x.InitSynchronizer(logManager.logExperienceController)).ToArray();
+            xpSynchronizers = xpContexts.Select(xpContext => xpContext.InitSynchronizer(logManager.logExperienceController, room.GetZones().Where(zone => zone.xpContext == xpContext).ToArray())).ToArray();
             _startTime = Time.time;
             return xpSynchronizers;
         }

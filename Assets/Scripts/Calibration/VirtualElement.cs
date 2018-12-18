@@ -8,8 +8,7 @@ namespace CRI.HelloHouston.Calibration
         WallTopLeft,
         WallTopRight,
         Tablet,
-        WallBottomLeft,
-        WallBottomRight,
+        WallBottom,
         Hologram,
         Corner,
         Door,
@@ -29,31 +28,38 @@ namespace CRI.HelloHouston.Calibration
 
         public XPContext xpContext { get; protected set; }
         /// <summary>
-        /// The type of element
+        /// The type of element.
         /// </summary>
-        [Tooltip("The type of placeholder")]
-        public ElementType elementType;
+        [Tooltip("The type of placeholder.")]
+        [SerializeField]
+        private ElementType _elementType = ElementType.Unknown;
+        /// <summary>
+        /// The type of element.
+        /// </summary>
+        public ElementType elementType { get { return _elementType; } }
         /// <summary>
         /// Places an experience element on a virtual element.
         /// </summary>
         /// <param name="element"></param>
-        public void PlaceObject(XPElement element, XPContext xpContext)
+        public virtual void PlaceObject(XPElement element, XPContext xpContext)
         {
             _elementPrefab = element;
             this.xpContext = xpContext;
         }
 
-        public void Init()
+        public virtual XPElement Init(XPSynchronizer xpSynchronizer)
         {
             Clean();
             currentElement = Instantiate(_elementPrefab, transform);
+            currentElement.Init(xpSynchronizer, this);
+            return currentElement;
         }
 
-        public void Clean()
+        public virtual void Clean()
         {
             if (currentElement != null)
             {
-                Destroy(currentElement.gameObject);
+                currentElement.Dismiss();
                 currentElement = null;
             }
         }
@@ -62,7 +68,7 @@ namespace CRI.HelloHouston.Calibration
         /// </summary>
         /// <typeparam name="T">The type of XPElement</typeparam>
         /// <returns>An instance of XPElement</returns>
-        public T GetObject<T>() where T : XPElement, new()
+        public virtual T GetObject<T>() where T : XPElement, new()
         {
             return _elementPrefab as T;
         }
