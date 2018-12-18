@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using System;
 using CRI.HelloHouston.Experience.Actions;
+using System;
 
 namespace CRI.HelloHouston.Experience
 {
@@ -22,6 +22,20 @@ namespace CRI.HelloHouston.Experience
     [System.Serializable]
     public abstract class XPSynchronizer : MonoBehaviour
     {
+        [System.Serializable]
+        public struct ElementInfo
+        {
+            public XPElement xpElement;
+            public VirtualElement virtualElement;
+            public VirtualZone virtualZone;
+
+            public ElementInfo(XPElement xpElement, VirtualElement virtualElement, VirtualZone virtualZone)
+            {
+                this.xpElement = xpElement;
+                this.virtualElement = virtualElement;
+                this.virtualZone = virtualZone;
+            }
+        }
         public delegate void XPStateEvent(XPState state);
         public delegate void XPSynchronizerEvent(XPSynchronizer synchronizer);
         public XPStateEvent onStateChange;
@@ -32,9 +46,13 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         public XPContext xpContext { get; protected set; }
         /// <summary>
+        /// The wall top zone.
+        /// </summary>
+        public VirtualWallTopZone wallTopZone { get; protected set; }
+        /// <summary>
         /// All the contents.
         /// </summary>
-        protected List<XPElement> elements = new List<XPElement>();
+        protected List<ElementInfo> elements = new List<ElementInfo>();
         /// <summary>
         /// The error of the experiment chosen randomly that will be displayed on the table screen for this game.
         /// </summary>
@@ -44,10 +62,10 @@ namespace CRI.HelloHouston.Experience
         /// The state of the XPSynchronizer.
         /// </summary>
         public XPState state { get; protected set; }
-        
+
         public LogExperienceController logController { get; protected set; }
 
-        public ExperienceActionController actionController { get; protected set;}
+        public ExperienceActionController actionController { get; protected set; }
 
         protected XPState _stateOnActivation;
 
@@ -69,12 +87,23 @@ namespace CRI.HelloHouston.Experience
 
         public T GetElement<T>(string name) where T : XPElement, new()
         {
-            return (T)elements.FirstOrDefault(x => x.GetType() == typeof(T) && x.elementName == name);
+            return (T)elements.Select(x => x.xpElement).FirstOrDefault(xpElement => xpElement is T && xpElement.elementName == name);
+        }
+
+        public T GetElement<T>() where T : XPElement, new()
+        {
+            return (T)elements.Select(x => x.xpElement).FirstOrDefault(xpElement => xpElement is T) as T;
+        }
+
+        public XPElement GetElement(string name)
+        {
+            return elements.Select(element => element.xpElement).FirstOrDefault(xpElement => xpElement.elementName == name);
         }
 
         public T[] GetElements<T>() where T : XPElement, new()
         {
-            return (T[]) elements.Where(x => x.GetType() == typeof(T)).ToArray();
+            T[] res = elements.Select(element => element.xpElement).Where(xpElement => xpElement is T).Select(xpElement => (T)xpElement).ToArray();
+            return res;
         }
 
 
@@ -83,7 +112,7 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         public void Success()
         {
-            CustomSuccess();
+            PreSuccess();
             state = XPState.Success;
             if (onStateChange != null)
                 onStateChange(state);
@@ -92,24 +121,26 @@ namespace CRI.HelloHouston.Experience
             logController.AddLog("Success", xpContext, Log.LogType.Automatic);
             foreach (var element in elements)
             {
-                element.OnSuccess();
+                element.xpElement.OnSuccess();
             }
+            PostSuccess();
         }
 
         /// <summary>
         /// Called before the state changed to the success state.
         /// </summary>
-        protected virtual void CustomSuccess()
-        {
-
-        }
-
+        protected virtual void PreSuccess() { }
+        /// <summary>
+        /// Called after the state changed to the success state.
+        /// </summary>
+        /// <returns></returns>
+        protected virtual void PostSuccess() { }
         /// <summary>
         /// To be called in case of failure of the experiment.
         /// </summary>
         public void Fail()
         {
-            CustomFail();
+            PreFail();
             state = XPState.Failure;
             if (onStateChange != null)
                 onStateChange(state);
@@ -118,24 +149,26 @@ namespace CRI.HelloHouston.Experience
             logController.AddLog("Failure", xpContext, Log.LogType.Automatic);
             foreach (var element in elements)
             {
-                element.OnFailure();
+                element.xpElement.OnFailure();
             }
+            PostFail();
         }
 
         /// <summary>
         /// Called before the state changes to failure.
         /// </summary>
-        protected virtual void CustomFail()
-        {
-
-        }
+        protected virtual void PreFail() { }
+        /// <summary>
+        /// Called after that state changes to failure.
+        /// </summary>
+        protected virtual void PostFail() { }
 
         /// <summary>
         /// To be called to activate the incident of the experiment.
         /// </summary>
         public void Activate()
         {
-            CustomActivate();
+            PreActivate();
             state = _stateOnActivation;
             if (onStateChange != null)
                 onStateChange(state);
@@ -144,81 +177,111 @@ namespace CRI.HelloHouston.Experience
             logController.AddLog("Activation", xpContext, Log.LogType.Automatic);
             foreach (var element in elements)
             {
-                element.OnActivation();
+                element.xpElement.OnActivation();
             }
+            PostActivate();
         }
 
         /// <summary>
+        /// Called before the state changed to the default state on activation.
+        /// </summary>
+        protected virtual void PreActivate() { }
+        /// <summary>
         /// Called before the state changes to the default state on activation.
         /// </summary>
-        protected virtual void CustomActivate()
-        {
-        }
+        protected virtual void PostActivate() { }
 
         /// <summary>
         /// To be called to pause the experiment during the game.
         /// </summary>
         public void Hide()
         {
-            CustomHide();
+            PreHide();
+            if (this.wallTopZone != null)
+                wallTopZone.CleanAll();
             state = XPState.Hidden;
             if (onStateChange != null)
                 onStateChange(state);
             logController.AddLog("Hide", xpContext, Log.LogType.Automatic);
             foreach (var element in elements)
             {
-                element.OnHide();
+                element.xpElement.OnHide();
             }
+            PostHide();
         }
 
         /// <summary>
         /// Called before the state changes to the hidden state.
         /// </summary>
-        protected virtual void CustomHide()
-        {
-
-        }
+        protected virtual void PreHide() { }
+        /// <summary>
+        /// Called after the state changes to the hidden state.
+        /// </summary>
+        protected virtual void PostHide() { }
 
         /// <summary>
         /// To be called to call back the experiment after it has been paused.
         /// </summary>
-        public void Show()
+        public void Show(VirtualWallTopZone wallTopZone)
         {
-            CustomShow();
+            var zones = InitZone(wallTopZone);
+            PreShow(wallTopZone, zones);
+            this.wallTopZone = wallTopZone;
+            wallTopZone.Place(xpContext.xpWallTopZone, xpContext);
             state = XPState.Visible;
             if (onStateChange != null)
                 onStateChange(state);
             logController.AddLog("Show", xpContext, Log.LogType.Automatic);
             foreach (var element in elements)
             {
-                element.OnShow();
+                element.xpElement.OnShow();
             }
+            PostShow(wallTopZone, zones);
         }
 
         /// <summary>
         /// Called before the state changes to the visible state.
         /// </summary>
-        protected virtual void CustomShow()
-        {
+        protected virtual void PreShow(VirtualWallTopZone wallTopZone, ElementInfo[] info) { }
+        /// <summary>
+        /// Called after the state changes to the visible state.
+        /// </summary>
+        protected virtual void PostShow(VirtualWallTopZone wallTopZone, ElementInfo[] info) { }
 
+        protected virtual ElementInfo[] InitZone(VirtualZone zone)
+        {
+            var res = zone.InitAll(this).Select(xpElement => new ElementInfo(xpElement, xpElement.virtualElement, zone));
+            elements.AddRange(res);
+            return res.ToArray();
         }
 
-        public void Init(XPContext xpContext, LogExperienceController logController, XPState stateOnActivation = XPState.Hidden)
+        protected virtual ElementInfo[] InitZones(VirtualZone[] zones)
         {
+            var res = zones.SelectMany(zone => InitZone(zone));
+            return res.ToArray();
+        }
+
+        public void Init(XPContext xpContext, VirtualZone[] zones, LogExperienceController logController, XPState stateOnActivation = XPState.Hidden)
+        {
+            PreInit(xpContext, logController, stateOnActivation);
             this.xpContext = xpContext;
             state = XPState.Inactive;
             _stateOnActivation = stateOnActivation;
             actionController = new ExperienceActionController(this);
             this.logController = logController;
-            CustomInit(xpContext, logController, stateOnActivation);
             if (logController != null)
                 logController.AddLog("Ready", xpContext, Log.LogType.Automatic);
+            PostInit(xpContext, InitZones(zones), logController, stateOnActivation);
         }
 
-        protected virtual void CustomInit(XPContext xpContext, LogExperienceController logController, XPState stateOnActivation)
-        {
-
-        }
+        /// <summary>
+        /// Called before the initialization.
+        /// </summary>
+        protected virtual void PreInit(XPContext xpContext, LogExperienceController logController, XPState stateOnActivation) { }
+        /// <summary>
+        /// Called after the initialization.
+        /// </summary>
+        protected virtual void PostInit(XPContext xpContext, ElementInfo[] info, LogExperienceController logController, XPState stateOnActivation) { }
 
         public virtual void SkipToStep(int step)
         {
