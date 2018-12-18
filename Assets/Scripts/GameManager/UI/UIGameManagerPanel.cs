@@ -44,6 +44,18 @@ namespace CRI.HelloHouston.Experience.UI
         [SerializeField]
         [Tooltip("The action display, it shows a list of custom actions that can be run on the game.")]
         private UIActionDisplay _actionDisplay;
+        /// <summary>
+        /// The player gameobject.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("The player gameobject")]
+        private GameObject _player;
+        /// <summary>
+        /// The calibration player gameobject.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("The calibration player gameobject.")]
+        private GameObject _calibrationPlayer;
 
         private void Reset()
         {
@@ -65,7 +77,8 @@ namespace CRI.HelloHouston.Experience.UI
         {
             GameManager gameManager = GameManager.instance;
             XPSynchronizer[] synchronizers = gameManager.Init(rxpp.xpContexts, rxpp.vroom);
-            _cameraDisplay.Init(rxpp.vroom.GetComponentsInChildren<Camera>(true));
+            var cameras = _player.GetComponentsInChildren<Camera>().Where(x => x.tag == "DisplayCamera").Concat(rxpp.vroom.GetComponentsInChildren<Camera>(true).Where(x => x.tag == "DisplayCamera"));
+            _cameraDisplay.Init(cameras.ToArray());
 
             // Needs to be initialized before the start of the game.
             _logDisplay.Init(gameManager.logManager);
@@ -77,6 +90,11 @@ namespace CRI.HelloHouston.Experience.UI
             //Needs to be initialized after the start of the game.
             _experienceDisplay.Init(synchronizers);
             _actionDisplay.Init(gameManager.actions, gameManager.gameActionController);
+
+            if (_player != null)
+                _player.SetActive(true);
+            if (_calibrationPlayer != null)
+                _calibrationPlayer.SetActive(false);
         }
     }
 }
