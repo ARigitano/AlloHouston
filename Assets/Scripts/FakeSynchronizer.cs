@@ -114,9 +114,6 @@ namespace CRI.HelloHouston.ParticlePhysics
                     _fakeTopScreen.FillChosenDiagrams(_fakeTabletScreen._chosenReactions, _fakeTabletScreen._realReaction);
                     _fakeTopScreen.FillInteractionType(_fakeTabletScreen._realReaction);
                     break;
-                case "ParticleInCorrect":
-                    _fakeTopScreen.IncorrectParticle();
-                    break;
                 case "ClearParticles":
                     _fakeTopScreen.ClearParticles();
                     break;
@@ -139,7 +136,12 @@ namespace CRI.HelloHouston.ParticlePhysics
                     _fakeTopScreen.ErrorParticles(_fakeTabletScreen.particleErrorString);
                     break;
                 case "ParticleRightCombination":
-                    _fakeTopScreen.CorrectParticle();
+                    _fakeTopScreen.OverrideSecond();
+                    _fakeTabletScreen.OverrideSecond();
+                    _fakeTubeScreen.OverrideSecond(_fakeTabletScreen._allReactions);
+                    break;
+                case "ReactionSelected":
+                    _fakeTopScreen.ReactionSelected(_fakeTabletScreen._realReaction, _fakeTubeScreen.diagramSelected);
                     break;
                 default:
                     break;

@@ -44,7 +44,7 @@ namespace CRI.HelloHouston.ParticlePhysics
         /// All the panels for the tablet screen.
         /// </summary>
         [SerializeField]
-        private GameObject _panel, _b1C2, _b1C4, _b1C4Left, _b1C5Left, _b1C6Left;
+        private GameObject _panel, _b1C2, _b1C4, _b1C4Left, _b1C5Left, _b1C6Left, _b1C6Right, _b1C7Left;
         /// <summary>
         /// Loading bar to display the time remaining.
         /// </summary>
@@ -85,8 +85,6 @@ namespace CRI.HelloHouston.ParticlePhysics
         /// String displayed depending on the particles combination entered.
         /// </summary>
         public string[] result;
-        //TO DO: those should be accessed by the synchronizer
-        public Text partic, partic2;
         /// <summary>
         /// Number of ongoing reactions.
         /// </summary>
@@ -113,6 +111,27 @@ namespace CRI.HelloHouston.ParticlePhysics
         public int displayedDiagram = 0;
         public string particleErrorString;
 
+        IEnumerator WaitGeneric(float time, Action action)
+        {
+            yield return new WaitForSeconds(time);
+            action.Invoke();
+        }
+
+        public void SelectReaction()
+        {
+                _synchronizer.SynchronizeScreens("ReactionSelected");
+        }
+
+        public void OverrideSecond()
+        {
+          
+                _b1C6Right.SetActive(true);
+            _b1C7Left.SetActive(true);
+            _b1C6Left.SetActive(false);
+            
+            
+        }
+
         public void NextDiagram()
         {
             if (!isTouched)
@@ -126,6 +145,8 @@ namespace CRI.HelloHouston.ParticlePhysics
                 StartCoroutine("WaitButton");
             }
         }
+
+
 
         public void PreviousDiagram()
         {
@@ -169,7 +190,7 @@ namespace CRI.HelloHouston.ParticlePhysics
 
         IEnumerator WaitButton()
         {
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(0.5f);
             isTouched = false;
         }
 
@@ -259,8 +280,7 @@ namespace CRI.HelloHouston.ParticlePhysics
                 {
                     type += realParticles[i];
                 }
-            
-            partic2.text = type;
+           
             
             _synchronizer.SynchronizeScreens("ParticleCorrect");
             
@@ -299,32 +319,116 @@ namespace CRI.HelloHouston.ParticlePhysics
         {
             if(_enteredParticles.Count == reactionExits.Count)
             {
-                bool symbols = true;
+                int nbQuark = 0;
+                int nbAntiquark = 0;
+                int nbMuon = 0;
+                int nbAntimuon = 0;
+                int nbElectron = 0;
+                int nbAntielectron = 0;
+                int nbNeutrino = 0;
+                int nbPhoton = 0;
 
-               for(int i = 0; i<reactionExits.Count;i++)
+                foreach (Particle particle in reactionExits)
                 {
-                    if(_enteredParticles[i].symbol != reactionExits[i].symbol)
+                    switch (particle.symbol)
                     {
-                        Debug.Log("pas meme symbol");
-                        symbols = false;
-                        particleErrorString = "WRONG PARTICLES!";
-                        _synchronizer.SynchronizeScreens("ParticleWrongSymbol");
-                        break;
-                    }
-                }
-                if (symbols)
-                {
-                    for (int i = 0; i < reactionExits.Count; i++)
-                    {
-                        if (_enteredParticles[i].negative != reactionExits[i].negative)
-                        {
-                            Debug.Log("pas meme charge");
-                            particleErrorString = "WRONG NUMBER OF CHARGES!";
-                            _synchronizer.SynchronizeScreens("ParticleWrongCharge");
+                        case "q":
+                            nbQuark++;
                             break;
-                        }
+                        case "qBar":
+                            nbAntiquark++;
+                            break;
+                        case "μ":
+                            nbMuon++;
+                            break;
+                        case "μBar":
+                            nbAntimuon++;
+                            break;
+                        case "e":
+                            nbElectron++;
+                            break;
+                        case "eBar":
+                            nbAntielectron++;
+                            break;
+                        case "v":
+                            nbNeutrino++;
+                            break;
+                        case "vBar":
+                            nbNeutrino++;
+                            break;
+                        case "γ":
+                            nbPhoton++;
+                            break;
+                        default:
+                            break;
                     }
                 }
+
+                int nbQuarkEntered = 0;
+                int nbAntiquarkEntered = 0;
+                int nbMuonEntered = 0;
+                int nbAntimuonEntered = 0;
+                int nbElectronEntered = 0;
+                int nbAntielectronEntered = 0;
+                int nbNeutrinoEntered = 0;
+                int nbPhotonEntered = 0;
+
+                foreach (Particle particle in _enteredParticles)
+                {
+                    switch (particle.symbol)
+                    {
+                        case "q":
+                            nbQuarkEntered++;
+                            break;
+                        case "qBar":
+                            nbAntiquarkEntered++;
+                            break;
+                        case "μ":
+                            nbMuonEntered++;
+                            break;
+                        case "μBar":
+                            nbAntimuonEntered++;
+                            break;
+                        case "e":
+                            nbElectronEntered++;
+                            break;
+                        case "eBar":
+                            nbAntielectronEntered++;
+                            break;
+                        case "v":
+                            nbNeutrinoEntered++;
+                            break;
+                        case "vBar":
+                            nbNeutrinoEntered++;
+                            break;
+                        case "γ":
+                            nbPhotonEntered++;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                if((nbElectron+nbAntielectron == nbElectronEntered+nbAntielectronEntered) && (nbMuon+nbAntimuon == nbMuonEntered+nbAntimuonEntered) && (nbQuark+nbAntiquark == nbQuarkEntered+nbAntiquarkEntered) && nbNeutrino == nbNeutrinoEntered && nbPhoton == nbPhotonEntered)
+                {
+                    if(nbElectron == nbElectronEntered && nbAntielectron ==  nbAntielectronEntered && nbMuon == nbMuonEntered && nbAntimuon == nbAntimuonEntered && nbQuark == nbQuarkEntered && nbAntiquark ==  nbAntiquarkEntered && nbNeutrino == nbNeutrinoEntered && nbPhoton == nbPhotonEntered)
+                    {
+                        Debug.Log("correct");
+                        _synchronizer.SynchronizeScreens("ParticleRightCombination");
+                    }
+                    else
+                    {
+                        Debug.Log("pas meme charge");
+                        particleErrorString = "WRONG NUMBER OF CHARGES!";
+                        _synchronizer.SynchronizeScreens("ParticleWrongCharge");
+                    }
+                } else
+                {
+                    Debug.Log("pas meme symbol");
+                    particleErrorString = "WRONG PARTICLES!";
+                    _synchronizer.SynchronizeScreens("ParticleWrongSymbol");
+                }
+
             }
             else
             {
@@ -393,8 +497,11 @@ namespace CRI.HelloHouston.ParticlePhysics
         /// </summary>
         public void AccessGranted()
         {
-            _b1C5Left.SetActive(false);
+           
+               _b1C5Left.SetActive(false);
             _b1C6Left.SetActive(true);
+            
+            
         }
 
         /// <summary>
@@ -402,8 +509,12 @@ namespace CRI.HelloHouston.ParticlePhysics
         /// </summary>
         public void WaitingConfirmation()
         {
+           
             _b1C2.SetActive(true);
             _panel.SetActive(false);
+               
+           
+            
         }
 
         /// <summary>
@@ -412,8 +523,12 @@ namespace CRI.HelloHouston.ParticlePhysics
         public void OverrideButtonClicked()
         {
             _synchronizer.SynchronizeScreens("OverrideButtonClicked");
-            _b1C5Left.SetActive(true);
+            StartCoroutine(WaitGeneric(0.2f, () =>
+            {
+                _b1C5Left.SetActive(true);
             _b1C4Left.SetActive(false);
+            }));
+            
         }
 
         /// <summary>
@@ -422,9 +537,14 @@ namespace CRI.HelloHouston.ParticlePhysics
         public void StartButtonClicked()
         {
             _synchronizer.SynchronizeScreens("StartButtonClicked");
-            _b1C4.SetActive(true);
+            StartCoroutine(WaitGeneric(0.2f, () =>
+            {
+                _b1C4.SetActive(true);
             _b1C2.SetActive(false);
             StartCoroutine("FakeLoading");
+            }));
+            
+            
         }
         //TO DO
         /// <summary>

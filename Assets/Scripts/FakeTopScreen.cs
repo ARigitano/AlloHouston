@@ -37,16 +37,12 @@ namespace CRI.HelloHouston.ParticlePhysics
         /// <summary>
         /// Text displaying the password entered on the access screen.
         /// </summary>
-                    _passwordText,
-        /// <summary>
-        /// Text displaying the particles entered on the particle identification screen.
-        /// </summary>
-                   _particlesText;
+                    _passwordText;
         /// <summary>
         /// All the panels of the top left screen of the experiment.
         /// </summary>
         [SerializeField]
-        private GameObject _Exile_Loading_Screen, _MAIA_Loading_Screen, _MAIA_overview, _Manual_override_access, _Popup_Access_granted, _PopupError_Access_denied, _Manual_override_1, _b1A7bis, _PopupError_Message_Particles;
+        private GameObject _Exile_Loading_Screen, _MAIA_Loading_Screen, _MAIA_overview, _Manual_override_access, _Popup_Access_granted, _PopupError_Access_denied, _Manual_override_1, _PopupError_Message_Particles, _Override_Screen2;
         [SerializeField]
         private Text _loadingText;
         [SerializeField]
@@ -76,7 +72,33 @@ namespace CRI.HelloHouston.ParticlePhysics
         [SerializeField]
         private Sprite _starPasswword, _cursorPassword;
         [SerializeField]
-        private SpriteRenderer[] _slotPassword;
+        private GameObject[] _slotPassword;
+        [SerializeField]
+        private GameObject _popupWin, _popupLose;
+
+        public void ReactionSelected(Reaction realReaction, Sprite reactionSelected)
+        {
+            if (reactionSelected == realReaction.diagramImage)
+            {
+                _popupWin.SetActive(true);
+            }
+            else
+            {
+                _popupLose.SetActive(true);
+
+                StartCoroutine(WaitGeneric(2f, () =>
+                {
+                    _popupLose.SetActive(false);
+                }));
+            }
+               
+        }
+
+        public void OverrideSecond()
+        {
+            _Override_Screen2.SetActive(true);
+            _Manual_override_1.SetActive(false);
+        }
 
         IEnumerator WaitGeneric(float time, Action action)
         {
@@ -86,11 +108,11 @@ namespace CRI.HelloHouston.ParticlePhysics
 
         public void ErrorParticles(string error)
         {
-            _errorParticles.GetComponent<SpriteRenderer>().enabled = true;
+            _errorParticles.SetActive(true);
             _errorParticles.GetComponentInChildren<Text>().text = error;
             StartCoroutine(WaitGeneric(2f, () =>
                 {
-                    _errorParticles.GetComponent<SpriteRenderer>().enabled = false;
+                    _errorParticles.SetActive(false);
                 }));
 
                  
@@ -100,7 +122,7 @@ namespace CRI.HelloHouston.ParticlePhysics
 
         private void SuccessParticles()
         {
-
+            _successParticles.SetActive(true);
         }
 
         public void FillNbParticlesDetected(List<Particle> particles)
@@ -215,21 +237,9 @@ namespace CRI.HelloHouston.ParticlePhysics
             
         }
 
-        /// <summary>
-        /// Displays a popup if the correct combination of particles has been entered.
-        /// </summary>
-        public void CorrectParticle()
-        {
-            _b1A7bis.SetActive(true);
-        }
 
-        /// <summary>
-        /// Displays a popup if an incorrect combination of particles has been entered.
-        /// </summary>
-        public void IncorrectParticle()
-        {
-            _PopupError_Message_Particles.SetActive(true);
-        }
+
+
 
         /// <summary>
         /// Displays the pasword that is being entered.
@@ -241,7 +251,7 @@ namespace CRI.HelloHouston.ParticlePhysics
 
             for (int i = 0; i<password.Length; i++)
             {
-                _slotPassword[i].sprite = _starPasswword;
+                _slotPassword[i].GetComponent<SpriteRenderer>().sprite = _starPasswword;
             }
 
           
@@ -270,7 +280,7 @@ namespace CRI.HelloHouston.ParticlePhysics
             _PopupError_Access_denied.SetActive(false);
             for (int i = 0; i < _slotPassword.Length; i++)
             {
-                _slotPassword[i].sprite = _cursorPassword;
+                _slotPassword[i].GetComponent<SpriteRenderer>().sprite = _cursorPassword;
             }
         }
 
@@ -357,7 +367,7 @@ namespace CRI.HelloHouston.ParticlePhysics
         {
             _MAIA_Loading_Screen.SetActive(false);
             _MAIA_overview.SetActive(true);
-            StartCoroutine(WaitGeneric(2f, () =>
+            StartCoroutine(WaitGeneric(10f, () =>
             {
                 _popupCrash.SetActive(true);
                 StartCoroutine("ScrollingError");

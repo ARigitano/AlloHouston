@@ -26,13 +26,34 @@ namespace CRI.HelloHouston.ParticlePhysics
         /// </summary>
         [SerializeField]
         private Image _previousDiagram, _currentDiagram, _nextDiagram;
+        /// <summary>
+        /// 
+        /// </summary>
+        [SerializeField]
+        private GameObject _overrideScreen2;
+        public Sprite diagramSelected;
+        /// <summary>
+        /// Synchronizer for this experiment.
+        /// </summary>
+        [SerializeField]
+        private FakeSynchronizer _synchronizer;
+
+
+        public void OverrideSecond(Reaction[] reactions)
+        {
+            _overrideScreen2.SetActive(true);
+            _currentDiagram.sprite = reactions[0].diagramImage;
+            _nextDiagram.sprite = reactions[1].diagramImage;
+        }
 
         public void SelectExit(int nBDiagram)
         {
             if (_casesDiagram[nBDiagram].selectedExits.enabled == true)
                 _casesDiagram[nBDiagram].selectedExits.enabled = false;
             else
+            {
                 _casesDiagram[nBDiagram].selectedExits.enabled = true;
+            }
         }
 
         public void SelectInteraction(int nBDiagram)
@@ -56,6 +77,7 @@ namespace CRI.HelloHouston.ParticlePhysics
 
             _casesDiagram[nbDiagram].displayed.enabled = true;
             _currentDiagram.sprite = reactions[nbDiagram].diagramImage;
+            diagramSelected = reactions[nbDiagram].diagramImage;
 
             if (nbDiagram + 1 < _casesDiagram.Length)
             {
@@ -89,7 +111,7 @@ namespace CRI.HelloHouston.ParticlePhysics
         public override void OnActivated()
         {
             Debug.Log(name + "Activated");
-            _tube.GetComponent<MeshRenderer>().enabled = true;
+            //_tube.GetComponent<MeshRenderer>().enabled = true;
         }
         //TO DO
         /// <summary>
