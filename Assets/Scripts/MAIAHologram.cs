@@ -3,51 +3,45 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CRI.HelloHouston.ParticlePhysics
+namespace CRI.HelloHouston.Experience.MAIA
 {
     /// <summary>
     /// An hologram for the particle physics experiment.
     /// </summary>
-    public class FakeHologram : XPHologramElement
+    public class MAIAHologram : XPHologramElement
     {
         /// <summary>
         /// The synchronizer of the experiment.
         /// </summary>
-        [SerializeField]
-        private ExempleSynchronizer _synchronizer;
+        private MAIASynchronizer _synchronizer;
         /// <summary>
         /// Folder path for the particle scriptable objects
         /// </summary>
-        private static string _path = "Particle";
+        private const string _path = "Particle";
         /// <summary>
         /// Lines to be displayed by the hologram.
         /// </summary>
-        [SerializeField]
-        private List<GameObject> lines;
+        private List<BezierSpline> _lines = new List<BezierSpline>();
         //private GameObject[] lines;
         /// <summary>
         /// End point of the generated lines.
         /// </summary>
-        [SerializeField]
-        private GameObject[] pointsB;
+        private GameObject[] _pointsB = null;
         /// <summary>
         /// Prefab of the hologram.
         /// </summary>
         [SerializeField]
-        private GameObject _hologram;
+        private GameObject _hologram = null;
+        /// <summary>
+        /// Prefab of the head of a particle line.
+        /// </summary>
         [SerializeField]
-        /// <summary>
-        /// Prefab of the sphere that will be generated several times to constitute a particle line.
-        /// </summary>
-        private GameObject _sphere,
+        private GameObject _headPrefab = null;
         /// <summary>
         /// Prefab of the head of a particle line.
         /// </summary>
-                           _head,
-        /// <summary>
-        /// Prefab of the head of a particle line.
-        /// </summary>
-                           _headQuark;
+        [SerializeField]
+        private GameObject _headQuarkPrefab = null;
         /// <summary>
         /// Angle for shaping the bezier curves of the particle lines.
         /// </summary>
@@ -68,40 +62,36 @@ namespace CRI.HelloHouston.ParticlePhysics
         /// Spline prefab.
         /// </summary>
         [SerializeField]
-        private GameObject _particleSpline;
+        private BezierSpline _particleSplinePrefab = null;
         /// <summary>
         /// Last point of spline prefab.
         /// </summary>
         [SerializeField]
-        private GameObject _destination;
-        /// <summary>
-        /// Number of particles to generate.
-        /// </summary>
-        public int particleCount = 25;
+        private GameObject _destination = null;
         /// <summary>
         /// First cylinder.
         /// </summary>
         [SerializeField]
         [Tooltip("First cylinder.")]
-        private Renderer _cyl1;
+        private MeshFilter _cyl1 = null;
         /// <summary>
         /// Second cylinder.
         /// </summary>
         [SerializeField]
         [Tooltip("Second cylider.")]
-        private Renderer _cyl2;
+        private MeshFilter _cyl2 = null;
         /// <summary>
         /// Third cylinder.
         /// </summary>
         [SerializeField]
         [Tooltip("Third cylinder.")]
-        private Renderer _cyl3;
+        private MeshFilter _cyl3 = null;
         /// <summary>
         /// Fourth cylinder.
         /// </summary>
         [SerializeField]
         [Tooltip("Fourth cylinder.")]
-        private Renderer _cyl4;
+        private MeshFilter _cyl4 = null;
         /// <summary>
         /// Particle reactor zones margin.
         /// </summary>
@@ -110,42 +100,34 @@ namespace CRI.HelloHouston.ParticlePhysics
         /// <summary>
         /// Maximum radius of first zone.
         /// </summary>
-        [SerializeField]
         private float _rMaxCyl1 = 0.125f;
         /// <summary>
         /// Maximum half width of first zone.
         /// </summary>
-        [SerializeField]
         private float _lMaxCyl1 = 0.25f;
         /// <summary>
         /// Maximum radius of second zone.
         /// </summary>
-        [SerializeField]
         private float _rMaxCyl2 = 0.25f;
         /// <summary>
         /// Maximum half width of second zone.
         /// </summary>
-        [SerializeField]
         private float _lMaxCyl2 = 0.5f;
         /// <summary>
         /// Maximum radius of third zone.
         /// </summary>
-        [SerializeField]
         private float _rMaxCyl3 = 0.375f;
         /// <summary>
         /// Maximum half width of third zone.
         /// </summary>
-        [SerializeField]
         private float _lMaxCyl3 = 0.75f;
         /// <summary>
         /// Maximum radius of fourth zone.
         /// </summary>
-        [SerializeField]
         private float _rMaxCyl4 = 1f;
         /// <summary>
         /// Maximum half width of fourth zone.
         /// </summary>
-        [SerializeField]
         private float _lMaxCyl4 = 1f;
 
         /// <summary>
@@ -154,7 +136,16 @@ namespace CRI.HelloHouston.ParticlePhysics
         /// <param name="particles">The combination of particles.</param>
         public void AnimHologram(List<Particle> particles)
         {
-            for(int i = 0; i<particles.Count; i++)
+            _rMaxCyl1 = _cyl1.mesh.bounds.extents.x * _cyl1.transform.localScale.x;
+            _lMaxCyl1 = _cyl1.mesh.bounds.extents.y * _cyl1.transform.localScale.y;
+            _rMaxCyl2 = _cyl2.mesh.bounds.extents.x * _cyl2.transform.localScale.x;
+            _lMaxCyl2 = _cyl2.mesh.bounds.extents.y * _cyl2.transform.localScale.y;
+            _rMaxCyl3 = _cyl3.mesh.bounds.extents.x * _cyl3.transform.localScale.x;
+            _lMaxCyl3 = _cyl3.mesh.bounds.extents.y * _cyl3.transform.localScale.y;
+            _rMaxCyl4 = _cyl4.mesh.bounds.extents.x * _cyl4.transform.localScale.x;
+            _lMaxCyl4 = _cyl4.mesh.bounds.extents.y * _cyl4.transform.localScale.y;
+            _pointsB = new GameObject[particles.Count];
+            for (int i = 0; i < particles.Count; i++)
             {
                 Vector3 headPosition = CreateLine(i, particles[i]);
             }
@@ -187,15 +178,14 @@ namespace CRI.HelloHouston.ParticlePhysics
             }
 
             //Generating the spline.
-            GameObject lineParticle = (GameObject)Instantiate(_particleSpline, Vector3.zero, Quaternion.identity, transform);
-            lines.Add(lineParticle);
-            lineParticle.transform.localPosition = Vector3.zero;
-            lineParticle.transform.localRotation = Quaternion.identity;
-            BezierSpline spline = lineParticle.GetComponent<BezierSpline>();
+            var spline = Instantiate(_particleSplinePrefab, Vector3.zero, Quaternion.identity, transform);
+            spline.transform.localPosition = Vector3.zero;
+            spline.transform.localRotation = Quaternion.identity;
+            _lines.Add(spline);
             spline.Reset();
 
-            pointsB[i] = (GameObject)Instantiate(_destination, Vector3.zero, Quaternion.identity);
-            pointsB[i].transform.parent = this.gameObject.transform;
+            _pointsB[i] = (GameObject)Instantiate(_destination, Vector3.zero, Quaternion.identity);
+            _pointsB[i].transform.parent = this.gameObject.transform;
 
             //Setting the instantiating boundaries.
             float rMax = 0f;
@@ -257,7 +247,7 @@ namespace CRI.HelloHouston.ParticlePhysics
                 //Mathf.Cos(Random.Range(-1f * Mathf.PI , Mathf.PI ));
                 spline.points[3].z = r * Mathf.Sin(alpha);
 
-                lineParticle.name = particle.particleName + i;
+                spline.gameObject.name = particle.particleName + i;
 
                 spline.points[0] = Vector3.zero;
 
@@ -281,23 +271,13 @@ namespace CRI.HelloHouston.ParticlePhysics
 
             //Displaying the lines.
             if (particle.line)
-            {
-                _sphere.GetComponent<MeshRenderer>().material = particle.debugMaterial;
-                lineParticle.AddComponent<SplineDecorator>();
-                SplineDecorator decorator = lineParticle.GetComponent<SplineDecorator>();
-                decorator.spline = spline;
-                decorator.frequency = 75;
-                decorator.items = new Transform[1];
-                decorator.items[0] = _sphere.transform;
-                decorator.Populate();
-            }
+                spline.GetComponent<SplineDecorator>().Populate();
 
             //Displaying the heads.
             if (particle.head)
             {
-                GameObject lineHead = (GameObject)Instantiate(_head, Vector3.zero, Quaternion.identity, lines[i].transform);
-                lineHead.GetComponent<MeshRenderer>().material = particle.debugMaterial;
-
+                GameObject lineHead = (GameObject)Instantiate(_headPrefab, Vector3.zero, Quaternion.identity, _lines[i].transform);
+                lineHead.GetComponent<Renderer>().material.SetColor("_Color", spline.GetComponent<SplineDecorator>().endColor);
                 lineHead.transform.localPosition = spline.points[3];
                 lineHead.transform.localRotation = Quaternion.FromToRotation(lineHead.transform.forward, vDir);
             }
@@ -305,7 +285,7 @@ namespace CRI.HelloHouston.ParticlePhysics
             return spline.points[3];
         }
 
-        public void Init(ExempleSynchronizer synchronizer)
+        public void Init(MAIASynchronizer synchronizer)
         {
             _synchronizer = synchronizer;
         }

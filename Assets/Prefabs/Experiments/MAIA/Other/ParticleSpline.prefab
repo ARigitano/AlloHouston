@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4723130836425868}
   - component: {fileID: 114330974348385556}
+  - component: {fileID: 114450142418297190}
   m_Layer: 0
   m_Name: ParticleSpline
   m_TagString: Untagged
@@ -58,3 +59,22 @@ MonoBehaviour:
   - {x: 3.9999998, y: 1.266038, z: 2.154324}
   modes: 0000000000000000
   loop: 0
+--- !u!114 &114450142418297190
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1394503751326142}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee2cdd158732c4661ba3c2b49fe9ebc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spline: {fileID: 114330974348385556}
+  frequency: 75
+  lookForward: 0
+  items:
+  - {fileID: 4921026381109300, guid: 3df66bd7a5e4e374884a3a5386055ca4, type: 2}
+  colorGradient: 1
+  startColor: {r: 0, g: 0.34212565, b: 1, a: 1}
+  endColor: {r: 1, g: 0, b: 0.8307333, a: 1}

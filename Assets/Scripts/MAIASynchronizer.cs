@@ -1,32 +1,28 @@
 ﻿using CRI.HelloHouston.Calibration;
-using CRI.HelloHouston.Experience;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 /// <summary>
 /// The synchronizer of the particle physics experiment.
 /// </summary>
-namespace CRI.HelloHouston.ParticlePhysics
+namespace CRI.HelloHouston.Experience.MAIA
 {
-    public class ExempleSynchronizer : XPSynchronizer
+    public class MAIASynchronizer : XPSynchronizer
     {
         /// <summary>
         /// The top left script of the experiment block.
         /// </summary>
-        private FakeTopScreen _fakeTopScreen;
+        private MAIATopScreen _fakeTopScreen;
         /// <summary>
         /// The top right script of the experiment block.
         /// </summary>
-        private FakeTubeScreen _fakeTubeScreen;
+        private MAIATubeScreen _fakeTubeScreen;
         /// <summary>
         /// The tablet script of the experiment block.
         /// </summary>
-        private FakeTabletScreen _fakeTabletScreen;
+        private MAIATabletScreen _fakeTabletScreen;
         /// <summary>
         /// The hologram scripts of the table block.
         /// </summary>
-        private FakeHologram[] _holograms;
+        private MAIAHologram[] _holograms;
 
         public void LoadingBarFinished()
         {
@@ -99,20 +95,20 @@ namespace CRI.HelloHouston.ParticlePhysics
         protected override void PreShow(VirtualWallTopZone wallTopZone, ElementInfo[] info)
         {
             base.PreShow(wallTopZone, info);
-            _fakeTabletScreen = GetElement<FakeTabletScreen>();
-            _fakeTopScreen = GetElement<FakeTopScreen>();
-            _fakeTubeScreen = GetElement<FakeTubeScreen>();
+            _fakeTabletScreen = GetElement<MAIATabletScreen>();
+            _fakeTopScreen = GetElement<MAIATopScreen>();
+            _fakeTubeScreen = GetElement<MAIATubeScreen>();
         }
 
         protected override void PostInit(XPContext xpContext, ElementInfo[] info, LogExperienceController logController, XPState stateOnActivation)
         {
             base.PostInit(xpContext, info, logController, stateOnActivation);
-            _holograms = GetElements<FakeHologram>();
+            _holograms = GetElements<MAIAHologram>();
             _holograms[0].Init(this);
-            _fakeTabletScreen = GetElement<FakeTabletScreen>();
-            _fakeTopScreen = GetElement<FakeTopScreen>();
+            _fakeTabletScreen = GetElement<MAIATabletScreen>();
+            _fakeTopScreen = GetElement<MAIATopScreen>();
             _fakeTopScreen.Init(this);
-            _fakeTubeScreen = GetElement<FakeTubeScreen>();
+            _fakeTubeScreen = GetElement<MAIATubeScreen>();
         }
     }
 }

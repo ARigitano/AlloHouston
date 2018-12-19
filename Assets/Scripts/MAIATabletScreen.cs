@@ -1,17 +1,16 @@
-﻿using CRI.HelloHouston.Experience;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using System;
 using System.Linq;
+using CRI.HelloHouston.ParticlePhysics;
 
-namespace CRI.HelloHouston.ParticlePhysics
+namespace CRI.HelloHouston.Experience.MAIA
 {
     /// <summary>
     /// The tablet screen of the experiment block for the particle physics experiment.
     /// </summary>
-    public class FakeTabletScreen : XPElement
+    public class MAIATabletScreen : XPElement
     {
         /// <summary>
         /// All the particle scriptable objects.
@@ -39,7 +38,7 @@ namespace CRI.HelloHouston.ParticlePhysics
         /// Synchronizer for this experiment.
         /// </summary>
         [SerializeField]
-        private ExempleSynchronizer _synchronizer;
+        private MAIASynchronizer _synchronizer;
         /// <summary>
         /// All the panels for the tablet screen.
         /// </summary>
@@ -384,23 +383,6 @@ namespace CRI.HelloHouston.ParticlePhysics
             _b1C2.SetActive(false);
             StartCoroutine("FakeLoading");
         }
-        //TO DO
-        /// <summary>
-        /// Effect when the experiment is correctly resolved.
-        /// </summary>
-        public override void OnSuccess()
-        {
-            Debug.Log(name + "Resolved");
-        }
-        //TO DO
-        /// <summary>
-        /// Effect when the experiment is failed.
-        /// </summary>
-        public override void OnFailure()
-        {
-            Debug.Log(name + "Failed");
-        }
-        //TO DO
         /// <summary>
         /// Effect when the experiment is activated the first time.
         /// </summary>
@@ -408,22 +390,6 @@ namespace CRI.HelloHouston.ParticlePhysics
         {
             reactionExits = ParticlesCombination();
             Debug.Log(name + "Activated");
-        }
-        //TO DO
-        /// <summary>
-        /// Effect when the experiment is paused.
-        /// </summary>
-        public override void OnHide()
-        {
-            Debug.Log(name + "Paused");
-        }
-        //TO DO
-        /// <summary>
-        /// Effect when the experiment is unpaused.
-        /// </summary>
-        public override void OnShow()
-        {
-            Debug.Log(name + "Unpaused");
         }
     }
 }

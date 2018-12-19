@@ -10,6 +10,12 @@ public class SplineDecorator : MonoBehaviour {
 
 	public Transform[] items;
 
+    public bool colorGradient;
+
+    public Color startColor;
+
+    public Color endColor;
+
 	public void Populate () {
 		if (frequency <= 0 || items == null || items.Length == 0) {
 			return;
@@ -32,7 +38,14 @@ public class SplineDecorator : MonoBehaviour {
 				}
 				item.transform.parent = transform;
                 item.localScale = localScale;
-			}
+                Renderer renderer = item.GetComponent<Renderer>();
+                if (colorGradient && startColor != null && endColor != null
+                    && renderer != null
+                    && renderer.material != null)
+                {
+                    renderer.material.SetColor("_Color", Color.Lerp(startColor, endColor, (float)f / (float)frequency));
+                }
+            }
 		}
 	}
 }

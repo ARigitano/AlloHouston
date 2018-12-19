@@ -4,18 +4,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace CRI.HelloHouston.ParticlePhysics
+namespace CRI.HelloHouston.Experience.MAIA
 {
     /// <summary>
     /// The top left screen of the experiment block for the particle physics experiment.
     /// </summary>
-    public class FakeTopScreen : XPElement
+    public class MAIATopScreen : XPElement
     {
         /// <summary>
         /// The synchronizer of the experiment.
         /// </summary>
         [SerializeField]
-        private ExempleSynchronizer _synchronizer;
+        private MAIASynchronizer _synchronizer;
         /// <summary>
         /// TODO: the current panel displayed on the screen.
         /// </summary>
@@ -186,7 +186,7 @@ namespace CRI.HelloHouston.ParticlePhysics
             _b1A4.SetActive(false);
         }
 
-        public void Init(ExempleSynchronizer synchronizer)
+        public void Init(MAIASynchronizer synchronizer)
         {
             _synchronizer = synchronizer;
         }
