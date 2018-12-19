@@ -60,5 +60,10 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         [Tooltip("Does the particle stop at the extremity of its destination?")]
         public bool extremity;
+        /// <summary>
+        /// Color at the end of the line, if there's a line.
+        /// </summary>
+        [Tooltip("Color at the end of the line, if there's a line.")]
+        public Color endColor;
     }
 }

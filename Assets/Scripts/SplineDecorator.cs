@@ -13,6 +13,7 @@ public class SplineDecorator : MonoBehaviour {
     public bool colorGradient;
 
     public Color startColor;
+    public Color secondColor;
 
     public Color endColor;
 
@@ -27,6 +28,26 @@ public class SplineDecorator : MonoBehaviour {
 		else {
 			stepSize = 1f / (stepSize - 1);
 		}
+        Gradient gradient = null;
+        if (colorGradient)
+        {
+            gradient = new Gradient();
+
+            // Populate the color keys at the relative time 0 and 1 (0 and 100%)
+            var colorKey = new GradientColorKey[]
+            {
+                new GradientColorKey(startColor, 0.0f),
+                new GradientColorKey(secondColor, 0.1f),
+                new GradientColorKey(endColor, 0.5f),
+            };
+
+            var alphaKey = new GradientAlphaKey[]
+            {
+                new GradientAlphaKey(1.0f, 0.0f),
+            };
+
+            gradient.SetKeys(colorKey, alphaKey);
+        }
 		for (int p = 0, f = 0; f < frequency; f++) {
 			for (int i = 0; i < items.Length; i++, p++) {
 				Transform item = Instantiate(items[i]) as Transform;
@@ -39,11 +60,11 @@ public class SplineDecorator : MonoBehaviour {
 				item.transform.parent = transform;
                 item.localScale = localScale;
                 Renderer renderer = item.GetComponent<Renderer>();
-                if (colorGradient && startColor != null && endColor != null
+                if (gradient != null
                     && renderer != null
                     && renderer.material != null)
                 {
-                    renderer.material.SetColor("_Color", Color.Lerp(startColor, endColor, (float)f / (float)frequency));
+                    renderer.material.SetColor("_Color", gradient.Evaluate((float)f / frequency));
                 }
             }
 		}
