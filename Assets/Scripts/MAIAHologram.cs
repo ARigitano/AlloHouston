@@ -53,10 +53,12 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// Amplitude for the bezier curves curvature.
         /// </summary>
+        [SerializeField]
         private float _amplitudeA = 0.15f;
         /// <summary>
         /// Amplitude for the bezier curves curvature.
         /// </summary>
+        [SerializeField]
         private float _amplitudeB = 0.15f;
         /// <summary>
         /// Spline prefab.
@@ -137,13 +139,13 @@ namespace CRI.HelloHouston.Experience.MAIA
         public void AnimHologram(List<Particle> particles)
         {
             _rMaxCyl1 = _cyl1.mesh.bounds.extents.x * _cyl1.transform.localScale.x;
-            _lMaxCyl1 = _cyl1.mesh.bounds.extents.y * _cyl1.transform.localScale.z;
+            _lMaxCyl1 = _cyl1.mesh.bounds.extents.y * _cyl1.transform.localScale.y;
             _rMaxCyl2 = _cyl2.mesh.bounds.extents.x * _cyl2.transform.localScale.x;
-            _lMaxCyl2 = _cyl2.mesh.bounds.extents.y * _cyl2.transform.localScale.z;
+            _lMaxCyl2 = _cyl2.mesh.bounds.extents.y * _cyl2.transform.localScale.y;
             _rMaxCyl3 = _cyl3.mesh.bounds.extents.x * _cyl3.transform.localScale.x;
-            _lMaxCyl3 = _cyl3.mesh.bounds.extents.y * _cyl3.transform.localScale.z;
+            _lMaxCyl3 = _cyl3.mesh.bounds.extents.y * _cyl3.transform.localScale.y;
             _rMaxCyl4 = _cyl4.mesh.bounds.extents.x * _cyl4.transform.localScale.x;
-            _lMaxCyl4 = _cyl4.mesh.bounds.extents.y * _cyl4.transform.localScale.z;
+            _lMaxCyl4 = _cyl4.mesh.bounds.extents.y * _cyl4.transform.localScale.y;
             _pointsB = new GameObject[particles.Count];
             for (int i = 0; i < particles.Count; i++)
             {
