@@ -1,10 +1,8 @@
 ﻿// Copyright (c) 2018 ManusVR
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Assets.ManusVR.Scripts.Factory;
 using UnityEngine;
-using Valve.VR.InteractionSystem;
 
 namespace Assets.ManusVR.Scripts.PhysicalInteraction
 {

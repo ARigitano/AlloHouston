@@ -28,7 +28,7 @@ namespace CRI.HelloHouston.ParticlePhysics
         /// <summary>
         /// Image of the Feynman diagram.
         /// </summary>
-        public Texture diagramImage;
+        public Sprite diagramImage;
     }
 
     /// <summary>

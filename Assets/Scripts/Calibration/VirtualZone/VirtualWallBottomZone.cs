@@ -38,6 +38,11 @@ namespace CRI.HelloHouston.Calibration
 
         protected override void AddXPZone(XPZone xpZone, XPContext xpContext)
         {
+            if (xpZone == null)
+            {
+                this.xpWallBottomZone = null;
+                wallBottomVirtualElement.PlaceObject(null, null);
+            }
             var xpWallBottomZone = xpZone as XPWallBottomZone;
             if (!xpWallBottomZone)
                 throw new WrongZoneTypeException();

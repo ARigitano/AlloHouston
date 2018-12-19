@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 using System.Linq;
 using CRI.HelloHouston.ParticlePhysics;
 
@@ -21,7 +22,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// All the reaction scriptable objects.
         /// </summary>
         [SerializeField]
-        private Reaction[] _allReactions;
+        public Reaction[] _allReactions;
         /// <summary>
         /// Path to the particle scriptable objects folder.
         /// </summary>
@@ -43,7 +44,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// All the panels for the tablet screen.
         /// </summary>
         [SerializeField]
-        private GameObject _panel, _b1C2, _b1C4, _b1C4Left, _b1C5Left, _b1C6Left;
+        private GameObject _panel, _b1C2, _b1C4, _b1C4Left, _b1C5Left, _b1C6Left, _b1C6Right, _b1C7Left;
         /// <summary>
         /// Loading bar to display the time remaining.
         /// </summary>
@@ -70,7 +71,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// The particles entered by the player.
         /// </summary>
-        public List<string> _enteredParticles = new List<string>();
+        public List<Particle> _enteredParticles = new List<Particle>();
         [SerializeField]
         /// <summary>
         /// The buttons to enter digits for the password.
@@ -93,22 +94,103 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// The ongoing reactions.
         /// </summary>
         [SerializeField]
-        private List<Reaction> _chosenReactions = new List<Reaction>();
+        public List<Reaction> _chosenReactions = new List<Reaction>();
         /// <summary>
         /// The reaction to idetify.
         /// </summary>
         [SerializeField]
-        private Reaction _realReaction;
+        public Reaction _realReaction;
         /// <summary>
         /// The particles produced by the ongoing reactions.
         /// </summary>
         [SerializeField]
         public List<Particle> reactionExits = new List<Particle>();
         private bool isTouched = false;
+        //TODO: not needed?
+        public Particle particleToEnter;
+        public int displayedDiagram = 0;
+        public string particleErrorString;
+
+        IEnumerator WaitGeneric(float time, Action action)
+        {
+            yield return new WaitForSeconds(time);
+            action.Invoke();
+        }
+
+        public void SelectReaction()
+        {
+            _synchronizer.ReactionSelected();
+        }
+
+        public void OverrideSecond()
+        {
+
+            _b1C6Right.SetActive(true);
+            _b1C7Left.SetActive(true);
+            _b1C6Left.SetActive(false);
+
+
+        }
+
+        public void NextDiagram()
+        {
+            if (!isTouched)
+            {
+                isTouched = true;
+                if (displayedDiagram < _allReactions.Length)
+                {
+                    displayedDiagram++;
+                    _synchronizer.OtherDiagram();
+                }
+                StartCoroutine("WaitButton");
+            }
+        }
+
+
+
+        public void PreviousDiagram()
+        {
+            if (!isTouched)
+            {
+                isTouched = true;
+                Debug.Log("CALLED");
+                if (displayedDiagram > 0)
+                {
+                    displayedDiagram--;
+
+                    _synchronizer.OtherDiagram();
+                }
+                StartCoroutine("WaitButton");
+            }
+        }
+
+        public void PreselectExits()
+        {
+            if (!isTouched)
+            {
+                isTouched = true;
+
+                _synchronizer.SelectExit();
+
+                StartCoroutine("WaitButton");
+            }
+        }
+
+        public void PreselectInteraction()
+        {
+            if (!isTouched)
+            {
+                isTouched = true;
+
+                _synchronizer.SelectInteraction();
+
+                StartCoroutine("WaitButton");
+            }
+        }
 
         IEnumerator WaitButton()
         {
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(0.5f);
             isTouched = false;
         }
 
@@ -117,7 +199,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         private void ReactionsCombination()
         {
-            _allReactions = Resources.LoadAll(_pathReaction, typeof(Reaction)).Cast<Reaction>().ToArray();
+            _allReactions = Resources.LoadAll<Reaction>(_pathReaction);
 
             List<Reaction> fundamentals = new List<Reaction>();
 
@@ -141,9 +223,9 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// Lists the particles produced by the ongoing reactions.
         /// </summary>
         /// <returns>The list of produced particles.</returns>
-        private List<Particle> ParticlesCombination()
+        public List<Particle> ParticlesCombination()
         {
-            _allParticles = Resources.LoadAll(_path, typeof(Particle)).Cast<Particle>().ToArray();
+            _allParticles = Resources.LoadAll<Particle>(_path);
 
             ReactionsCombination();
 
@@ -162,9 +244,8 @@ namespace CRI.HelloHouston.Experience.MAIA
                         }
                     }
                 }
-
-                GenerateParticleString();
             }
+            GenerateParticleString();
             return reactionExits;
         }
 
@@ -173,12 +254,13 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary
         private void GenerateParticleString()
         {
-                string type = "";
+            string type = "";
 
-                for (int i = 0; i < realParticles.Count; i++)
-                {
-                    type += realParticles[i];
-                }
+            for (int i = 0; i < realParticles.Count; i++)
+            {
+                type += realParticles[i];
+            }
+            _synchronizer.CorrectParticle();
         }
 
         /// <summary>
@@ -201,121 +283,157 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void ClearParticles()
         {
-            for(int i = 0; i < _enteredParticles.Count; i++)
-            {
-                _enteredParticles[i] = "";
-            }
-            _synchronizer.EnteringParticles();
+            _enteredParticles.Clear();
+            _synchronizer.ClearParticles();
         }
-
         /// <summary>
         /// Submits the particles combination entered.
         /// </summary>
         public void SubmitParticles()
         {
-            Debug.Log("fired");
-
-            string particles = "";
-            string realPart = "";
-
-            for (int i = 0; i < _enteredParticles.Count; i++) 
+            if (_enteredParticles.Count == reactionExits.Count)
             {
-                particles+=_enteredParticles[i];
-            }
+                int nbQuark = 0;
+                int nbAntiquark = 0;
+                int nbMuon = 0;
+                int nbAntimuon = 0;
+                int nbElectron = 0;
+                int nbAntielectron = 0;
+                int nbNeutrino = 0;
+                int nbPhoton = 0;
 
-            for (int i = 0; i < realParticles.Count; i++) {
-                realPart += realParticles[i];
-            }
-
-            if (particles == realPart)
-            {
-                //_synchronizer.SynchronizeScreens("ParticleCorrect");
-                //meme longueur
-                Debug.Log("meme string");
-            }
-            else if (particles != realPart)
-            {
-                bool isSign = false;
-                int particleCounter = 0;
-
-                for (int i = 0; i < _enteredParticles.Count; i++) {
-                    if(_enteredParticles[i] != "")
-                        particleCounter++;
-                }
-
-                if (particleCounter != realParticles.Count)
+                foreach (Particle particle in reactionExits)
                 {
-                    //pas meme longueur
-                    Debug.Log("pas meme longueur");
-                }
-                else 
-                {
-                    for (int i = 0; i < realParticles.Count; i++)
+                    switch (particle.symbol)
                     {
-                        string particle = _enteredParticles[i];
-                        char sign = particle[0];
-
-                        string realParticle = realParticles[i];
-                        char realSign = realParticle[0];
-
-                        if (sign != realSign)
-                        {
-                            //pas meme symbol
-                            Debug.Log("pas meme symbol");
-                            isSign = true;
+                        case "q":
+                            nbQuark++;
                             break;
-                        }
-                    }
-                    if (!isSign)
-                    {
-                        for (int i = 0; i < realParticles.Count; i++)
-                        {
-                            char sign = '\0';
-                            char realSign = '\0';
-                            if (_enteredParticles[i].Length == 2)
-                            {
-                                string particle = _enteredParticles[i];
-                                sign = particle[1];
-                            }
-
-                            if (realParticles[i].Length == 2)
-                            {
-                                string realParticle = realParticles[i];
-                                realSign = realParticle[1];
-                            }
-
-                            if (sign != realSign)
-                            {
-                                //pas meme charge
-                                Debug.Log("pas meme charge");
-                                break;
-                            }
-                        }
+                        case "qBar":
+                            nbAntiquark++;
+                            break;
+                        case "μ":
+                            nbMuon++;
+                            break;
+                        case "μBar":
+                            nbAntimuon++;
+                            break;
+                        case "e":
+                            nbElectron++;
+                            break;
+                        case "eBar":
+                            nbAntielectron++;
+                            break;
+                        case "v":
+                            nbNeutrino++;
+                            break;
+                        case "vBar":
+                            nbNeutrino++;
+                            break;
+                        case "γ":
+                            nbPhoton++;
+                            break;
+                        default:
+                            break;
                     }
                 }
-                _synchronizer.IncorrectParticle();
-                enteredPassword = "";
+
+                int nbQuarkEntered = 0;
+                int nbAntiquarkEntered = 0;
+                int nbMuonEntered = 0;
+                int nbAntimuonEntered = 0;
+                int nbElectronEntered = 0;
+                int nbAntielectronEntered = 0;
+                int nbNeutrinoEntered = 0;
+                int nbPhotonEntered = 0;
+
+                foreach (Particle particle in _enteredParticles)
+                {
+                    switch (particle.symbol)
+                    {
+                        case "q":
+                            nbQuarkEntered++;
+                            break;
+                        case "qBar":
+                            nbAntiquarkEntered++;
+                            break;
+                        case "μ":
+                            nbMuonEntered++;
+                            break;
+                        case "μBar":
+                            nbAntimuonEntered++;
+                            break;
+                        case "e":
+                            nbElectronEntered++;
+                            break;
+                        case "eBar":
+                            nbAntielectronEntered++;
+                            break;
+                        case "v":
+                            nbNeutrinoEntered++;
+                            break;
+                        case "vBar":
+                            nbNeutrinoEntered++;
+                            break;
+                        case "γ":
+                            nbPhotonEntered++;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                if ((nbElectron + nbAntielectron == nbElectronEntered + nbAntielectronEntered) && (nbMuon + nbAntimuon == nbMuonEntered + nbAntimuonEntered) && (nbQuark + nbAntiquark == nbQuarkEntered + nbAntiquarkEntered) && nbNeutrino == nbNeutrinoEntered && nbPhoton == nbPhotonEntered)
+                {
+                    if (nbElectron == nbElectronEntered && nbAntielectron == nbAntielectronEntered && nbMuon == nbMuonEntered && nbAntimuon == nbAntimuonEntered && nbQuark == nbQuarkEntered && nbAntiquark == nbAntiquarkEntered && nbNeutrino == nbNeutrinoEntered && nbPhoton == nbPhotonEntered)
+                    {
+                        Debug.Log("correct");
+                        _synchronizer.ParticleRightCombination();
+                    }
+                    else
+                    {
+                        Debug.Log("pas meme charge");
+                        particleErrorString = "WRONG NUMBER OF CHARGES!";
+                        _synchronizer.ParticleWrongCharge();
+                    }
+                }
+                else
+                {
+                    Debug.Log("pas meme symbol");
+                    particleErrorString = "WRONG PARTICLES!";
+                    _synchronizer.ParticleWrongSymbol();
+                }
+
+            }
+            else
+            {
+                Debug.Log("pas meme longueur");
+                particleErrorString = "WRONG NUMBER OF PARTICLES!";
+                _synchronizer.ParticleWrongLength();
             }
         }
-
         /// <summary>
         /// Adds a particle to the combination.
         /// </summary>
-        /// <param name="particle">The particle to add.</param>
-        public void EnteringParticle(string particle)
+        /// <param name="particleButton">The particle to add.</param>
+        public void EnteringParticle(string particleButton)
         {
-            if (!isTouched)
+            if (!isTouched && _enteredParticles.Count < reactionExits.Count)
             {
                 isTouched = true;
-                if (_enteredParticles.Count < 23)
+
+                foreach (Particle particle in reactionExits)
                 {
-                    _enteredParticles.Add(particle);
-                    _synchronizer.EnteringParticles();
+                    if (particle.symbol == particleButton)
+                    {
+                        _enteredParticles.Add(particle);
+                        break;
+                    }
                 }
+                _synchronizer.EnteringParticles();
                 StartCoroutine("WaitButton");
             }
         }
-
         /// <summary>
         /// Adds a number to the password.
         /// </summary>
@@ -342,9 +460,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                 }
                 StartCoroutine("WaitButton");
             }
-
         }
-
         /// <summary>
         /// Displays particle selection panel after the correct password have been entered.
         /// </summary>
@@ -353,7 +469,6 @@ namespace CRI.HelloHouston.Experience.MAIA
             _b1C5Left.SetActive(false);
             _b1C6Left.SetActive(true);
         }
-
         /// <summary>
         /// Displays start panel after the splash screen has finished loading.
         /// </summary>
@@ -362,34 +477,36 @@ namespace CRI.HelloHouston.Experience.MAIA
             _b1C2.SetActive(true);
             _panel.SetActive(false);
         }
-
         /// <summary>
         /// Displays password panel adter override button has been clicked.
         /// </summary>
         public void OverrideButtonClicked()
         {
             _synchronizer.OverrideButtonClicked();
-            _b1C5Left.SetActive(true);
-            _b1C4Left.SetActive(false);
-        }
+            StartCoroutine(WaitGeneric(0.2f, () =>
+            {
+                _b1C5Left.SetActive(true);
+                _b1C4Left.SetActive(false);
+            }));
 
+        }
         /// <summary>
         /// Displays override panel after start button has been clicked.
         /// </summary>
         public void StartButtonClicked()
         {
             _synchronizer.StartButtonClicked();
-            _b1C4.SetActive(true);
-            _b1C2.SetActive(false);
-            StartCoroutine("FakeLoading");
+            StartCoroutine(WaitGeneric(0.2f, () =>
+            {
+                _b1C4.SetActive(true);
+                _b1C2.SetActive(false);
+                StartCoroutine("FakeLoading");
+            }));
         }
-        /// <summary>
-        /// Effect when the experiment is activated the first time.
-        /// </summary>
-        public override void OnActivation()
+
+        public void Init(MAIASynchronizer synchronizer)
         {
-            reactionExits = ParticlesCombination();
-            Debug.Log(name + "Activated");
+            _synchronizer = synchronizer;
         }
     }
 }

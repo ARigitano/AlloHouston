@@ -163,7 +163,7 @@ namespace CRI.HelloHouston.Experience
         public XPSynchronizer InitSynchronizer(LogExperienceController logExperienceController, VirtualZone[] zones)
         {
             XPSynchronizer res = GameObject.Instantiate(_xpSynchronizerPrefab);
-            res.Init(this, zones, logExperienceController);
+            res.Init(this, zones, logExperienceController, XPState.Visible);
             return res;
         }
     }

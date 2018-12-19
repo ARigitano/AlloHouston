@@ -10,15 +10,15 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// The top left script of the experiment block.
         /// </summary>
-        private MAIATopScreen _fakeTopScreen;
+        private MAIATopScreen _topScreen;
         /// <summary>
         /// The top right script of the experiment block.
         /// </summary>
-        private MAIATubeScreen _fakeTubeScreen;
+        private MAIATubeScreen _tubeScreen;
         /// <summary>
         /// The tablet script of the experiment block.
         /// </summary>
-        private MAIATabletScreen _fakeTabletScreen;
+        private MAIATabletScreen _tabletScreen;
         /// <summary>
         /// The hologram scripts of the table block.
         /// </summary>
@@ -26,78 +26,108 @@ namespace CRI.HelloHouston.Experience.MAIA
 
         public void LoadingBarFinished()
         {
-            if (state == XPState.Visible)
-                _fakeTabletScreen.WaitingConfirmation();
+            _tabletScreen.WaitingConfirmation();
         }
 
         public void StartButtonClicked()
         {
-            if (state == XPState.Visible)
-                _fakeTopScreen.ManualOverride();
+            _topScreen.ManualOverride();
         }
 
         public void OverrideButtonClicked()
         {
-            if (state == XPState.Visible)
-                _fakeTopScreen.AccessCode();
+            _topScreen.AccessCode();
         }
 
         public void CorrectPassword()
         {
-            if (state == XPState.Visible)
-                _fakeTopScreen.Access(true);
+            _topScreen.Access(true);
         }
 
         public void IncorrectPassword()
         {
-            if (state == XPState.Visible)
-                _fakeTopScreen.Access(false);
+            _topScreen.Access(false);
         }
 
         public void EnteringDigit()
         {
-            if (state == XPState.Visible)
-                _fakeTopScreen.DisplayPassword(_fakeTabletScreen.enteredPassword);
+            _topScreen.DisplayPassword(_tabletScreen.enteredPassword);
         }
 
         public void AccessGranted()
         {
-            if (state == XPState.Visible)
-                _fakeTabletScreen.AccessGranted();
+            _tabletScreen.AccessGranted();
+            _tabletScreen.reactionExits = _tabletScreen.ParticlesCombination();
+            _topScreen.FillNbParticlesDetected(_tabletScreen.reactionExits);
         }
 
         public void EnteringParticles()
         {
-            if (state == XPState.Visible)
-                _fakeTopScreen.DisplayParticles(_fakeTabletScreen._enteredParticles);
+            _topScreen.DisplayParticles(_tabletScreen._enteredParticles);
         }
 
         public void CorrectParticle()
         {
-            if (state == XPState.Visible)
-            {
-                _fakeTopScreen.CorrectParticle();
-                _holograms[0].AnimHologram(_fakeTabletScreen.reactionExits);
-            }
+            _holograms[0].AnimHologram(_tabletScreen.reactionExits);
+            _topScreen.ParticleGrid(_tabletScreen.reactionExits);
+            _topScreen.FillParticlesTable(_tabletScreen.reactionExits);
+            _topScreen.FillChosenDiagrams(_tabletScreen._chosenReactions, _tabletScreen._realReaction);
+            _topScreen.FillInteractionType(_tabletScreen._realReaction);
         }
 
-        public void IncorrectParticle()
+        public void ClearParticles()
         {
-            if (state == XPState.Visible)
-                _fakeTopScreen.IncorrectParticle();
+            _topScreen.ClearParticles();
         }
-        
-        protected override void PostActivate()
+
+        public void OtherDiagram()
         {
-            _holograms[0].AnimHologram(_fakeTabletScreen.reactionExits);
+            _tubeScreen.OtherDiagram(_tabletScreen.displayedDiagram, _tabletScreen._allReactions);
+        }
+
+        public void SelectExit()
+        {
+            _tubeScreen.SelectExit(_tabletScreen.displayedDiagram);
+        }
+
+        public void SelectInteraction()
+        {
+            _tubeScreen.SelectInteraction(_tabletScreen.displayedDiagram);
+        }
+
+        public void ParticleWrongLength()
+        {
+            _topScreen.ErrorParticles(_tabletScreen.particleErrorString);
+        }
+
+        public void ParticleWrongSymbol()
+        {
+            _topScreen.ErrorParticles(_tabletScreen.particleErrorString);
+        }
+
+        public void ParticleWrongCharge()
+        {
+            _topScreen.ErrorParticles(_tabletScreen.particleErrorString);
+        }
+
+        public void ParticleRightCombination()
+        {
+            _topScreen.OverrideSecond();
+            _tabletScreen.OverrideSecond();
+            _tubeScreen.OverrideSecond(_tabletScreen._allReactions);
+        }
+
+        public void ReactionSelected()
+        {
+            _topScreen.ReactionSelected(_tabletScreen._realReaction, _tubeScreen.diagramSelected);
         }
 
         protected override void PreShow(VirtualWallTopZone wallTopZone, ElementInfo[] info)
         {
             base.PreShow(wallTopZone, info);
-            _fakeTabletScreen = GetElement<MAIATabletScreen>();
-            _fakeTopScreen = GetElement<MAIATopScreen>();
-            _fakeTubeScreen = GetElement<MAIATubeScreen>();
+            _tabletScreen = GetElement<MAIATabletScreen>();
+            _topScreen = GetElement<MAIATopScreen>();
+            _tubeScreen = GetElement<MAIATubeScreen>();
         }
 
         protected override void PostInit(XPContext xpContext, ElementInfo[] info, LogExperienceController logController, XPState stateOnActivation)
@@ -105,10 +135,12 @@ namespace CRI.HelloHouston.Experience.MAIA
             base.PostInit(xpContext, info, logController, stateOnActivation);
             _holograms = GetElements<MAIAHologram>();
             _holograms[0].Init(this);
-            _fakeTabletScreen = GetElement<MAIATabletScreen>();
-            _fakeTopScreen = GetElement<MAIATopScreen>();
-            _fakeTopScreen.Init(this);
-            _fakeTubeScreen = GetElement<MAIATubeScreen>();
+            _tabletScreen = GetElement<MAIATabletScreen>();
+            _tabletScreen.Init(this);
+            _topScreen = GetElement<MAIATopScreen>();
+            _topScreen.Init(this);
+            _tubeScreen = GetElement<MAIATubeScreen>();
+            _tubeScreen.Init(this);
         }
     }
 }

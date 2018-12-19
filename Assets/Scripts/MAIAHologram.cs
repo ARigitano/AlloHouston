@@ -138,6 +138,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <param name="particles">The combination of particles.</param>
         public void AnimHologram(List<Particle> particles)
         {
+            Debug.Log("AnimHologram");
             _rMaxCyl1 = _cyl1.mesh.bounds.extents.x * _cyl1.transform.localScale.x;
             _lMaxCyl1 = _cyl1.mesh.bounds.extents.y * _cyl1.transform.localScale.y;
             _rMaxCyl2 = _cyl2.mesh.bounds.extents.x * _cyl2.transform.localScale.x;

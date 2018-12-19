@@ -37,11 +37,19 @@ namespace CRI.HelloHouston.Calibration
 
         protected override void AddXPZone(XPZone xpZone, XPContext xpContext)
         {
-            var xpCornerZone = xpZone as XPCornerZone;
-            if (!xpCornerZone)
-                throw new WrongZoneTypeException();
-            this.xpCornerZone = xpCornerZone;
-            wallCornerVirtualElement.PlaceObject(xpCornerZone.cornerElementPrefab, xpContext);
+            if (xpZone == null)
+            {
+                this.xpCornerZone = null;
+                wallCornerVirtualElement.PlaceObject(null, null);
+            }
+            else
+            {
+                var xpCornerZone = xpZone as XPCornerZone;
+                if (!xpCornerZone)
+                    throw new WrongZoneTypeException();
+                this.xpCornerZone = xpCornerZone;
+                wallCornerVirtualElement.PlaceObject(xpCornerZone.cornerElementPrefab, xpContext);
+            }
         }
 
         public VirtualElement wallCornerVirtualElement;

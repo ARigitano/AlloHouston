@@ -38,13 +38,24 @@ namespace CRI.HelloHouston.Calibration
 
         protected override void AddXPZone(XPZone xpZone, XPContext xpContext)
         {
-            var xpWallTopZone = xpZone as XPWallTopZone;
-            if (!xpWallTopZone)
-                throw new WrongZoneTypeException();
-            this.xpWallTopZone = xpWallTopZone;
-            wallTopLeftVirtualElement.PlaceObject(xpWallTopZone.elementLeftPrefab, xpContext);
-            wallTopRightVirtualElement.PlaceObject(xpWallTopZone.elementRightPrefab, xpContext);
-            wallTopTabletVirtualElement.PlaceObject(xpWallTopZone.elementTabletPrefab, xpContext);
+            if (xpZone == null)
+            {
+                this.xpWallTopZone = null;
+                wallTopLeftVirtualElement.Clean();
+                wallTopLeftVirtualElement.PlaceObject(null, null);
+                wallTopRightVirtualElement.PlaceObject(null, null);
+                wallTopTabletVirtualElement.PlaceObject(null, null);
+            }
+            else
+            {
+                var xpWallTopZone = xpZone as XPWallTopZone;
+                if (!xpWallTopZone)
+                    throw new WrongZoneTypeException();
+                this.xpWallTopZone = xpWallTopZone;
+                wallTopLeftVirtualElement.PlaceObject(xpWallTopZone.elementLeftPrefab, xpContext);
+                wallTopRightVirtualElement.PlaceObject(xpWallTopZone.elementRightPrefab, xpContext);
+                wallTopTabletVirtualElement.PlaceObject(xpWallTopZone.elementTabletPrefab, xpContext);
+            }
         }
 
         public VirtualElement wallTopLeftVirtualElement;

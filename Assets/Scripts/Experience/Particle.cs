@@ -65,5 +65,9 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         [Tooltip("Color at the end of the line, if there's a line.")]
         public Color endColor;
+        /// <summary>
+        /// Image of the symbol of the particle.
+        /// </summary>
+        public Sprite symbolImage;
     }
 }
