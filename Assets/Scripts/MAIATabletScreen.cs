@@ -110,6 +110,35 @@ namespace CRI.HelloHouston.Experience.MAIA
         public Particle particleToEnter;
         public int displayedDiagram = 0;
         public string particleErrorString;
+        private GameObject _currentPanelLeft, _currentPanelRight, _currentPanel;
+
+        private void Start()
+        {
+            _currentPanel = _b1C2;
+        }
+
+        public void SkipStepOne()
+        {
+            if (_currentPanel != null)
+                _currentPanel.SetActive(false);
+
+            _b1C4Left.SetActive(false);
+
+            if (_currentPanelLeft != null)
+            {
+                
+                _currentPanelLeft.SetActive(false);
+            }
+
+            if (_currentPanelRight != null)
+                _currentPanelRight.SetActive(false);
+
+            _b1C4.SetActive(true);
+            _b1C6Right.SetActive(true);
+            _b1C7Left.SetActive(true);
+
+            ParticlesCombination();
+        }
 
         IEnumerator WaitGeneric(float time, Action action)
         {
@@ -126,7 +155,9 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
 
             _b1C6Right.SetActive(true);
+            _currentPanelRight = _b1C6Right;
             _b1C7Left.SetActive(true);
+            _currentPanelLeft = _b1C7Left;
             _b1C6Left.SetActive(false);
 
 
@@ -137,11 +168,16 @@ namespace CRI.HelloHouston.Experience.MAIA
             if (!isTouched)
             {
                 isTouched = true;
+                
                 if (displayedDiagram < _allReactions.Length)
                 {
                     displayedDiagram++;
-                    _synchronizer.OtherDiagram();
+                   
+                } else
+                {
+                    displayedDiagram = 0;
                 }
+                _synchronizer.OtherDiagram();
                 StartCoroutine("WaitButton");
             }
         }
@@ -158,8 +194,12 @@ namespace CRI.HelloHouston.Experience.MAIA
                 {
                     displayedDiagram--;
 
-                    _synchronizer.OtherDiagram();
+                    
+                } else
+                {
+                    displayedDiagram = _allReactions.Length;
                 }
+                _synchronizer.OtherDiagram();
                 StartCoroutine("WaitButton");
             }
         }
@@ -217,6 +257,8 @@ namespace CRI.HelloHouston.Experience.MAIA
             }
 
             _realReaction = _chosenReactions[UnityEngine.Random.Range(0, _chosenReactions.Count)];
+
+            synchronizer.logController.AddLog(_realReaction.name, synchronizer.xpContext);
         }
 
         /// <summary>
@@ -240,6 +282,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                         if (particle.symbol == particlesStrings[i])
                         {
                             reactionExits.Add(particle);
+                            synchronizer.logController.AddLog(particle.particleName, synchronizer.xpContext);
                             realParticles.Add(particle.symbol);
                         }
                     }
@@ -468,6 +511,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             _b1C5Left.SetActive(false);
             _b1C6Left.SetActive(true);
+            _currentPanelLeft = _b1C6Left;
         }
         /// <summary>
         /// Displays start panel after the splash screen has finished loading.
@@ -475,6 +519,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         public void WaitingConfirmation()
         {
             _b1C2.SetActive(true);
+            _currentPanel = _b1C2;
             _panel.SetActive(false);
         }
         /// <summary>
@@ -486,6 +531,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             StartCoroutine(WaitGeneric(0.2f, () =>
             {
                 _b1C5Left.SetActive(true);
+                _currentPanelLeft = _b1C5Left;
                 _b1C4Left.SetActive(false);
             }));
 
@@ -499,6 +545,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             StartCoroutine(WaitGeneric(0.2f, () =>
             {
                 _b1C4.SetActive(true);
+                _currentPanel = _b1C4;
                 _b1C2.SetActive(false);
                 StartCoroutine("FakeLoading");
             }));

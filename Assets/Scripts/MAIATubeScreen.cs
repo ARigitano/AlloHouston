@@ -31,6 +31,10 @@ namespace CRI.HelloHouston.Experience.MAIA
         [SerializeField]
         private MAIASynchronizer _synchronizer;
 
+        public void SkipStepOne()
+        {
+            _overrideScreen2.SetActive(true);
+        }
 
         public void OverrideSecond(Reaction[] reactions)
         {
@@ -63,15 +67,13 @@ namespace CRI.HelloHouston.Experience.MAIA
             _currentDiagram.sprite = reactions[nbDiagram].diagramImage;
             diagramSelected = reactions[nbDiagram].diagramImage;
 
-            if (nbDiagram - 1 < 0)
+            if (nbDiagram - 1 >= 0)
             {
-                nbDiagram = _casesDiagram.Length;
                 _casesDiagram[nbDiagram - 1].displayed.enabled = false;
             }
 
-            if (nbDiagram + 1 > _casesDiagram.Length)
+            if (nbDiagram + 1 <= _casesDiagram.Length)
             {
-                nbDiagram = 0;
                 _casesDiagram[nbDiagram + 1].displayed.enabled = false;
             }
         }
