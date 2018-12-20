@@ -38,7 +38,7 @@ public class SplineDecorator : MonoBehaviour {
             {
                 new GradientColorKey(startColor, 0.0f),
                 new GradientColorKey(secondColor, 0.1f),
-                new GradientColorKey(endColor, 0.5f),
+                new GradientColorKey(endColor, 0.2f),
             };
 
             var alphaKey = new GradientAlphaKey[]

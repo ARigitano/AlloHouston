@@ -110,6 +110,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1303975309044074
+GameObject:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4910803741457862}
+  - component: {fileID: 135652151966924074}
+  m_Layer: 0
+  m_Name: SphereCollider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1313675577176822
 GameObject:
   m_ObjectHideFlags: 1
@@ -453,6 +469,7 @@ Transform:
   m_LocalPosition: {x: 0.0062931613, y: 0.012468352, z: 0.0125162415}
   m_LocalScale: {x: 0.1594047, y: 0.1594049, z: 0.15940489}
   m_Children:
+  - {fileID: 4910803741457862}
   - {fileID: 4644697008414800}
   m_Father: {fileID: 4442780407217852}
   m_RootOrder: 1
@@ -548,7 +565,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4327591675314324}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
 --- !u!4 &4686953318314812
 Transform:
@@ -635,6 +652,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4171268759447688}
   m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4910803741457862
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1303975309044074}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.00257, y: 0.0036, z: 0}
+  m_LocalScale: {x: 0.054999974, y: 0.054999974, z: 0.054999974}
+  m_Children: []
+  m_Father: {fileID: 4327591675314324}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4978287166862918
 Transform:
@@ -1106,7 +1136,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f32883eed859804dbb0c5fedac91496, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  axisOfRotation: -1
+  axisOfRotation: 4
   childCollider: {fileID: 0}
   linearMapping: {fileID: 0}
   hoverLock: 0
@@ -1237,3 +1267,15 @@ MonoBehaviour:
   index: 2
   _positionTagIndexTextPrefab: {fileID: 102496181755149656, guid: dc58f9ba75537744f80457927a3f604e,
     type: 2}
+--- !u!135 &135652151966924074
+SphereCollider:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1303975309044074}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
