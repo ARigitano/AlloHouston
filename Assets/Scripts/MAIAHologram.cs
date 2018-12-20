@@ -163,7 +163,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         private Vector3 CreateLine(int i, Particle particle)
         {
             //Setting rotation angles.
-            if(particle.straight)
+            if (particle.straight)
             {
                 _theta = 0f;
                 _phi = 0f;
@@ -229,24 +229,25 @@ namespace CRI.HelloHouston.Experience.MAIA
             //Setting the coordinates of the spline points.
             Vector3 vDir = new Vector3(0f, 0f, 0f);
 
+            float factorTmp;
+
             do
             {
-               
-                
-                float r = Random.Range(1.5f*_factor, rMax * (1f - 1f * _factor));
-                float alpha = Random.Range(0, Mathf.PI*2f);
+                factorTmp = _factor;
+                float r = Random.Range(1.5f * factorTmp, rMax * (1f - factorTmp));
+                float alpha = Random.Range(0, Mathf.PI * 2f);
 
 
                 if (particle.extremity)
                 {
-                    _factor = 0f;
+                    factorTmp = 0f;
                     r = rMax;
                 }
 
 
 
                 spline.points[3].x = r * Mathf.Cos(alpha);
-                spline.points[3].y = lMax * (1f - 1f * _factor) * Random.Range(-lMax, lMax);
+                spline.points[3].y = lMax * (1f - factorTmp) * Random.Range(-lMax, lMax);
                 //Mathf.Cos(Random.Range(-1f * Mathf.PI , Mathf.PI ));
                 spline.points[3].z = r * Mathf.Sin(alpha);
 
@@ -261,7 +262,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                 spline.points[1].y = matrixRotation1 * spline.points[3].y;
                 spline.points[1].z = matrixRotation1 * ((-1f * spline.points[3].x) * Mathf.Sin(_theta) + spline.points[3].z * Mathf.Cos(_theta));
 
-               
+
                 vDir.x = matrixRotation2 * (spline.points[3].x * Mathf.Cos(-1f * _phi) + spline.points[3].z * Mathf.Sin(-1f * _phi));
                 vDir.y = matrixRotation2 * spline.points[3].y;
                 vDir.z = matrixRotation2 * ((-1f * spline.points[3].x) * Mathf.Sin(-1f * _phi) + spline.points[3].z * Mathf.Cos(-1f * _phi));
@@ -270,7 +271,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                 spline.points[2].y = spline.points[3].y + vDir.y;
                 spline.points[2].z = spline.points[3].z + vDir.z;
 
-            } while ((Mathf.Abs(spline.points[3].y) <= lMaxPrevious * (1f + _factor)) && Mathf.Sqrt(Mathf.Pow(spline.points[3].x, 2) + Mathf.Pow(spline.points[3].z, 2)) <= rMaxPrevious * (1f + _factor));
+            } while ((Mathf.Abs(spline.points[3].y) <= lMaxPrevious * (1f + factorTmp)) && Mathf.Sqrt(Mathf.Pow(spline.points[3].x, 2) + Mathf.Pow(spline.points[3].z, 2)) <= rMaxPrevious * (1f + factorTmp));
 
             //Displaying the lines.
             if (particle.line)
@@ -283,7 +284,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             if (particle.head)
             {
                 GameObject lineHead = (GameObject)Instantiate(_headPrefab, Vector3.zero, Quaternion.identity, _lines[i].transform);
-                lineHead.GetComponent<Renderer>().material.SetColor("_Color", spline.GetComponent<SplineDecorator>().endColor);
+                lineHead.GetComponent<Renderer>().material.SetColor("_Color", particle.endColor);
                 lineHead.transform.localPosition = spline.points[3];
                 lineHead.transform.localRotation = Quaternion.FromToRotation(lineHead.transform.forward, vDir);
             }
