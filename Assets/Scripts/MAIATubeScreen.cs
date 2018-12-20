@@ -36,7 +36,6 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             _overrideScreen2.SetActive(true);
             _currentDiagram.sprite = reactions[0].diagramImage;
-            _nextDiagram.sprite = reactions[1].diagramImage;
         }
 
         public void SelectExit(int nBDiagram)
@@ -60,25 +59,21 @@ namespace CRI.HelloHouston.Experience.MAIA
         public void OtherDiagram(int nbDiagram, Reaction[] reactions)
         {
 
-            if (nbDiagram - 1 >= 0)
-            {
-                _casesDiagram[nbDiagram - 1].displayed.enabled = false;
-                _previousDiagram.sprite = reactions[nbDiagram - 1].diagramImage;
-            }
-            else
-                _previousDiagram.sprite = null;
-
             _casesDiagram[nbDiagram].displayed.enabled = true;
             _currentDiagram.sprite = reactions[nbDiagram].diagramImage;
             diagramSelected = reactions[nbDiagram].diagramImage;
 
-            if (nbDiagram + 1 < _casesDiagram.Length)
+            if (nbDiagram - 1 < 0)
             {
-                _casesDiagram[nbDiagram + 1].displayed.enabled = false;
-                _nextDiagram.sprite = reactions[nbDiagram + 1].diagramImage;
+                nbDiagram = _casesDiagram.Length;
+                _casesDiagram[nbDiagram - 1].displayed.enabled = false;
             }
-            else
-                _nextDiagram.sprite = null;
+
+            if (nbDiagram + 1 > _casesDiagram.Length)
+            {
+                nbDiagram = 0;
+                _casesDiagram[nbDiagram + 1].displayed.enabled = false;
+            }
         }
 
         public void Init(MAIASynchronizer synchronizer)
