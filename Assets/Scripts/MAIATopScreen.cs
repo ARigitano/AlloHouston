@@ -75,6 +75,21 @@ namespace CRI.HelloHouston.Experience.MAIA
         private GameObject[] _slotPassword;
         [SerializeField]
         private GameObject _popupWin, _popupLose;
+        private GameObject _currentPanel;
+
+        private void Start()
+        {
+            //TODO: change when exile loading screen created;
+            _currentPanel = _MAIA_Loading_Screen;
+        }
+
+        public void SkipStepOne()
+        {
+            if(_currentPanel != null)
+                 _currentPanel.SetActive(false);
+
+            _Override_Screen2.SetActive(true);
+        }
 
         public void ReactionSelected(Reaction realReaction, Sprite reactionSelected)
         {
@@ -97,6 +112,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         public void OverrideSecond()
         {
             _Override_Screen2.SetActive(true);
+            _currentPanel = _Override_Screen2;
             _Manual_override_1.SetActive(false);
         }
 
@@ -248,6 +264,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             yield return new WaitForSeconds(2);
             _Popup_Access_granted.SetActive(false);
             _Manual_override_1.SetActive(true);
+            _currentPanel = _Manual_override_1;
             _Manual_override_access.SetActive(false);
             _synchronizer.AccessGranted();
         }
@@ -322,6 +339,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                     {
                         _slider.fillAmount = 1f;
                         _MAIA_Loading_Screen.SetActive(true);
+                        _currentPanel = _MAIA_Loading_Screen;
                         _Exile_Loading_Screen.SetActive(false);
                         _isLoaded = true;
                         _synchronizer.LoadingBarFinished();
@@ -338,6 +356,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             _MAIA_Loading_Screen.SetActive(false);
             _MAIA_overview.SetActive(true);
+            _currentPanel = _MAIA_overview;
             StartCoroutine(WaitGeneric(10f, () =>
             {
                 _popupCrash.SetActive(true);
@@ -353,6 +372,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         public void AccessCode()
         {
             _Manual_override_access.SetActive(true);
+            _currentPanel = _Manual_override_access;
             _MAIA_overview.SetActive(false);
         }
 

@@ -1,4 +1,6 @@
 ﻿using CRI.HelloHouston.Calibration;
+using System.Collections;
+using UnityEngine;
 
 /// <summary>
 /// The synchronizer of the particle physics experiment.
@@ -23,6 +25,17 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// The hologram scripts of the table block.
         /// </summary>
         private MAIAHologram[] _holograms;
+
+   
+
+
+        public void SkipStepOne()
+        {
+            _tabletScreen.SkipStepOne();
+            _tubeScreen.SkipStepOne();
+            _topScreen.SkipStepOne();
+
+        }
 
         public void LoadingBarFinished()
         {
