@@ -13,8 +13,6 @@ public class SplineDecorator : MonoBehaviour {
     public bool colorGradient;
 
     public Color startColor;
-    public Color secondColor;
-
     public Color endColor;
 
 	public void Populate () {
@@ -37,8 +35,7 @@ public class SplineDecorator : MonoBehaviour {
             var colorKey = new GradientColorKey[]
             {
                 new GradientColorKey(startColor, 0.0f),
-                new GradientColorKey(secondColor, 0.1f),
-                new GradientColorKey(endColor, 0.5f),
+                new GradientColorKey(endColor, 0.05f),
             };
 
             var alphaKey = new GradientAlphaKey[]
