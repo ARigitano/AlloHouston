@@ -26,6 +26,13 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         private MAIAHologram[] _holograms;
 
+        public void ManualOverrideActive()
+        {
+            _tabletScreen.ManualOverride();
+
+            
+        }
+
         public void SkipStepOne()
         {
             _tabletScreen.SkipStepOne();

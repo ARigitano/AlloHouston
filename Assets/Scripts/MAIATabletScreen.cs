@@ -16,12 +16,11 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// All the particle scriptable objects.
         /// </summary>
-        [SerializeField]
         private Particle[] _allParticles;
         /// <summary>
         /// All the reaction scriptable objects.
         /// </summary>
-        [SerializeField]
+        [HideInInspector]
         public Reaction[] _allReactions;
         /// <summary>
         /// Path to the particle scriptable objects folder.
@@ -34,6 +33,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// Contains the combination of particles randomly generated.
         /// </summary>
+        [HideInInspector]
         public Particle[] particleTypes;
         /// <summary>
         /// Synchronizer for this experiment.
@@ -44,7 +44,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// All the panels for the tablet screen.
         /// </summary>
         [SerializeField]
-        private GameObject _panel, _b1C2, _b1C4, _b1C4Left, _b1C5Left, _b1C6Left, _b1C6Right, _b1C7Left;
+        private GameObject _startFull, _panelFull, _overrideLeft, _passwordLeft, _particlesLeft, _diagramsBrowsingRight, _diagramsSelectionLeft;
         /// <summary>
         /// Loading bar to display the time remaining.
         /// </summary>
@@ -63,27 +63,22 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// Password entered by the player.
         /// </summary>
+        [HideInInspector]
         public string enteredPassword;
         /// <summary>
         /// The combination of particles randomly generated rewritten as a string.
         /// </summary>
+        [HideInInspector]
         public List<string> realParticles = new List<string>();
         /// <summary>
         /// The particles entered by the player.
         /// </summary>
+        [HideInInspector]
         public List<Particle> _enteredParticles = new List<Particle>();
-        [SerializeField]
-        /// <summary>
-        /// The buttons to enter digits for the password.
-        /// </summary>
-        private Button[] _digitButtons,
-        /// <summary>
-        /// The buttons to enter particles.
-        /// </summary>
-                         _particleButtons;
         /// <summary>
         /// String displayed depending on the particles combination entered.
         /// </summary>
+        [HideInInspector]
         public string[] result;
         /// <summary>
         /// Number of ongoing reactions.
@@ -93,36 +88,56 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// The ongoing reactions.
         /// </summary>
-        [SerializeField]
+        [HideInInspector]
         public List<Reaction> _chosenReactions = new List<Reaction>();
         /// <summary>
         /// The reaction to idetify.
         /// </summary>
-        [SerializeField]
+        [HideInInspector]
         public Reaction _realReaction;
         /// <summary>
         /// The particles produced by the ongoing reactions.
         /// </summary>
-        [SerializeField]
+        [HideInInspector]
         public List<Particle> reactionExits = new List<Particle>();
-        private bool isTouched = false;
-        //TODO: not needed?
-        public Particle particleToEnter;
+        /// <summary>
+        /// To check if a button have been pressed by the VR controller.
+        /// </summary>
+        private bool _isTouched = false;
+        /// <summary>
+        /// Index of the Feynman diagram currently being displayed.
+        /// </summary>
+        [HideInInspector]
         public int displayedDiagram = 0;
+        /// <summary>
+        /// An error depending on the payer's diagram selection mistake.
+        /// </summary>
+        [HideInInspector]
         public string particleErrorString;
+        /// <summary>
+        /// Stores the panels currently being displayed.
+        /// </summary>
         private GameObject _currentPanelLeft, _currentPanelRight, _currentPanel;
+
+        public void ManualOverride()
+        {
+            _overrideLeft.SetActive(true);
+        }
 
         private void Start()
         {
-            _currentPanel = _b1C2;
+            _currentPanel = _startFull;
         }
 
+        /// <summary>
+        /// Called by the synchronizer to skip directly to the Feynman diagrams step.
+        /// </summary>
         public void SkipStepOne()
         {
             if (_currentPanel != null)
                 _currentPanel.SetActive(false);
 
-            _b1C4Left.SetActive(false);
+            _overrideLeft.SetActive(false);
 
             if (_currentPanelLeft != null)
             {
@@ -133,13 +148,19 @@ namespace CRI.HelloHouston.Experience.MAIA
             if (_currentPanelRight != null)
                 _currentPanelRight.SetActive(false);
 
-            _b1C4.SetActive(true);
-            _b1C6Right.SetActive(true);
-            _b1C7Left.SetActive(true);
+            _panelFull.SetActive(true);
+            _diagramsBrowsingRight.SetActive(true);
+            _diagramsSelectionLeft.SetActive(true);
 
             ParticlesCombination();
         }
 
+        /// <summary>
+        /// A generic coroutine to wait during a method.
+        /// </summary>
+        /// <param name="time">The time to wait.</param>
+        /// <param name="action">The action to be done after the waiting delay is over.</param>
+        /// <returns></returns>
         IEnumerator WaitGeneric(float time, Action action)
         {
             yield return new WaitForSeconds(time);
@@ -154,20 +175,23 @@ namespace CRI.HelloHouston.Experience.MAIA
         public void OverrideSecond()
         {
 
-            _b1C6Right.SetActive(true);
-            _currentPanelRight = _b1C6Right;
-            _b1C7Left.SetActive(true);
-            _currentPanelLeft = _b1C7Left;
-            _b1C6Left.SetActive(false);
+            _diagramsBrowsingRight.SetActive(true);
+            _currentPanelRight = _diagramsBrowsingRight;
+            _diagramsSelectionLeft.SetActive(true);
+            _currentPanelLeft = _diagramsSelectionLeft;
+            _particlesLeft.SetActive(false);
 
 
         }
 
+        /// <summary>
+        /// Display the next Feynman diagram after the right button is pressed.
+        /// </summary>
         public void NextDiagram()
         {
-            if (!isTouched)
+            if (!_isTouched)
             {
-                isTouched = true;
+                _isTouched = true;
                 
                 if (displayedDiagram < _allReactions.Length)
                 {
@@ -183,12 +207,14 @@ namespace CRI.HelloHouston.Experience.MAIA
         }
 
 
-
+        /// <summary>
+        /// Display the previous Feynman diagram after the left diagram is pressed.
+        /// </summary>
         public void PreviousDiagram()
         {
-            if (!isTouched)
+            if (!_isTouched)
             {
-                isTouched = true;
+                _isTouched = true;
                 Debug.Log("CALLED");
                 if (displayedDiagram > 0)
                 {
@@ -204,11 +230,14 @@ namespace CRI.HelloHouston.Experience.MAIA
             }
         }
 
+        /// <summary>
+        /// Display a symbol on the current Feynman diagram to preselect it based on its exits.
+        /// </summary>
         public void PreselectExits()
         {
-            if (!isTouched)
+            if (!_isTouched)
             {
-                isTouched = true;
+                _isTouched = true;
 
                 _synchronizer.SelectExit();
 
@@ -216,11 +245,14 @@ namespace CRI.HelloHouston.Experience.MAIA
             }
         }
 
+        /// <summary>
+        /// Display a symbol on the current Feynman diagram to preselect it based on its interactions.
+        /// </summary>
         public void PreselectInteraction()
         {
-            if (!isTouched)
+            if (!_isTouched)
             {
-                isTouched = true;
+                _isTouched = true;
 
                 _synchronizer.SelectInteraction();
 
@@ -228,10 +260,11 @@ namespace CRI.HelloHouston.Experience.MAIA
             }
         }
 
+        //TODO: replace by a generic wait
         IEnumerator WaitButton()
         {
             yield return new WaitForSeconds(0.5f);
-            isTouched = false;
+            _isTouched = false;
         }
 
         /// <summary>
@@ -253,7 +286,9 @@ namespace CRI.HelloHouston.Experience.MAIA
 
             for (int i = 0; i < _numberChosenReaction; i++)
             {
-                _chosenReactions.Add(fundamentals[UnityEngine.Random.Range(0, fundamentals.Count)]);
+                int randNumber = UnityEngine.Random.Range(0, fundamentals.Count);
+                _chosenReactions.Add(fundamentals[randNumber]);
+                fundamentals.RemoveAt(randNumber); ;
             }
 
             _realReaction = _chosenReactions[UnityEngine.Random.Range(0, _chosenReactions.Count)];
@@ -461,9 +496,9 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <param name="particleButton">The particle to add.</param>
         public void EnteringParticle(string particleButton)
         {
-            if (!isTouched && _enteredParticles.Count < reactionExits.Count)
+            if (!_isTouched && _enteredParticles.Count < reactionExits.Count)
             {
-                isTouched = true;
+                _isTouched = true;
 
                 foreach (Particle particle in reactionExits)
                 {
@@ -483,9 +518,9 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <param name="number">The number to add.</param>
         public void EnteringDigit(int number)
         {
-            if (!isTouched)
+            if (!_isTouched)
             {
-                isTouched = true;
+                _isTouched = true;
                 if (enteredPassword.Length < _realPassword.Length)
                 {
                     enteredPassword += number.ToString();
@@ -509,18 +544,17 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void AccessGranted()
         {
-            _b1C5Left.SetActive(false);
-            _b1C6Left.SetActive(true);
-            _currentPanelLeft = _b1C6Left;
+            _passwordLeft.SetActive(false);
+            _particlesLeft.SetActive(true);
+            _currentPanelLeft = _particlesLeft;
         }
         /// <summary>
         /// Displays start panel after the splash screen has finished loading.
         /// </summary>
         public void WaitingConfirmation()
         {
-            _b1C2.SetActive(true);
-            _currentPanel = _b1C2;
-            _panel.SetActive(false);
+            _startFull.SetActive(true);
+            _currentPanel = _startFull;
         }
         /// <summary>
         /// Displays password panel adter override button has been clicked.
@@ -530,9 +564,9 @@ namespace CRI.HelloHouston.Experience.MAIA
             _synchronizer.OverrideButtonClicked();
             StartCoroutine(WaitGeneric(0.2f, () =>
             {
-                _b1C5Left.SetActive(true);
-                _currentPanelLeft = _b1C5Left;
-                _b1C4Left.SetActive(false);
+                _passwordLeft.SetActive(true);
+                _currentPanelLeft = _passwordLeft;
+                _overrideLeft.SetActive(false);
             }));
 
         }
@@ -544,9 +578,9 @@ namespace CRI.HelloHouston.Experience.MAIA
             _synchronizer.StartButtonClicked();
             StartCoroutine(WaitGeneric(0.2f, () =>
             {
-                _b1C4.SetActive(true);
-                _currentPanel = _b1C4;
-                _b1C2.SetActive(false);
+                _panelFull.SetActive(true);
+                _currentPanel = _panelFull;
+                _startFull.SetActive(false);
                 StartCoroutine("FakeLoading");
             }));
         }
