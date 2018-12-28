@@ -14,6 +14,10 @@ namespace CRI.HelloHouston.Experience.MAIA
     public class MAIATabletScreen : XPElement
     {
         /// <summary>
+        /// Synchronizer for this experiment.
+        /// </summary>
+        private MAIASynchronizer _synchronizer;
+        /// <summary>
         /// All the particle scriptable objects.
         /// </summary>
         private Particle[] _allParticles;
@@ -35,11 +39,6 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         [HideInInspector]
         public Particle[] particleTypes;
-        /// <summary>
-        /// Synchronizer for this experiment.
-        /// </summary>
-        [SerializeField]
-        private MAIASynchronizer _synchronizer;
         /// <summary>
         /// All the panels for the tablet screen.
         /// </summary>
@@ -119,16 +118,6 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         private GameObject _currentPanelLeft, _currentPanelRight, _currentPanel;
 
-        public void ManualOverride()
-        {
-            _overrideLeft.SetActive(true);
-        }
-
-        private void Start()
-        {
-            _currentPanel = _startFull;
-        }
-
         /// <summary>
         /// Called by the synchronizer to skip directly to the Feynman diagrams step.
         /// </summary>
@@ -141,7 +130,7 @@ namespace CRI.HelloHouston.Experience.MAIA
 
             if (_currentPanelLeft != null)
             {
-                
+
                 _currentPanelLeft.SetActive(false);
             }
 
@@ -152,7 +141,21 @@ namespace CRI.HelloHouston.Experience.MAIA
             _diagramsBrowsingRight.SetActive(true);
             _diagramsSelectionLeft.SetActive(true);
 
-            ParticlesCombination();
+            if(realParticles.Count == 0)
+                ParticlesCombination();
+        }
+
+        /// <summary>
+        /// Activates the manual override panel.
+        /// </summary>
+        public void ManualOverride()
+        {
+            _overrideLeft.SetActive(true);
+        }
+
+        private void Start()
+        {
+            _currentPanel = _startFull;
         }
 
         /// <summary>
@@ -167,25 +170,28 @@ namespace CRI.HelloHouston.Experience.MAIA
             action.Invoke();
         }
 
+        /// <summary>
+        /// Selects a reaction.
+        /// </summary>
         public void SelectReaction()
         {
             _synchronizer.ReactionSelected();
         }
 
+        /// <summary>
+        /// Activates the reaction selection panels.
+        /// </summary>
         public void OverrideSecond()
         {
-
             _diagramsBrowsingRight.SetActive(true);
             _currentPanelRight = _diagramsBrowsingRight;
             _diagramsSelectionLeft.SetActive(true);
             _currentPanelLeft = _diagramsSelectionLeft;
             _particlesLeft.SetActive(false);
-
-
         }
 
         /// <summary>
-        /// Display the next Feynman diagram after the right button is pressed.
+        /// Displays the next Feynman diagram after the right button is pressed.
         /// </summary>
         public void NextDiagram()
         {
@@ -193,7 +199,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             {
                 _isTouched = true;
                 
-                if (displayedDiagram < _allReactions.Length)
+                if (displayedDiagram < _allReactions.Length-1)
                 {
                     displayedDiagram++;
                    
@@ -208,7 +214,7 @@ namespace CRI.HelloHouston.Experience.MAIA
 
 
         /// <summary>
-        /// Display the previous Feynman diagram after the left diagram is pressed.
+        /// Displays the previous Feynman diagram after the left diagram is pressed.
         /// </summary>
         public void PreviousDiagram()
         {
@@ -223,7 +229,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                     
                 } else
                 {
-                    displayedDiagram = _allReactions.Length;
+                    displayedDiagram = _allReactions.Length-1;
                 }
                 _synchronizer.OtherDiagram();
                 StartCoroutine("WaitButton");
@@ -369,6 +375,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void SubmitParticles()
         {
+            //Checks if the combination entered has the right number of particles.
             if (_enteredParticles.Count == reactionExits.Count)
             {
                 int nbQuark = 0;
@@ -380,6 +387,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                 int nbNeutrino = 0;
                 int nbPhoton = 0;
 
+                //Counts each particles detected of every kind.
                 foreach (Particle particle in reactionExits)
                 {
                     switch (particle.symbol)
@@ -425,6 +433,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                 int nbNeutrinoEntered = 0;
                 int nbPhotonEntered = 0;
 
+                //Counts each particles entered of every kind.
                 foreach (Particle particle in _enteredParticles)
                 {
                     switch (particle.symbol)
@@ -461,31 +470,36 @@ namespace CRI.HelloHouston.Experience.MAIA
                     }
                 }
 
+                //Checks if the right symbols have been entered.
                 if ((nbElectron + nbAntielectron == nbElectronEntered + nbAntielectronEntered) && (nbMuon + nbAntimuon == nbMuonEntered + nbAntimuonEntered) && (nbQuark + nbAntiquark == nbQuarkEntered + nbAntiquarkEntered) && nbNeutrino == nbNeutrinoEntered && nbPhoton == nbPhotonEntered)
                 {
+                    //Check if the right symbols have been entered.
                     if (nbElectron == nbElectronEntered && nbAntielectron == nbAntielectronEntered && nbMuon == nbMuonEntered && nbAntimuon == nbAntimuonEntered && nbQuark == nbQuarkEntered && nbAntiquark == nbAntiquarkEntered && nbNeutrino == nbNeutrinoEntered && nbPhoton == nbPhotonEntered)
                     {
-                        Debug.Log("correct");
+                        //The right combination of particles have been entered.
+                        Debug.Log("The right combination of particles have been entered.");
                         _synchronizer.ParticleRightCombination();
                     }
                     else
                     {
-                        Debug.Log("pas meme charge");
+                        //A wrong combination of charges have been entered.
+                        Debug.Log("A wrong combination of charges have been entered.");
                         particleErrorString = "WRONG NUMBER OF CHARGES!";
                         _synchronizer.ParticleWrongCharge();
                     }
                 }
                 else
                 {
-                    Debug.Log("pas meme symbol");
+                    //A wrong combination of symbols have been entered.
+                    Debug.Log("A wrong combination of symbols have been entered.");
                     particleErrorString = "WRONG PARTICLES!";
                     _synchronizer.ParticleWrongSymbol();
                 }
-
             }
             else
             {
-                Debug.Log("pas meme longueur");
+                //A combination of particles with a wrong length has been entered.
+                Debug.Log("A combination of particles with a wrong length has been entered.");
                 particleErrorString = "WRONG NUMBER OF PARTICLES!";
                 _synchronizer.ParticleWrongLength();
             }

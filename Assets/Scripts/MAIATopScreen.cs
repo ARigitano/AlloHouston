@@ -15,7 +15,6 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// The synchronizer of the experiment.
         /// </summary>
-        [SerializeField]
         private MAIASynchronizer _synchronizer;
         /// <summary>
         /// The loading bar of the splash screen.
@@ -123,6 +122,11 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         [SerializeField]
         private GameObject _popupWin, _popupLose;
+        /// <summary>
+        /// Error popups for the Feynman diagram selection.
+        /// </summary>
+        [SerializeField]
+        private GameObject _popupErrorRessource, _popupErrorNumber;
         /// <summary>
         /// Stores the panel currently being displayed.
         /// </summary>
@@ -278,6 +282,10 @@ namespace CRI.HelloHouston.Experience.MAIA
             }
         }
 
+        /// <summary>
+        /// Fills the number of particles detected table.
+        /// </summary>
+        /// <param name="particles">The particles detected.</param>
         public void FillParticlesTable(List<Particle> particles)
         {
             int nbQuark = 0;
@@ -335,6 +343,10 @@ namespace CRI.HelloHouston.Experience.MAIA
             Debug.Log("LAOK");
         }
 
+        /// <summary>
+        /// Generates a grid for particles to be entered in.
+        /// </summary>
+        /// <param name="particles">The particles detected.</param>
         public void ParticleGrid(List<Particle> particles)
         {
             Debug.Log(particles.Count);
@@ -344,6 +356,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                 _particleCases.Add(newCase.GetComponentInChildren<Image>());
             }
         }
+
         /// <summary>
         /// Displays the pasword that is being entered.
         /// </summary>
@@ -355,6 +368,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                 _slotPassword[i].GetComponent<SpriteRenderer>().sprite = _starPasswword;
             }
         }
+
         /// <summary>
         /// Waiting delay when access granted.
         /// </summary>
@@ -368,6 +382,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             _manualOverrideAccess.SetActive(false);
             _synchronizer.AccessGranted();
         }
+
         /// <summary>
         /// Waiting delay when access denied.
         /// </summary>
@@ -389,6 +404,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                 particleCase.enabled = false;
             }
         }
+
         /// <summary>
         /// Displays the particles combination while they are being opened.
         /// </summary>
@@ -401,6 +417,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                 _particleCases[i].sprite = particles[i].symbolImage;
             }
         }
+
         /// <summary>
         /// Decides what to display depending on the password entered.
         /// </summary>
@@ -418,6 +435,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                 StartCoroutine(WaitDenied());
             }
         }
+
         /// <summary>
         /// Loading delay of the splash screen.
         /// </summary>
@@ -448,6 +466,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                 }
             }
         }
+
         //TO DO: find better way of changing panel
         /// <summary>
         /// Displays the manual override screen when the start button is pressed.
@@ -466,6 +485,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                 _synchronizer.ManualOverrideActive();
             }));
         }
+
         /// <summary>
         /// Displays the access screen when the manual override button is pressed.
         /// </summary>
@@ -480,6 +500,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             _synchronizer = synchronizer;
         }
+
         //TO DO
         /// <summary>
         /// Effect when the experiment is correctly resolved.
@@ -488,6 +509,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             Debug.Log(name + "Resolved");
         }
+
         //TO DO
         /// <summary>
         /// Effect when the experiment is failed.
