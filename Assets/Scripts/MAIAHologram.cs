@@ -22,7 +22,6 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// Lines to be displayed by the hologram.
         /// </summary>
         private List<BezierSpline> _lines = new List<BezierSpline>();
-        //private GameObject[] lines;
         /// <summary>
         /// End point of the generated lines.
         /// </summary>
@@ -37,11 +36,6 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         [SerializeField]
         private GameObject _headPrefab = null;
-        /// <summary>
-        /// Prefab of the head of a particle line.
-        /// </summary>
-        [SerializeField]
-        private GameObject _headQuarkPrefab = null;
         /// <summary>
         /// Angle for shaping the bezier curves of the particle lines.
         /// </summary>
