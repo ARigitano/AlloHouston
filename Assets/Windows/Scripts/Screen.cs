@@ -5,13 +5,13 @@ using UnityEngine;
 
 public class Screen : MonoBehaviour
 {
-    //[Header("Parameters")]
+    [Header("Parameters")]
     public int nbLayersMax = 6; //if = 0 => no limit
     public int depthStep = 100;
     private float widthMax;
     private float heightMax;
 
-    //[Header("Elements")]
+    [Header("Elements")]
     public Vector3 initWinPos = new Vector3(0.0f, 0.0f, 0.0f);
     public WinAlert prefabWinAlert;
     public WinBlurb prefabWinBlurb;
@@ -19,7 +19,7 @@ public class Screen : MonoBehaviour
     public WinMessage prefabWinMsg;
     public WinSuccess prefabWinSuccess;
 
-    //[Header("Elements")]
+    [Header("Elements")]
     public Sprite background;
     //public Window win;
     private List<Window> listWindows = new List<Window>();
