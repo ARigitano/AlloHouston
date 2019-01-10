@@ -117,6 +117,11 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// Stores the panels currently being displayed.
         /// </summary>
         private GameObject _currentPanelLeft, _currentPanelRight, _currentPanel;
+        /// <summary>
+        /// The numbers of particle detected of each kind.
+        /// </summary>
+        [HideInInspector]
+        public int nbQuark, nbAntiquark, nbMuon, nbAntimuon, nbElectron, nbAntielectron, nbNeutrino, nbPhoton;
 
         /// <summary>
         /// Called by the synchronizer to skip directly to the Feynman diagrams step.
@@ -298,8 +303,59 @@ namespace CRI.HelloHouston.Experience.MAIA
             }
 
             _realReaction = _chosenReactions[UnityEngine.Random.Range(0, _chosenReactions.Count)];
-
             synchronizer.logController.AddLog(_realReaction.name, synchronizer.xpContext);
+        }
+
+        /// <summary>
+        /// Counts the number of particles detetected of each kind.
+        /// </summary>
+        /// <param name="particles">The particles detected.</param>
+        public void CountParticles(List<Particle> particles)
+        {
+            foreach (Particle particle in particles)
+            {
+                switch (particle.symbol)
+                {
+                    case "q":
+                        nbQuark++;
+                        break;
+                    case "qBar":
+                        nbAntiquark++;
+                        break;
+                    case "μ":
+                        nbMuon++;
+                        break;
+                    case "μBar":
+                        nbAntimuon++;
+                        break;
+                    case "e":
+                        nbElectron++;
+                        break;
+                    case "eBar":
+                        nbAntielectron++;
+                        break;
+                    case "v":
+                        nbNeutrino++;
+                        break;
+                    case "vBar":
+                        nbNeutrino++;
+                        break;
+                    case "γ":
+                        nbPhoton++;
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            synchronizer.logController.AddLog("Quarks:"+ nbQuark, synchronizer.xpContext);
+            synchronizer.logController.AddLog("Antiquarks:" + nbAntiquark, synchronizer.xpContext);
+            synchronizer.logController.AddLog("Muons:" + nbMuon, synchronizer.xpContext);
+            synchronizer.logController.AddLog("Antimuons:" + nbAntimuon, synchronizer.xpContext);
+            synchronizer.logController.AddLog("Electrons:" + nbElectron, synchronizer.xpContext);
+            synchronizer.logController.AddLog("Antielectrons:" + nbAntielectron, synchronizer.xpContext);
+            synchronizer.logController.AddLog("Neutrinos:" + nbNeutrino, synchronizer.xpContext);
+            synchronizer.logController.AddLog("Photons:" + nbPhoton, synchronizer.xpContext);
         }
 
         /// <summary>
@@ -323,12 +379,15 @@ namespace CRI.HelloHouston.Experience.MAIA
                         if (particle.symbol == particlesStrings[i])
                         {
                             reactionExits.Add(particle);
-                            synchronizer.logController.AddLog(particle.particleName, synchronizer.xpContext);
                             realParticles.Add(particle.symbol);
                         }
                     }
                 }
+
+               
             }
+
+            CountParticles(reactionExits);
             GenerateParticleString();
             return reactionExits;
         }

@@ -62,7 +62,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// Texts that display the number of particles detected for each type of particles.
         /// </summary>
         [SerializeField]
-        private Text _textQuark, _textAntiquark, _textMuon, _textAntimuon, _textElectron, _textAntielectron, _textNeutrino, _textPhoton;
+        public Text _textQuark, _textAntiquark, _textMuon, _textAntimuon, _textElectron, _textAntielectron, _textNeutrino, _textPhoton;
         /// <summary>
         /// Slots where the diagrams of the chosen reactions are displayed.
         /// </summary>
@@ -283,64 +283,13 @@ namespace CRI.HelloHouston.Experience.MAIA
         }
 
         /// <summary>
-        /// Fills the number of particles detected table.
+        /// Fills the number of a kind of particles in the particles table.
         /// </summary>
-        /// <param name="particles">The particles detected.</param>
-        public void FillParticlesTable(List<Particle> particles)
+        /// <param name="nbParticles">The number of particles of the kind.</param>
+        /// <param name="entry">The text to be filled.</param>
+        public void FillParticlesTable(int nbParticles, Text entry)
         {
-            int nbQuark = 0;
-            int nbAntiquark = 0;
-            int nbMuon = 0;
-            int nbAntimuon = 0;
-            int nbElectron = 0;
-            int nbAntielectron = 0;
-            int nbNeutrino = 0;
-            int nbPhoton = 0;
-
-            foreach (Particle particle in particles)
-            {
-                switch (particle.symbol)
-                {
-                    case "q":
-                        nbQuark++;
-                        break;
-                    case "qBar":
-                        nbAntiquark++;
-                        break;
-                    case "μ":
-                        nbMuon++;
-                        break;
-                    case "μBar":
-                        nbAntimuon++;
-                        break;
-                    case "e":
-                        nbElectron++;
-                        break;
-                    case "eBar":
-                        nbAntielectron++;
-                        break;
-                    case "v":
-                        nbNeutrino++;
-                        break;
-                    case "vBar":
-                        nbNeutrino++;
-                        break;
-                    case "γ":
-                        nbPhoton++;
-                        break;
-                    default:
-                        break;
-                }
-            }
-            _textQuark.text = nbQuark.ToString();
-            _textAntiquark.text = nbAntiquark.ToString();
-            _textMuon.text = nbMuon.ToString();
-            _textAntimuon.text = nbAntimuon.ToString();
-            _textElectron.text = nbElectron.ToString();
-            _textAntielectron.text = nbAntielectron.ToString();
-            _textNeutrino.text = nbNeutrino.ToString();
-            _textPhoton.text = nbPhoton.ToString();
-            Debug.Log("LAOK");
+            entry.text = nbParticles.ToString();
         }
 
         /// <summary>

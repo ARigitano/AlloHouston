@@ -25,7 +25,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// End point of the generated lines.
         /// </summary>
-        private GameObject[] _pointsB = null;
+        //private GameObject[] _pointsB = null;
         /// <summary>
         /// Prefab of the hologram.
         /// </summary>
@@ -141,7 +141,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             _lMaxCyl3 = _cyl3.mesh.bounds.extents.y * _cyl3.transform.localScale.y;
             _rMaxCyl4 = _cyl4.mesh.bounds.extents.x * _cyl4.transform.localScale.x;
             _lMaxCyl4 = _cyl4.mesh.bounds.extents.y * _cyl4.transform.localScale.y;
-            _pointsB = new GameObject[particles.Count];
+            //_pointsB = new GameObject[particles.Count];
             for (int i = 0; i < particles.Count; i++)
             {
                 Vector3 headPosition = CreateLine(i, particles[i]);
@@ -181,8 +181,8 @@ namespace CRI.HelloHouston.Experience.MAIA
             _lines.Add(spline);
             spline.Reset();
 
-            _pointsB[i] = (GameObject)Instantiate(_destination, Vector3.zero, Quaternion.identity);
-            _pointsB[i].transform.parent = this.gameObject.transform;
+            //_pointsB[i] = (GameObject)Instantiate(_destination, Vector3.zero, Quaternion.identity);
+            //_pointsB[i].transform.parent = this.gameObject.transform;
 
             //Setting the instantiating boundaries.
             float rMax = 0f;

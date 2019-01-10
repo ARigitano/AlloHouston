@@ -117,7 +117,14 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             _holograms[0].AnimHologram(_tabletScreen.reactionExits);
             _topScreen.ParticleGrid(_tabletScreen.reactionExits);
-            _topScreen.FillParticlesTable(_tabletScreen.reactionExits);
+            _topScreen.FillParticlesTable(_tabletScreen.nbAntielectron, _topScreen._textAntielectron);
+            _topScreen.FillParticlesTable(_tabletScreen.nbAntimuon, _topScreen._textAntimuon);
+            _topScreen.FillParticlesTable(_tabletScreen.nbAntiquark, _topScreen._textAntiquark);
+            _topScreen.FillParticlesTable(_tabletScreen.nbElectron, _topScreen._textElectron);
+            _topScreen.FillParticlesTable(_tabletScreen.nbMuon, _topScreen._textMuon);
+            _topScreen.FillParticlesTable(_tabletScreen.nbNeutrino, _topScreen._textNeutrino);
+            _topScreen.FillParticlesTable(_tabletScreen.nbPhoton, _topScreen._textPhoton);
+            _topScreen.FillParticlesTable(_tabletScreen.nbQuark, _topScreen._textQuark);
             _topScreen.FillChosenDiagrams(_tabletScreen._chosenReactions, _tabletScreen._realReaction);
             _topScreen.FillInteractionType(_tabletScreen._realReaction);
         }
