@@ -7,9 +7,9 @@ namespace CRI.HelloHouston.Experience.Actions
     [CreateAssetMenu(fileName = "New SkipToStep Action", menuName = "Actions/Experience/Skip To Step")]
     public class SkipToStepExperienceAction : ExperienceAction
     {
-        public override void Act(XPSynchronizer controller)
+        public override void Act(XPManager controller)
         {
-            MAIASynchronizer synchronizer = controller as MAIASynchronizer;
+            MAIAManager synchronizer = controller as MAIAManager;
             if (synchronizer != null)
                 synchronizer.SkipStepOne();
         }

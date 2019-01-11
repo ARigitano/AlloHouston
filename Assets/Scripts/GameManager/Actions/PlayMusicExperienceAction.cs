@@ -11,7 +11,7 @@ namespace CRI.HelloHouston.Experience.Actions
         [Tooltip("The music that will be played by the action.")]
         public AudioSource music;
 
-        public override void Act(XPSynchronizer controller)
+        public override void Act(XPManager controller)
         {
             controller.PlayMusic(music);
         }

@@ -18,7 +18,7 @@ namespace CRI.HelloHouston.Experience.UI
         [Tooltip("Experience status content transform.")]
         private Transform _experienceStatusContentTransform = null;
 
-        public void Init(XPSynchronizer[] xpSynchronizers)
+        public void Init(XPManager[] xpSynchronizers)
         {
             foreach (var xpSynchronizer in xpSynchronizers)
             {

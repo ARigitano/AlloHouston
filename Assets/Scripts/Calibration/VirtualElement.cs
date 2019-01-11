@@ -47,7 +47,7 @@ namespace CRI.HelloHouston.Calibration
             this.xpContext = xpContext;
         }
 
-        public virtual XPElement Init(XPSynchronizer xpSynchronizer)
+        public virtual XPElement Init(XPManager xpSynchronizer)
         {
             Clean();
             currentElement = Instantiate(_elementPrefab, transform);

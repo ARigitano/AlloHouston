@@ -12,7 +12,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// Synchronizer for this experiment.
         /// </summary>
-        private MAIASynchronizer _synchronizer;
+        private MAIAManager _manager;
         /// <summary>
         /// Thumbnails for all the possible Feynman diagrams.
         /// </summary>
@@ -47,7 +47,6 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             _overrideScreen2.SetActive(true);
             _currentDiagram.sprite = reactions[0].diagramImage;
-            //_nextDiagram.sprite = reactions[1].diagramImage;
         }
 
         /// <summary>
@@ -105,9 +104,14 @@ namespace CRI.HelloHouston.Experience.MAIA
             }
         }
 
-        public void Init(MAIASynchronizer synchronizer)
+        private void Init(MAIAManager synchronizer)
         {
-            _synchronizer = synchronizer;
+            _manager = synchronizer;
+        }
+
+        public override void OnActivation(XPManager manager)
+        {
+            Init((MAIAManager)manager);
         }
     }
 }

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CRI.HelloHouston.Experience
 {
-    public class XPExempleManager : XPManager
+    public class XPExempleSynchronizer : XPManager
     {
     }
 }

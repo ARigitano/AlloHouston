@@ -7,7 +7,7 @@ using UnityEngine;
 /// </summary>
 namespace CRI.HelloHouston.Experience.MAIA
 {
-    public class MAIASynchronizer : XPSynchronizer
+    public class MAIAManager : XPManager
     {
         /// <summary>
         /// The top left script of the experiment block.
@@ -116,6 +116,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         public void CorrectParticle()
         {
             _holograms[0].AnimHologram(_tabletScreen.reactionExits);
+            _holograms[0].DisplaySplines();
             _topScreen.ParticleGrid(_tabletScreen.reactionExits);
             _topScreen.FillParticlesTable(_tabletScreen.reactionExits);
             _topScreen.FillChosenDiagrams(_tabletScreen._chosenReactions, _tabletScreen._realReaction);
@@ -208,13 +209,9 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             base.PostInit(xpContext, info, logController, stateOnActivation);
             _holograms = GetElements<MAIAHologram>();
-            _holograms[0].Init(this);
             _tabletScreen = GetElement<MAIATabletScreen>();
-            _tabletScreen.Init(this);
             _topScreen = GetElement<MAIATopScreen>();
-            _topScreen.Init(this);
             _tubeScreen = GetElement<MAIATubeScreen>();
-            _tubeScreen.Init(this);
         }
     }
 }

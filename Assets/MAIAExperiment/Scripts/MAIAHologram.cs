@@ -10,27 +10,27 @@ namespace CRI.HelloHouston.Experience.MAIA
     /// </summary>
     public class MAIAHologram : XPHologramElement
     {
+        private class HologramSpline
+        {
+            public BezierSpline spline;
+            public Particle particle;
+            public Vector3 vDir;
+
+            public HologramSpline(BezierSpline spline, Particle particle, Vector3 vDir)
+            {
+                this.spline = spline;
+                this.particle = particle;
+                this.vDir = vDir;
+            }
+        }
         /// <summary>
         /// The synchronizer of the experiment.
         /// </summary>
-        private MAIASynchronizer _synchronizer;
+        private MAIAManager _manager;
         /// <summary>
         /// Folder path for the particle scriptable objects
         /// </summary>
         private const string _path = "Particle";
-        /// <summary>
-        /// Lines to be displayed by the hologram.
-        /// </summary>
-        private List<BezierSpline> _lines = new List<BezierSpline>();
-        /// <summary>
-        /// End point of the generated lines.
-        /// </summary>
-        private GameObject[] _pointsB = null;
-        /// <summary>
-        /// Prefab of the hologram.
-        /// </summary>
-        [SerializeField]
-        private GameObject _hologram = null;
         /// <summary>
         /// Prefab of the head of a particle line.
         /// </summary>
@@ -60,71 +60,30 @@ namespace CRI.HelloHouston.Experience.MAIA
         [SerializeField]
         private BezierSpline _particleSplinePrefab = null;
         /// <summary>
-        /// Last point of spline prefab.
+        /// Array of particle splines.
+        /// </summary>
+        private HologramSpline[] _particleSplineArray;
+        /// <summary>
+        /// Particle list.
+        /// </summary>
+        private List<Particle> _particleList;
+        /// <summary>
+        /// Array of the cylinders' mesh filters.
         /// </summary>
         [SerializeField]
-        private GameObject _destination = null;
-        /// <summary>
-        /// First cylinder.
-        /// </summary>
-        [SerializeField]
-        [Tooltip("First cylinder.")]
-        private MeshFilter _cyl1 = null;
-        /// <summary>
-        /// Second cylinder.
-        /// </summary>
-        [SerializeField]
-        [Tooltip("Second cylider.")]
-        private MeshFilter _cyl2 = null;
-        /// <summary>
-        /// Third cylinder.
-        /// </summary>
-        [SerializeField]
-        [Tooltip("Third cylinder.")]
-        private MeshFilter _cyl3 = null;
-        /// <summary>
-        /// Fourth cylinder.
-        /// </summary>
-        [SerializeField]
-        [Tooltip("Fourth cylinder.")]
-        private MeshFilter _cyl4 = null;
-        /// <summary>
-        /// Particle reactor zones margin.
-        /// </summary>
+        [Tooltip("Array of the cylinders' mesh filters.")]
+        private MeshFilter[] _cylArray;
+
         [SerializeField]
         private float _factor = 0.2f;
         /// <summary>
-        /// Maximum radius of first zone.
+        /// Array of the cylinders' radiuses.
         /// </summary>
-        private float _rMaxCyl1 = 0.125f;
+        private float[] _rMaxCylArray;
         /// <summary>
-        /// Maximum half width of first zone.
+        /// Array of the cylinders' lengths.
         /// </summary>
-        private float _lMaxCyl1 = 0.25f;
-        /// <summary>
-        /// Maximum radius of second zone.
-        /// </summary>
-        private float _rMaxCyl2 = 0.25f;
-        /// <summary>
-        /// Maximum half width of second zone.
-        /// </summary>
-        private float _lMaxCyl2 = 0.5f;
-        /// <summary>
-        /// Maximum radius of third zone.
-        /// </summary>
-        private float _rMaxCyl3 = 0.375f;
-        /// <summary>
-        /// Maximum half width of third zone.
-        /// </summary>
-        private float _lMaxCyl3 = 0.75f;
-        /// <summary>
-        /// Maximum radius of fourth zone.
-        /// </summary>
-        private float _rMaxCyl4 = 1f;
-        /// <summary>
-        /// Maximum half width of fourth zone.
-        /// </summary>
-        private float _lMaxCyl4 = 1f;
+        private float[] _lMaxCylArray;
 
         /// <summary>
         /// Animates the particle reaction hologram.
@@ -132,19 +91,10 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <param name="particles">The combination of particles.</param>
         public void AnimHologram(List<Particle> particles)
         {
-            Debug.Log("AnimHologram");
-            _rMaxCyl1 = _cyl1.mesh.bounds.extents.x * _cyl1.transform.localScale.x;
-            _lMaxCyl1 = _cyl1.mesh.bounds.extents.y * _cyl1.transform.localScale.y;
-            _rMaxCyl2 = _cyl2.mesh.bounds.extents.x * _cyl2.transform.localScale.x;
-            _lMaxCyl2 = _cyl2.mesh.bounds.extents.y * _cyl2.transform.localScale.y;
-            _rMaxCyl3 = _cyl3.mesh.bounds.extents.x * _cyl3.transform.localScale.x;
-            _lMaxCyl3 = _cyl3.mesh.bounds.extents.y * _cyl3.transform.localScale.y;
-            _rMaxCyl4 = _cyl4.mesh.bounds.extents.x * _cyl4.transform.localScale.x;
-            _lMaxCyl4 = _cyl4.mesh.bounds.extents.y * _cyl4.transform.localScale.y;
-            _pointsB = new GameObject[particles.Count];
+            _particleSplineArray = new HologramSpline[particles.Count];
             for (int i = 0; i < particles.Count; i++)
             {
-                Vector3 headPosition = CreateLine(i, particles[i]);
+                _particleSplineArray[i] = CreateSpline(particles[i], i);
             }
         }
 
@@ -154,7 +104,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <param name="i">The index of the particle inside the combination.</param>
         /// <param name="particle">The particle which line is being generated.</param>
         /// <returns>The end position of the line.</returns>
-        private Vector3 CreateLine(int i, Particle particle)
+        private HologramSpline CreateSpline(Particle particle, int index)
         {
             //Setting rotation angles.
             if (particle.straight)
@@ -173,64 +123,25 @@ namespace CRI.HelloHouston.Experience.MAIA
                     _phi = -1f * _phi;
                 }
             }
-
             //Generating the spline.
             var spline = Instantiate(_particleSplinePrefab, Vector3.zero, Quaternion.identity, transform);
             spline.transform.localPosition = Vector3.zero;
             spline.transform.localRotation = Quaternion.identity;
-            _lines.Add(spline);
             spline.Reset();
-
-            _pointsB[i] = (GameObject)Instantiate(_destination, Vector3.zero, Quaternion.identity);
-            _pointsB[i].transform.parent = this.gameObject.transform;
-
             //Setting the instantiating boundaries.
-            float rMax = 0f;
-            float lMax = 0f;
-            float rMaxPrevious = 0f;
-            float lMaxPrevious = 0f;
-
-            switch (particle.destination)
-            {
-                case 1:
-                    rMax = _rMaxCyl1;
-                    lMax = _lMaxCyl1;
-                    rMaxPrevious = 0f;
-                    lMaxPrevious = 0f;
-                    break;
-                case 2:
-                    rMax = _rMaxCyl2;
-                    lMax = _lMaxCyl2;
-                    rMaxPrevious = _rMaxCyl1;
-                    lMaxPrevious = _lMaxCyl1;
-                    break;
-                case 3:
-                    rMax = _rMaxCyl3;
-                    lMax = _lMaxCyl3;
-                    rMaxPrevious = _rMaxCyl2;
-                    lMaxPrevious = _lMaxCyl2;
-                    break;
-                case 4:
-                    rMax = _rMaxCyl4;
-                    lMax = _lMaxCyl4;
-                    rMaxPrevious = _rMaxCyl3;
-                    lMaxPrevious = _lMaxCyl3;
-                    break;
-                default:
-                    break;
-            }
-
+            int destination = particle.destination - 1;
+            float rMax = _rMaxCylArray[destination];
+            float lMax = _lMaxCylArray[destination];
+            float rMaxPrevious = destination > 0 ? _rMaxCylArray[destination - 1] : 0.0f;
+            float lMaxPrevious = destination > 0 ? _lMaxCylArray[destination - 1] : 0.0f;
             //Setting the coordinates of the spline points.
-            Vector3 vDir = new Vector3(0f, 0f, 0f);
-
+            Vector3 vDir = Vector3.zero;
             float factorTmp;
-
             do
             {
                 factorTmp = _factor;
                 float r = Random.Range(1.5f * factorTmp, rMax * (1f - factorTmp));
                 float alpha = Random.Range(0, Mathf.PI * 2f);
-
 
                 if (particle.extremity)
                 {
@@ -238,14 +149,11 @@ namespace CRI.HelloHouston.Experience.MAIA
                     r = rMax;
                 }
 
-
-
                 spline.points[3].x = r * Mathf.Cos(alpha);
                 spline.points[3].y = lMax * (1f - factorTmp) * Random.Range(-lMax, lMax);
-                //Mathf.Cos(Random.Range(-1f * Mathf.PI , Mathf.PI ));
                 spline.points[3].z = r * Mathf.Sin(alpha);
 
-                spline.gameObject.name = particle.particleName + i;
+                spline.gameObject.name = particle.particleName + index;
 
                 spline.points[0] = Vector3.zero;
 
@@ -255,7 +163,6 @@ namespace CRI.HelloHouston.Experience.MAIA
                 spline.points[1].x = matrixRotation1 * (spline.points[3].x * Mathf.Cos(_theta) + spline.points[3].z * Mathf.Sin(_theta));
                 spline.points[1].y = matrixRotation1 * spline.points[3].y;
                 spline.points[1].z = matrixRotation1 * ((-1f * spline.points[3].x) * Mathf.Sin(_theta) + spline.points[3].z * Mathf.Cos(_theta));
-
 
                 vDir.x = matrixRotation2 * (spline.points[3].x * Mathf.Cos(-1f * _phi) + spline.points[3].z * Mathf.Sin(-1f * _phi));
                 vDir.y = matrixRotation2 * spline.points[3].y;
@@ -267,30 +174,49 @@ namespace CRI.HelloHouston.Experience.MAIA
 
             } while ((Mathf.Abs(spline.points[3].y) <= lMaxPrevious * (1f + factorTmp)) && Mathf.Sqrt(Mathf.Pow(spline.points[3].x, 2) + Mathf.Pow(spline.points[3].z, 2)) <= rMaxPrevious * (1f + factorTmp));
 
+            return new HologramSpline(spline, particle, vDir);
+        }
+
+        private void PopulateLine(HologramSpline hologramSpline)
+        {
+            Particle particle = hologramSpline.particle;
+            BezierSpline spline = hologramSpline.spline;
+            Vector3 vDir = hologramSpline.vDir;
             //Displaying the lines.
             if (particle.line)
             {
                 spline.GetComponent<SplineDecorator>().endColor = particle.endColor;
                 spline.GetComponent<SplineDecorator>().Populate();
             }
-
             //Displaying the heads.
             if (particle.head)
             {
-                GameObject lineHead = (GameObject)Instantiate(_headPrefab, Vector3.zero, Quaternion.identity, _lines[i].transform);
+                GameObject lineHead = (GameObject)Instantiate(_headPrefab, Vector3.zero, Quaternion.identity, spline.transform);
                 lineHead.GetComponent<Renderer>().material.SetColor("_Color", particle.endColor);
                 lineHead.transform.localPosition = spline.points[3];
                 lineHead.transform.localRotation = Quaternion.FromToRotation(lineHead.transform.forward, vDir);
             }
-
-            return spline.points[3];
         }
 
-        public void Init(MAIASynchronizer synchronizer)
+        public void DisplaySplines()
         {
-            _synchronizer = synchronizer;
+            foreach (HologramSpline hologramSpline in _particleSplineArray)
+            {
+                PopulateLine(hologramSpline);
+            }
         }
-        //TO DO
+
+        private void Init(MAIAManager synchronizer)
+        {
+            _manager = synchronizer;
+            _lMaxCylArray = new float[_cylArray.Length];
+            _rMaxCylArray = new float[_cylArray.Length];
+            for (int i = 0; i < _cylArray.Length; i++)
+            {
+                _lMaxCylArray[i] = _cylArray[i].mesh.bounds.extents.y * _cylArray[i].transform.localScale.y;
+                _rMaxCylArray[i] = _cylArray[i].mesh.bounds.extents.x * _cylArray[i].transform.localScale.x;
+            }
+        }
         /// <summary>
         /// Effect when the experiment is correctly resolved.
         /// </summary>
@@ -298,7 +224,6 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             Debug.Log(name + "Resolved");
         }
-        //TO DO
         /// <summary>
         /// Effect when the experiment is failed.
         /// </summary>
@@ -306,16 +231,15 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             Debug.Log(name + "Failed");
         }
-        //TO DO
         /// <summary>
         /// Effect when the experiment is activated the first time.
         /// </summary>
-        public override void OnActivation()
+        public override void OnActivation(XPManager manager)
         {
             Debug.Log(name + "Activated");
+            Init((MAIAManager)manager);
             gameObject.SetActive(true);
         }
-        //TO DO
         /// <summary>
         /// Effect when the experiment is paused.
         /// </summary>
@@ -324,7 +248,6 @@ namespace CRI.HelloHouston.Experience.MAIA
             Debug.Log(name + "Paused");
             gameObject.SetActive(true);
         }
-        //TO DO
         /// <summary>
         /// Effect when the experiment is unpaused.
         /// </summary>

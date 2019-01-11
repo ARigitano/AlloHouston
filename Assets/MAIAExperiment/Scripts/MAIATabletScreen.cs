@@ -16,7 +16,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// Synchronizer for this experiment.
         /// </summary>
-        private MAIASynchronizer _synchronizer;
+        private MAIAManager _manager;
         /// <summary>
         /// All the particle scriptable objects.
         /// </summary>
@@ -175,7 +175,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void SelectReaction()
         {
-            _synchronizer.ReactionSelected();
+            _manager.ReactionSelected();
         }
 
         /// <summary>
@@ -207,7 +207,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                 {
                     displayedDiagram = 0;
                 }
-                _synchronizer.OtherDiagram();
+                _manager.OtherDiagram();
                 StartCoroutine("WaitButton");
             }
         }
@@ -231,7 +231,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                 {
                     displayedDiagram = _allReactions.Length-1;
                 }
-                _synchronizer.OtherDiagram();
+                _manager.OtherDiagram();
                 StartCoroutine("WaitButton");
             }
         }
@@ -245,7 +245,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             {
                 _isTouched = true;
 
-                _synchronizer.SelectExit();
+                _manager.SelectExit();
 
                 StartCoroutine("WaitButton");
             }
@@ -260,7 +260,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             {
                 _isTouched = true;
 
-                _synchronizer.SelectInteraction();
+                _manager.SelectInteraction();
 
                 StartCoroutine("WaitButton");
             }
@@ -299,7 +299,7 @@ namespace CRI.HelloHouston.Experience.MAIA
 
             _realReaction = _chosenReactions[UnityEngine.Random.Range(0, _chosenReactions.Count)];
 
-            synchronizer.logController.AddLog(_realReaction.name, synchronizer.xpContext);
+            manager.logController.AddLog(_realReaction.name, manager.xpContext);
         }
 
         /// <summary>
@@ -323,7 +323,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                         if (particle.symbol == particlesStrings[i])
                         {
                             reactionExits.Add(particle);
-                            synchronizer.logController.AddLog(particle.particleName, synchronizer.xpContext);
+                            manager.logController.AddLog(particle.particleName, manager.xpContext);
                             realParticles.Add(particle.symbol);
                         }
                     }
@@ -344,7 +344,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             {
                 type += realParticles[i];
             }
-            _synchronizer.CorrectParticle();
+            _manager.CorrectParticle();
         }
 
         /// <summary>
@@ -368,7 +368,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         public void ClearParticles()
         {
             _enteredParticles.Clear();
-            _synchronizer.ClearParticles();
+            _manager.ClearParticles();
         }
         /// <summary>
         /// Submits the particles combination entered.
@@ -478,14 +478,14 @@ namespace CRI.HelloHouston.Experience.MAIA
                     {
                         //The right combination of particles have been entered.
                         Debug.Log("The right combination of particles have been entered.");
-                        _synchronizer.ParticleRightCombination();
+                        _manager.ParticleRightCombination();
                     }
                     else
                     {
                         //A wrong combination of charges have been entered.
                         Debug.Log("A wrong combination of charges have been entered.");
                         particleErrorString = "WRONG NUMBER OF CHARGES!";
-                        _synchronizer.ParticleWrongCharge();
+                        _manager.ParticleWrongCharge();
                     }
                 }
                 else
@@ -493,7 +493,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                     //A wrong combination of symbols have been entered.
                     Debug.Log("A wrong combination of symbols have been entered.");
                     particleErrorString = "WRONG PARTICLES!";
-                    _synchronizer.ParticleWrongSymbol();
+                    _manager.ParticleWrongSymbol();
                 }
             }
             else
@@ -501,7 +501,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                 //A combination of particles with a wrong length has been entered.
                 Debug.Log("A combination of particles with a wrong length has been entered.");
                 particleErrorString = "WRONG NUMBER OF PARTICLES!";
-                _synchronizer.ParticleWrongLength();
+                _manager.ParticleWrongLength();
             }
         }
         /// <summary>
@@ -522,7 +522,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                         break;
                     }
                 }
-                _synchronizer.EnteringParticles();
+                _manager.EnteringParticles();
                 StartCoroutine("WaitButton");
             }
         }
@@ -538,15 +538,15 @@ namespace CRI.HelloHouston.Experience.MAIA
                 if (enteredPassword.Length < _realPassword.Length)
                 {
                     enteredPassword += number.ToString();
-                    _synchronizer.EnteringDigit();
+                    _manager.EnteringDigit();
 
                     if (enteredPassword.Length == _realPassword.Length && enteredPassword == _realPassword)
                     {
-                        _synchronizer.CorrectPassword();
+                        _manager.CorrectPassword();
                     }
                     else if (enteredPassword.Length == _realPassword.Length && enteredPassword != _realPassword)
                     {
-                        _synchronizer.IncorrectPassword();
+                        _manager.IncorrectPassword();
                         enteredPassword = "";
                     }
                 }
@@ -575,7 +575,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void OverrideButtonClicked()
         {
-            _synchronizer.OverrideButtonClicked();
+            _manager.OverrideButtonClicked();
             StartCoroutine(WaitGeneric(0.2f, () =>
             {
                 _passwordLeft.SetActive(true);
@@ -589,7 +589,8 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void StartButtonClicked()
         {
-            _synchronizer.StartButtonClicked();
+            Debug.Log("StartButtonClicked");
+            _manager.StartButtonClicked();
             StartCoroutine(WaitGeneric(0.2f, () =>
             {
                 _panelFull.SetActive(true);
@@ -599,9 +600,14 @@ namespace CRI.HelloHouston.Experience.MAIA
             }));
         }
 
-        public void Init(MAIASynchronizer synchronizer)
+        private void Init(MAIAManager synchronizer)
         {
-            _synchronizer = synchronizer;
+            _manager = synchronizer;
+        }
+
+        public override void OnActivation(XPManager manager)
+        {
+            Init((MAIAManager)manager);
         }
     }
 }

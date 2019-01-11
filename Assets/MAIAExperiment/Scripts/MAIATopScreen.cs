@@ -15,7 +15,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// The synchronizer of the experiment.
         /// </summary>
-        private MAIASynchronizer _synchronizer;
+        private MAIAManager _manager;
         /// <summary>
         /// The loading bar of the splash screen.
         /// </summary>
@@ -380,7 +380,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             _manualOverride1.SetActive(true);
             _currentPanel = _manualOverride1;
             _manualOverrideAccess.SetActive(false);
-            _synchronizer.AccessGranted();
+            _manager.AccessGranted();
         }
 
         /// <summary>
@@ -460,7 +460,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                         _currentPanel = _maiaLoadingScreen;
                         _exileLoadingScreen.SetActive(false);
                         isLoaded = true;
-                        _synchronizer.LoadingBarFinished();
+                        _manager.LoadingBarFinished();
                         yield return null;
                     }
                 }
@@ -482,7 +482,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                 StartCoroutine("ScrollingError");
                 _popupErrorMessage.SetActive(true);
                 _popupInfoMessage.SetActive(true);
-                _synchronizer.ManualOverrideActive();
+                _manager.ManualOverrideActive();
             }));
         }
 
@@ -496,9 +496,9 @@ namespace CRI.HelloHouston.Experience.MAIA
             _maiaOverview.SetActive(false);
         }
 
-        public void Init(MAIASynchronizer synchronizer)
+        private void Init(MAIAManager synchronizer)
         {
-            _synchronizer = synchronizer;
+            _manager = synchronizer;
         }
 
         //TO DO
@@ -522,10 +522,10 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// Effect when the experiment is activated the first time.
         /// </summary>
-        public override void OnActivation()
+        public override void OnActivation(XPManager manager)
         {
             Debug.Log(name + "Activated");
-            //StartCoroutine("Loading");
+            Init((MAIAManager)manager);
         }
 
         /// <summary>

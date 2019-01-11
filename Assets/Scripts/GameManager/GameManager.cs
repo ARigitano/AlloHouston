@@ -44,7 +44,7 @@ namespace CRI.HelloHouston.Experience
         /// <summary>
         /// Experience list.
         /// </summary>
-        public XPSynchronizer[] xpSynchronizers { get; private set; }
+        public XPManager[] xpManagers { get; private set; }
         /// <summary>
         /// All the available game actions.
         /// </summary>
@@ -70,7 +70,7 @@ namespace CRI.HelloHouston.Experience
         {
             get
             {
-                return xpSynchronizers.Sum(x => x.xpContext.xpSettings.duration);
+                return xpManagers.Sum(x => x.xpContext.xpSettings.duration);
             }
         }
 
@@ -82,20 +82,20 @@ namespace CRI.HelloHouston.Experience
             }
         }
 
-        public XPSynchronizer[] Init(XPContext[] xpContexts, VirtualRoom room)
+        public XPManager[] Init(XPContext[] xpContexts, VirtualRoom room)
         {
             globalSoundManager = GetComponent<SoundManager>();
             gameActionController = new GameActionController(this);
             logManager = new LogManager(this);
             _mainSettings = Resources.Load<XPMainSettings>("Settings/MainSettings");
-            xpSynchronizers = xpContexts.Select(xpContext => xpContext.InitSynchronizer(logManager.logExperienceController, room.GetZones().Where(zone => zone.xpContext == xpContext).ToArray())).ToArray();
+            xpManagers = xpContexts.Select(xpContext => xpContext.InitSynchronizer(logManager.logExperienceController, room.GetZones().Where(zone => zone.xpContext == xpContext).ToArray())).ToArray();
             _startTime = Time.time;
-            return xpSynchronizers;
+            return xpManagers;
         }
 
         public GameHint[] GetAllCurrentHints()
         {
-            return _mainSettings.hints.Select(hint => new GameHint(hint, this)).Concat(xpSynchronizers.Where(x => x.active).SelectMany(x => x.xpContext.hints)).ToArray();
+            return _mainSettings.hints.Select(hint => new GameHint(hint, this)).Concat(xpManagers.Where(x => x.active).SelectMany(x => x.xpContext.hints)).ToArray();
         }
 
         public void SendHintToPlayers(string hint)
@@ -109,7 +109,7 @@ namespace CRI.HelloHouston.Experience
             for (int i = 0; i < starting.Length; i++)
             {
                 if (starting[i])
-                    xpSynchronizers[i].Activate();
+                    xpManagers[i].Activate();
             }
         }
 

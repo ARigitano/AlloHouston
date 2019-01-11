@@ -8,7 +8,7 @@ namespace CRI.HelloHouston.Experience
         /// <summary>
         /// The experience synchronizer.
         /// </summary>
-        public XPSynchronizer synchronizer { get; protected set; }
+        public XPManager manager { get; protected set; }
         /// <summary>
         /// The virtual element.
         /// </summary>
@@ -34,9 +34,9 @@ namespace CRI.HelloHouston.Experience
             }
         }
 
-        public virtual void Init(XPSynchronizer synchronizer, VirtualElement virtualElement)
+        public virtual void Init(XPManager synchronizer, VirtualElement virtualElement)
         {
-            this.synchronizer = synchronizer;
+            this.manager = synchronizer;
             this.virtualElement = virtualElement;
             elementType = virtualElement.elementType;
         }
@@ -50,7 +50,7 @@ namespace CRI.HelloHouston.Experience
 
         public virtual void OnFailure() { }
 
-        public virtual void OnActivation() { }
+        public virtual void OnActivation(XPManager synchronizer) { }
 
         public virtual void OnHide() { }
 

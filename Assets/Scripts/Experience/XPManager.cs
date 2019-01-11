@@ -17,10 +17,10 @@ namespace CRI.HelloHouston.Experience
     }
 
     /// <summary>
-    /// The XpSynchronizer is responsible for the communication of every prefabs of one particular experiment among themselves as well as with the Gamecontroller.
+    /// The XPManager is responsible for the communication of every prefabs of one particular experiment among themselves as well as with the Gamecontroller.
     /// </summary>
     [System.Serializable]
-    public abstract class XPSynchronizer : MonoBehaviour
+    public abstract class XPManager : MonoBehaviour
     {
         [System.Serializable]
         public struct ElementInfo
@@ -37,7 +37,7 @@ namespace CRI.HelloHouston.Experience
             }
         }
         public delegate void XPStateEvent(XPState state);
-        public delegate void XPSynchronizerEvent(XPSynchronizer synchronizer);
+        public delegate void XPSynchronizerEvent(XPManager synchronizer);
         public XPStateEvent onStateChange;
         public static XPSynchronizerEvent onActivation;
         public static XPSynchronizerEvent onEnd;
@@ -177,7 +177,7 @@ namespace CRI.HelloHouston.Experience
             logController.AddLog("Activation", xpContext, Log.LogType.Automatic);
             foreach (var element in elements)
             {
-                element.xpElement.OnActivation();
+                element.xpElement.OnActivation(this);
             }
             PostActivate();
         }

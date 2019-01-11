@@ -76,7 +76,11 @@ namespace CRI.HelloHouston.Experience.UI
         private void Init(RoomXPPair rxpp)
         {
             GameManager gameManager = GameManager.instance;
-            XPSynchronizer[] synchronizers = gameManager.Init(rxpp.xpContexts, rxpp.vroom);
+            XPManager[] synchronizers = gameManager.Init(rxpp.xpContexts, rxpp.vroom);
+            if (_player != null)
+                _player.SetActive(true);
+            if (_calibrationPlayer != null)
+                _calibrationPlayer.SetActive(false);
             var cameras = _player.GetComponentsInChildren<Camera>().Where(x => x.tag == "DisplayCamera").Concat(rxpp.vroom.GetComponentsInChildren<Camera>(true).Where(x => x.tag == "DisplayCamera"));
             _cameraDisplay.Init(cameras.ToArray());
 
@@ -90,11 +94,6 @@ namespace CRI.HelloHouston.Experience.UI
             //Needs to be initialized after the start of the game.
             _experienceDisplay.Init(synchronizers);
             _actionDisplay.Init(gameManager.actions, gameManager.gameActionController);
-
-            if (_player != null)
-                _player.SetActive(true);
-            if (_calibrationPlayer != null)
-                _calibrationPlayer.SetActive(false);
         }
     }
 }

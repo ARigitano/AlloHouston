@@ -58,7 +58,6 @@ namespace CRI.HelloHouston
 
         public virtual void Next()
         {
-            Debug.Log("hey");
             if (_next != null)
             {
                 Hide();

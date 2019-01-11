@@ -45,7 +45,7 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         [SerializeField]
         [Tooltip("An empty object with the XpSynchronizer inhreting script of the experiment.")]
-        private XPSynchronizer _xpSynchronizerPrefab = null;
+        private XPManager _xpManagerPrefab = null;
 
         /// <summary>
         /// The screen, window and tablet on the top part of the wall, to interact with the experiment.
@@ -160,9 +160,9 @@ namespace CRI.HelloHouston.Experience
         /// Initializes and returns the synchronizer.
         /// </summary>
         /// <returns></returns>
-        public XPSynchronizer InitSynchronizer(LogExperienceController logExperienceController, VirtualZone[] zones)
+        public XPManager InitSynchronizer(LogExperienceController logExperienceController, VirtualZone[] zones)
         {
-            XPSynchronizer res = GameObject.Instantiate(_xpSynchronizerPrefab);
+            XPManager res = GameObject.Instantiate(_xpManagerPrefab);
             res.Init(this, zones, logExperienceController, XPState.Visible);
             return res;
         }

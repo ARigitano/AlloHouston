@@ -30,14 +30,14 @@ namespace CRI.HelloHouston.Experience.UI
 
         private void OnEnable()
         {
-            XPSynchronizer.onActivation += RefreshDropdown;
-            XPSynchronizer.onEnd += RefreshDropdown;
+            XPManager.onActivation += RefreshDropdown;
+            XPManager.onEnd += RefreshDropdown;
         }
 
         private void OnDisable()
         {
-            XPSynchronizer.onActivation -= RefreshDropdown;
-            XPSynchronizer.onEnd -= RefreshDropdown;
+            XPManager.onActivation -= RefreshDropdown;
+            XPManager.onEnd -= RefreshDropdown;
         }
 
         private void Reset()
@@ -58,7 +58,7 @@ namespace CRI.HelloHouston.Experience.UI
             RefreshDropdown();
         }
 
-        private void RefreshDropdown(XPSynchronizer xpSynchronizer = null)
+        private void RefreshDropdown(XPManager xpSynchronizer = null)
         {
             GameHint[] hints = _gameManager.GetAllCurrentHints();
             _dropdown.ClearOptions();

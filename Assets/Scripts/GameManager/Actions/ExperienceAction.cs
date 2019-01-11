@@ -7,6 +7,6 @@ namespace CRI.HelloHouston.Experience.Actions
 {
     public abstract class ExperienceAction : GeneralAction
     {
-        public abstract void Act(XPSynchronizer controller);
+        public abstract void Act(XPManager controller);
     }
 }

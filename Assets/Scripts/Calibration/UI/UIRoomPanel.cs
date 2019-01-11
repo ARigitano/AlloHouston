@@ -35,7 +35,16 @@ namespace CRI.HelloHouston.Calibration.UI {
             }
             zoneManager.DistributeZones(zones, xpContexts.SelectMany(xpContext => xpContext.zones.Select(xpZone => new ContextZone(xpContext, xpZone))).ToArray());
             _nextObject = rxpp;
-            _nextButton.onClick.AddListener(Next);
+            _nextButton.onClick.AddListener(() =>
+            {
+                foreach (var zone in zones)
+                {
+                    Collider col = zone.GetComponent<Collider>();
+                    if (col != null)
+                        col.enabled = false;
+                }
+                Next();
+            });
         }
     }
 }

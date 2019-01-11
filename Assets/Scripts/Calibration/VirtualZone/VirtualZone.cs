@@ -35,7 +35,7 @@ namespace CRI.HelloHouston.Calibration
             AddXPZone(xpZone, xpContext);
         }
 
-        public virtual XPElement[] InitAll(XPSynchronizer xpSynchronizer)
+        public virtual XPElement[] InitAll(XPManager xpSynchronizer)
         {
             XPElement[] res = virtualElements.Where(x => x.xpContext != null).Select(x => x.Init(xpSynchronizer)).ToArray();
             return res;

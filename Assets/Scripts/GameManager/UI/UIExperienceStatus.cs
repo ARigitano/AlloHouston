@@ -88,11 +88,11 @@ namespace CRI.HelloHouston.Experience.UI
         [Tooltip("Text of the popup when there's not enough time left.")]
         private string _notEnoughTimeText = null;
 
-        private XPSynchronizer _xpSynchronizer;
+        private XPManager _xpManager;
 
-        public void Init(GameManager gameManager, XPSynchronizer xpSynchronizer)
+        public void Init(GameManager gameManager, XPManager xpSynchronizer)
         {
-            _xpSynchronizer = xpSynchronizer;
+            _xpManager = xpSynchronizer;
             _nameText.text = xpSynchronizer.xpContext.contextName;
             _actionButton.Init(xpSynchronizer.xpContext.xpSettings.actions, xpSynchronizer.actionController);
             _launchButton.onClick.AddListener(() =>
@@ -128,7 +128,7 @@ namespace CRI.HelloHouston.Experience.UI
 
         private void LaunchAction()
         {
-            _xpSynchronizer.Activate();
+            _xpManager.Activate();
             _launchButton.GetComponent<CanvasGroup>().Hide();
             _failButton.GetComponent<CanvasGroup>().Show();
             _successButton.GetComponent<CanvasGroup>().Show();
@@ -136,7 +136,7 @@ namespace CRI.HelloHouston.Experience.UI
 
         private void FailAction()
         {
-            _xpSynchronizer.Fail();
+            _xpManager.Fail();
             _successButton.interactable = false;
             _failButton.interactable = false;
             if (_successButton.GetComponentInChildren<Text>())
@@ -145,7 +145,7 @@ namespace CRI.HelloHouston.Experience.UI
 
         private void SuccessAction()
         {
-            _xpSynchronizer.Success();
+            _xpManager.Success();
             _successButton.interactable = false;
             _failButton.interactable = false;
             if (_failButton.GetComponentInChildren<Text>())
@@ -160,7 +160,7 @@ namespace CRI.HelloHouston.Experience.UI
                 _finished.Hide();
                 _inactive.Show();
             }
-            else if (_xpSynchronizer.active)
+            else if (_xpManager.active)
             {
                 _inProgress.Show();
                 _finished.Hide();

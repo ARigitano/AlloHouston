@@ -66,8 +66,11 @@ namespace CRI.HelloHouston.Calibration.UI
 
         public ZoneManager(PointerClicker laserClicker)
         {
-            laserClicker.onGripClicked += Unselect;
-            laserClicker.onHangleTriggerClicked += Select;
+            if (laserClicker != null)
+            {
+                laserClicker.onGripClicked += Unselect;
+                laserClicker.onHangleTriggerClicked += Select;
+            }
         }
     }
 }

@@ -6,7 +6,7 @@ namespace CRI.HelloHouston.Experience.Actions
     public class ExperienceActionController : GeneralActionController<ExperienceAction>
     {
 
-        public XPSynchronizer synchronizer { get; private set; }
+        public XPManager manager { get; private set; }
         /// <summary>
         /// Resolve the first action of the queue if there's at least one action in the queue and the current action has finished.
         /// </summary>
@@ -18,17 +18,17 @@ namespace CRI.HelloHouston.Experience.Actions
             {
                 ExperienceAction action = actionQueue.Dequeue();
                 _currentAction = action;
-                _currentAction.Act(synchronizer);
+                _currentAction.Act(manager);
                 _lastActionResolutionTime = Time.time;
                 return true;
             }
             return false;
         }
 
-        public ExperienceActionController(XPSynchronizer synchronizer)
+        public ExperienceActionController(XPManager synchronizer)
         {
             actionQueue = new Queue<ExperienceAction>();
-            this.synchronizer = synchronizer;
+            this.manager = synchronizer;
         }
     }
 }

@@ -2,7 +2,7 @@
 {
     public class XPHologramElement : XPElement
     {
-        public override void OnActivation() { }
+        public override void OnActivation(XPManager manager) { }
 
         public override void OnFailure() { }
 
