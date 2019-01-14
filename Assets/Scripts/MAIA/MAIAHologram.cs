@@ -127,6 +127,15 @@ namespace CRI.HelloHouston.Experience.MAIA
         private float _lMaxCyl4 = 1f;
 
         /// <summary>
+        /// Activates or deactivates the hologram.
+        /// </summary>
+        /// <param name="isActivated">Is the hologram activated or deactivated?</param>
+        public void ActivateHologram(bool isActivated)
+        {
+            _hologram.SetActive(isActivated);
+        }
+
+        /// <summary>
         /// Animates the particle reaction hologram.
         /// </summary>
         /// <param name="particles">The combination of particles.</param>
@@ -306,15 +315,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             Debug.Log(name + "Failed");
         }
-        //TO DO
-        /// <summary>
-        /// Effect when the experiment is activated the first time.
-        /// </summary>
-        public override void OnActivation()
-        {
-            Debug.Log(name + "Activated");
-            gameObject.SetActive(true);
-        }
+
         //TO DO
         /// <summary>
         /// Effect when the experiment is paused.
@@ -332,6 +333,11 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             Debug.Log(name + "Unpaused");
             gameObject.SetActive(false);
+        }
+
+        private void Start()
+        {
+            //ActivateHologram(false);
         }
     }
 }

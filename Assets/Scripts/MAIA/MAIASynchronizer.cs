@@ -39,6 +39,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void SkipStepOne()
         {
+            _holograms[0].ActivateHologram(true);
             _tabletScreen.SkipStepOne();
             _tubeScreen.SkipStepOne();
             _topScreen.SkipStepOne();
@@ -97,6 +98,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void AccessGranted()
         {
+            _holograms[0].ActivateHologram(true);
             _tabletScreen.AccessGranted();
             _tabletScreen.reactionExits = _tabletScreen.ParticlesCombination();
             _topScreen.FillNbParticlesDetected(_tabletScreen.reactionExits);
@@ -192,7 +194,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             _topScreen.OverrideSecond();
             _tabletScreen.OverrideSecond();
-            _tubeScreen.OverrideSecond(_tabletScreen._allReactions);
+           // _tubeScreen.OverrideSecond(_tabletScreen._allReactions);
         }
 
         /// <summary>

@@ -32,7 +32,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// All the panels of the top left screen of the experiment.
         /// </summary>
         [SerializeField]
-        private GameObject _exileLoadingScreen, _maiaLoadingScreen, _maiaOverview, _manualOverrideAccess, _popupAccessGranted, _popupErrorAccessDenied, _manualOverride1, _popupErrorMessageParticles, _pverrideScreen2;
+        private GameObject _exileLoadingScreen, _maiaLoadingScreen, _maiaOverview, _manualOverrideAccess, _popupAccessGranted, _popupErrorAccessDenied, _manualOverride1, _popupErrorMessageParticles, _pverrideScreen2, _victoryPopup;
         /// <summary>
         /// Text that displays the loading states of the experiment according to the loading bar progression.
         /// </summary>
@@ -179,9 +179,10 @@ namespace CRI.HelloHouston.Experience.MAIA
 
         public void OverrideSecond()
         {
-            _pverrideScreen2.SetActive(true);
-            _currentPanel = _pverrideScreen2;
-            _manualOverride1.SetActive(false);
+            _victoryPopup.SetActive(true);
+           // _pverrideScreen2.SetActive(true);
+           // _currentPanel = _pverrideScreen2;
+           // _manualOverride1.SetActive(false);
         }
 
         /// <summary>
@@ -425,14 +426,17 @@ namespace CRI.HelloHouston.Experience.MAIA
             _maiaLoadingScreen.SetActive(false);
             _maiaOverview.SetActive(true);
             _currentPanel = _maiaOverview;
-            StartCoroutine(WaitGeneric(10f, () =>
+            _popupErrorMessage.SetActive(true);
+            _popupInfoMessage.SetActive(true);
+            _synchronizer.ManualOverrideActive();
+            /*StartCoroutine(WaitGeneric(10f, () =>
             {
                 _popupCrash.SetActive(true);
                 StartCoroutine("ScrollingError");
                 _popupErrorMessage.SetActive(true);
                 _popupInfoMessage.SetActive(true);
                 _synchronizer.ManualOverrideActive();
-            }));
+            }));*/
         }
 
         /// <summary>
