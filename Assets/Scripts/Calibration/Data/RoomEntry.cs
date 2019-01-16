@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Xml.Serialization;
 using VRCalibrationTool;
 
-namespace CRI.HelloHouston.Calibration.XML
+namespace CRI.HelloHouston.Calibration.Data
 {
     /// <summary>
-    /// A room.
+    /// A block room, a data entity that contains the values of a virtual room.
     /// </summary>
     [Serializable]
     public class RoomEntry : ItemEntry

@@ -1,6 +1,6 @@
 ﻿using System.Xml.Serialization;
 
-namespace CRI.HelloHouston.Calibration.XML
+namespace CRI.HelloHouston.Calibration.Data
 {
     public enum BlockType
     {

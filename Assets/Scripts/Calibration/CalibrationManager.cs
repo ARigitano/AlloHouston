@@ -2,7 +2,7 @@
 using UnityEngine;
 using System.Linq;
 using VRCalibrationTool;
-using CRI.HelloHouston.Calibration.XML;
+using CRI.HelloHouston.Calibration.Data;
 using System;
 using UnityEngine.UI;
 

@@ -1,17 +1,16 @@
 ﻿using System;
-using System.Xml.Serialization;
 using VRCalibrationTool;
 
-namespace CRI.HelloHouston.Calibration.XML
+namespace CRI.HelloHouston.Calibration.Data
 {
     /// <summary>
-    /// An item entry.
+    /// A block entry, a data entity that contains the values of a virtual block.
     /// </summary>
     [Serializable]
     public class BlockEntry : ItemEntry
     {
         /// <summary>
-        /// Path of the ItemEntry prefab.
+        /// Path of the BlockEntry prefab.
         /// </summary>
         public override string name
         {
@@ -21,7 +20,7 @@ namespace CRI.HelloHouston.Calibration.XML
             }
         }
         /// <summary>
-        /// Type of Block Entry.
+        /// Type of BlockEntry.
         /// </summary>
         public BlockType type;
 

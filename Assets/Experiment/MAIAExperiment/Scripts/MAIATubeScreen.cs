@@ -17,7 +17,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// Thumbnails for all the possible Feynman diagrams.
         /// </summary>
         [SerializeField]
-        private CaseDiagram[] _casesDiagram;
+        private MAIACaseDiagram[] _casesDiagram;
         /// <summary>
         /// Images of the previous, current and next displayed Feynman diagrams.
         /// </summary>
@@ -41,7 +41,6 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             _overrideScreen2.SetActive(true);
         }
-
 
         public void OverrideSecond(Reaction[] reactions)
         {

@@ -1,9 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using System;
 
-namespace CRI.HelloHouston.Calibration.XML
+namespace CRI.HelloHouston.Calibration.Data
 {
     /// <summary>
     /// Makes Vector3 serializable to be stored in XML file

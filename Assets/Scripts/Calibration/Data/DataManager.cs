@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace CRI.HelloHouston.Calibration.XML
+namespace CRI.HelloHouston.Calibration.Data
 {
     /// <summary>
     /// Stores or loads instantiable objects' coordinates for the auto calibration phase

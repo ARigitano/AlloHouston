@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Xml.Serialization;
 using UnityEngine;
-using UnityEngine.Serialization;
 using VRCalibrationTool;
 
-namespace CRI.HelloHouston.Calibration.XML
+namespace CRI.HelloHouston.Calibration.Data
 {
+    /// <summary>
+    /// An item entry, an abstract data entity that contains the values of any virtual item.
+    /// </summary>
     [Serializable]
     public abstract class ItemEntry
     {
