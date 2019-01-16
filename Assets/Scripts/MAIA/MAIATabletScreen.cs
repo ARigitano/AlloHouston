@@ -123,6 +123,17 @@ namespace CRI.HelloHouston.Experience.MAIA
         [HideInInspector]
         public int nbQuark, nbAntiquark, nbMuon, nbAntimuon, nbElectron, nbAntielectron, nbNeutrino, nbPhoton;
 
+        public void DeleteParticle()
+        {
+            if (!_isTouched)
+            {
+                _isTouched = true;
+                _enteredParticles.RemoveAt(_enteredParticles.Count - 1);
+                _synchronizer.DeleteParticle();
+                StartCoroutine("WaitButton");
+            }
+        }
+
         /// <summary>
         /// Called by the synchronizer to skip directly to the Feynman diagrams step.
         /// </summary>

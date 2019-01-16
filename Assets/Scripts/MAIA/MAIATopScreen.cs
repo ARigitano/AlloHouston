@@ -355,6 +355,12 @@ namespace CRI.HelloHouston.Experience.MAIA
             }
         }
 
+        public void DeleteParticle(int nbParticles)
+        {
+            _particleCases[nbParticles].enabled = false;
+            //_particleCases[_particleCases.IndexOf(_particleCases[_particleCases.Count-1])].enabled = false;
+        }
+
         /// <summary>
         /// Displays the particles combination while they are being opened.
         /// </summary>

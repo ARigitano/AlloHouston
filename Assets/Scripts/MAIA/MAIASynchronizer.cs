@@ -140,6 +140,14 @@ namespace CRI.HelloHouston.Experience.MAIA
         }
 
         /// <summary>
+        /// Tells the main screen to clear the last entered particles.
+        /// </summary>
+        public void DeleteParticle()
+        {
+            _topScreen.DeleteParticle(_tabletScreen._enteredParticles.Count);
+        }
+
+        /// <summary>
         /// Tells the tube screen to display another Feynman diagram.
         /// </summary>
         public void OtherDiagram()
