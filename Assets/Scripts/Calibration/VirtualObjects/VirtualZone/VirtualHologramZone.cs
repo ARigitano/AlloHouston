@@ -1,6 +1,4 @@
-﻿using System;
-using CRI.HelloHouston.Experience;
-using System.Collections.Generic;
+﻿using CRI.HelloHouston.Experience;
 using UnityEngine;
 
 namespace CRI.HelloHouston.Calibration

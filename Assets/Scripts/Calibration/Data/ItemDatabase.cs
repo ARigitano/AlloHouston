@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
-using System.Xml;
-using System.Xml.Serialization;
 using UnityEngine;
 
 namespace CRI.HelloHouston.Calibration.Data
 {
     /// <summary>
-    /// Serializable XML entry
+    /// The database of all the virtual items.
     /// </summary>
     [Serializable]
     [CreateAssetMenu(fileName = "New ItemDatabase", menuName = "Calibration/ItemDatabase", order = 1)]

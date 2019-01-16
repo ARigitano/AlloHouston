@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Audio;
 
 namespace CRI.HelloHouston.Audio
 {
+    /// <summary>
+    /// Parameters for an audio file.
+    /// </summary>
     public class Audio
     {
         protected static int _audioCounter = 0;
