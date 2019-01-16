@@ -39,6 +39,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void SkipStepOne()
         {
+            _holograms[0].ActivateHologram(true);
             _tabletScreen.SkipStepOne();
             _tubeScreen.SkipStepOne();
             _topScreen.SkipStepOne();
@@ -97,6 +98,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void AccessGranted()
         {
+            _holograms[0].ActivateHologram(true);
             _tabletScreen.AccessGranted();
             _tabletScreen.reactionExits = _tabletScreen.ParticlesCombination();
             _topScreen.FillNbParticlesDetected(_tabletScreen.reactionExits);
@@ -118,7 +120,14 @@ namespace CRI.HelloHouston.Experience.MAIA
             _holograms[0].AnimHologram(_tabletScreen.reactionExits);
             _holograms[0].DisplaySplines();
             _topScreen.ParticleGrid(_tabletScreen.reactionExits);
-            _topScreen.FillParticlesTable(_tabletScreen.reactionExits);
+            _topScreen.FillParticlesTable(_tabletScreen.nbAntielectron, _topScreen._textAntielectron);
+            _topScreen.FillParticlesTable(_tabletScreen.nbAntimuon, _topScreen._textAntimuon);
+            _topScreen.FillParticlesTable(_tabletScreen.nbAntiquark, _topScreen._textAntiquark);
+            _topScreen.FillParticlesTable(_tabletScreen.nbElectron, _topScreen._textElectron);
+            _topScreen.FillParticlesTable(_tabletScreen.nbMuon, _topScreen._textMuon);
+            _topScreen.FillParticlesTable(_tabletScreen.nbNeutrino, _topScreen._textNeutrino);
+            _topScreen.FillParticlesTable(_tabletScreen.nbPhoton, _topScreen._textPhoton);
+            _topScreen.FillParticlesTable(_tabletScreen.nbQuark, _topScreen._textQuark);
             _topScreen.FillChosenDiagrams(_tabletScreen._chosenReactions, _tabletScreen._realReaction);
             _topScreen.FillInteractionType(_tabletScreen._realReaction);
         }
@@ -129,6 +138,14 @@ namespace CRI.HelloHouston.Experience.MAIA
         public void ClearParticles()
         {
             _topScreen.ClearParticles();
+        }
+
+        /// <summary>
+        /// Tells the main screen to clear the last entered particles.
+        /// </summary>
+        public void DeleteParticle()
+        {
+            _topScreen.DeleteParticle(_tabletScreen._enteredParticles.Count);
         }
 
         /// <summary>
@@ -186,7 +203,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             _topScreen.OverrideSecond();
             _tabletScreen.OverrideSecond();
-            _tubeScreen.OverrideSecond(_tabletScreen._allReactions);
+           // _tubeScreen.OverrideSecond(_tabletScreen._allReactions);
         }
 
         /// <summary>

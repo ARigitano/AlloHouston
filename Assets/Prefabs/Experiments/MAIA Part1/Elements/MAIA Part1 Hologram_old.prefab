@@ -42,7 +42,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1217976467665746
 GameObject:
   m_ObjectHideFlags: 1
@@ -94,7 +94,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1544155408307126
 GameObject:
   m_ObjectHideFlags: 0
@@ -154,12 +154,12 @@ GameObject:
   - component: {fileID: 4993085576833532}
   - component: {fileID: 114681139431253332}
   m_Layer: 0
-  m_Name: MAIA Hologram_old
+  m_Name: MAIA Part1 Hologram_old
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1822403030364336
 GameObject:
   m_ObjectHideFlags: 0
@@ -247,7 +247,7 @@ Transform:
   m_GameObject: {fileID: 1061906480027732}
   m_LocalRotation: {x: -0, y: -0, z: 0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 252.09477, y: 183.36833, z: 183.36827}
+  m_LocalScale: {x: 246.28973, y: 179.14586, z: 179.1458}
   m_Children: []
   m_Father: {fileID: 4374113473207956}
   m_RootOrder: 0
@@ -457,7 +457,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: 2a2859baeeec7e14785299ea50011ea5, type: 2}
+  - {fileID: 2100000, guid: a9d8565cd2f99b04c94288f457b17456, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -492,7 +492,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: a9d8565cd2f99b04c94288f457b17456, type: 2}
+  - {fileID: 2100000, guid: c4e0cc427470e5749af1aa749cbc7e99, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -597,7 +597,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: 2f858ee794e39a245a0056f861046926, type: 2}
+  - {fileID: 2100000, guid: c4e0cc427470e5749af1aa749cbc7e99, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -632,7 +632,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: 503f0eee76fe24443b555aba7eb07f05, type: 2}
+  - {fileID: 2100000, guid: a9d8565cd2f99b04c94288f457b17456, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -797,17 +797,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _elementName: 
+  _hologram: {fileID: 1657341404690666}
   _headPrefab: {fileID: 1638978900420930, guid: e20e5702d9cfbeb4283f8cad3cceec2e,
     type: 2}
   _amplitudeA: 0.15
   _amplitudeB: 0.15
   _particleSplinePrefab: {fileID: 114330974348385556, guid: f3741c479c435b84dae26c8388f02e22,
     type: 2}
-  _cylArray:
-  - {fileID: 33614257511252690}
-  - {fileID: 33778873967638092}
-  - {fileID: 33533058801098216}
-  - {fileID: 33970273169914432}
+  _destination: {fileID: 1608022025954948, guid: e9e4067b5208e9746b7d99440e2ce781,
+    type: 2}
+  _cyl1: {fileID: 33614257511252690}
+  _cyl2: {fileID: 33778873967638092}
+  _cyl3: {fileID: 33533058801098216}
+  _cyl4: {fileID: 33970273169914432}
   _factor: 0.1
 --- !u!136 &136406308416974890
 CapsuleCollider:

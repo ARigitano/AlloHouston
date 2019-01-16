@@ -14,7 +14,8 @@ public class Window : MonoBehaviour
     private bool isMoving = false;
     private float speed = 500f;
     private float distmin = 0.5f;
-    private float delay = 0.0f;
+    private float
+        delay = 0.0f;
     private float frequency = 0.02f;
 
     //private Screen parentScreen;

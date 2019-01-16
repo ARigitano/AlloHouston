@@ -32,7 +32,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// All the panels of the top left screen of the experiment.
         /// </summary>
         [SerializeField]
-        private GameObject _exileLoadingScreen, _maiaLoadingScreen, _maiaOverview, _manualOverrideAccess, _popupAccessGranted, _popupErrorAccessDenied, _manualOverride1, _popupErrorMessageParticles, _pverrideScreen2;
+        private GameObject _exileLoadingScreen, _maiaLoadingScreen, _maiaOverview, _manualOverrideAccess, _popupAccessGranted, _popupErrorAccessDenied, _manualOverride1, _popupErrorMessageParticles, _pverrideScreen2, _victoryPopup;
         /// <summary>
         /// Text that displays the loading states of the experiment according to the loading bar progression.
         /// </summary>
@@ -62,7 +62,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// Texts that display the number of particles detected for each type of particles.
         /// </summary>
         [SerializeField]
-        private Text _textQuark, _textAntiquark, _textMuon, _textAntimuon, _textElectron, _textAntielectron, _textNeutrino, _textPhoton;
+        public Text _textQuark, _textAntiquark, _textMuon, _textAntimuon, _textElectron, _textAntielectron, _textNeutrino, _textPhoton;
         /// <summary>
         /// Slots where the diagrams of the chosen reactions are displayed.
         /// </summary>
@@ -148,8 +148,8 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void SkipStepOne()
         {
-            if(_currentPanel != null)
-                 _currentPanel.SetActive(false);
+            if (_currentPanel != null)
+                _currentPanel.SetActive(false);
 
             _pverrideScreen2.SetActive(true);
         }
@@ -179,9 +179,10 @@ namespace CRI.HelloHouston.Experience.MAIA
 
         public void OverrideSecond()
         {
-            _pverrideScreen2.SetActive(true);
-            _currentPanel = _pverrideScreen2;
-            _manualOverride1.SetActive(false);
+            _victoryPopup.SetActive(true);
+            // _pverrideScreen2.SetActive(true);
+            // _currentPanel = _pverrideScreen2;
+            // _manualOverride1.SetActive(false);
         }
 
         /// <summary>
@@ -272,7 +273,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                 if (reactionsTemp[0].diagramImage != chosenReaction.diagramImage)
                 {
                     _diagrams[i].sprite = reactionsTemp[0].diagramImage;
-                } 
+                }
                 else
                 {
                     _diagrams[i].sprite = _diagramMissing;
@@ -283,64 +284,13 @@ namespace CRI.HelloHouston.Experience.MAIA
         }
 
         /// <summary>
-        /// Fills the number of particles detected table.
+        /// Fills the number of a kind of particles in the particles table.
         /// </summary>
-        /// <param name="particles">The particles detected.</param>
-        public void FillParticlesTable(List<Particle> particles)
+        /// <param name="nbParticles">The number of particles of the kind.</param>
+        /// <param name="entry">The text to be filled.</param>
+        public void FillParticlesTable(int nbParticles, Text entry)
         {
-            int nbQuark = 0;
-            int nbAntiquark = 0;
-            int nbMuon = 0;
-            int nbAntimuon = 0;
-            int nbElectron = 0;
-            int nbAntielectron = 0;
-            int nbNeutrino = 0;
-            int nbPhoton = 0;
-
-            foreach (Particle particle in particles)
-            {
-                switch (particle.symbol)
-                {
-                    case "q":
-                        nbQuark++;
-                        break;
-                    case "qBar":
-                        nbAntiquark++;
-                        break;
-                    case "μ":
-                        nbMuon++;
-                        break;
-                    case "μBar":
-                        nbAntimuon++;
-                        break;
-                    case "e":
-                        nbElectron++;
-                        break;
-                    case "eBar":
-                        nbAntielectron++;
-                        break;
-                    case "v":
-                        nbNeutrino++;
-                        break;
-                    case "vBar":
-                        nbNeutrino++;
-                        break;
-                    case "γ":
-                        nbPhoton++;
-                        break;
-                    default:
-                        break;
-                }
-            }
-            _textQuark.text = nbQuark.ToString();
-            _textAntiquark.text = nbAntiquark.ToString();
-            _textMuon.text = nbMuon.ToString();
-            _textAntimuon.text = nbAntimuon.ToString();
-            _textElectron.text = nbElectron.ToString();
-            _textAntielectron.text = nbAntielectron.ToString();
-            _textNeutrino.text = nbNeutrino.ToString();
-            _textPhoton.text = nbPhoton.ToString();
-            Debug.Log("LAOK");
+            entry.text = nbParticles.ToString();
         }
 
         /// <summary>
@@ -403,6 +353,12 @@ namespace CRI.HelloHouston.Experience.MAIA
             {
                 particleCase.enabled = false;
             }
+        }
+
+        public void DeleteParticle(int nbParticles)
+        {
+            _particleCases[nbParticles].enabled = false;
+            //_particleCases[_particleCases.IndexOf(_particleCases[_particleCases.Count-1])].enabled = false;
         }
 
         /// <summary>
@@ -476,14 +432,17 @@ namespace CRI.HelloHouston.Experience.MAIA
             _maiaLoadingScreen.SetActive(false);
             _maiaOverview.SetActive(true);
             _currentPanel = _maiaOverview;
-            StartCoroutine(WaitGeneric(10f, () =>
+            _popupErrorMessage.SetActive(true);
+            _popupInfoMessage.SetActive(true);
+            _manager.ManualOverrideActive();
+            /*StartCoroutine(WaitGeneric(10f, () =>
             {
                 _popupCrash.SetActive(true);
                 StartCoroutine("ScrollingError");
                 _popupErrorMessage.SetActive(true);
                 _popupInfoMessage.SetActive(true);
-                _manager.ManualOverrideActive();
-            }));
+                _synchronizer.ManualOverrideActive();
+            }));*/
         }
 
         /// <summary>
@@ -496,7 +455,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             _maiaOverview.SetActive(false);
         }
 
-        private void Init(MAIAManager synchronizer)
+        public void Init(MAIAManager synchronizer)
         {
             _manager = synchronizer;
         }
@@ -526,6 +485,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             Debug.Log(name + "Activated");
             Init((MAIAManager)manager);
+            //StartCoroutine("Loading");
         }
 
         /// <summary>
