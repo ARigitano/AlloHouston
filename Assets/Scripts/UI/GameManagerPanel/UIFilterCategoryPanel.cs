@@ -43,6 +43,8 @@ namespace CRI.HelloHouston.Experience.UI {
             }
             _panel.sizeDelta = new Vector2(20 + filters.Length * _togglePrefab.GetComponent<RectTransform>().sizeDelta.x, _panel.sizeDelta.y);
             _toggleTransform.SetParent(_panel);
+            _toggleTransform.GetComponent<RectTransform>().offsetMin = Vector2.zero;
+            _toggleTransform.GetComponent<RectTransform>().offsetMax = Vector2.zero;
             _categoryToggle.Init(toggles, categoryName);
         } 
     }
