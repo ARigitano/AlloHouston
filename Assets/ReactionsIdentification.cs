@@ -1,0 +1,127 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using System;
+
+namespace CRI.HelloHouston.Experience.MAIA
+{
+    public class ReactionsIdentification : MonoBehaviour
+    {
+        /// <summary>
+        /// Script for the whole top screen.
+        /// </summary>
+        [SerializeField]
+        private MAIATopScreen _maiaTopScreen;
+        /// <summary>
+        /// Slots where the diagrams of the chosen reactions are displayed.
+        /// </summary>
+        [SerializeField]
+        private Image[] _diagrams;
+        /// <summary>
+        /// Displays the type of interaction of the real reaction.
+        /// </summary>
+        [SerializeField]
+        private Text _textInteraction;
+        /// <summary>
+        /// Image to be displayed insted of the Feynman diagram for the real reaction.
+        /// </summary>
+        [SerializeField]
+        private Sprite _diagramMissing;
+        /// <summary>
+        /// Popups displayed when selecting the right or wrong Feynman diagram.
+        /// </summary>
+        [SerializeField]
+        private GameObject _popupWin, _popupLose;
+        /// <summary>
+        /// Error popups for the Feynman diagram selection.
+        /// </summary>
+        [SerializeField]
+        private GameObject _popupErrorRessource, _popupErrorNumber;
+
+        /// <summary>
+        /// Effect if the correct Feynman diagram is selected, or a wrong one.
+        /// </summary>
+        /// <param name="realReaction">The real reaction.</param>
+        /// <param name="reactionSelected">The reaction selected by the player.</param>
+        public void ReactionSelected(Reaction realReaction, Sprite reactionSelected)
+        {
+            if (reactionSelected == realReaction.diagramImage)
+            {
+                _popupWin.SetActive(true);
+            }
+            else
+            {
+                _popupLose.SetActive(true);
+
+                StartCoroutine(_maiaTopScreen.WaitGeneric(2f, () =>
+                {
+                    _popupLose.SetActive(false);
+                }));
+            }
+
+        }
+
+        /// <summary>
+        /// Fills the interaction type of the real reaction on the interaction type window.
+        /// </summary>
+        /// <param name="chosenReaction">The chosen reaction.</param>
+        public void FillInteractionType(Reaction chosenReaction)
+        {
+            _textInteraction.text = chosenReaction.entries.ToString();
+        }
+
+        /// <summary>
+        /// Displays the Feynman diagrams of each chosen reaction except the real one.
+        /// </summary>
+        /// <param name="reactions"></param>
+        /// <param name="chosenReaction"></param>
+        public void FillChosenDiagrams(List<Reaction> reactions, Reaction chosenReaction)
+        {
+            int i = 0;
+
+            List<Reaction> reactionsTemp = new List<Reaction>();
+
+            foreach (Reaction reaction in reactions)
+            {
+                reactionsTemp.Add(reaction);
+            }
+
+            while (reactionsTemp.Count != 0)
+            {
+                if (reactionsTemp[0].diagramImage != chosenReaction.diagramImage)
+                {
+                    _diagrams[i].sprite = reactionsTemp[0].diagramImage;
+                }
+                else
+                {
+                    _diagrams[i].sprite = _diagramMissing;
+                }
+                reactionsTemp.RemoveAt(0);
+                i++;
+            }
+        }
+
+        /// <summary>
+        /// Fills the number of a kind of particles in the particles table.
+        /// </summary>
+        /// <param name="nbParticles">The number of particles of the kind.</param>
+        /// <param name="entry">The text to be filled.</param>
+        public void FillParticlesTable(int nbParticles, Text entry)
+        {
+            entry.text = nbParticles.ToString();
+        }
+
+        // Start is called before the first frame update
+        void Start()
+        {
+
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+
+        }
+    }
+}

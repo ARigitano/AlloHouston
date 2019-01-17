@@ -1,6 +1,7 @@
 ﻿using CRI.HelloHouston.Calibration;
 using System.Collections;
 using UnityEngine;
+using System.Collections.Generic;
 
 /// <summary>
 /// The synchronizer of the particle physics experiment.
@@ -25,6 +26,92 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// The hologram scripts of the table block.
         /// </summary>
         private MAIAHologram[] _holograms;
+
+
+
+
+        /// <summary>
+        /// All the particle scriptable objects.
+        /// </summary>
+        private Particle[] _allParticles;
+        /// <summary>
+        /// All the reaction scriptable objects.
+        /// </summary>
+        [HideInInspector]
+        public Reaction[] _allReactions;
+        /// <summary>
+        /// Path to the particle scriptable objects folder.
+        /// </summary>
+        private static string _path = "Particles";
+        /// <summary>
+        /// Path to the particle scriptable objects folder.
+        /// </summary>
+        private static string _pathReaction = "reactions";
+        /// <summary>
+        /// Contains the combination of particles randomly generated.
+        /// </summary>
+        [HideInInspector]
+        public Particle[] particleTypes;
+        /// <summary>
+        /// Real password to get access.
+        /// </summary>
+        [SerializeField]
+        private string _realPassword;
+        /// <summary>
+        /// Password entered by the player.
+        /// </summary>
+        [HideInInspector]
+        public string enteredPassword;
+        /// <summary>
+        /// The combination of particles randomly generated rewritten as a string.
+        /// </summary>
+        [HideInInspector]
+        public List<string> realParticles = new List<string>();
+        /// <summary>
+        /// The particles entered by the player.
+        /// </summary>
+        [HideInInspector]
+        public List<Particle> _enteredParticles = new List<Particle>();
+        /// <summary>
+        /// String displayed depending on the particles combination entered.
+        /// </summary>
+        [HideInInspector]
+        public string[] result;
+        /// <summary>
+        /// Number of ongoing reactions.
+        /// </summary>
+        [SerializeField]
+        private int _numberChosenReaction = 4;
+        /// <summary>
+        /// The ongoing reactions.
+        /// </summary>
+        [HideInInspector]
+        public List<Reaction> _chosenReactions = new List<Reaction>();
+        /// <summary>
+        /// The reaction to idetify.
+        /// </summary>
+        [HideInInspector]
+        public Reaction _realReaction;
+        /// <summary>
+        /// The particles produced by the ongoing reactions.
+        /// </summary>
+        [HideInInspector]
+        public List<Particle> reactionExits = new List<Particle>();
+        /// <summary>
+        /// Index of the Feynman diagram currently being displayed.
+        /// </summary>
+        [HideInInspector]
+        public int displayedDiagram = 0;
+        /// <summary>
+        /// An error depending on the payer's diagram selection mistake.
+        /// </summary>
+        [HideInInspector]
+        public string particleErrorString;
+        /// <summary>
+        /// The numbers of particle detected of each kind.
+        /// </summary>
+        [HideInInspector]
+        public int nbQuark, nbAntiquark, nbMuon, nbAntimuon, nbElectron, nbAntielectron, nbNeutrino, nbPhoton;
 
         /// <summary>
         /// Activates the manual override panel of the tablet.
@@ -74,7 +161,8 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void CorrectPassword()
         {
-            _topScreen.Access(true);
+            //rewrite
+            //_topScreen.Access(true);
         }
 
         /// <summary>
@@ -82,7 +170,8 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void IncorrectPassword()
         {
-            _topScreen.Access(false);
+            //TODO:rewrite
+            //_topScreen.Access(false);
         }
 
         /// <summary>
@@ -90,7 +179,8 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void EnteringDigit()
         {
-            _topScreen.DisplayPassword(_tabletScreen.enteredPassword);
+            //TODO:rewrite
+            //_topScreen.DisplayPassword(_tabletScreen.enteredPassword);
         }
 
         /// <summary>
@@ -98,10 +188,11 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void AccessGranted()
         {
+            //TODO: rewrite
             _holograms[0].ActivateHologram(true);
             _tabletScreen.AccessGranted();
-            _tabletScreen.reactionExits = _tabletScreen.ParticlesCombination();
-            _topScreen.FillNbParticlesDetected(_tabletScreen.reactionExits);
+            //_tabletScreen.reactionExits = _tabletScreen.ParticlesCombination();
+            //_topScreen.FillNbParticlesDetected(_tabletScreen.reactionExits);
         }
 
         /// <summary>
@@ -109,7 +200,8 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void EnteringParticles()
         {
-            _topScreen.DisplayParticles(_tabletScreen._enteredParticles);
+            //TODO: rewrite
+            //_topScreen.DisplayParticles(_tabletScreen._enteredParticles);
         }
 
         /// <summary>
@@ -117,9 +209,10 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void CorrectParticle()
         {
-            _holograms[0].AnimHologram(_tabletScreen.reactionExits);
+            //TODO: rewrite
+            //_holograms[0].AnimHologram(_tabletScreen.reactionExits);
             _holograms[0].DisplaySplines();
-            _topScreen.ParticleGrid(_tabletScreen.reactionExits);
+            /*_topScreen.ParticleGrid(_tabletScreen.reactionExits);
             _topScreen.FillParticlesTable(_tabletScreen.nbAntielectron, _topScreen._textAntielectron);
             _topScreen.FillParticlesTable(_tabletScreen.nbAntimuon, _topScreen._textAntimuon);
             _topScreen.FillParticlesTable(_tabletScreen.nbAntiquark, _topScreen._textAntiquark);
@@ -129,7 +222,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             _topScreen.FillParticlesTable(_tabletScreen.nbPhoton, _topScreen._textPhoton);
             _topScreen.FillParticlesTable(_tabletScreen.nbQuark, _topScreen._textQuark);
             _topScreen.FillChosenDiagrams(_tabletScreen._chosenReactions, _tabletScreen._realReaction);
-            _topScreen.FillInteractionType(_tabletScreen._realReaction);
+            _topScreen.FillInteractionType(_tabletScreen._realReaction);*/
         }
 
         /// <summary>
@@ -145,7 +238,8 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void DeleteParticle()
         {
-            _topScreen.DeleteParticle(_tabletScreen._enteredParticles.Count);
+            //TODO:rewrite
+            //_topScreen.DeleteParticle(_tabletScreen._enteredParticles.Count);
         }
 
         /// <summary>
@@ -153,7 +247,8 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void OtherDiagram()
         {
-            _tubeScreen.OtherDiagram(_tabletScreen.displayedDiagram, _tabletScreen._allReactions);
+            //TODO:rewrite
+            //_tubeScreen.OtherDiagram(_tabletScreen.displayedDiagram, _tabletScreen._allReactions);
         }
 
         /// <summary>
@@ -161,7 +256,8 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void SelectExit()
         {
-            _tubeScreen.SelectExit(_tabletScreen.displayedDiagram);
+            //TODO:rewrite
+            //_tubeScreen.SelectExit(_tabletScreen.displayedDiagram);
         }
 
         /// <summary>
@@ -169,7 +265,8 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void SelectInteraction()
         {
-            _tubeScreen.SelectInteraction(_tabletScreen.displayedDiagram);
+            //TODO:rewrite
+            //_tubeScreen.SelectInteraction(_tabletScreen.displayedDiagram);
         }
 
         /// <summary>
@@ -177,7 +274,8 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void ParticleWrongLength()
         {
-            _topScreen.ErrorParticles(_tabletScreen.particleErrorString);
+            //TODO:rewrite
+            //_topScreen.ErrorParticles(_tabletScreen.particleErrorString);
         }
 
         /// <summary>
@@ -185,7 +283,8 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void ParticleWrongSymbol()
         {
-            _topScreen.ErrorParticles(_tabletScreen.particleErrorString);
+            //TODO:rewrite
+            //_topScreen.ErrorParticles(_tabletScreen.particleErrorString);
         }
 
         /// <summary>
@@ -193,7 +292,8 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void ParticleWrongCharge()
         {
-            _topScreen.ErrorParticles(_tabletScreen.particleErrorString);
+            //TODO:rewrite
+            //_topScreen.ErrorParticles(_tabletScreen.particleErrorString);
         }
 
         /// <summary>
@@ -203,7 +303,8 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             _topScreen.OverrideSecond();
             _tabletScreen.OverrideSecond();
-           // _tubeScreen.OverrideSecond(_tabletScreen._allReactions);
+            //Disabled for the demo version
+           //_tubeScreen.OverrideSecond(_tabletScreen._allReactions);
         }
 
         /// <summary>
@@ -211,7 +312,8 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void ReactionSelected()
         {
-            _topScreen.ReactionSelected(_tabletScreen._realReaction, _tubeScreen.diagramSelected);
+            //TODO:rewrite
+            //_topScreen.ReactionSelected(_tabletScreen._realReaction, _tubeScreen.diagramSelected);
         }
 
         protected override void PreShow(VirtualWallTopZone wallTopZone, ElementInfo[] info)

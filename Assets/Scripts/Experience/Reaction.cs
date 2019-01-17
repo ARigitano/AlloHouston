@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CRI.HelloHouston.ParticlePhysics
+namespace CRI.HelloHouston.Experience.MAIA
 {
     /// <summary>
     /// Constructor for a reaction scriptable object.

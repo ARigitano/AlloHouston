@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using System.Linq;
-using CRI.HelloHouston.ParticlePhysics;
 
 namespace CRI.HelloHouston.Experience.MAIA
 {
@@ -14,28 +13,6 @@ namespace CRI.HelloHouston.Experience.MAIA
     public class MAIATabletScreen : XPElement
     {
         private MAIAManager _manager;
-        /// <summary>
-        /// All the particle scriptable objects.
-        /// </summary>
-        private Particle[] _allParticles;
-        /// <summary>
-        /// All the reaction scriptable objects.
-        /// </summary>
-        [HideInInspector]
-        public Reaction[] _allReactions;
-        /// <summary>
-        /// Path to the particle scriptable objects folder.
-        /// </summary>
-        private static string _path = "Particles";
-        /// <summary>
-        /// Path to the particle scriptable objects folder.
-        /// </summary>
-        private static string _pathReaction = "reactions";
-        /// <summary>
-        /// Contains the combination of particles randomly generated.
-        /// </summary>
-        [HideInInspector]
-        public Particle[] particleTypes;
         /// <summary>
         /// All the panels for the tablet screen.
         /// </summary>
@@ -52,80 +29,21 @@ namespace CRI.HelloHouston.Experience.MAIA
         [SerializeField]
         private float _speed = 0.2f;
         /// <summary>
-        /// Real password to get access.
-        /// </summary>
-        [SerializeField]
-        private string _realPassword;
-        /// <summary>
-        /// Password entered by the player.
-        /// </summary>
-        [HideInInspector]
-        public string enteredPassword;
-        /// <summary>
-        /// The combination of particles randomly generated rewritten as a string.
-        /// </summary>
-        [HideInInspector]
-        public List<string> realParticles = new List<string>();
-        /// <summary>
-        /// The particles entered by the player.
-        /// </summary>
-        [HideInInspector]
-        public List<Particle> _enteredParticles = new List<Particle>();
-        /// <summary>
-        /// String displayed depending on the particles combination entered.
-        /// </summary>
-        [HideInInspector]
-        public string[] result;
-        /// <summary>
-        /// Number of ongoing reactions.
-        /// </summary>
-        [SerializeField]
-        private int _numberChosenReaction = 4;
-        /// <summary>
-        /// The ongoing reactions.
-        /// </summary>
-        [HideInInspector]
-        public List<Reaction> _chosenReactions = new List<Reaction>();
-        /// <summary>
-        /// The reaction to idetify.
-        /// </summary>
-        [HideInInspector]
-        public Reaction _realReaction;
-        /// <summary>
-        /// The particles produced by the ongoing reactions.
-        /// </summary>
-        [HideInInspector]
-        public List<Particle> reactionExits = new List<Particle>();
-        /// <summary>
         /// To check if a button have been pressed by the VR controller.
         /// </summary>
         private bool _isTouched = false;
         /// <summary>
-        /// Index of the Feynman diagram currently being displayed.
-        /// </summary>
-        [HideInInspector]
-        public int displayedDiagram = 0;
-        /// <summary>
-        /// An error depending on the payer's diagram selection mistake.
-        /// </summary>
-        [HideInInspector]
-        public string particleErrorString;
-        /// <summary>
         /// Stores the panels currently being displayed.
         /// </summary>
         private GameObject _currentPanelLeft, _currentPanelRight, _currentPanel;
-        /// <summary>
-        /// The numbers of particle detected of each kind.
-        /// </summary>
-        [HideInInspector]
-        public int nbQuark, nbAntiquark, nbMuon, nbAntimuon, nbElectron, nbAntielectron, nbNeutrino, nbPhoton;
 
         public void DeleteParticle()
         {
             if (!_isTouched)
             {
+                //TODO:rewrite
                 _isTouched = true;
-                _enteredParticles.RemoveAt(_enteredParticles.Count - 1);
+                //_enteredParticles.RemoveAt(_enteredParticles.Count - 1);
                 _manager.DeleteParticle();
                 StartCoroutine("WaitButton");
             }
@@ -153,9 +71,9 @@ namespace CRI.HelloHouston.Experience.MAIA
             _panelFull.SetActive(true);
             _diagramsBrowsingRight.SetActive(true);
             _diagramsSelectionLeft.SetActive(true);
-
-            if(realParticles.Count == 0)
-                ParticlesCombination();
+            //TODO:rewrite;
+            //if(realParticles.Count == 0)
+                //ParticlesCombination();
         }
 
         /// <summary>
@@ -211,15 +129,15 @@ namespace CRI.HelloHouston.Experience.MAIA
             if (!_isTouched)
             {
                 _isTouched = true;
-                
-                if (displayedDiagram < _allReactions.Length-1)
+                //TODO:rewrite;
+                /*if (displayedDiagram < _allReactions.Length-1)
                 {
                     displayedDiagram++;
                    
                 } else
                 {
                     displayedDiagram = 0;
-                }
+                }*/
                 _manager.OtherDiagram();
                 StartCoroutine("WaitButton");
             }
@@ -234,8 +152,8 @@ namespace CRI.HelloHouston.Experience.MAIA
             if (!_isTouched)
             {
                 _isTouched = true;
-                Debug.Log("CALLED");
-                if (displayedDiagram > 0)
+               //TODO:rewrite
+                /*if (displayedDiagram > 0)
                 {
                     displayedDiagram--;
 
@@ -243,7 +161,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                 } else
                 {
                     displayedDiagram = _allReactions.Length-1;
-                }
+                }*/
                 _manager.OtherDiagram();
                 StartCoroutine("WaitButton");
             }
@@ -291,11 +209,12 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         private void ReactionsCombination()
         {
-            _allReactions = Resources.LoadAll<Reaction>(_pathReaction);
+            //TODO:rewrite
+            //_allReactions = Resources.LoadAll<Reaction>(_pathReaction);
 
             List<Reaction> fundamentals = new List<Reaction>();
 
-            foreach (Reaction reaction in _allReactions)
+           /* foreach (Reaction reaction in _allReactions)
             {
                 if (reaction.fundamental)
                 {
@@ -311,7 +230,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             }
 
             _realReaction = _chosenReactions[UnityEngine.Random.Range(0, _chosenReactions.Count)];
-            manager.logController.AddLog(_realReaction.name, manager.xpContext);
+            manager.logController.AddLog(_realReaction.name, manager.xpContext);*/
         }
 
         /// <summary>
@@ -324,7 +243,8 @@ namespace CRI.HelloHouston.Experience.MAIA
             {
                 switch (particle.symbol)
                 {
-                    case "q":
+                    //TODO: rewrite
+                    /*case "q":
                         nbQuark++;
                         break;
                     case "qBar":
@@ -350,27 +270,29 @@ namespace CRI.HelloHouston.Experience.MAIA
                         break;
                     case "γ":
                         nbPhoton++;
-                        break;
+                        break;*/
                     default:
                         break;
                 }
             }
-            manager.logController.AddLog("Quarks:"+ nbQuark, manager.xpContext);
+            /*manager.logController.AddLog("Quarks:"+ nbQuark, manager.xpContext);
             manager.logController.AddLog("Antiquarks:" + nbAntiquark, manager.xpContext);
             manager.logController.AddLog("Muons:" + nbMuon, manager.xpContext);
             manager.logController.AddLog("Antimuons:" + nbAntimuon, manager.xpContext);
             manager.logController.AddLog("Electrons:" + nbElectron, manager.xpContext);
             manager.logController.AddLog("Antielectrons:" + nbAntielectron, manager.xpContext);
             manager.logController.AddLog("Neutrinos:" + nbNeutrino, manager.xpContext);
-            manager.logController.AddLog("Photons:" + nbPhoton, manager.xpContext);
+            manager.logController.AddLog("Photons:" + nbPhoton, manager.xpContext);*/
         }
 
+        //TODO: rewrite
         /// <summary>
         /// Lists the particles produced by the ongoing reactions.
         /// </summary>
         /// <returns>The list of produced particles.</returns>
-        public List<Particle> ParticlesCombination()
+        /*public List<Particle> ParticlesCombination()
         {
+            TODO: rewrite
             _allParticles = Resources.LoadAll<Particle>(_path);
 
             ReactionsCombination();
@@ -398,7 +320,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             CountParticles(reactionExits);
             GenerateParticleString();
             return reactionExits;
-        }
+        }*/
 
         /// <summary>
         /// Converts the produced particles into a string.
@@ -407,10 +329,11 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             string type = "";
 
-            for (int i = 0; i < realParticles.Count; i++)
+            //TODO: rewrite
+            /*for (int i = 0; i < realParticles.Count; i++)
             {
                 type += realParticles[i];
-            }
+            }*/
             _manager.CorrectParticle();
         }
 
@@ -434,7 +357,8 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void ClearParticles()
         {
-            _enteredParticles.Clear();
+            //TODO: rewrite
+            //_enteredParticles.Clear();
             _manager.ClearParticles();
         }
         /// <summary>
