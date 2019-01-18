@@ -33,7 +33,8 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// All the particle scriptable objects.
         /// </summary>
-        private Particle[] _allParticles;
+        [HideInInspector]
+        public Particle[] _allParticles;
         /// <summary>
         /// All the reaction scriptable objects.
         /// </summary>
@@ -42,11 +43,13 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// Path to the particle scriptable objects folder.
         /// </summary>
-        private static string _path = "Particles";
+        [HideInInspector]
+        public string _path = "Particles";
         /// <summary>
         /// Path to the particle scriptable objects folder.
         /// </summary>
-        private static string _pathReaction = "reactions";
+        [HideInInspector]
+        public string _pathReaction = "reactions";
         /// <summary>
         /// Contains the combination of particles randomly generated.
         /// </summary>
@@ -55,8 +58,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// Real password to get access.
         /// </summary>
-        [SerializeField]
-        private string _realPassword;
+        public string _realPassword;
         /// <summary>
         /// Password entered by the player.
         /// </summary>
@@ -80,8 +82,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// Number of ongoing reactions.
         /// </summary>
-        [SerializeField]
-        private int _numberChosenReaction = 4;
+        public int _numberChosenReaction = 4;
         /// <summary>
         /// The ongoing reactions.
         /// </summary>

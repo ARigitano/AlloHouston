@@ -41,9 +41,8 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             if (!_isTouched)
             {
-                //TODO:rewrite
                 _isTouched = true;
-                //_enteredParticles.RemoveAt(_enteredParticles.Count - 1);
+                _manager._enteredParticles.RemoveAt(_manager._enteredParticles.Count - 1);
                 _manager.DeleteParticle();
                 StartCoroutine("WaitButton");
             }
@@ -71,9 +70,9 @@ namespace CRI.HelloHouston.Experience.MAIA
             _panelFull.SetActive(true);
             _diagramsBrowsingRight.SetActive(true);
             _diagramsSelectionLeft.SetActive(true);
-            //TODO:rewrite;
-            //if(realParticles.Count == 0)
-                //ParticlesCombination();
+            
+            if(_manager.realParticles.Count == 0)
+                ParticlesCombination();
         }
 
         /// <summary>
@@ -129,15 +128,15 @@ namespace CRI.HelloHouston.Experience.MAIA
             if (!_isTouched)
             {
                 _isTouched = true;
-                //TODO:rewrite;
-                /*if (displayedDiagram < _allReactions.Length-1)
+                
+                if (_manager.displayedDiagram < _manager._allReactions.Length-1)
                 {
-                    displayedDiagram++;
+                    _manager.displayedDiagram++;
                    
                 } else
                 {
-                    displayedDiagram = 0;
-                }*/
+                    _manager.displayedDiagram = 0;
+                }
                 _manager.OtherDiagram();
                 StartCoroutine("WaitButton");
             }
@@ -152,16 +151,16 @@ namespace CRI.HelloHouston.Experience.MAIA
             if (!_isTouched)
             {
                 _isTouched = true;
-               //TODO:rewrite
-                /*if (displayedDiagram > 0)
+               
+                if (_manager.displayedDiagram > 0)
                 {
-                    displayedDiagram--;
+                    _manager.displayedDiagram--;
 
                     
                 } else
                 {
-                    displayedDiagram = _allReactions.Length-1;
-                }*/
+                    _manager.displayedDiagram = _manager._allReactions.Length-1;
+                }
                 _manager.OtherDiagram();
                 StartCoroutine("WaitButton");
             }
@@ -209,12 +208,12 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         private void ReactionsCombination()
         {
-            //TODO:rewrite
-            //_allReactions = Resources.LoadAll<Reaction>(_pathReaction);
+
+            _manager._allReactions = Resources.LoadAll<Reaction>(_manager._pathReaction);
 
             List<Reaction> fundamentals = new List<Reaction>();
 
-           /* foreach (Reaction reaction in _allReactions)
+            foreach (Reaction reaction in _manager._allReactions)
             {
                 if (reaction.fundamental)
                 {
@@ -222,15 +221,15 @@ namespace CRI.HelloHouston.Experience.MAIA
                 }
             }
 
-            for (int i = 0; i < _numberChosenReaction; i++)
+            for (int i = 0; i < _manager._numberChosenReaction; i++)
             {
                 int randNumber = UnityEngine.Random.Range(0, fundamentals.Count);
-                _chosenReactions.Add(fundamentals[randNumber]);
+                _manager._chosenReactions.Add(fundamentals[randNumber]);
                 fundamentals.RemoveAt(randNumber); ;
             }
 
-            _realReaction = _chosenReactions[UnityEngine.Random.Range(0, _chosenReactions.Count)];
-            manager.logController.AddLog(_realReaction.name, manager.xpContext);*/
+            _manager._realReaction = _manager._chosenReactions[UnityEngine.Random.Range(0, _manager._chosenReactions.Count)];
+            manager.logController.AddLog(_manager._realReaction.name, manager.xpContext);
         }
 
         /// <summary>
@@ -243,73 +242,72 @@ namespace CRI.HelloHouston.Experience.MAIA
             {
                 switch (particle.symbol)
                 {
-                    //TODO: rewrite
-                    /*case "q":
-                        nbQuark++;
+                    
+                    case "q":
+                        _manager.nbQuark++;
                         break;
                     case "qBar":
-                        nbAntiquark++;
+                        _manager.nbAntiquark++;
                         break;
                     case "μ":
-                        nbMuon++;
+                        _manager.nbMuon++;
                         break;
                     case "μBar":
-                        nbAntimuon++;
+                        _manager.nbAntimuon++;
                         break;
                     case "e":
-                        nbElectron++;
+                        _manager.nbElectron++;
                         break;
                     case "eBar":
-                        nbAntielectron++;
+                        _manager.nbAntielectron++;
                         break;
                     case "v":
-                        nbNeutrino++;
+                        _manager.nbNeutrino++;
                         break;
                     case "vBar":
-                        nbNeutrino++;
+                        _manager.nbNeutrino++;
                         break;
                     case "γ":
-                        nbPhoton++;
-                        break;*/
+                        _manager.nbPhoton++;
+                        break;
                     default:
                         break;
                 }
             }
-            /*manager.logController.AddLog("Quarks:"+ nbQuark, manager.xpContext);
-            manager.logController.AddLog("Antiquarks:" + nbAntiquark, manager.xpContext);
-            manager.logController.AddLog("Muons:" + nbMuon, manager.xpContext);
-            manager.logController.AddLog("Antimuons:" + nbAntimuon, manager.xpContext);
-            manager.logController.AddLog("Electrons:" + nbElectron, manager.xpContext);
-            manager.logController.AddLog("Antielectrons:" + nbAntielectron, manager.xpContext);
-            manager.logController.AddLog("Neutrinos:" + nbNeutrino, manager.xpContext);
-            manager.logController.AddLog("Photons:" + nbPhoton, manager.xpContext);*/
+            manager.logController.AddLog("Quarks:"+ _manager.nbQuark, manager.xpContext);
+            manager.logController.AddLog("Antiquarks:" + _manager.nbAntiquark, manager.xpContext);
+            manager.logController.AddLog("Muons:" + _manager.nbMuon, manager.xpContext);
+            manager.logController.AddLog("Antimuons:" + _manager.nbAntimuon, manager.xpContext);
+            manager.logController.AddLog("Electrons:" + _manager.nbElectron, manager.xpContext);
+            manager.logController.AddLog("Antielectrons:" + _manager.nbAntielectron, manager.xpContext);
+            manager.logController.AddLog("Neutrinos:" + _manager.nbNeutrino, manager.xpContext);
+            manager.logController.AddLog("Photons:" + _manager.nbPhoton, manager.xpContext);
         }
 
-        //TODO: rewrite
+       
         /// <summary>
         /// Lists the particles produced by the ongoing reactions.
         /// </summary>
         /// <returns>The list of produced particles.</returns>
-        /*public List<Particle> ParticlesCombination()
+        public List<Particle> ParticlesCombination()
         {
-            TODO: rewrite
-            _allParticles = Resources.LoadAll<Particle>(_path);
+            _manager._allParticles = Resources.LoadAll<Particle>(_manager._path);
 
             ReactionsCombination();
 
-            foreach (Reaction reaction in _chosenReactions)
+            foreach (Reaction reaction in _manager._chosenReactions)
             {
                 string[] particlesStrings = reaction.exits.ToString().Split('_');
 
                 for (int i = 0; i < particlesStrings.Length; i++)
                 {
-                    foreach (Particle particle in _allParticles)
+                    foreach (Particle particle in _manager._allParticles)
                     {
                         if (particle.symbol == particlesStrings[i])
                         {
-                            reactionExits.Add(particle);
+                            _manager.reactionExits.Add(particle);
                             manager.logController.AddLog(particle.particleName, manager.xpContext);
-                            realParticles.Add(particle.symbol);
+                            _manager.realParticles.Add(particle.symbol);
                         }
                     }
                 }
@@ -317,10 +315,10 @@ namespace CRI.HelloHouston.Experience.MAIA
                
             }
 
-            CountParticles(reactionExits);
+            CountParticles(_manager.reactionExits);
             GenerateParticleString();
-            return reactionExits;
-        }*/
+            return _manager.reactionExits;
+        }
 
         /// <summary>
         /// Converts the produced particles into a string.
@@ -329,11 +327,11 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             string type = "";
 
-            //TODO: rewrite
-            /*for (int i = 0; i < realParticles.Count; i++)
+            
+            for (int i = 0; i < _manager.realParticles.Count; i++)
             {
-                type += realParticles[i];
-            }*/
+                type += _manager.realParticles[i];
+            }
             _manager.CorrectParticle();
         }
 
@@ -357,17 +355,18 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void ClearParticles()
         {
-            //TODO: rewrite
-            //_enteredParticles.Clear();
+
+            _manager._enteredParticles.Clear();
             _manager.ClearParticles();
         }
+
         /// <summary>
         /// Submits the particles combination entered.
         /// </summary>
         public void SubmitParticles()
         {
             //Checks if the combination entered has the right number of particles.
-            if (_enteredParticles.Count == reactionExits.Count)
+            if (_manager._enteredParticles.Count == _manager.reactionExits.Count)
             {
                 int nbQuark = 0;
                 int nbAntiquark = 0;
@@ -379,7 +378,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                 int nbPhoton = 0;
 
                 //Counts each particles detected of every kind.
-                foreach (Particle particle in reactionExits)
+                foreach (Particle particle in _manager.reactionExits)
                 {
                     switch (particle.symbol)
                     {
@@ -425,7 +424,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                 int nbPhotonEntered = 0;
 
                 //Counts each particles entered of every kind.
-                foreach (Particle particle in _enteredParticles)
+                foreach (Particle particle in _manager._enteredParticles)
                 {
                     switch (particle.symbol)
                     {
@@ -475,7 +474,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                     {
                         //A wrong combination of charges have been entered.
                         Debug.Log("A wrong combination of charges have been entered.");
-                        particleErrorString = "WRONG NUMBER OF CHARGES!";
+                        _manager.particleErrorString = "WRONG NUMBER OF CHARGES!";
                         _manager.ParticleWrongCharge();
                     }
                 }
@@ -483,7 +482,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                 {
                     //A wrong combination of symbols have been entered.
                     Debug.Log("A wrong combination of symbols have been entered.");
-                    particleErrorString = "WRONG PARTICLES!";
+                    _manager.particleErrorString = "WRONG PARTICLES!";
                     _manager.ParticleWrongSymbol();
                 }
             }
@@ -491,25 +490,26 @@ namespace CRI.HelloHouston.Experience.MAIA
             {
                 //A combination of particles with a wrong length has been entered.
                 Debug.Log("A combination of particles with a wrong length has been entered.");
-                particleErrorString = "WRONG NUMBER OF PARTICLES!";
+                _manager.particleErrorString = "WRONG NUMBER OF PARTICLES!";
                 _manager.ParticleWrongLength();
             }
         }
+
         /// <summary>
         /// Adds a particle to the combination.
         /// </summary>
         /// <param name="particleButton">The particle to add.</param>
         public void EnteringParticle(string particleButton)
         {
-            if (!_isTouched && _enteredParticles.Count < reactionExits.Count)
+            if (!_isTouched && _manager._enteredParticles.Count < _manager.reactionExits.Count)
             {
                 _isTouched = true;
 
-                foreach (Particle particle in reactionExits)
+                foreach (Particle particle in _manager.reactionExits)
                 {
                     if (particle.symbol == particleButton)
                     {
-                        _enteredParticles.Add(particle);
+                        _manager._enteredParticles.Add(particle);
                         break;
                     }
                 }
@@ -517,6 +517,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                 StartCoroutine("WaitButton");
             }
         }
+
         /// <summary>
         /// Adds a number to the password.
         /// </summary>
@@ -526,19 +527,20 @@ namespace CRI.HelloHouston.Experience.MAIA
             if (!_isTouched)
             {
                 _isTouched = true;
-                if (enteredPassword.Length < _realPassword.Length)
+
+                if (_manager.enteredPassword.Length < _manager._realPassword.Length)
                 {
-                    enteredPassword += number.ToString();
+                    _manager.enteredPassword += number.ToString();
                     _manager.EnteringDigit();
 
-                    if (enteredPassword.Length == _realPassword.Length && enteredPassword == _realPassword)
+                    if (_manager.enteredPassword.Length == _manager._realPassword.Length && _manager.enteredPassword == _manager._realPassword)
                     {
                         _manager.CorrectPassword();
                     }
-                    else if (enteredPassword.Length == _realPassword.Length && enteredPassword != _realPassword)
+                    else if (_manager.enteredPassword.Length == _manager._realPassword.Length && _manager.enteredPassword != _manager._realPassword)
                     {
                         _manager.IncorrectPassword();
-                        enteredPassword = "";
+                        _manager.enteredPassword = "";
                     }
                 }
                 StartCoroutine("WaitButton");

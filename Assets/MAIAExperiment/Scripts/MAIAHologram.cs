@@ -28,10 +28,6 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         private MAIAManager _manager;
         /// <summary>
-        /// Folder path for the particle scriptable objects
-        /// </summary>
-        private const string _path = "Particle";
-        /// <summary>
         /// Prefab of the head of a particle line.
         /// </summary>
         [SerializeField]
@@ -64,16 +60,11 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         private HologramSpline[] _particleSplineArray;
         /// <summary>
-        /// Particle list.
-        /// </summary>
-        private List<Particle> _particleList;
-        /// <summary>
         /// Array of the cylinders' mesh filters.
         /// </summary>
         [SerializeField]
         [Tooltip("Array of the cylinders' mesh filters.")]
         private MeshFilter[] _cylArray;
-
         [SerializeField]
         private float _factor = 0.2f;
         /// <summary>

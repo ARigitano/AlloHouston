@@ -21,6 +21,11 @@ namespace CRI.HelloHouston.Experience.MAIA
         [SerializeField]
         private ExileLoading _exileLoading;
         /// <summary>
+        /// Script for the Exile Loading screen.
+        /// </summary>
+        [SerializeField]
+        private MAIALoading _maiaLoading;
+        /// <summary>
         /// Script for the MAIA Overview screen.
         /// </summary>
         [SerializeField]
@@ -40,13 +45,11 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         [SerializeField]
         private ReactionsIdentification _reactionsIdentification;
-
         /// <summary>
         /// All the panels of the top left screen of the experiment.
         /// </summary>
         [SerializeField]
         private GameObject _exileLoadingScreen, _maiaLoadingScreen, _maiaOverviewScreen, _manualOverrideAccess, _manualOverride1, _popupErrorMessageParticles, _pverrideScreen2;
-
         /// <summary>
         /// Stores the panel currently being displayed.
         /// </summary>
@@ -106,23 +109,6 @@ namespace CRI.HelloHouston.Experience.MAIA
             action.Invoke();
         }
 
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-
- 
-
-        
 
         /// <summary>
         /// Displays the access screen when the manual override button is pressed.
