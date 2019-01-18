@@ -214,9 +214,9 @@ namespace CRI.HelloHouston.Experience.MAIA
             _topScreen.ReactionSelected(_tabletScreen._realReaction, _tubeScreen.diagramSelected);
         }
 
-        protected override void PreShow(VirtualWallTopZone wallTopZone, ElementInfo[] info)
+        protected override void PreShow(VirtualWallTopZone wallTopZone, ElementInfo[] zones)
         {
-            base.PreShow(wallTopZone, info);
+            base.PreShow(wallTopZone, zones);
             _tabletScreen = GetElement<MAIATabletScreen>();
             _topScreen = GetElement<MAIATopScreen>();
             _tubeScreen = GetElement<MAIATubeScreen>();
@@ -226,9 +226,6 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             base.PostInit(xpContext, info, logController, stateOnActivation);
             _holograms = GetElements<MAIAHologram>();
-            _tabletScreen = GetElement<MAIATabletScreen>();
-            _topScreen = GetElement<MAIATopScreen>();
-            _tubeScreen = GetElement<MAIATubeScreen>();
         }
     }
 }

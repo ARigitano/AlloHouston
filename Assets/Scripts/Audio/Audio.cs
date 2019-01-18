@@ -25,7 +25,8 @@ namespace CRI.HelloHouston.Audio
         protected Transform _sourceTransform;
         protected List<Audio> _subAudios = new List<Audio>();
 
-        public const float maxDistance = 150.0f;
+        public const float maxDistance = 5.0f;
+        public const float spread = 160.0f;
 
 
         /// <summary>
@@ -107,7 +108,7 @@ namespace CRI.HelloHouston.Audio
             UISound
         }
         public Audio(SoundManager soundManager, AudioType audioType, AudioClip clip, AudioMixerGroup audioMixerGroup,
-            bool loop, bool persist, float volume, float fadeInValue, float fadeOutValue,
+            bool loop, bool persist, float volume, float pitch, float fadeInValue, float fadeOutValue,
             float minPitch, float maxPitch, bool randomStart,
             List<Audio> subAudios = null)
         {
@@ -149,12 +150,10 @@ namespace CRI.HelloHouston.Audio
             this.audioSource.pitch = minPitch < maxPitch ? Random.Range(minPitch, maxPitch) : minPitch;
             this.audioSource.volume = 0.0f;
             this.audioSource.maxDistance = maxDistance;
-            this.audioSource.rolloffMode = AudioRolloffMode.Custom;
+            this.audioSource.spread = spread;
+            this.audioSource.rolloffMode = AudioRolloffMode.Logarithmic;
             this.audioSource.outputAudioMixerGroup = audioMixerGroup;
-            if (_sourceTransform != _soundManager.gameObject.transform)
-            {
-                this.audioSource.spatialBlend = 1;
-            }
+            this.audioSource.spatialBlend = 1.0f;
         }
 
         /// <summary>

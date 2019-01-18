@@ -354,7 +354,7 @@ namespace CRI.HelloHouston.Audio
                     {
                         var subAudio = new Audio(this, Audio.AudioType.Music,
                                            music.clip, GetAudioMixerGroup(music.mixerGroupType),
-                                           music.clip, music.persist, music.volume, music.fadeInSeconds,
+                                           music.clip, music.persist, music.volume, music.pitch, music.fadeInSeconds,
                                            music.fadeOutSeconds, 1.0f, 1.0f, playableMusic.randomStart);
                         audioList.Add(subAudio);
                         music.audioId = subAudio.audioID;
@@ -365,7 +365,7 @@ namespace CRI.HelloHouston.Audio
 
             // Create the audioSource
             var newAudio = new Audio(this, Audio.AudioType.Music, playableMusic.clip, GetAudioMixerGroup(playableMusic.mixerGroupType),
-                               playableMusic.loop, playableMusic.persist, playableMusic.volume, playableMusic.fadeInSeconds, playableMusic.fadeOutSeconds,
+                               playableMusic.loop, playableMusic.persist, playableMusic.volume, playableMusic.pitch, playableMusic.fadeInSeconds, playableMusic.fadeOutSeconds,
                                1.0f, 1.0f, playableMusic.randomStart, audioList);
 
             // Add it to music list
@@ -397,7 +397,7 @@ namespace CRI.HelloHouston.Audio
             // Create the audioSource
             Audio newAudio = new Audio(this, Audio.AudioType.Sound, playableSound.clip, GetAudioMixerGroup(playableSound.mixerGroupType),
                                  playableSound.loop, false,
-                                 playableSound.volume, playableSound.fadeInSeconds,
+                                 playableSound.volume, playableSound.pitch, playableSound.fadeInSeconds,
                                  playableSound.fadeOutSeconds, playableSound.minPitch,
                                  playableSound.maxPitch, playableSound.randomStart);
 

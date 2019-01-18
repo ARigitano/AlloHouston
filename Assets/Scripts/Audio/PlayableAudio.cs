@@ -15,9 +15,15 @@ namespace CRI.HelloHouston.Audio
         /// <summary>
         /// The volume of the audio
         /// </summary>
-        [Tooltip("The volume of the audio")]
+        [Tooltip("The volume of the audio.")]
         [Range(0.0f, 1.0f)]
         public float volume = 1.0f;
+        /// <summary>
+        /// The pitch of the audio.
+        /// </summary>
+        [Tooltip("The pitch of the audio.")]
+        [Range(-3.0f, 3.0f)]
+        public float pitch = 1.0f;
 
         /// <summary>
         /// If true, the audio will start at a random point.

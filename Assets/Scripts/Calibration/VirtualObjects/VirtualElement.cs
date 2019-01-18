@@ -46,15 +46,21 @@ namespace CRI.HelloHouston.Calibration
             _elementPrefab = element;
             this.xpContext = xpContext;
         }
-
-        public virtual XPElement Init(XPManager xpSynchronizer)
+        /// <summary>
+        /// Instantiate the element prefab and initializes it with the help of its xpManager
+        /// </summary>
+        /// <param name="xpManager"></param>
+        /// <returns></returns>
+        public virtual XPElement Init(XPManager xpManager)
         {
             Clean();
             currentElement = Instantiate(_elementPrefab, transform);
-            currentElement.Init(xpSynchronizer, this);
+            currentElement.Init(xpManager, this);
             return currentElement;
         }
-
+        /// <summary>
+        /// Dismiss the current element and sets its value to null.
+        /// </summary>
         public virtual void Clean()
         {
             if (currentElement != null)

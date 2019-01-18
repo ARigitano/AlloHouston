@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using CRI.HelloHouston.Experience.Actions;
 using System;
+using CRI.HelloHouston.Audio;
 
 namespace CRI.HelloHouston.Experience
 {
@@ -37,10 +38,10 @@ namespace CRI.HelloHouston.Experience
             }
         }
         public delegate void XPStateEvent(XPState state);
-        public delegate void XPSynchronizerEvent(XPManager synchronizer);
+        public delegate void XPManagerEvent(XPManager synchronizer);
         public XPStateEvent onStateChange;
-        public static XPSynchronizerEvent onActivation;
-        public static XPSynchronizerEvent onEnd;
+        public static XPManagerEvent onActivation;
+        public static XPManagerEvent onEnd;
         /// <summary>
         /// The xp context.
         /// </summary>
@@ -74,14 +75,6 @@ namespace CRI.HelloHouston.Experience
             get
             {
                 return state == XPState.Visible || state == XPState.Hidden;
-            }
-        }
-
-        public string sourceName
-        {
-            get
-            {
-                return xpContext.xpGroup.experimentName;
             }
         }
 
@@ -135,6 +128,7 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         /// <returns></returns>
         protected virtual void PostSuccess() { }
+
         /// <summary>
         /// To be called in case of failure of the experiment.
         /// </summary>
@@ -271,7 +265,7 @@ namespace CRI.HelloHouston.Experience
             this.logController = logController;
             if (logController != null)
                 logController.AddLog("Ready", xpContext, Log.LogType.Automatic);
-            PostInit(xpContext, InitZones(zones), logController, stateOnActivation);
+            PostInit(xpContext, InitZones(zones.Where(x => !x.switchableZone).ToArray()), logController, stateOnActivation);
         }
 
         /// <summary>
@@ -288,14 +282,23 @@ namespace CRI.HelloHouston.Experience
             logController.AddLog(string.Format("Skip to step {0}", step), xpContext, Log.LogType.Automatic);
         }
 
-        public virtual void PlaySound(AudioSource sound)
+        public virtual void PlaySound(PlayableSound sound)
         {
             logController.AddLog(string.Format("Play sound {0}", sound), xpContext, Log.LogType.Automatic);
+            if (wallTopZone != null)
+                wallTopZone.leftSpeaker.PlaySound(sound);
         }
 
-        public virtual void PlayMusic(AudioSource music)
+        public virtual void PlayMusic(PlayableMusic music)
         {
             logController.AddLog(string.Format("Play music {0}", music), xpContext, Log.LogType.Automatic);
+            if (wallTopZone != null)
+                wallTopZone.leftSpeaker.PlayMusic(music);
+        }
+
+        internal void PlayableSound(AudioSource sound)
+        {
+            throw new NotImplementedException();
         }
     }
 }

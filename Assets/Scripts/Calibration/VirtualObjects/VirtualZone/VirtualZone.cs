@@ -17,9 +17,9 @@ namespace CRI.HelloHouston.Calibration
         /// </summary>
         public abstract bool switchableZone { get; }
         /// <summary>
-        /// Gets and set an xpZone on a virtualZone.
+        /// Gets the current xpZone on this virtualZone.
         /// </summary>
-        public abstract XPZone xpZone { get;}
+        public abstract XPZone xpZone { get; }
         /// <summary>
         /// Gets and set and xpContext on a virtualZone.
         /// </summary>
@@ -28,19 +28,32 @@ namespace CRI.HelloHouston.Calibration
         /// Gets all the virtual elements inside the zone.
         /// </summary>
         public abstract VirtualElement[] virtualElements { get; }
-
+        
+        /// <summary>
+        /// Places an XPZone and its XPContext inside an VirtualZone and set in cascade all the XPElements inside the VirtualElements of the VirtualZone.
+        /// </summary>
+        /// <param name="xpZone"></param>
+        /// <param name="xpContext"></param>
         public virtual void Place(XPZone xpZone, XPContext xpContext)
         {
             this.xpContext = xpContext;
             AddXPZone(xpZone, xpContext);
         }
 
-        public virtual XPElement[] InitAll(XPManager xpSynchronizer)
+        /// <summary>
+        /// Initializes all the elements defined in the current XPZone.
+        /// </summary>
+        /// <param name="xpManager">The XPManager of the XPZone.</param>
+        /// <returns>All the elements, initialized.</returns>
+        public virtual XPElement[] InitAll(XPManager xpManager)
         {
-            XPElement[] res = virtualElements.Where(x => x.xpContext != null).Select(x => x.Init(xpSynchronizer)).ToArray();
+            XPElement[] res = virtualElements.Where(x => x.xpContext != null).Select(x => x.Init(xpManager)).ToArray();
             return res;
         }
 
+        /// <summary>
+        /// Clean all virtual elements of this VirtualZone.
+        /// </summary>
         public virtual void CleanAll()
         {
             foreach (var virtualElement in virtualElements)

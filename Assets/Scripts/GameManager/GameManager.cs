@@ -22,6 +22,7 @@ namespace CRI.HelloHouston.Experience
                 return s_instance;
             }
         }
+
         public delegate void GameManagerEvent();
         public static GameManagerEvent onExperienceChange;
         /// <summary>
@@ -110,7 +111,9 @@ namespace CRI.HelloHouston.Experience
             for (int i = 0; i < starting.Length; i++)
             {
                 if (starting[i])
+                {
                     xpManagers[i].Activate();
+                }
             }
         }
 
@@ -141,6 +144,5 @@ namespace CRI.HelloHouston.Experience
             globalSoundManager.StopAllMusic();
             logGeneralController.AddLog(string.Format("Stop Music"), this, Log.LogType.Automatic);
         }
-
     }
 }

@@ -1,4 +1,6 @@
-﻿using CRI.HelloHouston.Experience;
+﻿using CRI.HelloHouston.Audio;
+using CRI.HelloHouston.Experience;
+using UnityEngine;
 
 namespace CRI.HelloHouston.Calibration
 {
@@ -58,10 +60,39 @@ namespace CRI.HelloHouston.Calibration
             }
         }
 
+        public override void CleanAll()
+        {
+            base.CleanAll();
+            if (_leftSpeaker != null)
+            _leftSpeaker.StopAll();
+            if (_leftSpeaker != null)
+            _rightSpeaker.StopAll();
+        }
+
         public VirtualElement wallTopLeftVirtualElement;
         public VirtualElement wallTopRightVirtualElement;
         public VirtualElement wallTopTabletVirtualElement;
         public XPWallTopZone xpWallTopZone { get; protected set; }
+        /// <summary>
+        /// The left speaker of the wall top.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("The left speaker of the wall top.")]
+        private SoundManager _leftSpeaker = null;
+        /// <summary>
+        /// The left speaker of the wall top.
+        /// </summary>
+        public SoundManager leftSpeaker { get { return _leftSpeaker; } }
+        /// <summary>
+        /// The right speaker of the wall top.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("The right speaker of the wall top.")]
+        private SoundManager _rightSpeaker = null;
+        /// <summary>
+        /// The right speaker of the wall top.
+        /// </summary>
+        public SoundManager rightSpeaker { get { return _rightSpeaker; } }
     }
 
 }

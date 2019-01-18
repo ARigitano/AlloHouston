@@ -19,6 +19,7 @@ namespace CRI.HelloHouston.Calibration
                 return false;
             }
         }
+
         public override VirtualElement[] virtualElements
         {
             get

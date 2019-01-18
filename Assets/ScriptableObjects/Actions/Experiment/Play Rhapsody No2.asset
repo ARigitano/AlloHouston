@@ -4,14 +4,25 @@
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5b5a589f6ade3384ea9681608c4f9779, type: 3}
-  m_Name: PlayMusic
+  m_Name: Play Rhapsody No2
   m_EditorClassIdentifier: 
   menuIcon: {fileID: 21300000, guid: 4b07302172a064b4892c3acae1366ef8, type: 3}
   actionTooltip: Play Music.
   actionDuration: 0
-  music: {fileID: 0}
+  music:
+    clip: {fileID: 8300000, guid: 944316825663fe3488b8cc806874d7a0, type: 3}
+    volume: 1
+    pitch: 1
+    randomStart: 0
+    currentMusicFadeOut: -1
+    loop: 1
+    persist: 0
+    fadeInSeconds: 1
+    fadeOutSeconds: 1
+    subMusics: []

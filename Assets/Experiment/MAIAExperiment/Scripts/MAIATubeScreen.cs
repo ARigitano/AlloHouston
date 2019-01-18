@@ -1,5 +1,4 @@
-﻿using CRI.HelloHouston.ParticlePhysics;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace CRI.HelloHouston.Experience.MAIA
