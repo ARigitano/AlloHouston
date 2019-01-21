@@ -16,127 +16,71 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         private MAIAManager _manager;
         /// <summary>
-        /// The loading bar of the splash screen.
+        /// Script for the Exile Loading screen.
         /// </summary>
         [SerializeField]
-        private Image _slider;
-        [SerializeField]
-        private float _speed = 0.2f;
+        private ExileLoading _exileLoading;
         /// <summary>
-        /// Text displaying the percentage loaded on the splash screen.
+        /// Script for the Exile Loading screen.
         /// </summary>
         [SerializeField]
-        private Text _percentage;
+        private MAIALoading _maiaLoading;
+        /// <summary>
+        /// Script for the MAIA Overview screen.
+        /// </summary>
+        [SerializeField]
+        private MAIAOverview _maiaOverview = null;
+        /// <summary>
+        /// Script for the Manual Override Access screen.
+        /// </summary>
+        [SerializeField]
+        private MAIAManualOverrideAccess _manualOverrideAccess = null;
+        /// <summary>
+        /// Script for the Particles Identification screen.
+        /// </summary>
+        [SerializeField]
+        private ParticlesIdentification _particlesIdentification = null;
+        /// <summary>
+        /// Script for the Reactions Identification screen.
+        /// </summary>
+        [SerializeField]
+        private ReactionsIdentification _reactionsIdentification;
         /// <summary>
         /// All the panels of the top left screen of the experiment.
         /// </summary>
         [SerializeField]
-        private GameObject _exileLoadingScreen, _maiaLoadingScreen, _maiaOverview, _manualOverrideAccess, _popupAccessGranted, _popupErrorAccessDenied, _manualOverride1, _popupErrorMessageParticles, _pverrideScreen2, _victoryPopup;
-        /// <summary>
-        /// Text that displays the loading states of the experiment according to the loading bar progression.
-        /// </summary>
-        [SerializeField]
-        private Text _loadingText;
-        /// <summary>
-        /// The loading states of the experiment.
-        /// </summary>
-        [SerializeField]
-        private string[] _loadingStrings;
-        /// <summary>
-        /// Grid that displays the cases for the detected particles to enter.
-        /// </summary>
-        [SerializeField]
-        private GameObject _particlesGrid;
-        /// <summary>
-        /// Prefab of a case for the particle grid.
-        /// </summary>
-        [SerializeField]
-        private GameObject _gridCase;
-        /// <summary>
-        /// All the cases for the detected particles.
-        /// </summary>
-        [HideInInspector]
-        public List<Image> _particleCases = new List<Image>();
-        /// <summary>
-        /// Texts that display the number of particles detected for each type of particles.
-        /// </summary>
-        [SerializeField]
-        public Text _textQuark, _textAntiquark, _textMuon, _textAntimuon, _textElectron, _textAntielectron, _textNeutrino, _textPhoton;
-        /// <summary>
-        /// Slots where the diagrams of the chosen reactions are displayed.
-        /// </summary>
-        [SerializeField]
-        private Image[] _diagrams;
-        /// <summary>
-        /// Displays the type of interaction of the real reaction.
-        /// </summary>
-        [SerializeField]
-        private Text _textInteraction;
-        /// <summary>
-        /// Long error string to be displayed in a scrolling manner.
-        /// </summary>
-        [SerializeField]
-        private string _scrollingText;
-        /// <summary>
-        /// Text that displays the scrolling error.
-        /// </summary>
-        [SerializeField]
-        private Text _scrollError;
-        /// <summary>
-        /// Has the experiment finished loading?
-        /// </summary>
-        [HideInInspector]
-        public bool isLoaded = false;
-        /// <summary>
-        /// The total number of particles detected.
-        /// </summary>
-        [SerializeField]
-        private Text _nbParticlesDetected;
-        /// <summary>
-        /// Popup that displays either a correct or wrong identification of the detected particles.
-        /// </summary>
-        [SerializeField]
-        private GameObject _errorParticles, _successParticles;
-        /// <summary>
-        /// Errors popup on the overview panel.
-        /// </summary>
-        [SerializeField]
-        private GameObject _popupCrash, _popupErrorMessage, _popupInfoMessage;
-        [SerializeField]
-        /// <summary>
-        /// Star image displayed when a password numbered has been entered.
-        /// </summary>
-        private Sprite _starPasswword,
-        /// <summary>
-        /// Cursor image to display the numbers yet to be entered for the password.
-        /// </summary>
-                       _cursorPassword;
-        /// <summary>
-        /// Slots to enter the numbers for the password.
-        /// </summary>
-        [SerializeField]
-        private GameObject[] _slotPassword;
-        /// <summary>
-        /// Popups displayed when selecting the right or wrong Feynman diagram.
-        /// </summary>
-        [SerializeField]
-        private GameObject _popupWin, _popupLose;
-        /// <summary>
-        /// Error popups for the Feynman diagram selection.
-        /// </summary>
-        [SerializeField]
-        private GameObject _popupErrorRessource, _popupErrorNumber;
+        private GameObject _exileLoadingScreen, _maiaLoadingScreen, _maiaOverviewScreen, _manualOverrideAccessScreen, _manualOverride1, _popupErrorMessageParticles, _pverrideScreen2;
         /// <summary>
         /// Stores the panel currently being displayed.
         /// </summary>
         private GameObject _currentPanel;
-        /// <summary>
-        /// Image to be displayed insted of the Feynman diagram for the real reaction.
-        /// </summary>
-        [SerializeField]
-        private Sprite _diagramMissing;
 
-        private void Start()
+        /// <summary>
+        /// Tells the MAIA Overwiew panel that the start button has been pressed.
+        /// </summary>
+        public void ManualOverride()
+        {
+            _maiaOverview.ManualOverride();
+        }
+
+        /// <summary>
+        /// Tells the particle identification panel to clear all the entered particles.
+        /// </summary>
+        public void ClearParticles()
+        {
+            _particlesIdentification.ClearParticles();
+        }
+
+        /// <summary>
+        /// Tells the Particle Identification panel that the right combination of particles has been entered.
+        /// </summary>
+        public void OverrideSecond()
+        {
+            _particlesIdentification.OverrideSecond();
+        }
+
+
+            private void Start()
         {
             //TODO: change when exile loading screen created;
             _currentPanel = _maiaLoadingScreen;
@@ -154,304 +98,26 @@ namespace CRI.HelloHouston.Experience.MAIA
         }
 
         /// <summary>
-        /// Effect if the correct Feynman diagram is selected, or a wrong one.
-        /// </summary>
-        /// <param name="realReaction">The real reaction.</param>
-        /// <param name="reactionSelected">The reaction selected by the player.</param>
-        public void ReactionSelected(Reaction realReaction, Sprite reactionSelected)
-        {
-            if (reactionSelected == realReaction.diagramImage)
-            {
-                _popupWin.SetActive(true);
-            }
-            else
-            {
-                _popupLose.SetActive(true);
-
-                StartCoroutine(WaitGeneric(2f, () =>
-                {
-                    _popupLose.SetActive(false);
-                }));
-            }
-
-        }
-
-        public void OverrideSecond()
-        {
-            _victoryPopup.SetActive(true);
-            // _pverrideScreen2.SetActive(true);
-            // _currentPanel = _pverrideScreen2;
-            // _manualOverride1.SetActive(false);
-        }
-
-        /// <summary>
         /// A generic coroutine to wait during a method.
         /// </summary>
         /// <param name="time">The time to wait.</param>
         /// <param name="action">The action to be done after the waiting delay is over.</param>
         /// <returns></returns>
-        IEnumerator WaitGeneric(float time, Action action)
+        public IEnumerator WaitGeneric(float time, Action action)
         {
             yield return new WaitForSeconds(time);
             action.Invoke();
         }
 
-        /// <summary>
-        /// Displays a popup if the player selected the wrong Feynman diagram.
-        /// </summary>
-        /// <param name="error">The error to be displayed on the popup depending on the player's mistake.</param>
-        public void ErrorParticles(string error)
-        {
-            _errorParticles.SetActive(true);
-            _errorParticles.GetComponentInChildren<Text>().text = error;
-            StartCoroutine(WaitGeneric(2f, () =>
-            {
-                _errorParticles.SetActive(false);
-            }));
-        }
-
-        /// <summary>
-        /// Displays a popup if the player selected the right Feynman diagram.
-        /// </summary>
-        private void SuccessParticles()
-        {
-            _successParticles.SetActive(true);
-        }
-
-        /// <summary>
-        /// Fills the number of particles that have been detected on the reaction summary window.
-        /// </summary>
-        /// <param name="particles">The particles that have been detected.</param>
-        public void FillNbParticlesDetected(List<Particle> particles)
-        {
-            _nbParticlesDetected.text = particles.Count + " particles have been detected.";
-        }
-
-        /// <summary>
-        /// Displays a long scrolling error.
-        /// </summary>
-        /// <returns></returns>
-        IEnumerator ScrollingError()
-        {
-            int i = 0;
-
-            while (i < _scrollingText.Length)
-            {
-                _scrollError.text += _scrollingText[i++];
-                yield return new WaitForSeconds(0.0001f);
-            }
-        }
-
-        /// <summary>
-        /// Fills the interaction type of the real reaction on the interaction type window.
-        /// </summary>
-        /// <param name="chosenReaction">The chosen reaction.</param>
-        public void FillInteractionType(Reaction chosenReaction)
-        {
-            _textInteraction.text = chosenReaction.entries.ToString();
-        }
-
-        /// <summary>
-        /// Displays the Feynman diagrams of each chosen reaction except the real one.
-        /// </summary>
-        /// <param name="reactions"></param>
-        /// <param name="chosenReaction"></param>
-        public void FillChosenDiagrams(List<Reaction> reactions, Reaction chosenReaction)
-        {
-            int i = 0;
-
-            List<Reaction> reactionsTemp = new List<Reaction>();
-
-            foreach (Reaction reaction in reactions)
-            {
-                reactionsTemp.Add(reaction);
-            }
-
-            while (reactionsTemp.Count != 0)
-            {
-                if (reactionsTemp[0].diagramImage != chosenReaction.diagramImage)
-                {
-                    _diagrams[i].sprite = reactionsTemp[0].diagramImage;
-                }
-                else
-                {
-                    _diagrams[i].sprite = _diagramMissing;
-                }
-                reactionsTemp.RemoveAt(0);
-                i++;
-            }
-        }
-
-        /// <summary>
-        /// Fills the number of a kind of particles in the particles table.
-        /// </summary>
-        /// <param name="nbParticles">The number of particles of the kind.</param>
-        /// <param name="entry">The text to be filled.</param>
-        public void FillParticlesTable(int nbParticles, Text entry)
-        {
-            entry.text = nbParticles.ToString();
-        }
-
-        /// <summary>
-        /// Generates a grid for particles to be entered in.
-        /// </summary>
-        /// <param name="particles">The particles detected.</param>
-        public void ParticleGrid(List<Particle> particles)
-        {
-            Debug.Log(particles.Count);
-            foreach (Particle particle in particles)
-            {
-                GameObject newCase = (GameObject)Instantiate(_gridCase, _particlesGrid.transform.position, _particlesGrid.transform.rotation, _particlesGrid.transform);
-                _particleCases.Add(newCase.GetComponentInChildren<Image>());
-            }
-        }
-
-        /// <summary>
-        /// Displays the pasword that is being entered.
-        /// </summary>
-        /// <param name="password">The password being entered.</param>
-        public void DisplayPassword(string password)
-        {
-            for (int i = 0; i < password.Length; i++)
-            {
-                _slotPassword[i].GetComponent<SpriteRenderer>().sprite = _starPasswword;
-            }
-        }
-
-        /// <summary>
-        /// Waiting delay when access granted.
-        /// </summary>
-        /// <returns></returns>
-        IEnumerator WaitCorrect()
-        {
-            yield return new WaitForSeconds(2);
-            _popupAccessGranted.SetActive(false);
-            _manualOverride1.SetActive(true);
-            _currentPanel = _manualOverride1;
-            _manualOverrideAccess.SetActive(false);
-            _manager.AccessGranted();
-        }
-
-        /// <summary>
-        /// Waiting delay when access denied.
-        /// </summary>
-        /// <returns></returns>
-        IEnumerator WaitDenied()
-        {
-            yield return new WaitForSeconds(2);
-            _popupErrorAccessDenied.SetActive(false);
-            for (int i = 0; i < _slotPassword.Length; i++)
-            {
-                _slotPassword[i].GetComponent<SpriteRenderer>().sprite = _cursorPassword;
-            }
-        }
-
-        public void ClearParticles()
-        {
-            foreach (Image particleCase in _particleCases)
-            {
-                particleCase.enabled = false;
-            }
-        }
-
-        public void DeleteParticle(int nbParticles)
-        {
-            _particleCases[nbParticles].enabled = false;
-            //_particleCases[_particleCases.IndexOf(_particleCases[_particleCases.Count-1])].enabled = false;
-        }
-
-        /// <summary>
-        /// Displays the particles combination while they are being opened.
-        /// </summary>
-        /// <param name="particles">The particles combination that is being entered.</param>
-        public void DisplayParticles(List<Particle> particles)
-        {
-            for (int i = 0; i < particles.Count; i++)
-            {
-                _particleCases[i].enabled = true;
-                _particleCases[i].sprite = particles[i].symbolImage;
-            }
-        }
-
-        /// <summary>
-        /// Decides what to display depending on the password entered.
-        /// </summary>
-        /// <param name="access"></param>
-        public void Access(bool access)
-        {
-            if (access)
-            {
-                _popupAccessGranted.SetActive(true);
-                StartCoroutine(WaitCorrect());
-            }
-            else
-            {
-                _popupErrorAccessDenied.SetActive(true);
-                StartCoroutine(WaitDenied());
-            }
-        }
-
-        /// <summary>
-        /// Loading delay of the splash screen.
-        /// </summary>
-        /// <returns></returns>
-        IEnumerator Loading()
-        {
-            if (!isLoaded)
-            {
-                while (_slider.fillAmount < 1f)
-                {
-                    _slider.fillAmount += Time.deltaTime * _speed;
-                    _percentage.text = Mathf.Round(_slider.fillAmount * 100) + "%";
-
-                    if (_slider.fillAmount * 10 <= _loadingStrings.Length)
-                    {
-                        _loadingText.text = _loadingStrings[Mathf.FloorToInt(_slider.fillAmount * 10)];
-                    }
-                    if (_slider.fillAmount >= 0.9f)
-                    {
-                        _slider.fillAmount = 1f;
-                        _maiaLoadingScreen.SetActive(true);
-                        _currentPanel = _maiaLoadingScreen;
-                        _exileLoadingScreen.SetActive(false);
-                        isLoaded = true;
-                        _manager.LoadingBarFinished();
-                        yield return null;
-                    }
-                }
-            }
-        }
-
-        //TO DO: find better way of changing panel
-        /// <summary>
-        /// Displays the manual override screen when the start button is pressed.
-        /// </summary>
-        public void ManualOverride()
-        {
-            _maiaLoadingScreen.SetActive(false);
-            _maiaOverview.SetActive(true);
-            _currentPanel = _maiaOverview;
-            _popupErrorMessage.SetActive(true);
-            _popupInfoMessage.SetActive(true);
-            _manager.ManualOverrideActive();
-            /*StartCoroutine(WaitGeneric(10f, () =>
-            {
-                _popupCrash.SetActive(true);
-                StartCoroutine("ScrollingError");
-                _popupErrorMessage.SetActive(true);
-                _popupInfoMessage.SetActive(true);
-                _synchronizer.ManualOverrideActive();
-            }));*/
-        }
 
         /// <summary>
         /// Displays the access screen when the manual override button is pressed.
         /// </summary>
         public void AccessCode()
         {
-            _manualOverrideAccess.SetActive(true);
-            _currentPanel = _manualOverrideAccess;
-            _maiaOverview.SetActive(false);
+            _manualOverrideAccessScreen.SetActive(true);
+            _currentPanel = _manualOverrideAccessScreen;
+            _maiaOverviewScreen.SetActive(false);
         }
 
         public void Init(MAIAManager synchronizer)
@@ -485,6 +151,19 @@ namespace CRI.HelloHouston.Experience.MAIA
             Debug.Log(name + "Activated");
             Init((MAIAManager)manager);
             //StartCoroutine("Loading");
+        }
+
+        public void AccessGranted()
+        {
+            _manualOverride1.SetActive(true);
+            _currentPanel = _manualOverride1;
+            _manualOverrideAccessScreen.SetActive(false);
+            _manager.AccessGranted();
+        }
+
+        public void Access(bool isGranted)
+        {
+            _manualOverrideAccess.Access(isGranted);
         }
 
         /// <summary>

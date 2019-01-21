@@ -9,29 +9,32 @@ namespace CRI.HelloHouston.Experience.MAIA
     public class MAIATubeScreen : XPElement
     {
         /// <summary>
-        /// Synchronizer for this experiment.
+        /// Manager for this experiment.
         /// </summary>
-        private MAIAManager _manager;
+        [Tooltip("Manager for this experiment.")]
+        private MAIAManager _manager = null;
         /// <summary>
         /// Thumbnails for all the possible Feynman diagrams.
         /// </summary>
         [SerializeField]
-        private MAIACaseDiagram[] _casesDiagram;
+        [Tooltip("Thumbnails for all the possible Feynman diagrams.")]
+        private MAIACaseDiagram[] _casesDiagram = null;
         /// <summary>
-        /// Images of the previous, current and next displayed Feynman diagrams.
+        /// Image of the current feynman diagram.
         /// </summary>
         [SerializeField]
-        private Image _previousDiagram, _currentDiagram, _nextDiagram;
+        [Tooltip("Image of the current feynman diagram.")]
+        private Image _currentDiagram = null;
         /// <summary>
         /// All the panels of the tube screen of the experiment.
         /// </summary>
         [SerializeField]
-        private GameObject _overrideScreen2;
+        [Tooltip("All the panels of the tube screen of the experiment.")]
+        private GameObject _overrideScreen2 = null;
         /// <summary>
         /// Sprite of the currently selected Feynman diagram.
         /// </summary>
-        [HideInInspector]
-        public Sprite diagramSelected;
+        public Sprite diagramSelected { get; private set; }
 
         /// <summary>
         /// Called by the synchronizer to skip directly to the Feynman diagrams step.

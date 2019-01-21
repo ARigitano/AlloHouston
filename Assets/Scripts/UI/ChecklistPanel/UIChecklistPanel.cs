@@ -26,14 +26,6 @@ namespace CRI.HelloHouston.Calibration.UI
         [SerializeField]
         [Tooltip("Next button.")]
         private Button _nextButton = null;
-        /// <summary>
-        /// List of calibration entries.
-        /// </summary>
-        private List<UICalibrationEntry> _calibrationEntryList = new List<UICalibrationEntry>();
-        /// <summary>
-        /// The virtual room.
-        /// </summary>
-        private VirtualRoom _virtualRoom = null;
 
         private void CheckInteractable()
         {
@@ -53,7 +45,6 @@ namespace CRI.HelloHouston.Calibration.UI
         /// <param name="calibrationManager"></param>
         public void Init(RoomXPPair rxpp)
         {
-            _virtualRoom = rxpp.vroom;
             string[] checklist = rxpp.vroom.checklist.Concat(rxpp.xpContexts.SelectMany(x => x.xpSettings.checklist)).ToArray();
             foreach (string check in checklist)
             {

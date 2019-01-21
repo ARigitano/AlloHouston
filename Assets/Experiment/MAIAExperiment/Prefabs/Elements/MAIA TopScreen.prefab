@@ -383,7 +383,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 224720922270381614}
-  - component: {fileID: 212272225671052460}
+  - component: {fileID: 6088571776433867587}
+  - component: {fileID: 5546257347757420648}
   m_Layer: 0
   m_Name: Logo
   m_TagString: Untagged
@@ -400,64 +401,53 @@ RectTransform:
   m_GameObject: {fileID: 1025385657730162}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.0267206, y: 0.02672058, z: 0.026720593}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 224448598433927680}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.000000014901161, y: 0.000000029802322}
-  m_SizeDelta: {x: 12.18154, y: 3.13086}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!212 &212272225671052460
-SpriteRenderer:
+--- !u!222 &6088571776433867587
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1025385657730162}
+  m_CullTransparentMesh: 0
+--- !u!114 &5546257347757420648
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1025385657730162}
   m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_DynamicOccludee: 1
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RenderingLayerMask: 4294967295
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 0
-  m_SelectedEditorRenderState: 0
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: f3499cc10e384e54bbd9fd2f0e63941c, type: 3}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 6.5114675, y: 3.7335043}
-  m_AdaptiveModeThreshold: 0.5
-  m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Sprite: {fileID: 21300000, guid: f3499cc10e384e54bbd9fd2f0e63941c, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
 --- !u!1 &1032139734098928
 GameObject:
   m_ObjectHideFlags: 0
@@ -1805,7 +1795,7 @@ RectTransform:
   - {fileID: 224868943196538544}
   - {fileID: 224324037113549298}
   m_Father: {fileID: 224504773548602904}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
@@ -1987,8 +1977,9 @@ GameObject:
   - component: {fileID: 224951346136944666}
   - component: {fileID: 222193365562233834}
   - component: {fileID: 114591227940132424}
+  - component: {fileID: 8314944633267500166}
   m_Layer: 0
-  m_Name: Panel_Manual_override_2
+  m_Name: Panel_Reactions_Identification
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2058,6 +2049,30 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
+--- !u!114 &8314944633267500166
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1145951615608886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9587a7ed076a0444088b16fbfb6a02b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maiaTopScreen: {fileID: 114154771145110008}
+  _diagrams:
+  - {fileID: 114091819997562584}
+  - {fileID: 114942945479771830}
+  - {fileID: 114732416735734540}
+  - {fileID: 114759323830466184}
+  _textInteraction: {fileID: 114531681165771210}
+  _diagramMissing: {fileID: 21300000, guid: 64b330961027aa7489e0b76ad52922c1, type: 3}
+  _popupWin: {fileID: 0}
+  _popupLose: {fileID: 0}
+  _popupErrorRessource: {fileID: 0}
+  _popupErrorNumber: {fileID: 0}
 --- !u!1 &1159081154707734
 GameObject:
   m_ObjectHideFlags: 0
@@ -2113,67 +2128,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _elementName: 
-  _slider: {fileID: 114304811310632798}
-  _speed: 0.15
-  _percentage: {fileID: 114075122992184438}
+  _exileLoading: {fileID: 1440994217800278031}
+  _maiaLoading: {fileID: 8922558111454519181}
+  _maiaOverview: {fileID: 3122155383732031691}
+  _manualOverrideAccess: {fileID: 3177828493692389940}
+  _particlesIdentification: {fileID: 1109949460654781915}
+  _reactionsIdentification: {fileID: 8314944633267500166}
   _exileLoadingScreen: {fileID: 1231952084399616}
   _maiaLoadingScreen: {fileID: 1600579807507872}
-  _maiaOverview: {fileID: 1290599800269492}
-  _manualOverrideAccess: {fileID: 1828314154897938}
-  _popupAccessGranted: {fileID: 1699197941026668}
-  _popupErrorAccessDenied: {fileID: 1077047362872470}
+  _maiaOverviewScreen: {fileID: 1290599800269492}
+  _manualOverrideAccessScreen: {fileID: 1828314154897938}
   _manualOverride1: {fileID: 1628995940436812}
   _popupErrorMessageParticles: {fileID: 1485831795039926}
   _pverrideScreen2: {fileID: 1145951615608886}
-  _victoryPopup: {fileID: 1965747908054732}
-  _loadingText: {fileID: 114677099287199590}
-  _loadingStrings:
-  - TubEx database connected.
-  - "Localisation in progress\u2026"
-  - TubEx-27 localized.
-  - "He.Ra.Cles in movement\u2026"
-  - TubEx-27 secured.
-  - "Extracting TubEx-27\u2026"
-  - TubEx-27 docked to the ECS room.
-  - "Charging data\u2026"
-  _particlesGrid: {fileID: 1839463277847702}
-  _gridCase: {fileID: 1217671694569444, guid: d7af7726f0c7b1847a444e6ceedd0e2e, type: 3}
-  _particleCases: []
-  _textQuark: {fileID: 114330258787219254}
-  _textAntiquark: {fileID: 114546555076758058}
-  _textMuon: {fileID: 114860639972622930}
-  _textAntimuon: {fileID: 114468859226194240}
-  _textElectron: {fileID: 114168983720573290}
-  _textAntielectron: {fileID: 114077298318354156}
-  _textNeutrino: {fileID: 114190797904794624}
-  _textPhoton: {fileID: 114278541680030112}
-  _diagrams:
-  - {fileID: 114091819997562584}
-  - {fileID: 114942945479771830}
-  - {fileID: 114732416735734540}
-  - {fileID: 114759323830466184}
-  _textInteraction: {fileID: 114531681165771210}
-  _scrollingText: '0x04,0x2C,0x64,0x00,0xB6,0x03,0xFA,0x84,0x87,0x6A,0x74,0x18,0x01,0x64,0x79,0x13,0x09,0x6A,0xCB,0xED,0x3D,0x9C,0x79,0x88,0x49,0x4A,0x2E,0xE8,0x89,0x24,0xF7,0xDD,0x04,0xA9,0x09,0xE7,0xE5,0x14,0xF7,0x5B,0xC5,0x49,0x38,0x10,0xFA,0x5C,0xFA,0x99,0xC4,0x0D,0x74,0xE0,0x3A,0x45,0xE8,0x64,0xCC,0xBB,0x72,0x57,0x31,0x63,0xF9,0x7F,0x46,0x48,0xF4,0xE8,0x91,0x5B,0xF8,0xED,0x07,0x9B,0x09,0x07,0x0D,0x64,0xF7,0x64,0xC7,0x5A,0xB8,0x17,0xCD,0xBC,0x6A,0xA9,0xC3,0x9D,0xEF,0x96,0x9D,0x62,0xF5,0xDD,0x83,0xD9,0x45,0x0F,0x99,0x4B,0xF6,0x63,0x41,0x29,0x38,0xE0,0x4A,0xCD,0xF9,0x94,0xC3,0x1D,0xAE,0xB8,0x96,0x3D,0x69,0x82,0x8C,0xFF,0x29,0xF9,0x2A,0xF6,0x85,0x50,0x45,0x1A,0x7E,0xF8,0x26,0x66,0x86,0x43,0x48,0x4B,0x3E,0xF9,0x96,0xD4,0x6A,0x33,0xC3,0x6B,0x75,0xFD,0x29,0x95,0xAA,0x27,0xC4,0xBD,0xF7,0x0F,0x99,0x1D,0xEB,0x9C,0x84,0xFB,0x7B,0xF8,0x4D,0x3A,0xFA,0x12,0x43,0xC9,0x43,0x0F,0x66,0x52,0xF7,0x6F,0x87,0x4A,0x36,0xE9,0xD5,0x84,0x8B,0x9A,0x8B,0xFF,0xC1,0x0F,0x2D,0x25,0x8B,0x99,0xCE,0xFE,0xC3,0xFF,0x0E,0xC9,0xF8,0x88,0x83,0xD9,0x83,0xD8,0x5D,0x91,0xF5,0x76,0xC7,0x3A,0xF8,0xE0,0x86,0x71,0xF7,0x7C,0x04,0x3A,0xFA,0xD8,0x95,0x69,0x4B,0x8F,0xC5,0xFA,0xFB,0xEF,0xBD,0x19,0xF6,0x05,0xC6,0xB8,0x7B,0x16,0xD5,0x71,0xF6,0x7D,0x46,0xD7,0xB7,0xC0,0xE5,0x11,0xF7,0x75,0x04,0x4A,0x3A,0xE1,0x72,0xD9,0x4B,0x96,0x89,0xFF,0xFF,0xDF,0x82,0xF2,0xF4,0x65,0x44,0x3B,0xB8,0xF0,0xF9,0xF9,0x43,0x50,0xC4,0x9D,0xFE,0x37,0x62,0xB8,0xA7,0x88,0x43,0xE9,0xC1,0xEF,0xB5,0x50,0xF7,0x87,0x85,0x17,0x40,0xE8,0x01,0x98,0x4A,0x86,0xC7,0xF7,0xFF,0x0F,0x31,0x38,0x4A,0x0B,0x44,0x38,0x7E,0xF8,0x59,0xE8,0x49,0x8B,0xC3,0xD9,0xFF,0xEF,0x72,0xE0,0x4A,0x0C,0xC7,0x29,0x3E,0xF8,0x45,0x33,0x7C,0x1B,0x02,0xD,0x3F,0xF8,0xB1,0xF8,0x45,0x80,0x44,0x19,0xBE,0xE0,0xD6,0xC8,0x45,0x04,0xC3,0xF9,0x05,0x1F,0xA1,0x6B,0x7C,0x94,0xC3,0xF7,0xFB,0x0F,0xA3,0x2F,0x3F,0x11,0x27,0x42,0xF7,0x44,0x1F,0x65,0x62,0x52,0x42,0x4A,0x34,0x22,0x13,0x21,0x54,0x18,0x22,0x85,0xFF,0x43,0x32,0xB8,0xA5,0xF7,0xFF,0x12,0xF2,0x1F,0xC1,0x68,0x48,0x86,0x2F,0x22,0xF8,0x26,0x23,0xFF,0x0F,0xF6,0xFF,0x3F,0x77,0x45,0x1F,0x1F,0x17,0xF4,0x74,0x34,0x36,0x73,0x3F,0x26,0xF2,0x1F,0x6F,0x92,0x41,0xF7,0xFF,0x77,0xA6,0xF4,0x8F,0x4F,0xF4,0xF9,0x33,0x75,0x32,0xF4,0xF1,0xF8,0xF1,0x1F,0x8F,0x46,0x36,0x06,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xA2,0xE4 '
-  _scrollError: {fileID: 114419483970816894}
-  isLoaded: 0
-  _nbParticlesDetected: {fileID: 114542122094300846}
-  _errorParticles: {fileID: 1729140150482172}
-  _successParticles: {fileID: 1250927581470876}
-  _popupCrash: {fileID: 1769867196349090}
-  _popupErrorMessage: {fileID: 1066964169871608}
-  _popupInfoMessage: {fileID: 1726876527018844}
-  _starPasswword: {fileID: 21300000, guid: cacc58b72b7aed94dbf0748ae2dced02, type: 3}
-  _cursorPassword: {fileID: 21300000, guid: 173af38369c5bac479d9d1df795eb8ee, type: 3}
-  _slotPassword:
-  - {fileID: 1409700883200446}
-  - {fileID: 1188435743686646}
-  - {fileID: 1328502339584918}
-  - {fileID: 1442820678646422}
-  _popupWin: {fileID: 1859237427004254}
-  _popupLose: {fileID: 1183334285981470}
-  _popupErrorRessource: {fileID: 1325334265551168}
-  _popupErrorNumber: {fileID: 1902793316898962}
-  _diagramMissing: {fileID: 21300000, guid: 64b330961027aa7489e0b76ad52922c1, type: 3}
 --- !u!1 &1159613125057398
 GameObject:
   m_ObjectHideFlags: 0
@@ -2209,7 +2176,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 0.09500122, y: -0.14398193}
+  m_AnchoredPosition: {x: 0.0949707, y: -0.14398193}
   m_SizeDelta: {x: 0.73, y: 0.1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1180627091036604
@@ -3356,8 +3323,9 @@ GameObject:
   - component: {fileID: 224575162058563596}
   - component: {fileID: 222855966962173162}
   - component: {fileID: 114113336168374796}
+  - component: {fileID: 1440994217800278031}
   m_Layer: 0
-  m_Name: Panel_Exile_Loading_Screen
+  m_Name: Panel_Exile_Loading
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3420,6 +3388,33 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
+--- !u!114 &1440994217800278031
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1231952084399616}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ab44635ca917d04eb07e7ed9794460c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maiaTopScreen: {fileID: 114154771145110008}
+  _slider: {fileID: 114304811310632798}
+  _speed: 0.2
+  _percentage: {fileID: 114075122992184438}
+  _loadingText: {fileID: 114677099287199590}
+  _loadingStrings:
+  - TubEx database connected.
+  - "Localisation in progress\u2026"
+  - TubEx-27 localized.
+  - "He.Ra.Cles in movement\u2026"
+  - TubEx-27 secured.
+  - "Extracting TubEx-27\u2026"
+  - TubEx-27 docked to the ECS room.
+  - "Charging data\u2026"
+  isLoaded: 0
 --- !u!1 &1238991340557130
 GameObject:
   m_ObjectHideFlags: 0
@@ -4675,8 +4670,9 @@ GameObject:
   - component: {fileID: 224448598433927680}
   - component: {fileID: 222788407069792590}
   - component: {fileID: 114346231867489346}
+  - component: {fileID: 3122155383732031691}
   m_Layer: 0
-  m_Name: Panel_MAIA_overview
+  m_Name: Panel_MAIA_Overview
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4746,6 +4742,24 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
+--- !u!114 &3122155383732031691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1290599800269492}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c46e7e67b669a6c46aafa7014dd98fd6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maiaTopScreen: {fileID: 114154771145110008}
+  _scrollingText: '0x04,0x2C,0x64,0x00,0xB6,0x03,0xFA,0x84,0x87,0x6A,0x74,0x18,0x01,0x64,0x79,0x13,0x09,0x6A,0xCB,0xED,0x3D,0x9C,0x79,0x88,0x49,0x4A,0x2E,0xE8,0x89,0x24,0xF7,0xDD,0x04,0xA9,0x09,0xE7,0xE5,0x14,0xF7,0x5B,0xC5,0x49,0x38,0x10,0xFA,0x5C,0xFA,0x99,0xC4,0x0D,0x74,0xE0,0x3A,0x45,0xE8,0x64,0xCC,0xBB,0x72,0x57,0x31,0x63,0xF9,0x7F,0x46,0x48,0xF4,0xE8,0x91,0x5B,0xF8,0xED,0x07,0x9B,0x09,0x07,0x0D,0x64,0xF7,0x64,0xC7,0x5A,0xB8,0x17,0xCD,0xBC,0x6A,0xA9,0xC3,0x9D,0xEF,0x96,0x9D,0x62,0xF5,0xDD,0x83,0xD9,0x45,0x0F,0x99,0x4B,0xF6,0x63,0x41,0x29,0x38,0xE0,0x4A,0xCD,0xF9,0x94,0xC3,0x1D,0xAE,0xB8,0x96,0x3D,0x69,0x82,0x8C,0xFF,0x29,0xF9,0x2A,0xF6,0x85,0x50,0x45,0x1A,0x7E,0xF8,0x26,0x66,0x86,0x43,0x48,0x4B,0x3E,0xF9,0x96,0xD4,0x6A,0x33,0xC3,0x6B,0x75,0xFD,0x29,0x95,0xAA,0x27,0xC4,0xBD,0xF7,0x0F,0x99,0x1D,0xEB,0x9C,0x84,0xFB,0x7B,0xF8,0x4D,0x3A,0xFA,0x12,0x43,0xC9,0x43,0x0F,0x66,0x52,0xF7,0x6F,0x87,0x4A,0x36,0xE9,0xD5,0x84,0x8B,0x9A,0x8B,0xFF,0xC1,0x0F,0x2D,0x25,0x8B,0x99,0xCE,0xFE,0xC3,0xFF,0x0E,0xC9,0xF8,0x88,0x83,0xD9,0x83,0xD8,0x5D,0x91,0xF5,0x76,0xC7,0x3A,0xF8,0xE0,0x86,0x71,0xF7,0x7C,0x04,0x3A,0xFA,0xD8,0x95,0x69,0x4B,0x8F,0xC5,0xFA,0xFB,0xEF,0xBD,0x19,0xF6,0x05,0xC6,0xB8,0x7B,0x16,0xD5,0x71,0xF6,0x7D,0x46,0xD7,0xB7,0xC0,0xE5,0x11,0xF7,0x75,0x04,0x4A,0x3A,0xE1,0x72,0xD9,0x4B,0x96,0x89,0xFF,0xFF,0xDF,0x82,0xF2,0xF4,0x65,0x44,0x3B,0xB8,0xF0,0xF9,0xF9,0x43,0x50,0xC4,0x9D,0xFE,0x37,0x62,0xB8,0xA7,0x88,0x43,0xE9,0xC1,0xEF,0xB5,0x50,0xF7,0x87,0x85,0x17,0x40,0xE8,0x01,0x98,0x4A,0x86,0xC7,0xF7,0xFF,0x0F,0x31,0x38,0x4A,0x0B,0x44,0x38,0x7E,0xF8,0x59,0xE8,0x49,0x8B,0xC3,0xD9,0xFF,0xEF,0x72,0xE0,0x4A,0x0C,0xC7,0x29,0x3E,0xF8,0x45,0x33,0x7C,0x1B,0x02,0xD,0x3F,0xF8,0xB1,0xF8,0x45,0x80,0x44,0x19,0xBE,0xE0,0xD6,0xC8,0x45,0x04,0xC3,0xF9,0x05,0x1F,0xA1,0x6B,0x7C,0x94,0xC3,0xF7,0xFB,0x0F,0xA3,0x2F,0x3F,0x11,0x27,0x42,0xF7,0x44,0x1F,0x65,0x62,0x52,0x42,0x4A,0x34,0x22,0x13,0x21,0x54,0x18,0x22,0x85,0xFF,0x43,0x32,0xB8,0xA5,0xF7,0xFF,0x12,0xF2,0x1F,0xC1,0x68,0x48,0x86,0x2F,0x22,0xF8,0x26,0x23,0xFF,0x0F,0xF6,0xFF,0x3F,0x77,0x45,0x1F,0x1F,0x17,0xF4,0x74,0x34,0x36,0x73,0x3F,0x26,0xF2,0x1F,0x6F,0x92,0x41,0xF7,0xFF,0x77,0xA6,0xF4,0x8F,0x4F,0xF4,0xF9,0x33,0x75,0x32,0xF4,0xF1,0xF8,0xF1,0x1F,0x8F,0x46,0x36,0x06,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0xA2,0xE4 '
+  _scrollError: {fileID: 114419483970816894}
+  _popupCrash: {fileID: 1769867196349090}
+  _popupErrorMessage: {fileID: 1066964169871608}
+  _popupInfoMessage: {fileID: 1726876527018844}
 --- !u!1 &1291335294950342
 GameObject:
   m_ObjectHideFlags: 0
@@ -8962,8 +8976,9 @@ GameObject:
   - component: {fileID: 224639607290898566}
   - component: {fileID: 222435211625132816}
   - component: {fileID: 114719870097498152}
+  - component: {fileID: 8922558111454519181}
   m_Layer: 0
-  m_Name: Panel_MAIA_Loading_Screen
+  m_Name: Panel_MAIA_Loading
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9027,6 +9042,19 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
+--- !u!114 &8922558111454519181
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1600579807507872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd78b5bfc08bd45469fa9dae2460fe09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maiaTopScreen: {fileID: 114154771145110008}
 --- !u!1 &1601827131642798
 GameObject:
   m_ObjectHideFlags: 0
@@ -9526,8 +9554,9 @@ GameObject:
   - component: {fileID: 224182768193662970}
   - component: {fileID: 222541293876738102}
   - component: {fileID: 114423426515501530}
+  - component: {fileID: 1109949460654781915}
   m_Layer: 0
-  m_Name: Panel_Manual_override_1
+  m_Name: Panel_Particles_Identification
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9596,6 +9625,34 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
+--- !u!114 &1109949460654781915
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1628995940436812}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc5ab75d70cf5b54fab0bd936a66151f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maiaTopScreen: {fileID: 114154771145110008}
+  _particlesGrid: {fileID: 1839463277847702}
+  _gridCase: {fileID: 1217671694569444, guid: d7af7726f0c7b1847a444e6ceedd0e2e, type: 3}
+  _particleCases: []
+  _textQuark: {fileID: 114330258787219254}
+  _textAntiquark: {fileID: 114546555076758058}
+  _textMuon: {fileID: 114860639972622930}
+  _textAntimuon: {fileID: 114468859226194240}
+  _textElectron: {fileID: 114168983720573290}
+  _textAntielectron: {fileID: 114077298318354156}
+  _textNeutrino: {fileID: 114190797904794624}
+  _textPhoton: {fileID: 114278541680030112}
+  _nbParticlesDetected: {fileID: 114542122094300846}
+  _errorParticles: {fileID: 1729140150482172}
+  _successParticles: {fileID: 1250927581470876}
+  _victoryPopup: {fileID: 1965747908054732}
 --- !u!1 &1638420177140992
 GameObject:
   m_ObjectHideFlags: 0
@@ -11305,7 +11362,7 @@ RectTransform:
   - {fileID: 224237777355354486}
   - {fileID: 224883791081451232}
   m_Father: {fileID: 224504773548602904}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
@@ -12029,8 +12086,9 @@ GameObject:
   - component: {fileID: 224520038928421868}
   - component: {fileID: 222020350987934714}
   - component: {fileID: 114883290937713534}
+  - component: {fileID: 3177828493692389940}
   m_Layer: 0
-  m_Name: Panel_Manual_override_access
+  m_Name: Panel_Manual_Override_Access
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12098,6 +12156,24 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
+--- !u!114 &3177828493692389940
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1828314154897938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9ca0e161e0941047b233d4f3219b4e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maiaTopScreen: {fileID: 114154771145110008}
+  _starPasswword: {fileID: 21300000, guid: 00962e67f5a18fb4db6b083c02ab6288, type: 3}
+  _cursorPassword: {fileID: 21300000, guid: 173af38369c5bac479d9d1df795eb8ee, type: 3}
+  _slotPassword: []
+  _popupAccessGranted: {fileID: 1699197941026668}
+  _popupErrorAccessDenied: {fileID: 1077047362872470}
 --- !u!1 &1839463277847702
 GameObject:
   m_ObjectHideFlags: 0
@@ -13609,8 +13685,8 @@ RectTransform:
   - {fileID: 224206100675780544}
   - {fileID: 224052773395998614}
   - {fileID: 224432765222179218}
-  - {fileID: 224336200695874398}
   - {fileID: 224951128753026954}
+  - {fileID: 224336200695874398}
   m_Father: {fileID: 224224790422152562}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

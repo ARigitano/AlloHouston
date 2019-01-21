@@ -7,7 +7,6 @@ namespace CRI.HelloHouston.Experience.UI
     [RequireComponent(typeof(UIOnHoverTooltip))]
     internal class UIAction : MonoBehaviour
     {
-        private GeneralAction _action;
         [SerializeField]
         private Button _button;
         [SerializeField]
@@ -32,7 +31,6 @@ namespace CRI.HelloHouston.Experience.UI
 
         public void Init<T>(T action, GeneralActionController<T> actionController) where T: GeneralAction
         {
-            _action = action;
             _icon.sprite = action.menuIcon;
             GetComponent<UIOnHoverTooltip>().Init(_hoverTime, action.actionTooltip, _tooltipOffset);
             _button.onClick.AddListener(() => actionController.AddAction(action));

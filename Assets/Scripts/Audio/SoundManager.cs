@@ -195,9 +195,6 @@ namespace CRI.HelloHouston.Audio
                 ResumeAll();
         }
 
-        public delegate void SoundToggleEvent();
-        public static event SoundToggleEvent onSoundToggle = () => { };
-
         #region GetAudio Functions
 
         /// <summary>

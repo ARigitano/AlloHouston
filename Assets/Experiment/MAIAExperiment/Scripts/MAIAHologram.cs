@@ -24,57 +24,58 @@ namespace CRI.HelloHouston.Experience.MAIA
             }
         }
         /// <summary>
-        /// The synchronizer of the experiment.
+        /// The manager of the experiment.
         /// </summary>
-        private MAIAManager _manager;
-        /// <summary>
-        /// Folder path for the particle scriptable objects
-        /// </summary>
-        private const string _path = "Particle";
+        [Tooltip("The manager of the experiment.")]
+        private MAIAManager _manager = null;
         /// <summary>
         /// Prefab of the head of a particle line.
         /// </summary>
         [SerializeField]
+        [Tooltip("Prefab of the head of a particle line..")]
         private GameObject _headPrefab = null;
         /// <summary>
         /// Angle for shaping the bezier curves of the particle lines.
         /// </summary>
+        [SerializeField]
+        [Tooltip("Angle for shaping the bezier curves of the particle lines.")]
         private float _theta = 0f;
         /// <summary>
         /// Angle for shaping the bezier curves of the particle lines.
         /// </summary>
+        [SerializeField]
+        [Tooltip("Angle for shaping the bezier curves of the particle lines.")]
         private float _phi = 0f;
         /// <summary>
         /// Amplitude for the bezier curves curvature.
         /// </summary>
         [SerializeField]
+        [Tooltip("Amplitude for the bezier curves curvature.")]
         private float _amplitudeA = 0.15f;
         /// <summary>
         /// Amplitude for the bezier curves curvature.
         /// </summary>
         [SerializeField]
+        [Tooltip("Amplitude for the bezier curves curvature.")]
         private float _amplitudeB = 0.15f;
         /// <summary>
         /// Spline prefab.
         /// </summary>
         [SerializeField]
+        [Tooltip("Spline prefab.")]
         private BezierSpline _particleSplinePrefab = null;
         /// <summary>
         /// Array of particle splines.
         /// </summary>
         private HologramSpline[] _particleSplineArray;
         /// <summary>
-        /// Particle list.
-        /// </summary>
-        private List<Particle> _particleList;
-        /// <summary>
         /// Array of the cylinders' mesh filters.
         /// </summary>
         [SerializeField]
         [Tooltip("Array of the cylinders' mesh filters.")]
-        private MeshFilter[] _cylArray;
-
+        private MeshFilter[] _cylArray = null;
         [SerializeField]
+        [Tooltip("Angle for shaping the bezier curves of the particle lines.")]
         private float _factor = 0.2f;
         /// <summary>
         /// Array of the cylinders' radiuses.
@@ -264,11 +265,6 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             Debug.Log(name + "Unpaused");
             gameObject.SetActive(false);
-        }
-
-        private void Start()
-        {
-            //ActivateHologram(false);
         }
     }
 }

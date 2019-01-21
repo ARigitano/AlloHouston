@@ -6,12 +6,6 @@ namespace CRI.HelloHouston.Experience.UI
     internal class UICameraDisplay : MonoBehaviour
     {
         /// <summary>
-        /// The image on which the camera view will be displayed.
-        /// </summary>
-        [SerializeField]
-        [Tooltip("The image on which the camera view will be displayed.")]
-        private RawImage _image = null;
-        /// <summary>
         /// Prefab of the camera button.
         /// </summary>
         [SerializeField]
