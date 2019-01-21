@@ -94,5 +94,4 @@ namespace CRI.HelloHouston.Calibration
         /// </summary>
         public SoundManager rightSpeaker { get { return _rightSpeaker; } }
     }
-
 }
