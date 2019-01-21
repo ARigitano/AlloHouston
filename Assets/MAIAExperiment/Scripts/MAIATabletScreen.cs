@@ -526,6 +526,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             if (!_isTouched)
             {
+                Debug.Log(number);
                 _isTouched = true;
 
                 if (_manager.enteredPassword.Length < _manager._realPassword.Length)
@@ -535,10 +536,12 @@ namespace CRI.HelloHouston.Experience.MAIA
 
                     if (_manager.enteredPassword.Length == _manager._realPassword.Length && _manager.enteredPassword == _manager._realPassword)
                     {
+                        Debug.Log("correct");
                         _manager.CorrectPassword();
                     }
                     else if (_manager.enteredPassword.Length == _manager._realPassword.Length && _manager.enteredPassword != _manager._realPassword)
                     {
+                        Debug.Log("wrong");
                         _manager.IncorrectPassword();
                         _manager.enteredPassword = "";
                     }

@@ -49,13 +49,10 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <returns></returns>
         IEnumerator WaitCorrect()
         {
-            //TODO:rewrite
+            
             yield return new WaitForSeconds(2);
-            /*_popupAccessGranted.SetActive(false);
-            _manualOverride1.SetActive(true);
-            _currentPanel = _manualOverride1;
-            _manualOverrideAccess.SetActive(false);
-            _manager.AccessGranted();*/
+            _popupAccessGranted.SetActive(false);
+            _maiaTopScreen.AccessGranted();
         }
 
         /// <summary>

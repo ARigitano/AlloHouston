@@ -163,7 +163,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         public void CorrectPassword()
         {
             //rewrite
-            //_topScreen.Access(true);
+            _topScreen.Access(true);
         }
 
         /// <summary>

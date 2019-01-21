@@ -34,7 +34,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// Script for the Manual Override Access screen.
         /// </summary>
         [SerializeField]
-        private ManualOverrideAccess manualOverrideAccess;
+        private ManualOverrideAccess _manualOverrideAccess;
         /// <summary>
         /// Script for the Particles Identification screen.
         /// </summary>
@@ -49,7 +49,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// All the panels of the top left screen of the experiment.
         /// </summary>
         [SerializeField]
-        private GameObject _exileLoadingScreen, _maiaLoadingScreen, _maiaOverviewScreen, _manualOverrideAccess, _manualOverride1, _popupErrorMessageParticles, _pverrideScreen2;
+        private GameObject _exileLoadingScreen, _maiaLoadingScreen, _maiaOverviewScreen, _manualOverrideAccessScreen, _manualOverride1, _popupErrorMessageParticles, _pverrideScreen2;
         /// <summary>
         /// Stores the panel currently being displayed.
         /// </summary>
@@ -115,8 +115,8 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void AccessCode()
         {
-            _manualOverrideAccess.SetActive(true);
-            _currentPanel = _manualOverrideAccess;
+            _manualOverrideAccessScreen.SetActive(true);
+            _currentPanel = _manualOverrideAccessScreen;
             _maiaOverviewScreen.SetActive(false);
         }
 
@@ -151,6 +151,19 @@ namespace CRI.HelloHouston.Experience.MAIA
             Debug.Log(name + "Activated");
             Init((MAIAManager)manager);
             //StartCoroutine("Loading");
+        }
+
+        public void AccessGranted()
+        {
+            _manualOverride1.SetActive(true);
+            _currentPanel = _manualOverride1;
+            _manualOverrideAccessScreen.SetActive(false);
+            _manager.AccessGranted();
+        }
+
+        public void Access(bool isGranted)
+        {
+            _manualOverrideAccess.Access(isGranted);
         }
 
         /// <summary>
