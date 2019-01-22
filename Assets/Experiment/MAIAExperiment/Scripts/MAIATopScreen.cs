@@ -45,6 +45,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         [SerializeField]
         private ReactionsIdentification _reactionsIdentification;
+        //TODO: delete when windowws class integrated
         /// <summary>
         /// All the panels of the top left screen of the experiment.
         /// </summary>
@@ -54,6 +55,45 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// Stores the panel currently being displayed.
         /// </summary>
         private GameObject _currentPanel;
+        public MAIATabletScreen tabletScreen;
+        //TODO: put in right panel
+        /// <summary>
+        /// An error depending on the payer's diagram selection mistake.
+        /// </summary>
+        [HideInInspector]
+        public string particleErrorString;
+        //TODO: put in right panel
+        /// <summary>
+        /// Index of the Feynman diagram currently being displayed.
+        /// </summary>
+        [HideInInspector]
+        public int displayedDiagram = 0;
+
+        public void ParticleGrid(List<Particle> reactionExits)
+        {
+            _particlesIdentification.ParticleGrid(reactionExits);
+        }
+
+        public void DisplayPassword(string enteredPassword)
+        {
+            _manualOverrideAccess.DisplayPassword(enteredPassword);
+        }
+
+        public void FillNbParticlesDetected(List<Particle> reactionExits)
+        {
+            _particlesIdentification.FillNbParticlesDetected(reactionExits);
+        }
+
+        public void DisplayParticles(List<Particle> _enteredParticles)
+        {
+            _particlesIdentification.DisplayParticles(_enteredParticles);
+        }
+
+        //TODO: finish rewriting
+        /*public void FillParticlesTable(int nbAntielectron, _textAntielectron)
+        {
+            _reactionsIdentification.FillParticlesTable(nbAntielectron, _textAntielectron)
+        }*/
 
         /// <summary>
         /// Tells the MAIA Overwiew panel that the start button has been pressed.
@@ -158,7 +198,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             _manualOverride1.SetActive(true);
             _currentPanel = _manualOverride1;
             _manualOverrideAccessScreen.SetActive(false);
-            _manager.AccessGranted();
+            tabletScreen.AccessGranted();
         }
 
         public void Access(bool isGranted)
@@ -180,6 +220,16 @@ namespace CRI.HelloHouston.Experience.MAIA
         public override void OnShow()
         {
             Debug.Log(name + "Unpaused");
+        }
+
+        internal void ErrorParticles(string particleErrorString)
+        {
+            _particlesIdentification.ErrorParticles(particleErrorString);
+        }
+
+        internal void ReactionSelected(Reaction realReaction, Sprite diagramSelected)
+        {
+            _reactionsIdentification.ReactionSelected(realReaction, diagramSelected);
         }
     }
 }
