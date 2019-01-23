@@ -6,10 +6,6 @@ namespace CRI.HelloHouston.Experience
     public abstract class XPElement : MonoBehaviour
     {
         /// <summary>
-        /// The experience synchronizer.
-        /// </summary>
-        public XPManager manager { get; protected set; }
-        /// <summary>
         /// The virtual element.
         /// </summary>
         public VirtualElement virtualElement { get; protected set; }
@@ -34,9 +30,8 @@ namespace CRI.HelloHouston.Experience
             }
         }
 
-        public virtual void Init(XPManager synchronizer, VirtualElement virtualElement)
+        public virtual void Init(VirtualElement virtualElement)
         {
-            this.manager = synchronizer;
             this.virtualElement = virtualElement;
             elementType = virtualElement.elementType;
         }

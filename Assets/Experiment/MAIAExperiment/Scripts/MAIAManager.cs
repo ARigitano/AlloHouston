@@ -42,27 +42,36 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// The particles produced by the ongoing reactions.
         /// </summary>
-        public List<Particle> producedParticles { get; private set; }
+        public List<Particle> generatedParticles { get; private set; }
 
         /// <summary>
-        /// Activates the manual override panel of the tablet.
-        /// </summary>
-        public void ManualOverrideActive()
-        {
-            _tabletScreen.ManualOverride();
-        }
-
-        /// <summary>
-        /// Directly skips to the Feynman diagrams step.
+        /// Selects the ongoing particle reactions for this game.
         /// </summary>
         public void SkipStepOne()
         {
-            if (producedParticles.Count == 0)
+            if (generatedParticles.Count == 0)
                 GenerateParticles();
             _holograms[0].ActivateHologram(true);
             _tabletScreen.SkipStepOne();
             _tubeScreen.SkipStepOne();
             _topScreen.SkipStepOne();
+        }
+
+        //TODO: delete but call correctparticle somewhere else
+        /// <summary>
+        /// Converts the produced particles into a string.
+        /// </summary
+        private void GenerateParticleString()
+        {
+            CorrectParticle();
+        }
+
+        /// <summary>
+        /// Activates the manual override panel of the tablet.
+        /// </summary>
+       public void ManualOverrideActive()
+        {
+            _topScreen.ManualOverride();
         }
 
         /// <summary>
@@ -74,152 +83,22 @@ namespace CRI.HelloHouston.Experience.MAIA
         }
 
         /// <summary>
-        /// Tells the main screen that the start button has been pressed.
-        /// </summary>
-        public void StartButtonClicked()
-        {
-            _topScreen.ManualOverride();
-        }
-
-        /// <summary>
-        /// Tells the main screen that the override button has been pressed.
-        /// </summary>
-        public void OverrideButtonClicked()
-        {
-            _topScreen.AccessCode();
-        }
-
-        /// <summary>
-        /// Tells the main screen that the right password has been entered.
-        /// </summary>
-        public void CorrectPassword()
-        {
-            //rewrite
-            _topScreen.Access(true);
-        }
-
-        /// <summary>
-        /// Tells the tablet that access to the experiment has been granted.
-        /// </summary>
-        public void AccessGranted()
-        {
-            //TODO: rewrite
-            _holograms[0].ActivateHologram(true);
-            _tabletScreen.AccessGranted();
-            //_tabletScreen.reactionExits = _tabletScreen.ParticlesCombination();
-            //_topScreen.FillNbParticlesDetected(_tabletScreen.reactionExits);
-        }
-
-        /// <summary>
         /// Tells the main screen that the correct combination of particles has been entered.
         /// </summary>
         public void CorrectParticle()
         {
-            //TODO: rewrite
-            //_holograms[0].AnimHologram(_tabletScreen.reactionExits);
             _holograms[0].DisplaySplines();
-            /*_topScreen.ParticleGrid(_tabletScreen.reactionExits);
-            _topScreen.FillParticlesTable(_tabletScreen.nbAntielectron, _topScreen._textAntielectron);
-            _topScreen.FillParticlesTable(_tabletScreen.nbAntimuon, _topScreen._textAntimuon);
-            _topScreen.FillParticlesTable(_tabletScreen.nbAntiquark, _topScreen._textAntiquark);
-            _topScreen.FillParticlesTable(_tabletScreen.nbElectron, _topScreen._textElectron);
-            _topScreen.FillParticlesTable(_tabletScreen.nbMuon, _topScreen._textMuon);
-            _topScreen.FillParticlesTable(_tabletScreen.nbNeutrino, _topScreen._textNeutrino);
-            _topScreen.FillParticlesTable(_tabletScreen.nbPhoton, _topScreen._textPhoton);
-            _topScreen.FillParticlesTable(_tabletScreen.nbQuark, _topScreen._textQuark);
-            _topScreen.FillChosenDiagrams(_tabletScreen._chosenReactions, _tabletScreen._realReaction);
-            _topScreen.FillInteractionType(_tabletScreen._realReaction);*/
-        }
-
-        /// <summary>
-        /// Tells the main screen to clear all the entered particles.
-        /// </summary>
-        public void ClearParticles()
-        {
-            _topScreen.ClearParticles();
-        }
-
-        /// <summary>
-        /// Tells the main screen to clear the last entered particles.
-        /// </summary>
-        public void DeleteParticle()
-        {
-            //TODO:rewrite
-            //_topScreen.DeleteParticle(_tabletScreen._enteredParticles.Count);
-        }
-
-        /// <summary>
-        /// Tells the tube screen to display another Feynman diagram.
-        /// </summary>
-        public void OtherDiagram()
-        {
-            //TODO:rewrite
-            //_tubeScreen.OtherDiagram(_tabletScreen.displayedDiagram, _tabletScreen._allReactions);
-        }
-
-        /// <summary>
-        /// Tells the tube screen to mark a Feynman diagram for its exits.
-        /// </summary>
-        public void SelectExit()
-        {
-            //TODO:rewrite
-            //_tubeScreen.SelectExit(_tabletScreen.displayedDiagram);
-        }
-
-        /// <summary>
-        /// Tells the tube screen to mark a Feynman diagram for its interactions.
-        /// </summary>
-        public void SelectInteraction()
-        {
-            //TODO:rewrite
-            //_tubeScreen.SelectInteraction(_tabletScreen.displayedDiagram);
-        }
-
-        /// <summary>
-        /// Tells the top screen that a combination of particles with a wrong length has been entered.
-        /// </summary>
-        public void ParticleWrongLength()
-        {
-            //TODO:rewrite
-            //_topScreen.ErrorParticles(_tabletScreen.particleErrorString);
-        }
-
-        /// <summary>
-        /// Tells the top screen that a combination of particles with the wrong symbols has been entered.
-        /// </summary>
-        public void ParticleWrongSymbol()
-        {
-            //TODO:rewrite
-            //_topScreen.ErrorParticles(_tabletScreen.particleErrorString);
-        }
-
-        /// <summary>
-        /// Tells the top screen that a combination of particles with the wrong charges has been entered.
-        /// </summary>
-        public void ParticleWrongCharge()
-        {
-            //TODO:rewrite
-            //_topScreen.ErrorParticles(_tabletScreen.particleErrorString);
-        }
-
-        /// <summary>
-        /// Tells every screen that the right combination of particles has been entered.
-        /// </summary>
-        public void ParticleRightCombination()
-        {
-            _topScreen.OverrideSecond();
-            _tabletScreen.OverrideSecond();
-            //Disabled for the demo version
-           //_tubeScreen.OverrideSecond(_tabletScreen._allReactions);
-        }
-
-        /// <summary>
-        /// Tells the main screen that a reaction has been selected.
-        /// </summary>
-        public void ReactionSelected()
-        {
-            //TODO:rewrite
-            //_topScreen.ReactionSelected(_tabletScreen._realReaction, _tubeScreen.diagramSelected);
+            _topScreen.ParticleGrid(generatedParticles);
+            /*_topScreen.FillParticlesTable(nbAntielectron, _textAntielectron);
+            _topScreen.FillParticlesTable(nbAntimuon, _textAntimuon);
+            _topScreen.FillParticlesTable(nbAntiquark, _textAntiquark);
+            _topScreen.FillParticlesTable(nbElectron, _textElectron);
+            _topScreen.FillParticlesTable(nbMuon, _textMuon);
+            _topScreen.FillParticlesTable(nbNeutrino, _textNeutrino);
+            _topScreen.FillParticlesTable(nbPhoton, _textPhoton);
+            _topScreen.FillParticlesTable(nbQuark, _textQuark);
+            _topScreen.FillChosenDiagrams(_chosenReactions, _realReaction);
+            _topScreen.FillInteractionType(_realReaction);*/
         }
 
         /// <summary>
@@ -250,9 +129,9 @@ namespace CRI.HelloHouston.Experience.MAIA
         private List<Particle> GenerateParticles()
         {
             List<Reaction> currentReactions = SelectReactions();
-            producedParticles = currentReactions.SelectMany(reaction => reaction.exit.particles).ToList();
-            DisplayParticles(producedParticles);
-            return producedParticles;
+            generatedParticles = currentReactions.SelectMany(reaction => reaction.exit.particles).ToList();
+            DisplayParticles(generatedParticles);
+            return generatedParticles;
         }
 
         protected override void PreShow(VirtualWallTopZone wallTopZone, ElementInfo[] zones)
@@ -261,6 +140,17 @@ namespace CRI.HelloHouston.Experience.MAIA
             _tabletScreen = GetElement<MAIATabletScreen>();
             _topScreen = GetElement<MAIATopScreen>();
             _tubeScreen = GetElement<MAIATubeScreen>();
+            _tabletScreen.tubeScreen = _tubeScreen;
+            _tabletScreen.topScreen = _topScreen;
+            _tabletScreen.hologram = _holograms[0];
+            _topScreen.tabletScreen = _tabletScreen;
+        }
+
+        protected override void PostActivate()
+        {
+            base.PostActivate();
+            List<Particle> particle = GenerateParticles();
+            _holograms[0].CreateSplines(particle);
         }
 
         protected override void PostInit(XPContext xpContext, ElementInfo[] info, LogExperienceController logController, XPState stateOnActivation)
@@ -268,8 +158,6 @@ namespace CRI.HelloHouston.Experience.MAIA
             base.PostInit(xpContext, info, logController, stateOnActivation);
             _holograms = GetElements<MAIAHologram>();
             settings = (MAIASettings)xpContext.xpSettings;
-            List<Particle> particle = GenerateParticles();
-            _holograms[0].CreateSplines(particle);
         }
     }
 }

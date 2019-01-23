@@ -51,11 +51,11 @@ namespace CRI.HelloHouston.Calibration
         /// </summary>
         /// <param name="xpManager"></param>
         /// <returns></returns>
-        public virtual XPElement Init(XPManager xpManager)
+        public virtual XPElement Init()
         {
             Clean();
             currentElement = Instantiate(_elementPrefab, transform);
-            currentElement.Init(xpManager, this);
+            currentElement.Init(this);
             return currentElement;
         }
         /// <summary>

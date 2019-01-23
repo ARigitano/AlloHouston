@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace CRI.HelloHouston.Experience.MAIA
 {
@@ -12,10 +13,6 @@ namespace CRI.HelloHouston.Experience.MAIA
         [SerializeField]
         [Tooltip("Script for the whole top screen.")]
         private MAIATopScreen _maiaTopScreen = null;
-        /// <summary>
-        /// Manager of the experience.
-        /// </summary>
-        private MAIAManager _manager;
         /// <summary>
         /// Star image displayed when a password numbered has been entered.
         /// </summary>
@@ -51,15 +48,20 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// Displays the pasword that is being entered.
         /// </summary>
         /// <param name="password">The password being entered.</param>
-        public void CheckPassword(string password)
+        public bool CheckPassword(string password)
         {
+            bool res = false;
             for (int i = 0; i < password.Length; i++)
             {
-                _slotPassword[i].GetComponent<SpriteRenderer>().sprite = _starPassword;
+                _slotPassword[i].GetComponent<Image>().sprite = _starPassword;
             }
-            string realPassword = _manager.settings.password;
+            string realPassword = _maiaTopScreen.manager.settings.password;
             if (password.Length == realPassword.Length)
-                Access(password == realPassword);
+            {
+                res = password == realPassword;
+                Access(res);
+            }
+            return res;
         }
 
         /// <summary>
@@ -104,11 +106,6 @@ namespace CRI.HelloHouston.Experience.MAIA
                 _popupErrorAccessDenied.SetActive(true);
                 StartCoroutine(WaitDenied());
             }
-        }
-
-        public void Init(MAIAManager manager)
-        {
-            _manager = manager;
         }
     }
 }
