@@ -43,11 +43,10 @@ namespace CRI.HelloHouston.Calibration
         /// <summary>
         /// Initializes all the elements defined in the current XPZone.
         /// </summary>
-        /// <param name="xpManager">The XPManager of the XPZone.</param>
         /// <returns>All the elements, initialized.</returns>
-        public virtual XPElement[] InitAll(XPManager xpManager)
+        public virtual XPElement[] InitAll()
         {
-            XPElement[] res = virtualElements.Where(x => x.xpContext != null).Select(x => x.Init(xpManager)).ToArray();
+            XPElement[] res = virtualElements.Where(x => x.xpContext != null).Select(x => x.Init()).ToArray();
             return res;
         }
 

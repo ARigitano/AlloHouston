@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine;
 using System.Collections.Generic;
-using System;
+using System.Linq;
 
 /// <summary>
 /// The synchronizer of the particle physics experiment.
@@ -28,191 +28,33 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         private MAIAHologram[] _holograms;
         /// <summary>
-        /// All the particle scriptable objects.
+        /// Settings of the experience.
         /// </summary>
-        public Particle[] _allParticles { get; private set; }
-        /// <summary>
-        /// All the reaction scriptable objects.
-        /// </summary>
-        public Reaction[] allReactions { get; private set; }
-        /// <summary>
-        /// Path to the particle scriptable objects folder.
-        /// </summary>
-        [HideInInspector]
-        public const string path = "Particles";
-        /// <summary>
-        /// Path to the particle scriptable objects folder.
-        /// </summary>
-        [HideInInspector]
-        public const string pathReaction = "Reactions";
-        //TODO: check if useful
-        /// <summary>
-        /// Contains the combination of particles randomly generated.
-        /// </summary>
-        public Particle[] generatedParticles { get; private set; }
-        //TODO: put in settings
-        /// <summary>
-        /// Real password to get access.
-        /// </summary>
-        public string realPassword;
-        /// <summary>
-        /// The combination of particles randomly generated rewritten as a string.
-        /// </summary>
-        public List<string> realParticles { get; private set; }
-        //TODO: see if used
-        /// <summary>
-        /// String displayed depending on the particles combination entered.
-        /// </summary>
-        public string[] result { get; private set; }
-        //TODO: put in settings
-        /// <summary>
-        /// Number of ongoing reactions.
-        /// </summary>
-        public int numberChosenReaction = 4;
+        public MAIASettings settings { get; private set; }
         /// <summary>
         /// The ongoing reactions.
         /// </summary>
-        public List<Reaction> chosenReactions { get; private set; }
+        public List<Reaction> ongoingReactions { get; private set; }
         /// <summary>
         /// The reaction to idetify.
         /// </summary>
-        public Reaction realReaction { get; private set; }
-        //TODO: check if useful
+        public Reaction selectedReaction { get; private set; }
         /// <summary>
         /// The particles produced by the ongoing reactions.
         /// </summary>
-        public List<Particle> reactionExits { get; private set; }
-        //TODO: store? + linc.groupBy.Count()
-        /// <summary>
-        /// The numbers of particle detected of each kind.
-        /// </summary>
-        [HideInInspector]
-        public int nbQuark, nbAntiquark, nbMuon, nbAntimuon, nbElectron, nbAntielectron, nbNeutrino, nbPhoton;
-
-    //TODO: getelement in init
-    private void Start()
-        {
-            _tabletScreen.tubeScreen = _tubeScreen;
-            _tabletScreen.topScreen = _topScreen;
-            _tabletScreen.hologram = _holograms[0];
-            _topScreen.tabletScreen = _tabletScreen;
-        }
+        public List<Particle> generatedParticles { get; private set; }
 
         /// <summary>
         /// Selects the ongoing particle reactions for this game.
         /// </summary>
-        private void ReactionsCombination()
+        public void SkipStepOne()
         {
-            allReactions = Resources.LoadAll<Reaction>(pathReaction);
-
-            List<Reaction> fundamentals = new List<Reaction>();
-
-            foreach (Reaction reaction in allReactions)
-            {
-                if (reaction.fundamental)
-                {
-                    fundamentals.Add(reaction);
-                }
-            }
-
-            for (int i = 0; i < numberChosenReaction; i++)
-            {
-                int randNumber = UnityEngine.Random.Range(0, fundamentals.Count);
-                chosenReactions.Add(fundamentals[randNumber]);
-                fundamentals.RemoveAt(randNumber); ;
-            }
-
-            realReaction = chosenReactions[UnityEngine.Random.Range(0, chosenReactions.Count)];
-            logController.AddLog(realReaction.name, xpContext);
-        }
-
-        /// <summary>
-        /// Counts the number of particles detetected of each kind.
-        /// </summary>
-        /// <param name="particles">The particles detected.</param>
-
-        public void CountParticles(List<Particle> particles)
-        {
-            foreach (Particle particle in particles)
-            {
-                switch (particle.symbol)
-                {
-
-                    case "q":
-                        nbQuark++;
-                        break;
-                    case "qBar":
-                        nbAntiquark++;
-                        break;
-                    case "μ":
-                        nbMuon++;
-                        break;
-                    case "μBar":
-                        nbAntimuon++;
-                        break;
-                    case "e":
-                        nbElectron++;
-                        break;
-                    case "eBar":
-                        nbAntielectron++;
-                        break;
-                    case "v":
-                        nbNeutrino++;
-                        break;
-                    case "vBar":
-                        nbNeutrino++;
-                        break;
-                    case "γ":
-                        nbPhoton++;
-                        break;
-                    default:
-                        break;
-                }
-            }
-            logController.AddLog("Quarks:" + nbQuark, xpContext);
-            logController.AddLog("Antiquarks:" + nbAntiquark, xpContext);
-            logController.AddLog("Muons:" + nbMuon, xpContext);
-            logController.AddLog("Antimuons:" + nbAntimuon, xpContext);
-            logController.AddLog("Electrons:" + nbElectron, xpContext);
-            logController.AddLog("Antielectrons:" + nbAntielectron, xpContext);
-            logController.AddLog("Neutrinos:" + nbNeutrino, xpContext);
-            logController.AddLog("Photons:" + nbPhoton, xpContext);
-        }
-
-
-        /// <summary>
-        /// Lists the particles produced by the ongoing reactions.
-        /// </summary>
-        /// <returns>The list of produced particles.</returns>
-        public List<Particle> ParticlesCombination()
-        {
-            _allParticles = Resources.LoadAll<Particle>(path);
-
-            ReactionsCombination();
-
-            foreach (Reaction reaction in chosenReactions)
-            {
-                string[] particlesStrings = reaction.exits.ToString().Split('_');
-
-                for (int i = 0; i < particlesStrings.Length; i++)
-                {
-                    foreach (Particle particle in _allParticles)
-                    {
-                        if (particle.symbol == particlesStrings[i])
-                        {
-                            reactionExits.Add(particle);
-                            logController.AddLog(particle.particleName, xpContext);
-                            realParticles.Add(particle.symbol);
-                        }
-                    }
-                }
-
-
-            }
-
-            CountParticles(reactionExits);
-            GenerateParticleString();
-            return reactionExits;
+            if (generatedParticles.Count == 0)
+                GenerateParticles();
+            _holograms[0].ActivateHologram(true);
+            _tabletScreen.SkipStepOne();
+            _tubeScreen.SkipStepOne();
+            _topScreen.SkipStepOne();
         }
 
         //TODO: delete but call correctparticle somewhere else
@@ -221,13 +63,6 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary
         private void GenerateParticleString()
         {
-            string type = "";
-
-
-            for (int i = 0; i < realParticles.Count; i++)
-            {
-                type += realParticles[i];
-            }
             CorrectParticle();
         }
 
@@ -240,20 +75,6 @@ namespace CRI.HelloHouston.Experience.MAIA
         }
 
         /// <summary>
-        /// Directly skips to the Feynman diagrams step.
-        /// </summary>
-        public void SkipStepOne()
-        {
-            _holograms[0].ActivateHologram(true);
-            _tabletScreen.SkipStepOne();
-            _tubeScreen.SkipStepOne();
-            _topScreen.SkipStepOne();
-
-            if (realParticles.Count == 0)
-                ParticlesCombination();
-        }
-
-        /// <summary>
         /// Tells the tablet that the experiment has finished loading.
         /// </summary>
         public void LoadingBarFinished()
@@ -261,17 +82,13 @@ namespace CRI.HelloHouston.Experience.MAIA
             _tabletScreen.WaitingConfirmation();
         }
 
-        
-
         /// <summary>
         /// Tells the main screen that the correct combination of particles has been entered.
         /// </summary>
         public void CorrectParticle()
         {
-           //TODO:rewrite
-            _holograms[0].AnimHologram(reactionExits);
             _holograms[0].DisplaySplines();
-            _topScreen.ParticleGrid(reactionExits);
+            _topScreen.ParticleGrid(generatedParticles);
             /*_topScreen.FillParticlesTable(nbAntielectron, _textAntielectron);
             _topScreen.FillParticlesTable(nbAntimuon, _textAntimuon);
             _topScreen.FillParticlesTable(nbAntiquark, _textAntiquark);
@@ -284,12 +101,38 @@ namespace CRI.HelloHouston.Experience.MAIA
             _topScreen.FillInteractionType(_realReaction);*/
         }
 
-        
-        
+        /// <summary>
+        /// Selects the ongoing particle reactions for this game.
+        /// </summary>
+        private List<Reaction> SelectReactions()
+        {
+            ongoingReactions = settings.allReactions
+                .Where(reaction => reaction.fundamental)
+                .OrderBy(reaction => Random.value)
+                .Take(settings.reactionCount)
+                .ToList();
+            selectedReaction = ongoingReactions[Random.Range(0, settings.reactionCount)];
+            logController.AddLog(selectedReaction.name, xpContext);
+            return ongoingReactions;
+        }
 
-        
+        /// <summary>
+        /// Counts the number of particles detetected of each kind.
+        /// </summary>
+        /// <param name="particles">The particles detected.</param>
+        private void DisplayParticles(List<Particle> particles)
+        {
+            foreach (var particleGroup in particles.GroupBy(particle => particle.particleName))
+                logController.AddLog(string.Format("{0}: {1}", particleGroup.Key, particleGroup.Count()), xpContext, Log.LogType.Default);
+        }
 
-        
+        private List<Particle> GenerateParticles()
+        {
+            List<Reaction> currentReactions = SelectReactions();
+            generatedParticles = currentReactions.SelectMany(reaction => reaction.exit.particles).ToList();
+            DisplayParticles(generatedParticles);
+            return generatedParticles;
+        }
 
         protected override void PreShow(VirtualWallTopZone wallTopZone, ElementInfo[] zones)
         {
@@ -297,17 +140,24 @@ namespace CRI.HelloHouston.Experience.MAIA
             _tabletScreen = GetElement<MAIATabletScreen>();
             _topScreen = GetElement<MAIATopScreen>();
             _tubeScreen = GetElement<MAIATubeScreen>();
+            _tabletScreen.tubeScreen = _tubeScreen;
+            _tabletScreen.topScreen = _topScreen;
+            _tabletScreen.hologram = _holograms[0];
+            _topScreen.tabletScreen = _tabletScreen;
+        }
+
+        protected override void PostActivate()
+        {
+            base.PostActivate();
+            List<Particle> particle = GenerateParticles();
+            _holograms[0].CreateSplines(particle);
         }
 
         protected override void PostInit(XPContext xpContext, ElementInfo[] info, LogExperienceController logController, XPState stateOnActivation)
         {
             base.PostInit(xpContext, info, logController, stateOnActivation);
             _holograms = GetElements<MAIAHologram>();
-        }
-
-        internal void generateExits()
-        {
-            reactionExits = ParticlesCombination();
+            settings = (MAIASettings)xpContext.xpSettings;
         }
     }
 }

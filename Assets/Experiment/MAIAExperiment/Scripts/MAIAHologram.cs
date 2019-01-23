@@ -99,7 +99,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// Animates the particle reaction hologram.
         /// </summary>
         /// <param name="particles">The combination of particles.</param>
-        public void AnimHologram(List<Particle> particles)
+        public void CreateSplines(List<Particle> particles)
         {
             _particleSplineArray = new HologramSpline[particles.Count];
             for (int i = 0; i < particles.Count; i++)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using System.Linq;
 
 namespace CRI.HelloHouston.Experience.MAIA
 {
@@ -41,13 +42,12 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// Password entered by the player.
         /// </summary>
-        [HideInInspector]
-        public string enteredPassword;
+        private string _enteredPassword = "";
         /// <summary>
         /// The particles entered by the player.
         /// </summary>
         [HideInInspector]
-        public List<Particle> enteredParticles = new List<Particle>();
+        private List<Particle> _enteredParticles = new List<Particle>();
 
         /// <summary>
         /// Tells the main screen to clear all the entered particles.
@@ -81,8 +81,6 @@ namespace CRI.HelloHouston.Experience.MAIA
             //_tubeScreen.SelectInteraction(_tabletScreen.displayedDiagram);
         }
 
-
-
         /// <summary>
         /// Tells the main screen that the right password has been entered.
         /// </summary>
@@ -100,19 +98,11 @@ namespace CRI.HelloHouston.Experience.MAIA
         }
 
         /// <summary>
-        /// Tells the main screen that a password digit has been entered.
-        /// </summary>
-        public void EnteringDigit()
-        {
-            topScreen.DisplayPassword(enteredPassword);
-        }
-
-        /// <summary>
         /// Tells the main screen that a particle has been entered.
         /// </summary>
         public void EnteringParticles()
         {
-            topScreen.DisplayParticles(enteredParticles);
+            topScreen.DisplayParticles(_enteredParticles);
         }
 
         public void DeleteParticle()
@@ -120,7 +110,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             if (!_isTouched)
             {
                 _isTouched = true;
-                enteredParticles.RemoveAt(enteredParticles.Count - 1);
+                _enteredParticles.RemoveAt(_enteredParticles.Count - 1);
                 //TODO: rewrite
                 //topScreen.DeleteParticle(_enteredParticles.Count);
                 StartCoroutine("WaitButton");
@@ -148,8 +138,6 @@ namespace CRI.HelloHouston.Experience.MAIA
             _panelFull.SetActive(true);
             _diagramsBrowsingRight.SetActive(true);
             _diagramsSelectionLeft.SetActive(true);
-            
-            
         }
 
         /// <summary>
@@ -206,15 +194,10 @@ namespace CRI.HelloHouston.Experience.MAIA
             if (!_isTouched)
             {
                 _isTouched = true;
-                
-                if (topScreen.displayedDiagram < _manager.allReactions.Length-1)
-                {
+                if (topScreen.displayedDiagram < _manager.settings.allReactions.Length - 1)
                     topScreen.displayedDiagram++;
-                   
-                } else
-                {
+                else
                     topScreen.displayedDiagram = 0;
-                }
                 OtherDiagram();
                 StartCoroutine("WaitButton");
             }
@@ -254,16 +237,10 @@ namespace CRI.HelloHouston.Experience.MAIA
             if (!_isTouched)
             {
                 _isTouched = true;
-               
                 if (topScreen.displayedDiagram > 0)
-                {
                     topScreen.displayedDiagram--;
-
-                    
-                } else
-                {
-                    topScreen.displayedDiagram = _manager.allReactions.Length-1;
-                }
+                else
+                    topScreen.displayedDiagram = _manager.settings.allReactions.Length - 1;
                 OtherDiagram();
                 StartCoroutine("WaitButton");
             }
@@ -277,9 +254,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             if (!_isTouched)
             {
                 _isTouched = true;
-
                 SelectExit();
-
                 StartCoroutine("WaitButton");
             }
         }
@@ -292,9 +267,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             if (!_isTouched)
             {
                 _isTouched = true;
-
                 SelectInteraction();
-
                 StartCoroutine("WaitButton");
             }
         }
@@ -307,9 +280,6 @@ namespace CRI.HelloHouston.Experience.MAIA
         }
 
         //TODO:redistribute
-
-        
-
         /// <summary>
         /// Fake delay that can never be attained.
         /// </summary>
@@ -330,7 +300,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void ClearParticles()
         {
-            enteredParticles.Clear();
+            _enteredParticles.Clear();
             topScreen.ClearParticles();
         }
 
@@ -351,105 +321,15 @@ namespace CRI.HelloHouston.Experience.MAIA
         public void SubmitParticles()
         {
             //Checks if the combination entered has the right number of particles.
-            if (enteredParticles.Count == _manager.reactionExits.Count)
+            if (_enteredParticles.Count == _manager.generatedParticles.Count)
             {
-                int nbQuark = 0;
-                int nbAntiquark = 0;
-                int nbMuon = 0;
-                int nbAntimuon = 0;
-                int nbElectron = 0;
-                int nbAntielectron = 0;
-                int nbNeutrino = 0;
-                int nbPhoton = 0;
-
-                //Counts each particles detected of every kind.
-                foreach (Particle particle in _manager.reactionExits)
-                {
-                    switch (particle.symbol)
-                    {
-                        case "q":
-                            nbQuark++;
-                            break;
-                        case "qBar":
-                            nbAntiquark++;
-                            break;
-                        case "μ":
-                            nbMuon++;
-                            break;
-                        case "μBar":
-                            nbAntimuon++;
-                            break;
-                        case "e":
-                            nbElectron++;
-                            break;
-                        case "eBar":
-                            nbAntielectron++;
-                            break;
-                        case "v":
-                            nbNeutrino++;
-                            break;
-                        case "vBar":
-                            nbNeutrino++;
-                            break;
-                        case "γ":
-                            nbPhoton++;
-                            break;
-                        default:
-                            break;
-                    }
-                }
-
-                int nbQuarkEntered = 0;
-                int nbAntiquarkEntered = 0;
-                int nbMuonEntered = 0;
-                int nbAntimuonEntered = 0;
-                int nbElectronEntered = 0;
-                int nbAntielectronEntered = 0;
-                int nbNeutrinoEntered = 0;
-                int nbPhotonEntered = 0;
-
-                //Counts each particles entered of every kind.
-                foreach (Particle particle in enteredParticles)
-                {
-                    switch (particle.symbol)
-                    {
-                        case "q":
-                            nbQuarkEntered++;
-                            break;
-                        case "qBar":
-                            nbAntiquarkEntered++;
-                            break;
-                        case "μ":
-                            nbMuonEntered++;
-                            break;
-                        case "μBar":
-                            nbAntimuonEntered++;
-                            break;
-                        case "e":
-                            nbElectronEntered++;
-                            break;
-                        case "eBar":
-                            nbAntielectronEntered++;
-                            break;
-                        case "v":
-                            nbNeutrinoEntered++;
-                            break;
-                        case "vBar":
-                            nbNeutrinoEntered++;
-                            break;
-                        case "γ":
-                            nbPhotonEntered++;
-                            break;
-                        default:
-                            break;
-                    }
-                }
-
-                //Checks if the right symbols have been entered.
-                if ((nbElectron + nbAntielectron == nbElectronEntered + nbAntielectronEntered) && (nbMuon + nbAntimuon == nbMuonEntered + nbAntimuonEntered) && (nbQuark + nbAntiquark == nbQuarkEntered + nbAntiquarkEntered) && nbNeutrino == nbNeutrinoEntered && nbPhoton == nbPhotonEntered)
+                var l1 = _enteredParticles.OrderBy(particle => particle.name);
+                var l2 = _manager.generatedParticles.OrderBy(particle => particle.name);
+                // Checks if the right symbols have been entered.
+                if (l1.Select(particle => particle.name).SequenceEqual(l2.Select(particle => particle.name)))
                 {
                     //Check if the right symbols have been entered.
-                    if (nbElectron == nbElectronEntered && nbAntielectron == nbAntielectronEntered && nbMuon == nbMuonEntered && nbAntimuon == nbAntimuonEntered && nbQuark == nbQuarkEntered && nbAntiquark == nbAntiquarkEntered && nbNeutrino == nbNeutrinoEntered && nbPhoton == nbPhotonEntered)
+                    if (l1.SequenceEqual(l2))
                     {
                         //The right combination of particles have been entered.
                         Debug.Log("The right combination of particles have been entered.");
@@ -485,27 +365,19 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void ReactionSelected()
         {
-            topScreen.ReactionSelected(_manager.realReaction, tubeScreen.diagramSelected);
+            topScreen.ReactionSelected(_manager.selectedReaction, tubeScreen.diagramSelected);
         }
 
         /// <summary>
         /// Adds a particle to the combination.
         /// </summary>
         /// <param name="particleButton">The particle to add.</param>
-        public void EnteringParticle(string particleButton)
+        public void EnteringParticle(Particle particle)
         {
-            if (!_isTouched && enteredParticles.Count < _manager.reactionExits.Count)
+            if (!_isTouched && _enteredParticles.Count < _manager.generatedParticles.Count)
             {
                 _isTouched = true;
-
-                foreach (Particle particle in _manager.reactionExits)
-                {
-                    if (particle.symbol == particleButton)
-                    {
-                        enteredParticles.Add(particle);
-                        break;
-                    }
-                }
+                _enteredParticles.Add(particle);
                 EnteringParticles();
                 StartCoroutine("WaitButton");
             }
@@ -514,29 +386,32 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// Adds a number to the password.
         /// </summary>
-        /// <param name="number">The number to add.</param>
-        public void EnteringDigit(int number)
+        /// <param name="character">The character to add.</param>
+        public void EnteringDigit(string character)
         {
             if (!_isTouched)
             {
-                Debug.Log(number);
+                Debug.Log(character);
                 _isTouched = true;
+                string realPassword = _manager.settings.password;
 
-                if (enteredPassword.Length < _manager.realPassword.Length)
+                if (_enteredPassword.Length < realPassword.Length)
                 {
-                    enteredPassword += number.ToString();
-                    EnteringDigit();
-
-                    if (enteredPassword.Length == _manager.realPassword.Length && enteredPassword == _manager.realPassword)
+                    _enteredPassword += character.ToString();
+                    topScreen.DisplayPassword(_enteredPassword);
+                }
+                else if (_enteredPassword.Length == realPassword.Length)
+                {
+                    if (_enteredPassword == realPassword)
                     {
                         Debug.Log("correct");
                         CorrectPassword();
                     }
-                    else if (enteredPassword.Length == _manager.realPassword.Length && enteredPassword != _manager.realPassword)
+                    else
                     {
                         Debug.Log("wrong");
                         IncorrectPassword();
-                        enteredPassword = "";
+                        _enteredPassword = "";
                     }
                 }
                 StartCoroutine("WaitButton");
@@ -548,12 +423,12 @@ namespace CRI.HelloHouston.Experience.MAIA
         public void AccessGranted()
         {
             hologram.ActivateHologram(true);
-            _manager.generateExits();
-            topScreen.FillNbParticlesDetected(_manager.reactionExits);
+            topScreen.FillNbParticlesDetected(_manager.generatedParticles);
             _passwordLeft.SetActive(false);
             _particlesLeft.SetActive(true);
             _currentPanelLeft = _particlesLeft;
         }
+
         /// <summary>
         /// Displays start panel after the splash screen has finished loading.
         /// </summary>
@@ -592,9 +467,9 @@ namespace CRI.HelloHouston.Experience.MAIA
             }));
         }
 
-        private void Init(MAIAManager synchronizer)
+        private void Init(MAIAManager manager)
         {
-            _manager = synchronizer;
+            _manager = manager;
         }
 
         public override void OnActivation(XPManager manager)

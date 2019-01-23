@@ -14,7 +14,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// The synchronizer of the experiment.
         /// </summary>
-        private MAIAManager _manager;
+        public MAIAManager manager { get; private set; }
         /// <summary>
         /// Script for the Exile Loading screen.
         /// </summary>
@@ -76,7 +76,7 @@ namespace CRI.HelloHouston.Experience.MAIA
 
         public void DisplayPassword(string enteredPassword)
         {
-            _manualOverrideAccess.DisplayPassword(enteredPassword);
+            _manualOverrideAccess.CheckPassword(enteredPassword);
         }
 
         public void FillNbParticlesDetected(List<Particle> reactionExits)
@@ -119,8 +119,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             _particlesIdentification.OverrideSecond();
         }
 
-
-            private void Start()
+        private void Start()
         {
             //TODO: change when exile loading screen created;
             _currentPanel = _maiaLoadingScreen;
@@ -162,7 +161,7 @@ namespace CRI.HelloHouston.Experience.MAIA
 
         public void Init(MAIAManager synchronizer)
         {
-            _manager = synchronizer;
+            manager = synchronizer;
         }
 
         //TO DO

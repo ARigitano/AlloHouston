@@ -7,18 +7,18 @@ namespace CRI.HelloHouston.Experience.MAIA
     /// <summary>
     /// Constructor for a reaction scriptable object.
     /// </summary>
-    [CreateAssetMenu(fileName = "New Reaction", menuName = "PhysicsParticle/NewReaction", order = 2)]
+    [CreateAssetMenu(fileName = "New Reaction", menuName = "Experience/MAIA/NewReaction", order = 2)]
     public class Reaction : ScriptableObject
     {
         /// <summary>
-        /// List of entries of the reaction.
+        /// Type of entries of the reaction.
         /// </summary>
-        public entriesType entries;
+        public EntryType entries;
 
         /// <summary>
-        /// List of exits of the reaction.
+        /// Type of exits of the reaction.
         /// </summary>
-        public exitsType exits;
+        public ReactionExit exit;
 
         /// <summary>
         /// Is the reaction fundamental?
@@ -30,26 +30,14 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public Sprite diagramImage;
     }
-
     /// <summary>
     /// Possible categories of entries.
     /// </summary>
-    public enum entriesType
+    public enum EntryType
     {
         gluon_gluon_fusion,
         top_top_bar_fusion,
         Higgs_strahlung,
-        W_Z_fusion
-    }
-
-    /// <summary>
-    /// Possible categories of exits.
-    /// </summary>
-    public enum exitsType
-    {
-       γ_γ_q_qBar_μBar_μ,
-       q_qBar_μ_μBar_e_vBar,
-       vBar_γ_e_eBar_v,
-       μ_eBar_v_v_vBar_vBar
+        W_Z_fusion,
     }
 }

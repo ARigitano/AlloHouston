@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace CRI.HelloHouston.Experience.MAIA
 {
@@ -47,12 +48,20 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// Displays the pasword that is being entered.
         /// </summary>
         /// <param name="password">The password being entered.</param>
-        public void DisplayPassword(string password)
+        public bool CheckPassword(string password)
         {
+            bool res = false;
             for (int i = 0; i < password.Length; i++)
             {
-                _slotPassword[i].GetComponent<SpriteRenderer>().sprite = _starPassword;
+                _slotPassword[i].GetComponent<Image>().sprite = _starPassword;
             }
+            string realPassword = _maiaTopScreen.manager.settings.password;
+            if (password.Length == realPassword.Length)
+            {
+                res = password == realPassword;
+                Access(res);
+            }
+            return res;
         }
 
         /// <summary>
