@@ -13,6 +13,10 @@ namespace CRI.HelloHouston.Experience.MAIA
         [Tooltip("Script for the whole top screen.")]
         private MAIATopScreen _maiaTopScreen = null;
         /// <summary>
+        /// Manager of the experience.
+        /// </summary>
+        private MAIAManager _manager;
+        /// <summary>
         /// Star image displayed when a password numbered has been entered.
         /// </summary>
         [SerializeField]
@@ -47,12 +51,15 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// Displays the pasword that is being entered.
         /// </summary>
         /// <param name="password">The password being entered.</param>
-        public void DisplayPassword(string password)
+        public void CheckPassword(string password)
         {
             for (int i = 0; i < password.Length; i++)
             {
                 _slotPassword[i].GetComponent<SpriteRenderer>().sprite = _starPassword;
             }
+            string realPassword = _manager.settings.password;
+            if (password.Length == realPassword.Length)
+                Access(password == realPassword);
         }
 
         /// <summary>
@@ -97,6 +104,11 @@ namespace CRI.HelloHouston.Experience.MAIA
                 _popupErrorAccessDenied.SetActive(true);
                 StartCoroutine(WaitDenied());
             }
+        }
+
+        public void Init(MAIAManager manager)
+        {
+            _manager = manager;
         }
     }
 }

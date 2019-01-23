@@ -12,7 +12,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// Script for the whole top screen.
         /// </summary>
         [SerializeField]
-        private MAIATopScreen _maiaTopScreen;
+        private MAIATopScreen _maiaTopScreen = null;
         /// <summary>
         /// Grid that displays the cases for the detected particles to enter.
         /// </summary>

@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 
 /// <summary>
 /// The synchronizer of the particle physics experiment.
@@ -27,88 +28,21 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         private MAIAHologram[] _holograms;
         /// <summary>
-        /// All the particle scriptable objects.
+        /// Settings of the experience.
         /// </summary>
-        [HideInInspector]
-        public Particle[] _allParticles;
-        /// <summary>
-        /// All the reaction scriptable objects.
-        /// </summary>
-        [HideInInspector]
-        public Reaction[] _allReactions;
-        /// <summary>
-        /// Path to the particle scriptable objects folder.
-        /// </summary>
-        [HideInInspector]
-        public string _path = "Particles";
-        /// <summary>
-        /// Path to the particle scriptable objects folder.
-        /// </summary>
-        [HideInInspector]
-        public string _pathReaction = "reactions";
-        /// <summary>
-        /// Contains the combination of particles randomly generated.
-        /// </summary>
-        [HideInInspector]
-        public Particle[] particleTypes;
-        /// <summary>
-        /// Real password to get access.
-        /// </summary>
-        public string _realPassword;
-        /// <summary>
-        /// Password entered by the player.
-        /// </summary>
-        [HideInInspector]
-        public string enteredPassword;
-        /// <summary>
-        /// The combination of particles randomly generated rewritten as a string.
-        /// </summary>
-        [HideInInspector]
-        public List<string> realParticles = new List<string>();
-        /// <summary>
-        /// The particles entered by the player.
-        /// </summary>
-        [HideInInspector]
-        public List<Particle> _enteredParticles = new List<Particle>();
-        /// <summary>
-        /// String displayed depending on the particles combination entered.
-        /// </summary>
-        [HideInInspector]
-        public string[] result;
-        /// <summary>
-        /// Number of ongoing reactions.
-        /// </summary>
-        public int _numberChosenReaction = 4;
+        public MAIASettings settings { get; private set; }
         /// <summary>
         /// The ongoing reactions.
         /// </summary>
-        [HideInInspector]
-        public List<Reaction> _chosenReactions = new List<Reaction>();
+        public List<Reaction> ongoingReactions { get; private set; }
         /// <summary>
         /// The reaction to idetify.
         /// </summary>
-        [HideInInspector]
-        public Reaction _realReaction;
+        public Reaction selectedReaction { get; private set; }
         /// <summary>
         /// The particles produced by the ongoing reactions.
         /// </summary>
-        [HideInInspector]
-        public List<Particle> reactionExits = new List<Particle>();
-        /// <summary>
-        /// Index of the Feynman diagram currently being displayed.
-        /// </summary>
-        [HideInInspector]
-        public int displayedDiagram = 0;
-        /// <summary>
-        /// An error depending on the payer's diagram selection mistake.
-        /// </summary>
-        [HideInInspector]
-        public string particleErrorString;
-        /// <summary>
-        /// The numbers of particle detected of each kind.
-        /// </summary>
-        [HideInInspector]
-        public int nbQuark, nbAntiquark, nbMuon, nbAntimuon, nbElectron, nbAntielectron, nbNeutrino, nbPhoton;
+        public List<Particle> producedParticles { get; private set; }
 
         /// <summary>
         /// Activates the manual override panel of the tablet.
@@ -123,6 +57,8 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void SkipStepOne()
         {
+            if (producedParticles.Count == 0)
+                GenerateParticles();
             _holograms[0].ActivateHologram(true);
             _tabletScreen.SkipStepOne();
             _tubeScreen.SkipStepOne();
@@ -163,24 +99,6 @@ namespace CRI.HelloHouston.Experience.MAIA
         }
 
         /// <summary>
-        /// Tells the main screen that an incorrect password has been entered.
-        /// </summary>
-        public void IncorrectPassword()
-        {
-            //TODO:rewrite
-            //_topScreen.Access(false);
-        }
-
-        /// <summary>
-        /// Tells the main screen that a password digit has been entered.
-        /// </summary>
-        public void EnteringDigit()
-        {
-            //TODO:rewrite
-            //_topScreen.DisplayPassword(_tabletScreen.enteredPassword);
-        }
-
-        /// <summary>
         /// Tells the tablet that access to the experiment has been granted.
         /// </summary>
         public void AccessGranted()
@@ -190,15 +108,6 @@ namespace CRI.HelloHouston.Experience.MAIA
             _tabletScreen.AccessGranted();
             //_tabletScreen.reactionExits = _tabletScreen.ParticlesCombination();
             //_topScreen.FillNbParticlesDetected(_tabletScreen.reactionExits);
-        }
-
-        /// <summary>
-        /// Tells the main screen that a particle has been entered.
-        /// </summary>
-        public void EnteringParticles()
-        {
-            //TODO: rewrite
-            //_topScreen.DisplayParticles(_tabletScreen._enteredParticles);
         }
 
         /// <summary>
@@ -313,6 +222,39 @@ namespace CRI.HelloHouston.Experience.MAIA
             //_topScreen.ReactionSelected(_tabletScreen._realReaction, _tubeScreen.diagramSelected);
         }
 
+        /// <summary>
+        /// Selects the ongoing particle reactions for this game.
+        /// </summary>
+        private List<Reaction> SelectReactions()
+        {
+            ongoingReactions = settings.allReactions
+                .Where(reaction => reaction.fundamental)
+                .OrderBy(reaction => Random.value)
+                .Take(settings.reactionCount)
+                .ToList();
+            selectedReaction = ongoingReactions[Random.Range(0, settings.reactionCount)];
+            logController.AddLog(selectedReaction.name, xpContext);
+            return ongoingReactions;
+        }
+
+        /// <summary>
+        /// Counts the number of particles detetected of each kind.
+        /// </summary>
+        /// <param name="particles">The particles detected.</param>
+        private void DisplayParticles(List<Particle> particles)
+        {
+            foreach (var particleGroup in particles.GroupBy(particle => particle.particleName))
+                logController.AddLog(string.Format("{0}: {1}", particleGroup.Key, particleGroup.Count()), xpContext, Log.LogType.Default);
+        }
+
+        private List<Particle> GenerateParticles()
+        {
+            List<Reaction> currentReactions = SelectReactions();
+            producedParticles = currentReactions.SelectMany(reaction => reaction.exit.particles).ToList();
+            DisplayParticles(producedParticles);
+            return producedParticles;
+        }
+
         protected override void PreShow(VirtualWallTopZone wallTopZone, ElementInfo[] zones)
         {
             base.PreShow(wallTopZone, zones);
@@ -325,6 +267,9 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             base.PostInit(xpContext, info, logController, stateOnActivation);
             _holograms = GetElements<MAIAHologram>();
+            settings = (MAIASettings)xpContext.xpSettings;
+            List<Particle> particle = GenerateParticles();
+            _holograms[0].CreateSplines(particle);
         }
     }
 }

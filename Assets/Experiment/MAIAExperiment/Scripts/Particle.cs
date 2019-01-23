@@ -7,7 +7,7 @@ namespace CRI.HelloHouston.Experience.MAIA
     /// <summary>
     /// Constructor for a particle scriptable object.
     /// </summary>
-    [CreateAssetMenu(fileName = "New Particle", menuName = "PhysicsParticle/Particle", order = 1)]
+    [CreateAssetMenu(fileName = "New Particle", menuName = "Experience/MAIA/Particle", order = 1)]
     public class Particle : ScriptableObject
     {
         /// <summary>

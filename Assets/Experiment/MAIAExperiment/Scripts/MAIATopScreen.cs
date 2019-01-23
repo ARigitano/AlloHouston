@@ -79,8 +79,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             _particlesIdentification.OverrideSecond();
         }
 
-
-            private void Start()
+        private void Start()
         {
             //TODO: change when exile loading screen created;
             _currentPanel = _maiaLoadingScreen;
