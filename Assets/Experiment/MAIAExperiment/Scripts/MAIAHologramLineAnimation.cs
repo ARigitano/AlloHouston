@@ -20,6 +20,14 @@ namespace CRI.HelloHouston.Experience.MAIA
         [SerializeField]
         [Tooltip("Duration of the animation (in seconds).")]
         private float _explosionDuration = 5.0f;
+
+        public float explosionDuration
+        {
+            get
+            {
+                return _explosionDuration;
+            }
+        }
         /// <summary>
         /// The animation curve of the explosion.
         /// </summary>
