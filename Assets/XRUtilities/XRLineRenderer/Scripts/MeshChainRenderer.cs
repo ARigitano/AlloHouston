@@ -351,6 +351,11 @@ public abstract class MeshChainRenderer : MonoBehaviour
         }
     }
 
+    public void UpdateAll()
+    {
+        UpdateColors();
+    }
+
     /// <summary>
     /// Updates any internal variables to represent the new color that has been applied
     /// </summary>

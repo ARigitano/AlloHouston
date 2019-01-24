@@ -273,6 +273,7 @@ public class XRLineRenderer : MeshChainRenderer
         elementCounter++;
         pointCounter++;
         stepPercent += m_StepSize;
+        Debug.Log("Update Colors");
 
         while (pointCounter < m_Positions.Length)
         {

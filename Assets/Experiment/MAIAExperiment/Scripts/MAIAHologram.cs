@@ -41,6 +41,24 @@ namespace CRI.HelloHouston.Experience.MAIA
         [Tooltip("Prefab of the line of a particle.")]
         private XRLineRenderer _lineRendererPrefab = null;
         /// <summary>
+        /// Prefab of the spark effect of the particle generation.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("Prefab of the spark effect of the particle generation.")]
+        private MAIAHologramSparkAnimation _sparkPrefab = null;
+        /// <summary>
+        /// Transform of a starting point of the spark effect.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("Transform of a starting point of the spark effect.")]
+        private Transform _start1 = null;
+        /// <summary>
+        /// Transform of a starting point of the spark effect.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("Transform of a starting point of the spark effect.")]
+        private Transform _start2= null;
+        /// <summary>
         /// Number of points in the lines.
         /// </summary>
         [Tooltip("Number of points in the lines.")]
@@ -224,11 +242,10 @@ namespace CRI.HelloHouston.Experience.MAIA
                     },
                     new GradientAlphaKey[]
                     {
-                        new GradientAlphaKey(1.0f, 0.0f),
+                        new GradientAlphaKey(0.0f, 0.0f),
                         new GradientAlphaKey(0.0f, 1.0f),
                     });
                 line.materials[1].SetColor("Color Tint", particle.endColor);
-                line.GetComponent<MAIAHologramLineAnimation>().StartAnimation();
             }
             //Displaying the heads.
             if (particle.head)
@@ -246,6 +263,25 @@ namespace CRI.HelloHouston.Experience.MAIA
             {
                 PopulateLine(hologramSpline);
             }
+        }
+
+        private IEnumerator Animate()
+        {
+            var lines = GetComponentsInChildren<MAIAHologramLineAnimation>();
+            foreach (var line in lines)
+                line.Clear();
+            var spark1 = Instantiate(_sparkPrefab, transform);
+            spark1.Init(_start1.transform.position, transform.TransformPoint(Vector3.zero));
+            var spark2 = Instantiate(_sparkPrefab, transform);
+            spark2.Init(_start2.transform.position, transform.TransformPoint(Vector3.zero));
+            yield return new WaitForSeconds(_sparkPrefab.duration);
+            foreach (var line in GetComponentsInChildren<MAIAHologramLineAnimation>())
+                line.StartAnimation();
+        }
+
+        public void StartAnimation()
+        {
+            StartCoroutine(Animate());
         }
 
         private void Init(MAIAManager synchronizer)
