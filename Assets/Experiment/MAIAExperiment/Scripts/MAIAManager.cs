@@ -44,6 +44,8 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public List<Particle> generatedParticles { get; private set; }
 
+        //Game Master's actions
+
         /// <summary>
         /// Selects the ongoing particle reactions for this game.
         /// </summary>
@@ -57,48 +59,15 @@ namespace CRI.HelloHouston.Experience.MAIA
             _topScreen.SkipStepOne();
         }
 
-        //TODO: delete but call correctparticle somewhere else
-        /// <summary>
-        /// Converts the produced particles into a string.
-        /// </summary
-        private void GenerateParticleString()
-        {
-            CorrectParticle();
-        }
 
-        /// <summary>
-        /// Activates the manual override panel of the tablet.
-        /// </summary>
-       public void ManualOverrideActive()
-        {
-            _topScreen.ManualOverride();
-        }
+        //Particles generation
 
-        /// <summary>
-        /// Tells the tablet that the experiment has finished loading.
-        /// </summary>
-        public void LoadingBarFinished()
+        private List<Particle> GenerateParticles()
         {
-            _tabletScreen.WaitingConfirmation();
-        }
-
-        /// <summary>
-        /// Tells the main screen that the correct combination of particles has been entered.
-        /// </summary>
-        public void CorrectParticle()
-        {
-            _holograms[0].DisplaySplines();
-            _topScreen.ParticleGrid(generatedParticles);
-            /*_topScreen.FillParticlesTable(nbAntielectron, _textAntielectron);
-            _topScreen.FillParticlesTable(nbAntimuon, _textAntimuon);
-            _topScreen.FillParticlesTable(nbAntiquark, _textAntiquark);
-            _topScreen.FillParticlesTable(nbElectron, _textElectron);
-            _topScreen.FillParticlesTable(nbMuon, _textMuon);
-            _topScreen.FillParticlesTable(nbNeutrino, _textNeutrino);
-            _topScreen.FillParticlesTable(nbPhoton, _textPhoton);
-            _topScreen.FillParticlesTable(nbQuark, _textQuark);
-            _topScreen.FillChosenDiagrams(_chosenReactions, _realReaction);
-            _topScreen.FillInteractionType(_realReaction);*/
+            List<Reaction> currentReactions = SelectReactions();
+            generatedParticles = currentReactions.SelectMany(reaction => reaction.exit.particles).ToList();
+            DisplayParticles(generatedParticles);
+            return generatedParticles;
         }
 
         /// <summary>
@@ -126,13 +95,62 @@ namespace CRI.HelloHouston.Experience.MAIA
                 logController.AddLog(string.Format("{0}: {1}", particleGroup.Key, particleGroup.Count()), xpContext, Log.LogType.Default);
         }
 
-        private List<Particle> GenerateParticles()
+
+
+
+        //Exile loading screen
+
+        /// <summary>
+        /// Tells the tablet that the experiment has finished loading.
+        /// </summary>
+        public void LoadingBarFinished()
         {
-            List<Reaction> currentReactions = SelectReactions();
-            generatedParticles = currentReactions.SelectMany(reaction => reaction.exit.particles).ToList();
-            DisplayParticles(generatedParticles);
-            return generatedParticles;
+            _tabletScreen.WaitingConfirmation();
         }
+
+
+        //Manual override screen
+
+        /// <summary>
+        /// Activates the manual override panel of the tablet.
+        /// </summary>
+        public void ManualOverrideActive()
+        {
+            _topScreen.ManualOverride();
+        }
+
+
+        //Reaction identification screen
+
+        //TODO: obsolete second part of experiment?
+        /// <summary>
+        /// Converts the produced particles into a string.
+        /// </summary
+        /*private void GenerateParticleString()
+        {
+            CorrectParticle();
+        }*/
+
+        //TODO: obsolete second part experiment?
+        /// <summary>
+        /// Tells the main screen that the correct combination of particles has been entered.
+        /// </summary>
+        /*public void CorrectParticle()
+        {
+            _holograms[0].DisplaySplines();
+            _topScreen.ParticleGrid(generatedParticles);
+            _topScreen.FillParticlesTable(nbAntielectron, _textAntielectron);
+            _topScreen.FillParticlesTable(nbAntimuon, _textAntimuon);
+            _topScreen.FillParticlesTable(nbAntiquark, _textAntiquark);
+            _topScreen.FillParticlesTable(nbElectron, _textElectron);
+            _topScreen.FillParticlesTable(nbMuon, _textMuon);
+            _topScreen.FillParticlesTable(nbNeutrino, _textNeutrino);
+            _topScreen.FillParticlesTable(nbPhoton, _textPhoton);
+            _topScreen.FillParticlesTable(nbQuark, _textQuark);
+            _topScreen.FillChosenDiagrams(_chosenReactions, _realReaction);
+            _topScreen.FillInteractionType(_realReaction);
+        }*/
+
 
         protected override void PreShow(VirtualWallTopZone wallTopZone, ElementInfo[] zones)
         {

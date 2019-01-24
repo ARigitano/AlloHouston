@@ -53,7 +53,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// Tells the main screen to clear all the entered particles.
         /// </summary>
 
-
+        //TODO: obsolete second part of experiment?
         /// <summary>
         /// Tells the tube screen to display another Feynman diagram.
         /// </summary>
@@ -63,6 +63,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             //tubeScreen.OtherDiagram(displayedDiagram, _tabletSc_allReactions);
         }
 
+        //TODO: obsolete second part of experiment?
         /// <summary>
         /// Tells the tube screen to mark a Feynman diagram for its exits.
         /// </summary>
@@ -72,6 +73,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             //_tubeScreen.SelectExit(_tabletScreen.displayedDiagram);
         }
 
+        //TODO: obsolete second part of experiment?
         /// <summary>
         /// Tells the tube screen to mark a Feynman diagram for its interactions.
         /// </summary>
@@ -111,8 +113,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             {
                 _isTouched = true;
                 _enteredParticles.RemoveAt(_enteredParticles.Count - 1);
-                //TODO: rewrite
-                //topScreen.DeleteParticle(_enteredParticles.Count);
+                topScreen.DeleteParticle(_enteredParticles.Count);
                 StartCoroutine("WaitButton");
             }
         }
@@ -423,6 +424,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         public void AccessGranted()
         {
             hologram.ActivateHologram(true);
+            hologram.DisplaySplines();
             topScreen.FillNbParticlesDetected(_manager.generatedParticles);
             _passwordLeft.SetActive(false);
             _particlesLeft.SetActive(true);
@@ -451,10 +453,12 @@ namespace CRI.HelloHouston.Experience.MAIA
             }));
 
         }
+
+        //TODO: obsolete;
         /// <summary>
         /// Displays override panel after start button has been clicked.
         /// </summary>
-        public void StartButtonClicked()
+        /*public void StartButtonClicked()
         {
             Debug.Log("StartButtonClicked");
             topScreen.ManualOverride();
@@ -465,7 +469,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                 _startFull.SetActive(false);
                 StartCoroutine("FakeLoading");
             }));
-        }
+        }*/
 
         private void Init(MAIAManager manager)
         {

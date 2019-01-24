@@ -208,6 +208,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             }
         }
 
+        //TODO: never called
         public void DisplaySplines()
         {
             foreach (HologramSpline hologramSpline in _particleSplineArray)

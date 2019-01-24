@@ -86,7 +86,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             _popupErrorAccessDenied.SetActive(false);
             for (int i = 0; i < _slotPassword.Length; i++)
             {
-                _slotPassword[i].GetComponent<SpriteRenderer>().sprite = _cursorPassword;
+                _slotPassword[i].GetComponent<Image>().sprite = _cursorPassword;
             }
         }
 

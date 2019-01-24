@@ -49,26 +49,32 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// All the panels of the top left screen of the experiment.
         /// </summary>
-        [SerializeField]
-        private GameObject _exileLoadingScreen, _maiaLoadingScreen, _maiaOverviewScreen, _manualOverrideAccessScreen, _manualOverride1, _popupErrorMessageParticles, _pverrideScreen2;
+        public GameObject _exileLoadingScreen, _maiaLoadingScreen, _maiaOverviewScreen, _manualOverrideAccessScreen, _manualOverride1, _popupErrorMessageParticles, _pverrideScreen2;
+
+        public void ManualOverrideActive()
+        {
+            manager.ManualOverrideActive();
+        }
+
         /// <summary>
         /// Stores the panel currently being displayed.
         /// </summary>
-        private GameObject _currentPanel;
+        public GameObject _currentPanel;
         public MAIATabletScreen tabletScreen;
-        //TODO: put in right panel
+        //TODO: obsolete second part of experiment?
         /// <summary>
-        /// An error depending on the payer's diagram selection mistake.
+        /// An error depending on the player's diagram selection mistake.
         /// </summary>
         [HideInInspector]
         public string particleErrorString;
-        //TODO: put in right panel
+        //TODO: obsolete second part of experiment?
         /// <summary>
         /// Index of the Feynman diagram currently being displayed.
         /// </summary>
         [HideInInspector]
         public int displayedDiagram = 0;
 
+        //TODO: never called
         public void ParticleGrid(List<Particle> reactionExits)
         {
             _particlesIdentification.ParticleGrid(reactionExits);
@@ -89,7 +95,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             _particlesIdentification.DisplayParticles(_enteredParticles);
         }
 
-        //TODO: finish rewriting
+        //TODO: obsolete second part of experiment?
         /*public void FillParticlesTable(int nbAntielectron, _textAntielectron)
         {
             _reactionsIdentification.FillParticlesTable(nbAntielectron, _textAntielectron)
@@ -101,6 +107,11 @@ namespace CRI.HelloHouston.Experience.MAIA
         public void ManualOverride()
         {
             _maiaOverview.ManualOverride();
+        }
+
+        public void DeleteParticle(int count)
+        {
+            _particlesIdentification.DeleteParticle(count);
         }
 
         /// <summary>
@@ -197,6 +208,8 @@ namespace CRI.HelloHouston.Experience.MAIA
             _manualOverride1.SetActive(true);
             _currentPanel = _manualOverride1;
             _manualOverrideAccessScreen.SetActive(false);
+            _particlesIdentification.ParticleGrid(manager.generatedParticles);
+            _particlesIdentification.DisplayParticles(manager.generatedParticles);
             tabletScreen.AccessGranted();
         }
 

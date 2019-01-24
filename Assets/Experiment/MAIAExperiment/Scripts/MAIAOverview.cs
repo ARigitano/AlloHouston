@@ -44,20 +44,18 @@ namespace CRI.HelloHouston.Experience.MAIA
         [Tooltip("Info message popup.")]
         private GameObject _popupInfoMessage = null;
 
-        //TO DO: find better way of changing panel
+        //TODO: remove when windows class integrated
         /// <summary>
         /// Displays the manual override screen when the start button is pressed.
         /// </summary>
         public void ManualOverride()
         {
-            //TODO: rewrite
-            /*_maiaLoadingScreen.SetActive(false);
-            _maiaOverviewScreen.SetActive(true);
-            _currentPanel = _maiaOverviewScreen;*/
+            _maiaTopScreen._maiaLoadingScreen.SetActive(false);
+            _maiaTopScreen._maiaOverviewScreen.SetActive(true);
+            _maiaTopScreen._currentPanel = this.gameObject;
             _popupErrorMessage.SetActive(true);
             _popupInfoMessage.SetActive(true);
-            //_manager.ManualOverrideActive();
-            
+            _maiaTopScreen.ManualOverrideActive();
         }
 
         /// <summary>
