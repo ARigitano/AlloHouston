@@ -60,12 +60,15 @@ namespace CRI.HelloHouston.Experience.UI
 
         private void RefreshDropdown(XPManager xpSynchronizer = null)
         {
-            GameHint[] hints = _gameManager.GetAllCurrentHints();
-            _dropdown.ClearOptions();
-            _currentHints = hints;
-            foreach (GameHint hint in hints)
+            if (_gameManager)
             {
-                _dropdown.options.Add(new Dropdown.OptionData(hint.ToString()));
+                GameHint[] hints = _gameManager.GetAllCurrentHints();
+                _dropdown.ClearOptions();
+                _currentHints = hints;
+                foreach (GameHint hint in hints)
+                {
+                    _dropdown.options.Add(new Dropdown.OptionData(hint.ToString()));
+                }
             }
         }
 

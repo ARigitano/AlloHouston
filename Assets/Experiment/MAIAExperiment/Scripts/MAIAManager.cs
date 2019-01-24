@@ -144,6 +144,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             _tabletScreen.topScreen = _topScreen;
             _tabletScreen.hologram = _holograms[0];
             _topScreen.tabletScreen = _tabletScreen;
+            _holograms[0].DisplaySplines();
         }
 
         protected override void PostActivate()

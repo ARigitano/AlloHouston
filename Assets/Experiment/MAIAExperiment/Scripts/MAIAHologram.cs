@@ -35,6 +35,17 @@ namespace CRI.HelloHouston.Experience.MAIA
         [Tooltip("Prefab of the head of a particle line..")]
         private GameObject _headPrefab = null;
         /// <summary>
+        /// Prefab of the line of a particle.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("Prefab of the line of a particle.")]
+        private XRLineRenderer _lineRendererPrefab = null;
+        /// <summary>
+        /// Number of points in the lines.
+        /// </summary>
+        [Tooltip("Number of points in the lines.")]
+        private int _numberOfPoints = 20;
+        /// <summary>
         /// Angle for shaping the bezier curves of the particle lines.
         /// </summary>
         [SerializeField]
@@ -192,11 +203,32 @@ namespace CRI.HelloHouston.Experience.MAIA
             Particle particle = hologramSpline.particle;
             BezierSpline spline = hologramSpline.spline;
             Vector3 vDir = hologramSpline.vDir;
+
             //Displaying the lines.
             if (particle.line)
             {
-                spline.GetComponent<SplineDecorator>().endColor = particle.endColor;
-                spline.GetComponent<SplineDecorator>().Populate();
+                var line = Instantiate(_lineRendererPrefab, Vector3.zero, Quaternion.identity, spline.transform);
+                line.transform.localPosition = Vector3.zero;
+                line.transform.localRotation = Quaternion.identity;
+                Vector3[] points = new Vector3[_numberOfPoints];
+                for (int i = 0; i < _numberOfPoints; i++)
+                {
+                    points[i] = spline.transform.InverseTransformPoint(spline.GetPoint((float)i / (float)_numberOfPoints));
+                }
+                line.SetPositions(points);
+                line.colorGradient.SetKeys(
+                    new GradientColorKey[]
+                    {
+                        new GradientColorKey(Color.white, 0.0f),
+                        new GradientColorKey(particle.endColor, 0.5f),
+                    },
+                    new GradientAlphaKey[]
+                    {
+                        new GradientAlphaKey(1.0f, 0.0f),
+                        new GradientAlphaKey(0.0f, 1.0f),
+                    });
+                line.materials[1].SetColor("Color Tint", particle.endColor);
+                line.GetComponent<MAIAHologramLineAnimation>().StartAnimation();
             }
             //Displaying the heads.
             if (particle.head)

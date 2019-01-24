@@ -165,6 +165,8 @@ namespace CRI.HelloHouston.Experience
             XPManager res = GameObject.Instantiate(_xpManagerPrefab);
             res.Init(this, zones, logExperienceController, XPState.Visible);
             //TODO: Remove this line when then XP selection is complete.
+            if (!res.active)
+                res.Activate();
             res.Show((VirtualWallTopZone)zones.First(x => x.zoneType == ZoneType.WallTop));
             return res;
         }
