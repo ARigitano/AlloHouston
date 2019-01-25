@@ -169,25 +169,29 @@ namespace CRI.HelloHouston.Experience.MAIA
             int destination = particle.destination - 1;
             float rMax = _rMaxCylArray[destination];
             float lMax = _lMaxCylArray[destination];
-            float rMaxPrevious = destination > 0 ? _rMaxCylArray[destination - 1] : 0.0f;
-            float lMaxPrevious = destination > 0 ? _lMaxCylArray[destination - 1] : 0.0f;
+            float rMin = destination > 0 ? _rMaxCylArray[destination - 1] : 0.0f;
+            float lMin = destination > 0 ? _lMaxCylArray[destination - 1] : 0.0f;
             //Setting the coordinates of the spline points.
             Vector3 vDir = Vector3.zero;
-            float factorTmp;
+            float factorTmp = _factor;
+
+            if (particle.extremity)
+                factorTmp = 0f;
+
+            float lMaxFactor = lMax - factorTmp * (lMax - lMin);
+            float lMinFactor = lMin + factorTmp * (lMax - lMin);
+            float rMaxFactor = rMax - factorTmp * (rMax - rMin);
+            float rMinFactor = rMin + factorTmp * (rMax - rMin);
+
+            bool res = false;
+
             do
             {
-                factorTmp = _factor;
-                float r = Random.Range(1.5f * factorTmp, rMax * (1f - factorTmp));
+                float r = particle.extremity ? rMax : Random.Range(_rMaxCylArray[0], rMaxFactor);
                 float alpha = Random.Range(0, Mathf.PI * 2f);
 
-                if (particle.extremity)
-                {
-                    factorTmp = 0f;
-                    r = rMax;
-                }
-
                 spline.points[3].x = r * Mathf.Cos(alpha);
-                spline.points[3].y = lMax * (1f - factorTmp) * Random.Range(-lMax, lMax);
+                spline.points[3].y = Random.Range(-lMaxFactor, lMaxFactor);
                 spline.points[3].z = r * Mathf.Sin(alpha);
 
                 spline.gameObject.name = particle.particleName + index;
@@ -209,7 +213,8 @@ namespace CRI.HelloHouston.Experience.MAIA
                 spline.points[2].y = spline.points[3].y + vDir.y;
                 spline.points[2].z = spline.points[3].z + vDir.z;
 
-            } while ((Mathf.Abs(spline.points[3].y) <= lMaxPrevious * (1f + factorTmp)) && Mathf.Sqrt(Mathf.Pow(spline.points[3].x, 2) + Mathf.Pow(spline.points[3].z, 2)) <= rMaxPrevious * (1f + factorTmp));
+                res = (Mathf.Abs(spline.points[3].y) <= lMinFactor) && r <= rMinFactor;
+            } while (res);
 
             return new HologramSpline(spline, particle, vDir);
         }
