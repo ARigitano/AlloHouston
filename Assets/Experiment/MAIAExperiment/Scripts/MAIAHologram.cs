@@ -293,7 +293,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             yield return new WaitForSeconds(_sparkPrefab.duration);
             foreach (var line in lines)
                 line.StartAnimation();
-            yield return new WaitForSeconds(_lineRendererPrefab.GetComponent<MAIAHologramLineAnimation>().explosionDuration);
+            yield return new WaitForSeconds(_lineRendererPrefab.GetComponent<MAIAHologramLineAnimation>().explosionDuration * 0.7f);
             foreach (var head in heads)
                 head.StartAnimation();
         }
