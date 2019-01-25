@@ -226,19 +226,15 @@ namespace CRI.HelloHouston.Experience.MAIA
                 var line = Instantiate(_lineRendererPrefab, Vector3.zero, Quaternion.identity, spline.transform);
                 line.transform.localPosition = Vector3.zero;
                 line.transform.localRotation = Quaternion.identity;
-                Vector3[] points = new Vector3[_numberOfPoints];
-                for (int i = 0; i < _numberOfPoints; i++)
-                {
-                    points[i] = spline.transform.InverseTransformPoint(spline.GetPoint((float)i / (float)_numberOfPoints));
-                }
+                Vector3[] points = new Vector3[_numberOfPoints + 1];
+                for (int i = 0; i <= _numberOfPoints; i++)
+                    points[i] = spline.transform.InverseTransformPoint(spline.GetPoint(i / (float)_numberOfPoints));
                 line.SetPositions(points);
                 line.colorGradient.SetKeys(
                     new GradientColorKey[]
                     {
                         new GradientColorKey(Color.white, 0.0f),
                         new GradientColorKey(particle.endColor, 0.5f),
-                        new GradientColorKey(particle.endColor, 0.95f),
-                        new GradientColorKey(Color.white, 1.0f)
                     },
                     new GradientAlphaKey[]
                     {
@@ -251,19 +247,19 @@ namespace CRI.HelloHouston.Experience.MAIA
             if (particle.head)
             {
                 GameObject lineHead = (GameObject)Instantiate(_headPrefab, Vector3.zero, Quaternion.identity, spline.transform);
-                lineHead.GetComponent<XRLineRenderer>().colorGradient.SetKeys(
+                lineHead.GetComponentInChildren<XRLineRenderer>().colorGradient.SetKeys(
                     new GradientColorKey[]
                     {
-                        new GradientColorKey(particle.endColor, 0.0f),
-                        new GradientColorKey(Color.white, 0.6f),
+                        new GradientColorKey(Color.white, 0.0f),
+                        new GradientColorKey(particle.endColor, 0.2f),
                     },
                     new GradientAlphaKey[]
                     {
                         new GradientAlphaKey(0.0f, 0.0f),
                         new GradientAlphaKey(0.0f, 1.0f),
                     });
-                lineHead.GetComponent<XRLineRenderer>().materials[1].SetColor("Color Tint", particle.endColor);
-                lineHead.transform.localPosition = spline.points[3];
+                lineHead.GetComponentInChildren<XRLineRenderer>().materials[1].SetColor("Color Tint", particle.endColor);
+                lineHead.transform.position = spline.GetPoint(1.0f);
                 lineHead.transform.localRotation = Quaternion.FromToRotation(lineHead.transform.up, vDir);
                 _particleHeads.Add(lineHead.GetComponent<XRLineRenderer>());
             }
@@ -280,19 +276,11 @@ namespace CRI.HelloHouston.Experience.MAIA
         private IEnumerator Animate()
         {
             var lines = GetComponentsInChildren<MAIAHologramLineAnimation>();
+            var heads = GetComponentsInChildren<MAIAHologramHeadAnimation>();
             foreach (var line in lines)
                 line.Clear();
-            foreach (var head in _particleHeads)
-            {
-                head.colorGradient.SetKeys(
-                    head.colorGradient.colorKeys,
-                    new GradientAlphaKey[]
-                    {
-                        new GradientAlphaKey(0.0f, 0.0f),
-                        new GradientAlphaKey(0.0f, 1.0f),
-                    });
-                head.UpdateAll();
-            }
+            foreach (var head in heads)
+                head.Clear();
             var spark1 = Instantiate(_sparkPrefab, transform);
             spark1.Init(_start1.transform, transform);
             var spark2 = Instantiate(_sparkPrefab, transform);
@@ -301,17 +289,8 @@ namespace CRI.HelloHouston.Experience.MAIA
             foreach (var line in lines)
                 line.StartAnimation();
             yield return new WaitForSeconds(_lineRendererPrefab.GetComponent<MAIAHologramLineAnimation>().explosionDuration);
-            foreach (var head in _particleHeads)
-            {
-                head.colorGradient.SetKeys(
-                    head.colorGradient.colorKeys,
-                    new GradientAlphaKey[]
-                    {
-                        new GradientAlphaKey(0.0f, 0.0f),
-                        new GradientAlphaKey(1.0f, 0.5f),
-                    });
-                head.UpdateAll();
-            }
+            foreach (var head in heads)
+                head.StartAnimation();
         }
 
         public void StartAnimation()
