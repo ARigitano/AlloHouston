@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using System.Linq;
 
 namespace CRI.HelloHouston.Experience.MAIA
 {
@@ -48,6 +49,13 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         [SerializeField]
         private GameObject _popupErrorNumber = null;
+        /// <summary>
+        /// An error depending on the player's diagram selection mistake.
+        /// </summary>
+        [HideInInspector]
+        public string particleErrorString;
+        [SerializeField]
+        private Text[] _particleTexts;
 
         /// <summary>
         /// Effect if the correct Feynman diagram is selected, or a wrong one.
@@ -113,13 +121,22 @@ namespace CRI.HelloHouston.Experience.MAIA
         }
 
         /// <summary>
-        /// Fills the number of a kind of particles in the particles table.
+        /// Fills the number of each kind of particles in the particles table.
         /// </summary>
         /// <param name="nbParticles">The number of particles of the kind.</param>
         /// <param name="entry">The text to be filled.</param>
-        public void FillParticlesTable(int nbParticles, Text entry)
+        public void FillParticlesTable(List<Particle> particles)
         {
-            entry.text = nbParticles.ToString();
+            foreach (var particleGroup in particles.GroupBy(particle => particle.particleName))
+            {
+                foreach(Text particleText in _particleTexts)
+                {
+                    if(particleGroup.Key == particleText.name)
+                    {
+                        particleText.text = particleGroup.Count().ToString();
+                    }
+                }
+            }
         }
     }
 }

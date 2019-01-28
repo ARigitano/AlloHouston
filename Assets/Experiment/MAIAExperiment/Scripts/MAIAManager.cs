@@ -96,8 +96,6 @@ namespace CRI.HelloHouston.Experience.MAIA
         }
 
 
-
-
         //Exile loading screen
 
         /// <summary>
@@ -135,21 +133,11 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// Tells the main screen that the correct combination of particles has been entered.
         /// </summary>
-        /*public void CorrectParticle()
+        public void CorrectParticle()
         {
-            _holograms[0].DisplaySplines();
-            _topScreen.ParticleGrid(generatedParticles);
-            _topScreen.FillParticlesTable(nbAntielectron, _textAntielectron);
-            _topScreen.FillParticlesTable(nbAntimuon, _textAntimuon);
-            _topScreen.FillParticlesTable(nbAntiquark, _textAntiquark);
-            _topScreen.FillParticlesTable(nbElectron, _textElectron);
-            _topScreen.FillParticlesTable(nbMuon, _textMuon);
-            _topScreen.FillParticlesTable(nbNeutrino, _textNeutrino);
-            _topScreen.FillParticlesTable(nbPhoton, _textPhoton);
-            _topScreen.FillParticlesTable(nbQuark, _textQuark);
-            _topScreen.FillChosenDiagrams(_chosenReactions, _realReaction);
-            _topScreen.FillInteractionType(_realReaction);
-        }*/
+            //_topScreen.reactionIdentification():
+            //_holograms[0].DisplaySplines();
+        }
 
 
         protected override void PreShow(VirtualWallTopZone wallTopZone, ElementInfo[] zones)

@@ -67,12 +67,6 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         [HideInInspector]
         public string particleErrorString;
-        //TODO: obsolete second part of experiment?
-        /// <summary>
-        /// Index of the Feynman diagram currently being displayed.
-        /// </summary>
-        [HideInInspector]
-        public int displayedDiagram = 0;
 
         //TODO: never called
         public void ParticleGrid(List<Particle> reactionExits)
@@ -134,6 +128,13 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             //TODO: change when exile loading screen created;
             _currentPanel = _maiaLoadingScreen;
+        }
+
+        public void ParticleIdentification()
+        {
+            ParticleGrid(manager.generatedParticles);
+            _reactionsIdentification.FillParticlesTable(manager.generatedParticles);
+            _reactionsIdentification.FillChosenDiagrams(manager.ongoingReactions, manager.selectedReaction);
         }
 
         /// <summary>
@@ -234,12 +235,12 @@ namespace CRI.HelloHouston.Experience.MAIA
             Debug.Log(name + "Unpaused");
         }
 
-        internal void ErrorParticles(string particleErrorString)
+        public void ErrorParticles(string particleErrorString)
         {
             _particlesIdentification.ErrorParticles(particleErrorString);
         }
 
-        internal void ReactionSelected(Reaction realReaction, Sprite diagramSelected)
+        public void ReactionSelected(Reaction realReaction, Sprite diagramSelected)
         {
             _reactionsIdentification.ReactionSelected(realReaction, diagramSelected);
         }
