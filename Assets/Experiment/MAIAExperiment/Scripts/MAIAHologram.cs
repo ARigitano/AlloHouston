@@ -173,11 +173,9 @@ namespace CRI.HelloHouston.Experience.MAIA
             float lMin = destination > 0 ? _lMaxCylArray[destination - 1] : 0.0f;
             //Setting the coordinates of the spline points.
             Vector3 vDir = Vector3.zero;
-            float factorTmp = _factor;
 
-            if (particle.extremity)
-                factorTmp = 0f;
 
+            float factorTmp = particle.extremity ? 0.0f : _factor;
             float lMaxFactor = lMax - factorTmp * (lMax - lMin);
             float lMinFactor = lMin + factorTmp * (lMax - lMin);
             float rMaxFactor = rMax - factorTmp * (rMax - rMin);
@@ -195,11 +193,11 @@ namespace CRI.HelloHouston.Experience.MAIA
                 spline.points[3].z = r * Mathf.Sin(alpha);
 
                 spline.gameObject.name = particle.particleName + index;
-
+                 
                 spline.points[0] = Vector3.zero;
 
-                float matrixRotation1 = (1 / spline.points[3].magnitude) * _amplitudeA;
-                float matrixRotation2 = (-1 / spline.points[3].magnitude) * _amplitudeB;
+                float matrixRotation1 = (1.0f / spline.points[3].magnitude) * _amplitudeA;
+                float matrixRotation2 = -(1.0f / spline.points[3].magnitude) * _amplitudeB;
 
                 spline.points[1].x = matrixRotation1 * (spline.points[3].x * Mathf.Cos(_theta) + spline.points[3].z * Mathf.Sin(_theta));
                 spline.points[1].y = matrixRotation1 * spline.points[3].y;
