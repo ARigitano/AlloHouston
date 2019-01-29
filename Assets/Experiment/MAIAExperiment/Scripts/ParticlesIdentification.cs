@@ -61,6 +61,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             _victoryPopup.SetActive(true);
             _maiaTopScreen._pverrideScreen2.SetActive(true);
+            _maiaTopScreen.ParticleIdentification();
             _maiaTopScreen._currentPanel = _maiaTopScreen._pverrideScreen2;
             _maiaTopScreen._manualOverride1.SetActive(false);
         }

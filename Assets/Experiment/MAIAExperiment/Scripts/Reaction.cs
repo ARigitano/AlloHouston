@@ -28,7 +28,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// Image of the Feynman diagram.
         /// </summary>
-        public Sprite diagramImage;
+        public Texture diagramImage;
     }
     /// <summary>
     /// Possible categories of entries.

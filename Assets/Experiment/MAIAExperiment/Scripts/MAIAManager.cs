@@ -26,7 +26,8 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// The hologram scripts of the table block.
         /// </summary>
-        private MAIAHologram[] _holograms;
+        private MAIAHologramTube[] _hologramTube;
+        private MAIAHologramFeynman _hologramFeynman;
         /// <summary>
         /// Settings of the experience.
         /// </summary>
@@ -53,9 +54,10 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             if (generatedParticles.Count == 0)
                 GenerateParticles();
-            _holograms[0].ActivateHologram(true);
+            _hologramTube[0].gameObject.SetActive(false);
+            _hologramFeynman.gameObject.SetActive(true);
             _tabletScreen.SkipStepOne();
-            _tubeScreen.SkipStepOne();
+            //_tubeScreen.SkipStepOne();
             _topScreen.SkipStepOne();
         }
 
@@ -148,7 +150,8 @@ namespace CRI.HelloHouston.Experience.MAIA
             _tubeScreen = GetElement<MAIATubeScreen>();
             _tabletScreen.tubeScreen = _tubeScreen;
             _tabletScreen.topScreen = _topScreen;
-            _tabletScreen.hologram = _holograms[0];
+            _tabletScreen.hologramTube = _hologramTube[0];
+            _tabletScreen.hologramFeynman = _hologramFeynman;
             _topScreen.tabletScreen = _tabletScreen;
         }
 
@@ -156,13 +159,15 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             base.PostActivate();
             List<Particle> particle = GenerateParticles();
-            _holograms[0].CreateSplines(particle);
+            _hologramTube[0].CreateSplines(particle);
         }
 
         protected override void PostInit(XPContext xpContext, ElementInfo[] info, LogExperienceController logController, XPState stateOnActivation)
         {
             base.PostInit(xpContext, info, logController, stateOnActivation);
-            _holograms = GetElements<MAIAHologram>();
+            //TODO: separate variables
+            _hologramTube = GetElements<MAIAHologramTube>();
+            _hologramFeynman = GetElement<MAIAHologramFeynman>();
             settings = (MAIASettings)xpContext.xpSettings;
         }
     }

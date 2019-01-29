@@ -18,7 +18,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// Slots where the diagrams of the chosen reactions are displayed.
         /// </summary>
         [SerializeField]
-        private Image[] _diagrams = null;
+        private RawImage[] _diagrams = null;
         /// <summary>
         /// Displays the type of interaction of the real reaction.
         /// </summary>
@@ -28,7 +28,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// Image to be displayed insted of the Feynman diagram for the real reaction.
         /// </summary>
         [SerializeField]
-        private Sprite _diagramMissing = null;
+        private Texture _diagramMissing = null;
         /// <summary>
         /// Popups displayed when the right or wrong Feynman diagram.
         /// </summary>
@@ -62,7 +62,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         /// <param name="realReaction">The real reaction.</param>
         /// <param name="reactionSelected">The reaction selected by the player.</param>
-        public void ReactionSelected(Reaction realReaction, Sprite reactionSelected)
+        public void ReactionSelected(Reaction realReaction, Texture reactionSelected)
         {
             if (reactionSelected == realReaction.diagramImage)
             {
@@ -109,11 +109,11 @@ namespace CRI.HelloHouston.Experience.MAIA
             {
                 if (reactionsTemp[0].diagramImage != chosenReaction.diagramImage)
                 {
-                    _diagrams[i].sprite = reactionsTemp[0].diagramImage;
+                    _diagrams[i].texture = reactionsTemp[0].diagramImage;
                 }
                 else
                 {
-                    _diagrams[i].sprite = _diagramMissing;
+                    _diagrams[i].texture = _diagramMissing;
                 }
                 reactionsTemp.RemoveAt(0);
                 i++;
@@ -127,13 +127,18 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <param name="entry">The text to be filled.</param>
         public void FillParticlesTable(List<Particle> particles)
         {
+            Debug.Log("called");
             foreach (var particleGroup in particles.GroupBy(particle => particle.particleName))
             {
-                foreach(Text particleText in _particleTexts)
+                
+                foreach (Text particleText in _particleTexts)
                 {
-                    if(particleGroup.Key == particleText.name)
+                    Debug.Log(particleGroup.Key);
+                    if (particleGroup.Key == particleText.name)
                     {
+                        
                         particleText.text = particleGroup.Count().ToString();
+                        
                     }
                 }
             }

@@ -8,7 +8,7 @@ namespace CRI.HelloHouston.Experience.MAIA
     /// <summary>
     /// An hologram for the particle physics experiment.
     /// </summary>
-    public class MAIAHologram : XPHologramElement
+    public class MAIAHologramTube : XPHologramElement
     {
         private class HologramSpline
         {

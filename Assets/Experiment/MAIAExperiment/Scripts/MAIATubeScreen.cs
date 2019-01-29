@@ -24,7 +24,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         [SerializeField]
         [Tooltip("Image of the current feynman diagram.")]
-        private Image _currentDiagram = null;
+        private RawImage _currentDiagram = null;
         /// <summary>
         /// All the panels of the tube screen of the experiment.
         /// </summary>
@@ -34,7 +34,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// Sprite of the currently selected Feynman diagram.
         /// </summary>
-        public Sprite diagramSelected { get; private set; }
+        public Texture diagramSelected { get; private set; }
 
         /// <summary>
         /// Called by the synchronizer to skip directly to the Feynman diagrams step.
@@ -47,7 +47,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         public void OverrideSecond(Reaction[] reactions)
         {
             _overrideScreen2.SetActive(true);
-            _currentDiagram.sprite = reactions[0].diagramImage;
+            _currentDiagram.texture = reactions[0].diagramImage;
         }
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             Debug.Log("nbDiagram" + nbDiagram);
             _casesDiagram[nbDiagram].displayed.enabled = true;
-            _currentDiagram.sprite = reactions[nbDiagram].diagramImage;
+            _currentDiagram.texture = reactions[nbDiagram].diagramImage;
             diagramSelected = reactions[nbDiagram].diagramImage;
 
             if (nbDiagram == 0)

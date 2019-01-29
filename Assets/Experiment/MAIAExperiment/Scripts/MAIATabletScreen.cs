@@ -17,7 +17,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// All the panels for the tablet screen.
         /// </summary>
         [SerializeField]
-        private GameObject _startFull, _panelFull, _overrideLeft, _passwordLeft, _particlesLeft, _diagramsBrowsingRight, _diagramsSelectionLeft;
+        private GameObject _startFull, _panelFull, _overrideLeft, _passwordLeft, _particlesLeft, _diagramsSelectionLeft;
         /// <summary>
         /// Loading bar to display the time remaining.
         /// </summary>
@@ -37,7 +37,8 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         private GameObject _currentPanelLeft, _currentPanelRight, _currentPanel;
         public MAIATopScreen topScreen;
-        public MAIAHologram hologram;
+        public MAIAHologramTube hologramTube;
+        public MAIAHologramFeynman hologramFeynman;
         public MAIATubeScreen tubeScreen;
         /// <summary>
         /// Password entered by the player.
@@ -103,7 +104,6 @@ namespace CRI.HelloHouston.Experience.MAIA
                 _currentPanelRight.SetActive(false);
 
             _panelFull.SetActive(true);
-            _diagramsBrowsingRight.SetActive(true);
             _diagramsSelectionLeft.SetActive(true);
         }
 
@@ -146,14 +146,10 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void OverrideSecond()
         {
-            _diagramsBrowsingRight.SetActive(true);
-            _currentPanelRight = _diagramsBrowsingRight;
             _diagramsSelectionLeft.SetActive(true);
             _currentPanelLeft = _diagramsSelectionLeft;
             _particlesLeft.SetActive(false);
         }
-
-        
 
         //TODO: only one of these methods needed
         /// <summary>
@@ -223,6 +219,8 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             topScreen.OverrideSecond();
             OverrideSecond();
+            hologramFeynman.gameObject.SetActive(true);
+            hologramTube.gameObject.SetActive(false);
             //Disabled for the demo version
             //_tubeScreen.OverrideSecond(_tabletScreen._allReactions);
         }
@@ -290,6 +288,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             {
                 _isTouched = true;
                 _enteredParticles.Add(particle);
+                Debug.Log(particle.particleName);
                 EnteringParticles();
                 StartCoroutine("WaitButton");
             }
@@ -334,8 +333,8 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void AccessGranted()
         {
-            hologram.ActivateHologram(true);
-            hologram.DisplaySplines();
+            hologramTube.ActivateHologram(true);
+            hologramTube.DisplaySplines();
             topScreen.FillNbParticlesDetected(_manager.generatedParticles);
             _passwordLeft.SetActive(false);
             _particlesLeft.SetActive(true);

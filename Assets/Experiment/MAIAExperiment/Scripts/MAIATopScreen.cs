@@ -68,7 +68,6 @@ namespace CRI.HelloHouston.Experience.MAIA
         [HideInInspector]
         public string particleErrorString;
 
-        //TODO: never called
         public void ParticleGrid(List<Particle> reactionExits)
         {
             _particlesIdentification.ParticleGrid(reactionExits);
@@ -130,9 +129,10 @@ namespace CRI.HelloHouston.Experience.MAIA
             _currentPanel = _maiaLoadingScreen;
         }
 
+        //TODO: never called
         public void ParticleIdentification()
         {
-            ParticleGrid(manager.generatedParticles);
+            //ParticleGrid(manager.generatedParticles);
             _reactionsIdentification.FillParticlesTable(manager.generatedParticles);
             _reactionsIdentification.FillChosenDiagrams(manager.ongoingReactions, manager.selectedReaction);
         }
@@ -146,6 +146,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                 _currentPanel.SetActive(false);
 
             _pverrideScreen2.SetActive(true);
+            ParticleIdentification();
         }
 
         /// <summary>
@@ -240,7 +241,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             _particlesIdentification.ErrorParticles(particleErrorString);
         }
 
-        public void ReactionSelected(Reaction realReaction, Sprite diagramSelected)
+        public void ReactionSelected(Reaction realReaction, Texture diagramSelected)
         {
             _reactionsIdentification.ReactionSelected(realReaction, diagramSelected);
         }
