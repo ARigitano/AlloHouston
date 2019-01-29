@@ -1,4 +1,10 @@
-﻿using UnityEngine;
+﻿//======= Copyright (c) Valve Corporation, All rights reserved. ===============
+//
+// Purpose: Debug UI shown for the player
+//
+//=============================================================================
+
+using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 
@@ -34,9 +40,12 @@ namespace Valve.VR.InteractionSystem
 		//-------------------------------------------------
 		private void OnGUI()
 		{
+            if (Debug.isDebugBuild)
+            {
 #if !HIDE_DEBUG_UI
-			player.Draw2DDebug();
+                player.Draw2DDebug();
 #endif
+            }
 		}
 	}
 }
