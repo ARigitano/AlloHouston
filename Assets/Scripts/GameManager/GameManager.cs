@@ -110,7 +110,7 @@ namespace CRI.HelloHouston.Experience
         {
             for (int i = 0; i < starting.Length; i++)
             {
-                if (starting[i])
+                if (starting[i] && !xpManagers[i].active)
                 {
                     xpManagers[i].Activate();
                 }

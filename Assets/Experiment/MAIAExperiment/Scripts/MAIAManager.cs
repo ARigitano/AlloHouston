@@ -61,9 +61,10 @@ namespace CRI.HelloHouston.Experience.MAIA
             _hologramTube[0].gameObject.SetActive(false);
             _hologramFeynman.gameObject.SetActive(true);
             _tabletScreen.SkipStepOne();
+            _hologramFeynman.SkipStepOne();
             //_tubeScreen.SkipStepOne();
             _topScreen.SkipStepOne();
-            _hologramFeynman.SkipStepOne();
+            
         }
 
 
@@ -158,6 +159,9 @@ namespace CRI.HelloHouston.Experience.MAIA
             _tabletScreen.hologramTube = _hologramTube[0];
             _tabletScreen.hologramFeynman = _hologramFeynman;
             _topScreen.tabletScreen = _tabletScreen;
+            _hologramTube[0].DisplaySplines();
+            //TODO:find fix
+            _topScreen.Init(this);
         }
 
         protected override void PostActivate()

@@ -132,6 +132,8 @@ namespace CRI.HelloHouston.Experience.MAIA
         public void ParticleIdentification()
         {
             //ParticleGrid(manager.generatedParticles);
+            Debug.Log(manager);
+            Debug.Log(manager.generatedParticles.Count);
             _reactionsIdentification.FillParticlesTable(manager.generatedParticles);
             //_reactionsIdentification.FillChosenDiagrams(manager.ongoingReactions, manager.selectedReaction);
         }

@@ -48,8 +48,8 @@ namespace CRI.HelloHouston.Experience.MAIA
             int i = 0;
             foreach (Reaction reaction in manager.settings.allReactions)
             {
-                feynmanBoxes[i].GetComponent<MeshRenderer>().material.SetTexture("_MainTex", reaction.diagramImage);
-                //feynmanBoxes[i].GetComponent<MeshRenderer>().material.mainTexture = reaction.diagramImage;
+                MeshRenderer[] renderers = feynmanBoxes[i].GetComponentsInChildren<MeshRenderer>();
+                renderers[1].material.mainTexture = reaction.diagramImage;
                 i++;
             }
         }

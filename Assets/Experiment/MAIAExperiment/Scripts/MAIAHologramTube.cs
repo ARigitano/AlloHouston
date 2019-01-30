@@ -35,17 +35,34 @@ namespace CRI.HelloHouston.Experience.MAIA
         [Tooltip("Prefab of the head of a particle line..")]
         private GameObject _headPrefab = null;
         /// <summary>
-        /// Angle for shaping the bezier curves of the particle lines.
+        /// Prefab of the line of a particle.
         /// </summary>
         [SerializeField]
-        [Tooltip("Angle for shaping the bezier curves of the particle lines.")]
-        private float _theta = 0f;
+        [Tooltip("Prefab of the line of a particle.")]
+        private XRLineRenderer _lineRendererPrefab = null;
         /// <summary>
-        /// Angle for shaping the bezier curves of the particle lines.
+        /// Prefab of the spark effect of the particle generation.
         /// </summary>
         [SerializeField]
-        [Tooltip("Angle for shaping the bezier curves of the particle lines.")]
-        private float _phi = 0f;
+        [Tooltip("Prefab of the spark effect of the particle generation.")]
+        private MAIAHologramSparkAnimation _sparkPrefab = null;
+        /// <summary>
+        /// Transform of a starting point of the spark effect.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("Transform of a starting point of the spark effect.")]
+        private Transform _start1 = null;
+        /// <summary>
+        /// Transform of a starting point of the spark effect.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("Transform of a starting point of the spark effect.")]
+        private Transform _start2= null;
+        /// <summary>
+        /// Number of points in the lines.
+        /// </summary>
+        [Tooltip("Number of points in the lines.")]
+        private int _numberOfPoints = 20;
         /// <summary>
         /// Amplitude for the bezier curves curvature.
         /// </summary>
@@ -68,6 +85,8 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// Array of particle splines.
         /// </summary>
         private HologramSpline[] _particleSplineArray;
+
+        private List<XRLineRenderer> _particleHeads = new List<XRLineRenderer>();
         /// <summary>
         /// Array of the cylinders' mesh filters.
         /// </summary>
@@ -85,6 +104,14 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// Array of the cylinders' lengths.
         /// </summary>
         private float[] _lMaxCylArray;
+        /// <summary>
+        /// Angle for shaping the bezier curves of the particle lines.
+        /// </summary>
+        private float _theta = 0f;
+        /// <summary>
+        /// Angle for shaping the bezier curves of the particle lines.
+        /// </summary>
+        private float _phi = 0f;
 
         /// <summary>
         /// Activates or deactivates the hologram.
@@ -142,33 +169,35 @@ namespace CRI.HelloHouston.Experience.MAIA
             int destination = particle.destination - 1;
             float rMax = _rMaxCylArray[destination];
             float lMax = _lMaxCylArray[destination];
-            float rMaxPrevious = destination > 0 ? _rMaxCylArray[destination - 1] : 0.0f;
-            float lMaxPrevious = destination > 0 ? _lMaxCylArray[destination - 1] : 0.0f;
+            float rMin = destination > 0 ? _rMaxCylArray[destination - 1] : 0.0f;
+            float lMin = destination > 0 ? _lMaxCylArray[destination - 1] : 0.0f;
             //Setting the coordinates of the spline points.
             Vector3 vDir = Vector3.zero;
-            float factorTmp;
+
+
+            float factorTmp = particle.extremity ? 0.0f : _factor;
+            float lMaxFactor = lMax - factorTmp * (lMax - lMin);
+            float lMinFactor = lMin + factorTmp * (lMax - lMin);
+            float rMaxFactor = rMax - factorTmp * (rMax - rMin);
+            float rMinFactor = rMin + factorTmp * (rMax - rMin);
+
+            bool res = false;
+
             do
             {
-                factorTmp = _factor;
-                float r = Random.Range(1.5f * factorTmp, rMax * (1f - factorTmp));
+                float r = particle.extremity ? rMax : Random.Range(_rMaxCylArray[0], rMaxFactor);
                 float alpha = Random.Range(0, Mathf.PI * 2f);
 
-                if (particle.extremity)
-                {
-                    factorTmp = 0f;
-                    r = rMax;
-                }
-
                 spline.points[3].x = r * Mathf.Cos(alpha);
-                spline.points[3].y = lMax * (1f - factorTmp) * Random.Range(-lMax, lMax);
+                spline.points[3].y = Random.Range(-lMaxFactor, lMaxFactor);
                 spline.points[3].z = r * Mathf.Sin(alpha);
 
                 spline.gameObject.name = particle.particleName + index;
-
+                 
                 spline.points[0] = Vector3.zero;
 
-                float matrixRotation1 = (1 / spline.points[3].magnitude) * _amplitudeA;
-                float matrixRotation2 = (-1 / spline.points[3].magnitude) * _amplitudeB;
+                float matrixRotation1 = (1.0f / spline.points[3].magnitude) * _amplitudeA;
+                float matrixRotation2 = -(1.0f / spline.points[3].magnitude) * _amplitudeB;
 
                 spline.points[1].x = matrixRotation1 * (spline.points[3].x * Mathf.Cos(_theta) + spline.points[3].z * Mathf.Sin(_theta));
                 spline.points[1].y = matrixRotation1 * spline.points[3].y;
@@ -182,7 +211,8 @@ namespace CRI.HelloHouston.Experience.MAIA
                 spline.points[2].y = spline.points[3].y + vDir.y;
                 spline.points[2].z = spline.points[3].z + vDir.z;
 
-            } while ((Mathf.Abs(spline.points[3].y) <= lMaxPrevious * (1f + factorTmp)) && Mathf.Sqrt(Mathf.Pow(spline.points[3].x, 2) + Mathf.Pow(spline.points[3].z, 2)) <= rMaxPrevious * (1f + factorTmp));
+                res = (Mathf.Abs(spline.points[3].y) <= lMinFactor) && r <= rMinFactor;
+            } while (res);
 
             return new HologramSpline(spline, particle, vDir);
         }
@@ -192,19 +222,49 @@ namespace CRI.HelloHouston.Experience.MAIA
             Particle particle = hologramSpline.particle;
             BezierSpline spline = hologramSpline.spline;
             Vector3 vDir = hologramSpline.vDir;
+
             //Displaying the lines.
             if (particle.line)
             {
-                spline.GetComponent<SplineDecorator>().endColor = particle.endColor;
-                spline.GetComponent<SplineDecorator>().Populate();
+                var line = Instantiate(_lineRendererPrefab, Vector3.zero, Quaternion.identity, spline.transform);
+                line.transform.localPosition = Vector3.zero;
+                line.transform.localRotation = Quaternion.identity;
+                Vector3[] points = new Vector3[_numberOfPoints + 1];
+                for (int i = 0; i <= _numberOfPoints; i++)
+                    points[i] = spline.transform.InverseTransformPoint(spline.GetPoint(i / (float)_numberOfPoints));
+                line.SetPositions(points);
+                line.colorGradient.SetKeys(
+                    new GradientColorKey[]
+                    {
+                        new GradientColorKey(Color.white, 0.0f),
+                        new GradientColorKey(particle.endColor, 0.5f),
+                    },
+                    new GradientAlphaKey[]
+                    {
+                        new GradientAlphaKey(0.0f, 0.0f),
+                        new GradientAlphaKey(0.0f, 1.0f),
+                    });
+                line.materials[1].SetColor("Color Tint", particle.endColor);
             }
             //Displaying the heads.
             if (particle.head)
             {
                 GameObject lineHead = (GameObject)Instantiate(_headPrefab, Vector3.zero, Quaternion.identity, spline.transform);
-                lineHead.GetComponent<Renderer>().material.SetColor("_Color", particle.endColor);
-                lineHead.transform.localPosition = spline.points[3];
-                lineHead.transform.localRotation = Quaternion.FromToRotation(lineHead.transform.forward, vDir);
+                lineHead.GetComponentInChildren<XRLineRenderer>().colorGradient.SetKeys(
+                    new GradientColorKey[]
+                    {
+                        new GradientColorKey(Color.white, 0.0f),
+                        new GradientColorKey(particle.endColor, 0.2f),
+                    },
+                    new GradientAlphaKey[]
+                    {
+                        new GradientAlphaKey(0.0f, 0.0f),
+                        new GradientAlphaKey(0.0f, 1.0f),
+                    });
+                lineHead.GetComponentInChildren<XRLineRenderer>().materials[1].SetColor("Color Tint", particle.endColor);
+                lineHead.transform.position = spline.GetPoint(1.0f);
+                lineHead.transform.localRotation = Quaternion.FromToRotation(lineHead.transform.up, vDir);
+                _particleHeads.Add(lineHead.GetComponent<XRLineRenderer>());
             }
         }
 
@@ -214,6 +274,32 @@ namespace CRI.HelloHouston.Experience.MAIA
             {
                 PopulateLine(hologramSpline);
             }
+        }
+
+        private IEnumerator Animate()
+        {
+            var lines = GetComponentsInChildren<MAIAHologramLineAnimation>();
+            var heads = GetComponentsInChildren<MAIAHologramHeadAnimation>();
+            foreach (var line in lines)
+                line.Clear();
+            foreach (var head in heads)
+                head.Clear();
+            var spark1 = Instantiate(_sparkPrefab, transform);
+            spark1.Init(_start1.transform, transform);
+            var spark2 = Instantiate(_sparkPrefab, transform);
+            spark2.Init(_start2, transform);
+            yield return new WaitForSeconds(_sparkPrefab.duration);
+            foreach (var line in lines)
+                line.StartAnimation();
+            yield return new WaitForSeconds(_lineRendererPrefab.GetComponent<MAIAHologramLineAnimation>().explosionDuration * 0.7f);
+            foreach (var head in heads)
+                head.StartAnimation();
+        }
+
+        public void StartAnimation()
+        {
+            StopAllCoroutines();
+            StartCoroutine(Animate());
         }
 
         private void Init(MAIAManager synchronizer)

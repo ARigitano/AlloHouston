@@ -35,6 +35,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             Init((MAIAManager)manager);
             base.OnActivation(manager);
+            DisplayInteraction();
         }
     }
 }
