@@ -19,12 +19,12 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// Script for the Exile Loading screen.
         /// </summary>
         [SerializeField]
-        private ExileLoading _exileLoading;
+        private ExileLoading _exileLoading = null;
         /// <summary>
         /// Script for the Exile Loading screen.
         /// </summary>
         [SerializeField]
-        private MAIALoading _maiaLoading;
+        private MAIALoading _maiaLoading = null;
         /// <summary>
         /// Script for the MAIA Overview screen.
         /// </summary>
@@ -44,31 +44,28 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// Script for the Reactions Identification screen.
         /// </summary>
         [SerializeField]
-        private ReactionsIdentification _reactionsIdentification;
-        //TODO: delete when windowws class integrated
-        /// <summary>
-        /// All the panels of the top left screen of the experiment.
-        /// </summary>
-        [SerializeField]
-        private GameObject _exileLoadingScreen, _maiaLoadingScreen, _maiaOverviewScreen, _manualOverrideAccessScreen, _manualOverride1, _popupErrorMessageParticles, _pverrideScreen2;
+        private ReactionsIdentification _reactionsIdentification = null;
         /// <summary>
         /// Stores the panel currently being displayed.
         /// </summary>
-        private GameObject _currentPanel;
+        public GameObject _currentPanel { get; private set; }
         public MAIATabletScreen tabletScreen;
-        //TODO: put in right panel
+        //TODO: obsolete second part of experiment?
         /// <summary>
-        /// An error depending on the payer's diagram selection mistake.
+        /// An error depending on the player's diagram selection mistake.
         /// </summary>
         [HideInInspector]
         public string particleErrorString;
-        //TODO: put in right panel
-        /// <summary>
-        /// Index of the Feynman diagram currently being displayed.
-        /// </summary>
-        [HideInInspector]
-        public int displayedDiagram = 0;
 
+
+
+        public void ActivateManualOverride()
+        {
+            manager.ManualOverrideActive();
+        }
+
+
+        //TODO: never called
         public void ParticleGrid(List<Particle> reactionExits)
         {
             _particlesIdentification.ParticleGrid(reactionExits);
@@ -89,7 +86,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             _particlesIdentification.DisplayParticles(_enteredParticles);
         }
 
-        //TODO: finish rewriting
+        //TODO: obsolete second part of experiment?
         /*public void FillParticlesTable(int nbAntielectron, _textAntielectron)
         {
             _reactionsIdentification.FillParticlesTable(nbAntielectron, _textAntielectron)
@@ -100,7 +97,17 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void ManualOverride()
         {
-            _maiaOverview.ManualOverride();
+            if (_currentPanel != null)
+                _currentPanel.SetActive(false);
+            _currentPanel = _manualOverrideAccess.gameObject;
+            _manualOverrideAccess.gameObject.SetActive(true);
+            _manualOverrideAccess.Show();
+            _currentPanel = _manualOverrideAccess.gameObject;
+        }
+
+        public void DeleteParticle(int count)
+        {
+            _particlesIdentification.DeleteParticle(count);
         }
 
         /// <summary>
@@ -116,13 +123,25 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void OverrideSecond()
         {
+            if (_currentPanel != null)
+                _currentPanel.SetActive(false);
             _particlesIdentification.OverrideSecond();
+            _reactionsIdentification.gameObject.SetActive(true);
+            _currentPanel = _reactionsIdentification.gameObject;
+            _particlesIdentification.gameObject.SetActive(false);
         }
 
         private void Start()
         {
             //TODO: change when exile loading screen created;
-            _currentPanel = _maiaLoadingScreen;
+            _currentPanel = _maiaLoading.gameObject;
+        }
+
+        public void ParticleIdentification()
+        {
+            ParticleGrid(manager.generatedParticles);
+            _reactionsIdentification.FillParticlesTable(manager.generatedParticles);
+            _reactionsIdentification.FillChosenDiagrams(manager.ongoingReactions, manager.selectedReaction);
         }
 
         /// <summary>
@@ -132,8 +151,8 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             if (_currentPanel != null)
                 _currentPanel.SetActive(false);
-
-            _pverrideScreen2.SetActive(true);
+            _reactionsIdentification.gameObject.SetActive(true);
+            _currentPanel = _reactionsIdentification.gameObject;
         }
 
         /// <summary>
@@ -154,9 +173,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void AccessCode()
         {
-            _manualOverrideAccessScreen.SetActive(true);
-            _currentPanel = _manualOverrideAccessScreen;
-            _maiaOverviewScreen.SetActive(false);
+            _manualOverrideAccess.DisplayPassword(manager.settings.password);
         }
 
         public void Init(MAIAManager synchronizer)
@@ -194,9 +211,12 @@ namespace CRI.HelloHouston.Experience.MAIA
 
         public void AccessGranted()
         {
-            _manualOverride1.SetActive(true);
-            _currentPanel = _manualOverride1;
-            _manualOverrideAccessScreen.SetActive(false);
+            if (_currentPanel != null)
+                _currentPanel.SetActive(false);
+            _currentPanel = _particlesIdentification.gameObject;
+            _manualOverrideAccess.gameObject.SetActive(false);
+            _particlesIdentification.ParticleGrid(manager.generatedParticles);
+            _particlesIdentification.DisplayParticles(manager.generatedParticles);
             tabletScreen.AccessGranted();
         }
 
@@ -221,12 +241,12 @@ namespace CRI.HelloHouston.Experience.MAIA
             Debug.Log(name + "Unpaused");
         }
 
-        internal void ErrorParticles(string particleErrorString)
+        public void ErrorParticles(string particleErrorString)
         {
             _particlesIdentification.ErrorParticles(particleErrorString);
         }
 
-        internal void ReactionSelected(Reaction realReaction, Sprite diagramSelected)
+        public void ReactionSelected(Reaction realReaction, Sprite diagramSelected)
         {
             _reactionsIdentification.ReactionSelected(realReaction, diagramSelected);
         }

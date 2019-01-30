@@ -50,38 +50,6 @@ namespace CRI.HelloHouston.Experience.MAIA
         private List<Particle> _enteredParticles = new List<Particle>();
 
         /// <summary>
-        /// Tells the main screen to clear all the entered particles.
-        /// </summary>
-
-
-        /// <summary>
-        /// Tells the tube screen to display another Feynman diagram.
-        /// </summary>
-        public void OtherDiagram()
-        {
-            //TODO: rewrite
-            //tubeScreen.OtherDiagram(displayedDiagram, _tabletSc_allReactions);
-        }
-
-        /// <summary>
-        /// Tells the tube screen to mark a Feynman diagram for its exits.
-        /// </summary>
-        public void SelectExit()
-        {
-            //TODO:rewrite
-            //_tubeScreen.SelectExit(_tabletScreen.displayedDiagram);
-        }
-
-        /// <summary>
-        /// Tells the tube screen to mark a Feynman diagram for its interactions.
-        /// </summary>
-        public void SelectInteraction()
-        {
-            //TODO:rewrite
-            //_tubeScreen.SelectInteraction(_tabletScreen.displayedDiagram);
-        }
-
-        /// <summary>
         /// Tells the main screen that the right password has been entered.
         /// </summary>
         public void CorrectPassword()
@@ -111,8 +79,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             {
                 _isTouched = true;
                 _enteredParticles.RemoveAt(_enteredParticles.Count - 1);
-                //TODO: rewrite
-                //topScreen.DeleteParticle(_enteredParticles.Count);
+                topScreen.DeleteParticle(_enteredParticles.Count);
                 StartCoroutine("WaitButton");
             }
         }
@@ -186,22 +153,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             _particlesLeft.SetActive(false);
         }
 
-        /// <summary>
-        /// Displays the next Feynman diagram after the right button is pressed.
-        /// </summary>
-        public void NextDiagram()
-        {
-            if (!_isTouched)
-            {
-                _isTouched = true;
-                if (topScreen.displayedDiagram < _manager.settings.allReactions.Length - 1)
-                    topScreen.displayedDiagram++;
-                else
-                    topScreen.displayedDiagram = 0;
-                OtherDiagram();
-                StartCoroutine("WaitButton");
-            }
-        }
+        
 
         //TODO: only one of these methods needed
         /// <summary>
@@ -212,6 +164,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             topScreen.ErrorParticles(topScreen.particleErrorString);
         }
 
+        //TODO: only one of these methods needed
         /// <summary>
         /// Tells the top screen that a combination of particles with the wrong symbols has been entered.
         /// </summary>
@@ -220,6 +173,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             topScreen.ErrorParticles(topScreen.particleErrorString);
         }
 
+        //TODO: only one of these methods needed
         /// <summary>
         /// Tells the top screen that a combination of particles with the wrong charges has been entered.
         /// </summary>
@@ -227,51 +181,9 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             topScreen.ErrorParticles(topScreen.particleErrorString);
         }
+        
 
-
-        /// <summary>
-        /// Displays the previous Feynman diagram after the left diagram is pressed.
-        /// </summary>
-        public void PreviousDiagram()
-        {
-            if (!_isTouched)
-            {
-                _isTouched = true;
-                if (topScreen.displayedDiagram > 0)
-                    topScreen.displayedDiagram--;
-                else
-                    topScreen.displayedDiagram = _manager.settings.allReactions.Length - 1;
-                OtherDiagram();
-                StartCoroutine("WaitButton");
-            }
-        }
-
-        /// <summary>
-        /// Display a symbol on the current Feynman diagram to preselect it based on its exits.
-        /// </summary>
-        public void PreselectExits()
-        {
-            if (!_isTouched)
-            {
-                _isTouched = true;
-                SelectExit();
-                StartCoroutine("WaitButton");
-            }
-        }
-
-        /// <summary>
-        /// Display a symbol on the current Feynman diagram to preselect it based on its interactions.
-        /// </summary>
-        public void PreselectInteraction()
-        {
-            if (!_isTouched)
-            {
-                _isTouched = true;
-                SelectInteraction();
-                StartCoroutine("WaitButton");
-            }
-        }
-
+       
         //TODO: replace by a generic wait
         IEnumerator WaitButton()
         {
@@ -423,6 +335,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         public void AccessGranted()
         {
             hologram.ActivateHologram(true);
+            hologram.DisplaySplines();
             topScreen.FillNbParticlesDetected(_manager.generatedParticles);
             _passwordLeft.SetActive(false);
             _particlesLeft.SetActive(true);
@@ -451,10 +364,12 @@ namespace CRI.HelloHouston.Experience.MAIA
             }));
 
         }
+
+        //TODO: obsolete;
         /// <summary>
         /// Displays override panel after start button has been clicked.
         /// </summary>
-        public void StartButtonClicked()
+        /*public void StartButtonClicked()
         {
             Debug.Log("StartButtonClicked");
             topScreen.ManualOverride();
@@ -465,7 +380,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                 _startFull.SetActive(false);
                 StartCoroutine("FakeLoading");
             }));
-        }
+        }*/
 
         private void Init(MAIAManager manager)
         {

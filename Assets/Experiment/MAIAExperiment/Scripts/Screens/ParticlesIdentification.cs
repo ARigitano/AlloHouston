@@ -60,9 +60,6 @@ namespace CRI.HelloHouston.Experience.MAIA
         public void OverrideSecond()
         {
             _victoryPopup.SetActive(true);
-            // _pverrideScreen2.SetActive(true);
-            // _currentPanel = _pverrideScreen2;
-            // _manualOverride1.SetActive(false);
         }
 
         /// <summary>
