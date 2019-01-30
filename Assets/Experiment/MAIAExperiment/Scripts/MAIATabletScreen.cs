@@ -17,7 +17,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// All the panels for the tablet screen.
         /// </summary>
         [SerializeField]
-        private GameObject _startFull, _panelFull, _overrideLeft, _passwordLeft, _particlesLeft, _diagramsSelectionLeft;
+        private GameObject _startFull, _panelFull, _overrideLeft, _passwordLeft, _particlesLeft, _diagramsSelectionLeft, _diagramsSelectionRight;
         /// <summary>
         /// Loading bar to display the time remaining.
         /// </summary>
@@ -105,6 +105,7 @@ namespace CRI.HelloHouston.Experience.MAIA
 
             _panelFull.SetActive(true);
             _diagramsSelectionLeft.SetActive(true);
+            _diagramsSelectionRight.SetActive(true);
         }
 
         /// <summary>
@@ -147,7 +148,9 @@ namespace CRI.HelloHouston.Experience.MAIA
         public void OverrideSecond()
         {
             _diagramsSelectionLeft.SetActive(true);
+            _diagramsSelectionRight.SetActive(true);
             _currentPanelLeft = _diagramsSelectionLeft;
+            _currentPanelRight = _diagramsSelectionRight;
             _particlesLeft.SetActive(false);
         }
 

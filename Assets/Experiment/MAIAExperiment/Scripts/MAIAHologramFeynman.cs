@@ -7,6 +7,10 @@ namespace CRI.HelloHouston.Experience.MAIA
     public class MAIAHologramFeynman : XPHologramElement
     {
         /// <summary>
+        /// The synchronizer of the experiment.
+        /// </summary>
+        public MAIAManager manager { get; private set; }
+        /// <summary>
         /// The objects containing the Feynman diagrams.
         /// </summary>
         public GameObject[] feynmanBoxes;
@@ -18,28 +22,48 @@ namespace CRI.HelloHouston.Experience.MAIA
         // Start is called before the first frame update
         void Start()
         {
-
+            
         }
 
         // Update is called once per frame
         void Update()
         {
+           
+        }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public void SkipStepOne()
+        {
+            FillBoxesDiagrams();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void FillBoxesDiagrams()
+        {
+            feynmanBoxes = GameObject.FindGameObjectsWithTag("Feynmanbox");
+            int i = 0;
+            foreach (Reaction reaction in manager.settings.allReactions)
+            {
+                feynmanBoxes[i].GetComponent<MeshRenderer>().material.SetTexture("_MainTex", reaction.diagramImage);
+                //feynmanBoxes[i].GetComponent<MeshRenderer>().material.mainTexture = reaction.diagramImage;
+                i++;
+            }
+        }
+
+        private void Init(MAIAManager synchronizer)
+        {
+            manager = synchronizer;
         }
 
         public override void OnActivation(XPManager manager)
         {
+            Init((MAIAManager)manager);
             base.OnActivation(manager);
             gameObject.SetActive(false);
-        }
-
-        void OnTriggerStay(Collider other)
-        {
-            if (other.tag == "Feynmanbox")
-            {
-                feynmanBoxName = other.name;
-                Debug.Log(feynmanBoxName);
-            }
         }
     }
 }

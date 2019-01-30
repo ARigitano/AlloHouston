@@ -89,12 +89,13 @@ namespace CRI.HelloHouston.Experience.MAIA
             _textInteraction.text = chosenReaction.entries.ToString();
         }
 
+        //TODO: obsolete?
         /// <summary>
         /// Displays the Feynman diagrams of each chosen reaction except the real one.
         /// </summary>
         /// <param name="reactions"></param>
         /// <param name="chosenReaction"></param>
-        public void FillChosenDiagrams(List<Reaction> reactions, Reaction chosenReaction)
+        /*public void FillChosenDiagrams(List<Reaction> reactions, Reaction chosenReaction)
         {
             int i = 0;
 
@@ -118,7 +119,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                 reactionsTemp.RemoveAt(0);
                 i++;
             }
-        }
+        }*/
 
         /// <summary>
         /// Fills the number of each kind of particles in the particles table.

@@ -27,7 +27,11 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// The hologram scripts of the table block.
         /// </summary>
         private MAIAHologramTube[] _hologramTube;
+        /// <summary>
+        /// 
+        /// </summary>
         private MAIAHologramFeynman _hologramFeynman;
+        private MAIABottomScreen _bottomScreen;
         /// <summary>
         /// Settings of the experience.
         /// </summary>
@@ -48,7 +52,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         //Game Master's actions
 
         /// <summary>
-        /// Selects the ongoing particle reactions for this game.
+        /// 
         /// </summary>
         public void SkipStepOne()
         {
@@ -59,6 +63,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             _tabletScreen.SkipStepOne();
             //_tubeScreen.SkipStepOne();
             _topScreen.SkipStepOne();
+            _hologramFeynman.SkipStepOne();
         }
 
 
@@ -165,9 +170,9 @@ namespace CRI.HelloHouston.Experience.MAIA
         protected override void PostInit(XPContext xpContext, ElementInfo[] info, LogExperienceController logController, XPState stateOnActivation)
         {
             base.PostInit(xpContext, info, logController, stateOnActivation);
-            //TODO: separate variables
             _hologramTube = GetElements<MAIAHologramTube>();
             _hologramFeynman = GetElement<MAIAHologramFeynman>();
+            _bottomScreen = GetElement<MAIABottomScreen>();
             settings = (MAIASettings)xpContext.xpSettings;
         }
     }

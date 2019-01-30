@@ -129,12 +129,11 @@ namespace CRI.HelloHouston.Experience.MAIA
             _currentPanel = _maiaLoadingScreen;
         }
 
-        //TODO: never called
         public void ParticleIdentification()
         {
             //ParticleGrid(manager.generatedParticles);
             _reactionsIdentification.FillParticlesTable(manager.generatedParticles);
-            _reactionsIdentification.FillChosenDiagrams(manager.ongoingReactions, manager.selectedReaction);
+            //_reactionsIdentification.FillChosenDiagrams(manager.ongoingReactions, manager.selectedReaction);
         }
 
         /// <summary>
