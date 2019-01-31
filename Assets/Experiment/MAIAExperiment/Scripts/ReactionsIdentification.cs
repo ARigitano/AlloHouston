@@ -62,9 +62,9 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         /// <param name="realReaction">The real reaction.</param>
         /// <param name="reactionSelected">The reaction selected by the player.</param>
-        public void ReactionSelected(Reaction realReaction, Texture reactionSelected)
+        public void ReactionSelected(bool correctDiagram)
         {
-            if (reactionSelected == realReaction.diagramImage)
+            if (correctDiagram)
             {
                 _popupWin.SetActive(true);
             }

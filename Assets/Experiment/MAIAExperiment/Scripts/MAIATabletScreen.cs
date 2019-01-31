@@ -49,6 +49,27 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         [HideInInspector]
         private List<Particle> _enteredParticles = new List<Particle>();
+        /// <summary>
+        /// Is the holographic diagram the right one?
+        /// </summary>
+        public bool correctDiagram = false;
+
+        /// <summary>
+        /// Tests if the chosen holographic diagram is correct.
+        /// </summary>
+        /// <param name="diagram">Texture of the chosen holographic diagram.</param>
+        public void DiagramValidation(Texture diagram)
+        {
+            /// <summary>
+            /// Is the holographic diagram the right one?
+            /// </summary>
+            correctDiagram = false;
+
+            if (diagram == _manager.selectedReaction.diagramImage)
+            {
+                correctDiagram = true;
+            }
+        }
 
         /// <summary>
         /// Tells the main screen that the right password has been entered.
@@ -74,6 +95,9 @@ namespace CRI.HelloHouston.Experience.MAIA
             topScreen.DisplayParticles(_enteredParticles);
         }
 
+        /// <summary>
+        /// Deletes the last entered particle.
+        /// </summary>
         public void DeleteParticle()
         {
             if (!_isTouched)
@@ -278,7 +302,8 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void ReactionSelected()
         {
-            topScreen.ReactionSelected(_manager.selectedReaction, tubeScreen.diagramSelected);
+            topScreen.ReactionSelected(correctDiagram);
+            //topScreen.ReactionSelected(_manager.selectedReaction, tubeScreen.diagramSelected);
         }
 
         /// <summary>

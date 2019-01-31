@@ -242,9 +242,9 @@ namespace CRI.HelloHouston.Experience.MAIA
             _particlesIdentification.ErrorParticles(particleErrorString);
         }
 
-        public void ReactionSelected(Reaction realReaction, Texture diagramSelected)
+        public void ReactionSelected(bool correctDiagram)
         {
-            _reactionsIdentification.ReactionSelected(realReaction, diagramSelected);
+            _reactionsIdentification.ReactionSelected(correctDiagram);
         }
     }
 }

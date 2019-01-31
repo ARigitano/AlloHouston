@@ -334,6 +334,8 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             Debug.Log(name + "Activated");
             Init((MAIAManager)manager);
+            CreateSplines(_manager.generatedParticles);
+            gameObject.SetActive(false);
         }
 
         /// <summary>
@@ -342,7 +344,6 @@ namespace CRI.HelloHouston.Experience.MAIA
         public override void OnShow()
         {
             Debug.Log(name + "Paused");
-            gameObject.SetActive(true);
         }
         /// <summary>
         /// Effect when the experiment is unpaused.

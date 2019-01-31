@@ -159,16 +159,12 @@ namespace CRI.HelloHouston.Experience.MAIA
             _tabletScreen.hologramTube = _hologramTube[0];
             _tabletScreen.hologramFeynman = _hologramFeynman;
             _topScreen.tabletScreen = _tabletScreen;
-            _hologramTube[0].DisplaySplines();
-            //TODO:find fix
-            _topScreen.Init(this);
         }
 
-        protected override void PostActivate()
+        protected override void PreActivate()
         {
             base.PostActivate();
             List<Particle> particle = GenerateParticles();
-            _hologramTube[0].CreateSplines(particle);
         }
 
         protected override void PostInit(XPContext xpContext, ElementInfo[] info, LogExperienceController logController, XPState stateOnActivation)
