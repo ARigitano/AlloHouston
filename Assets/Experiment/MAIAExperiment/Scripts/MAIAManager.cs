@@ -24,9 +24,17 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public MAIATabletScreen tabletScreen { get; private set; }
         /// <summary>
-        /// The hologram scripts of the table block.
+        /// The hologram tube of the table block.
         /// </summary>
-        public MAIAHologram[] holograms;
+        private MAIAHologramTube _hologramTube;
+        /// <summary>
+        /// The hologram Feynman of the table block.
+        /// </summary>
+        private MAIAHologramFeynman _hologramFeynman;
+        /// <summary>
+        /// The bottomscreen script of the experiment block.
+        /// </summary>
+        private MAIABottomScreen _bottomScreen;
         /// <summary>
         /// Settings of the experience.
         /// </summary>
@@ -47,15 +55,16 @@ namespace CRI.HelloHouston.Experience.MAIA
         #region GameMasterActions
 
         /// <summary>
-        /// Selects the ongoing particle reactions for this game.
+        /// Skips to the second part od the experiment.
         /// </summary>
         public void SkipStepOne()
         {
             if (generatedParticles.Count == 0)
                 GenerateParticles();
-            holograms[0].ActivateHologram(false);
+            _hologramTube.gameObject.SetActive(false);
+            _hologramFeynman.gameObject.SetActive(true);
             tabletScreen.SkipStepOne();
-            tubeScreen.SkipStepOne();
+            _hologramFeynman.SkipStepOne();
             topScreen.SkipStepOne();
         }
 
@@ -63,6 +72,10 @@ namespace CRI.HelloHouston.Experience.MAIA
 
         #region ParticleGeneration
 
+        /// <summary>
+        /// Generates the list of particles detected for this game.
+        /// </summary>
+        /// <returns>The list of detected particles.</returns>
         private List<Particle> GenerateParticles()
         {
             List<Reaction> currentReactions = SelectReactions();
@@ -111,8 +124,8 @@ namespace CRI.HelloHouston.Experience.MAIA
 
         public void StartParticleIdentification()
         {
-            holograms[0].ActivateHologram(true);
-            holograms[0].StartAnimation();
+            _hologramTube.ActivateHologram(true);
+            _hologramTube.StartAnimation();
             topScreen.StartParticleIdentification();
             tabletScreen.StartParticleIdentification();
         }
@@ -163,7 +176,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         protected override void PreShow(VirtualWallTopZone wallTopZone, ElementInfo[] zones)
         {
             base.PreShow(wallTopZone, zones);
-            holograms[0].DisplaySplines();
+            _hologramTube.DisplaySplines();
         }
 
 
@@ -176,13 +189,15 @@ namespace CRI.HelloHouston.Experience.MAIA
         protected override void PostInit(XPContext xpContext, ElementInfo[] info, LogExperienceController logController, XPState stateOnActivation)
         {
             base.PostInit(xpContext, info, logController, stateOnActivation);
-            holograms = GetElements<MAIAHologram>();
+            _hologramTube = GetElement<MAIAHologramTube>();
             tabletScreen = GetElement<MAIATabletScreen>();
             topScreen = GetElement<MAIATopScreen>();
             tubeScreen = GetElement<MAIATubeScreen>();
             tabletScreen.tubeScreen = tubeScreen;
-            tabletScreen.hologram = holograms[0];
+            tabletScreen.hologramTube = _hologramTube;
             topScreen.tabletScreen = tabletScreen;
+            _hologramFeynman = GetElement<MAIAHologramFeynman>();
+            _bottomScreen = GetElement<MAIABottomScreen>();
             settings = (MAIASettings)xpContext.xpSettings;
         }
     }

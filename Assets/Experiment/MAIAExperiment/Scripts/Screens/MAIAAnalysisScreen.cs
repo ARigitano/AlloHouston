@@ -84,10 +84,10 @@ namespace CRI.HelloHouston.Experience.MAIA
             }
         }
 
-        private void DisplayDiagram(Sprite sprite, int i)
+        private void DisplayDiagram(Texture texture, int i)
         {
             _diagrams[i].gameObject.SetActive(true);
-            _diagrams[i].SetSprite(sprite);
+            _diagrams[i].SetSprite(texture);
         }
     }
 }

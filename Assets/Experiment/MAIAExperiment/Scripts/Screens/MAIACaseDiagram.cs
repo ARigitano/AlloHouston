@@ -10,11 +10,11 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         [SerializeField]
         [Tooltip("Image of the diagram.")]
-        private Image _image = null;
+        private RawImage _image = null;
 
-        public  void SetSprite(Sprite sprite)
+        public  void SetSprite(Texture texture)
         {
-            _image.sprite = sprite;
+            _image.texture = texture;
         }
     }
 }

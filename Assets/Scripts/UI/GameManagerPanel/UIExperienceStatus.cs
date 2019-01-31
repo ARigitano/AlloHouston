@@ -128,8 +128,7 @@ namespace CRI.HelloHouston.Experience.UI
 
         private void LaunchAction()
         {
-            if (!_xpManager.active)
-                _xpManager.Activate();
+            _xpManager.Activate();
             _launchButton.GetComponent<CanvasGroup>().Hide();
             _failButton.GetComponent<CanvasGroup>().Show();
             _successButton.GetComponent<CanvasGroup>().Show();

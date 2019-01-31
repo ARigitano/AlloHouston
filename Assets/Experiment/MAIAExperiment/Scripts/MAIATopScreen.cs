@@ -183,5 +183,31 @@ namespace CRI.HelloHouston.Experience.MAIA
             Init((MAIAManager)manager);
             StartManualOverride();
         }
+
+        public void Access(bool isGranted)
+        {
+            _manualOverrideAccess.Access(isGranted);
+        }
+
+        public void ReactionSelected(bool correctDiagram)
+        {
+            _reactionsIdentification.ReactionSelected(correctDiagram);
+        }
+
+        /// <summary>
+        /// Effect when the experiment is paused.
+        /// </summary>
+        public override void OnHide()
+        {
+            Debug.Log(name + "Paused");
+        }
+
+        /// <summary>
+        /// Effect when the experiment is unpaused.
+        /// </summary>
+        public override void OnShow()
+        {
+            Debug.Log(name + "Unpaused");
+        }
     }
 }

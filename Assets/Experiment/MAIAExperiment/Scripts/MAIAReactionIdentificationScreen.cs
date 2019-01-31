@@ -25,7 +25,39 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         [SerializeField]
         private Transform _particleGridTransform = null;
+        /// <summary>
+        /// Popup displayed when selecting the wrong Feynman diagram.
+        /// </summary>
+        [SerializeField]
+        private GameObject _popupLose = null;
+        /// <summary>
+        /// Popups displayed when the right or wrong Feynman diagram.
+        /// </summary>
+        [SerializeField]
+        private GameObject _popupWin = null;
 
+        /// <summary>
+        /// Effect if the correct Feynman diagram is selected, or a wrong one.
+        /// </summary>
+        /// <param name="realReaction">The real reaction.</param>
+        /// <param name="reactionSelected">The reaction selected by the player.</param>
+        public void ReactionSelected(bool correctDiagram)
+        {
+            if (correctDiagram)
+            {
+                _popupWin.SetActive(true);
+            }
+            else
+            {
+                _popupLose.SetActive(true);
+
+                StartCoroutine(_topScreen.WaitGeneric(2f, () =>
+                {
+                    _popupLose.SetActive(false);
+                }));
+            }
+
+        }
 
         public void StartReactionIdentification()
         {

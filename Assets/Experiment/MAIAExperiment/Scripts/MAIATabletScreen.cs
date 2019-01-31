@@ -17,7 +17,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// All the panels for the tablet screen.
         /// </summary>
         [SerializeField]
-        private GameObject _startFull, _panelFull, _overrideLeft, _passwordLeft, _particlesLeft, _diagramsBrowsingRight, _diagramsSelectionLeft;
+        private GameObject _startFull, _panelFull, _overrideLeft, _passwordLeft, _particlesLeft, _advanceOverride, _diagramsSelectionLeft, _diagramsSelectionRight;
         /// <summary>
         /// Loading bar to display the time remaining.
         /// </summary>
@@ -36,8 +36,11 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// Stores the panels currently being displayed.
         /// </summary>
         private GameObject _currentPanelLeft, _currentPanelRight, _currentPanel;
-        private MAIATopScreen _topScreen;
-        public MAIAHologram hologram;
+
+        public MAIATopScreen topScreen { get; private set; }
+        public MAIAHologramTube hologramTube;
+        public MAIAHologramFeynman hologramFeynman;
+
         public MAIATubeScreen tubeScreen;
         /// <summary>
         /// Password entered by the player.
@@ -49,6 +52,41 @@ namespace CRI.HelloHouston.Experience.MAIA
         [HideInInspector]
         private List<Particle> _enteredParticles = new List<Particle>();
         /// <summary>
+        /// Is the holographic diagram the right one?
+        /// </summary>
+        public bool correctDiagram = false;
+        /// <summary>
+        /// Is there a diagram in the docking zone?
+        /// </summary>
+        private bool _isDiagram = false;
+
+        /// <summary>
+        /// Tests if the chosen holographic diagram is correct.
+        /// </summary>
+        /// <param name="diagram">Texture of the chosen holographic diagram.</param>
+        public void DiagramValidation(Texture diagram)
+        {
+            /// <summary>
+            /// Is the holographic diagram the right one?
+            /// </summary>
+            correctDiagram = false;
+            _isDiagram = true;
+
+            if (diagram == _manager.selectedReaction.diagramImage)
+            {
+                correctDiagram = true;
+            }
+        }
+
+        /// <summary>
+        /// No diagram is detected on docking zone.
+        /// </summary>
+        public void NoDiagram()
+        {
+            _isDiagram = false;
+        }
+
+        /// <summary>
         /// Particle identification screen.
         /// </summary>
         private ParticlesIdentification _particleIdentificationScreen;
@@ -57,6 +95,9 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         private MAIAManualOverrideAccess _manualOverrideAccessScreen;
 
+        /// <summary>
+        /// Deletes the last entered particle.
+        /// </summary>
         public void DeleteParticle()
         {
             if (!_isTouched)
@@ -97,8 +138,8 @@ namespace CRI.HelloHouston.Experience.MAIA
                 _currentPanelRight.SetActive(false);
 
             _panelFull.SetActive(true);
-            _diagramsBrowsingRight.SetActive(true);
             _diagramsSelectionLeft.SetActive(true);
+            _diagramsSelectionRight.SetActive(true);
         }
 
         /// <summary>
@@ -131,10 +172,10 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void OverrideSecond()
         {
-            _diagramsBrowsingRight.SetActive(true);
-            _currentPanelRight = _diagramsBrowsingRight;
             _diagramsSelectionLeft.SetActive(true);
+            _diagramsSelectionRight.SetActive(true);
             _currentPanelLeft = _diagramsSelectionLeft;
+            _currentPanelRight = _diagramsSelectionRight;
             _particlesLeft.SetActive(false);
         }
 
@@ -173,10 +214,14 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void ParticleRightCombination()
         {
-            _topScreen.StartAnalysisAnimation();
+            topScreen.StartAnalysisAnimation();
             OverrideSecond();
-            //Disabled for the demo version
-            //_tubeScreen.OverrideSecond(_tabletScreen._allReactions);
+            hologramTube.gameObject.SetActive(false);
+        }
+
+        public void AdvanceManualOverride()
+        {
+            OverrideSecond();
         }
 
         /// <summary>
@@ -196,6 +241,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                     if (l1.SequenceEqual(l2))
                     {
                         //The right combination of particles have been entered.
+                        _advanceOverride.SetActive(true);
                         ParticleRightCombination();
                     }
                     else
@@ -218,6 +264,17 @@ namespace CRI.HelloHouston.Experience.MAIA
         }
 
         /// <summary>
+        /// Tells the main screen that a reaction has been selected.
+        /// </summary>
+        public void ReactionSelected()
+        {
+            if (_isDiagram)
+            {
+                topScreen.ReactionSelected(correctDiagram);
+            }
+            //topScreen.ReactionSelected(_manager.selectedReaction, tubeScreen.diagramSelected);
+        }
+
         /// Adds a particle to the combination.
         /// </summary>
         /// <param name="particleButton">The particle to add.</param>
@@ -273,7 +330,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void OverrideButtonClicked()
         {
-            _topScreen.InitPasswordInput();
+            topScreen.InitPasswordInput();
             StartCoroutine(WaitGeneric(0.2f, () =>
             {
                 _passwordLeft.SetActive(true);
@@ -286,9 +343,9 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             _manager = manager;
             Debug.Log(manager);
-            _topScreen = manager.topScreen;
-            _particleIdentificationScreen = _topScreen.particleIdentificationScreen;
-            _manualOverrideAccessScreen = _topScreen.manualOverrideAccessScreen;
+            topScreen = manager.topScreen;
+            _particleIdentificationScreen = topScreen.particleIdentificationScreen;
+            _manualOverrideAccessScreen = topScreen.manualOverrideAccessScreen;
         }
 
         public override void OnActivation(XPManager manager)
