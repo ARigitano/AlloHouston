@@ -258,11 +258,15 @@ namespace CRI.HelloHouston.Experience.MAIA
         public void ParticleRightCombination()
         {
             topScreen.OverrideSecond();
-            OverrideSecond();
             hologramFeynman.gameObject.SetActive(true);
             hologramTube.gameObject.SetActive(false);
             //Disabled for the demo version
             //_tubeScreen.OverrideSecond(_tabletScreen._allReactions);
+        }
+
+        public void AdvanceManualOverride()
+        {
+            OverrideSecond();
         }
 
         /// <summary>
@@ -283,6 +287,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                     {
                         //The right combination of particles have been entered.
                         Debug.Log("The right combination of particles have been entered.");
+                        _advanceOverride.SetActive(true);
                         ParticleRightCombination();
                     }
                     else
