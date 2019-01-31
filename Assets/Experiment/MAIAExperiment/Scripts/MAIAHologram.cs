@@ -334,6 +334,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             Debug.Log(name + "Activated");
             Init((MAIAManager)manager);
+            CreateSplines(this._manager.generatedParticles);
         }
 
         /// <summary>

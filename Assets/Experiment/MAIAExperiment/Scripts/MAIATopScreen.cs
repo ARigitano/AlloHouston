@@ -79,11 +79,6 @@ namespace CRI.HelloHouston.Experience.MAIA
             return _manualOverrideAccess.CheckPasswordInput(enteredPassword);
         }
 
-        public void DisplayParticles(List<Particle> _enteredParticles)
-        {
-            _particlesIdentification.DisplayParticles(_enteredParticles);
-        }
-
         /// <summary>
         /// Tells the MAIA Overwiew panel that the start button has been pressed.
         /// </summary>
@@ -108,11 +103,6 @@ namespace CRI.HelloHouston.Experience.MAIA
             _reactionsIdentification.gameObject.SetActive(true);
             _currentPanel = _reactionsIdentification.gameObject;
             _particlesIdentification.gameObject.SetActive(false);
-        }
-
-        private void Start()
-        {
-            _currentPanel = _maiaLoading.gameObject;
         }
 
         public void ParticleIdentification()
@@ -154,6 +144,23 @@ namespace CRI.HelloHouston.Experience.MAIA
             _manualOverrideAccess.InitPasswordInput(manager.settings.password);
         }
 
+
+
+        public void AccessGranted()
+        {
+            if (_currentPanel != null)
+                _currentPanel.SetActive(false);
+            _currentPanel = _particlesIdentification.gameObject;
+            _particlesIdentification.gameObject.SetActive(true);
+            _particlesIdentification.ParticleGrid(manager.generatedParticles);
+        }
+
+
+        public void ReactionSelected(Reaction realReaction, Sprite diagramSelected)
+        {
+            _reactionsIdentification.ReactionSelected(realReaction, diagramSelected);
+        }
+
         public void Init(MAIAManager synchronizer)
         {
             manager = synchronizer;
@@ -184,42 +191,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             Debug.Log(name + "Activated");
             Init((MAIAManager)manager);
-        }
-
-        public void AccessGranted()
-        {
-            if (_currentPanel != null)
-                _currentPanel.SetActive(false);
-            _currentPanel = _particlesIdentification.gameObject;
-            _manualOverrideAccess.gameObject.SetActive(false);
-            _particlesIdentification.ParticleGrid(manager.generatedParticles);
-            _particlesIdentification.DisplayParticles(manager.generatedParticles);
-        }
-
-        /// <summary>
-        /// Effect when the experiment is paused.
-        /// </summary>
-        public override void OnHide()
-        {
-            Debug.Log(name + "Paused");
-        }
-
-        /// <summary>
-        /// Effect when the experiment is unpaused.
-        /// </summary>
-        public override void OnShow()
-        {
-            Debug.Log(name + "Unpaused");
-        }
-
-        public void ErrorParticles(string particleErrorString)
-        {
-            _particlesIdentification.DisplayErrorMessage(particleErrorString);
-        }
-
-        public void ReactionSelected(Reaction realReaction, Sprite diagramSelected)
-        {
-            _reactionsIdentification.ReactionSelected(realReaction, diagramSelected);
+            ManualOverride();
         }
     }
 }

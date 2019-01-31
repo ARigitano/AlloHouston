@@ -81,7 +81,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             _realPassword = password;
             for (int i = 0; _passwordSlots != null && i < _passwordSlots.Length; i++)
-                Destroy(_passwordSlots[i]);
+                Destroy(_passwordSlots[i].gameObject);
             _passwordSlots = new GridCell[password.Length];
             for (int i = 0; i < password.Length; i++)
                 _passwordSlots[i] = GameObject.Instantiate(_gridCellPrefab, _passwordBox);

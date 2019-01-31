@@ -1,13 +1,26 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using System.Linq;
 
 namespace CRI.HelloHouston.Experience.MAIA
 {
     public class ParticlesIdentification : MonoBehaviour
     {
+        public enum ErrorType
+        {
+            WrongNumberCharges,
+            WrongParticles,
+            WrongNumberParticles,
+        }
+
+        [Serializable]
+        public class ErrorMessage
+        {
+            public ErrorType errorType;
+            public string errorMessage;
+        }
         /// <summary>
         /// Script for the whole top screen.
         /// </summary>
@@ -51,6 +64,17 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         [SerializeField]
         private GameObject _victoryPopup = null;
+        /// <summary>
+        /// Error popup duration.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("Error popup duration.")]
+        private float _errorPopupDuration = 3.0f;
+        /// <summary>
+        /// Dictionary with key error type and value the error message.
+        /// </summary>
+        [SerializeField]
+        private ErrorMessage[] _errorMessages = null;
 
         private void Start()
         {
@@ -69,11 +93,11 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// Displays a popup if the player selected the wrong Feynman diagram.
         /// </summary>
         /// <param name="error">The error to be displayed on the popup depending on the player's mistake.</param>
-        public void DisplayErrorMessage(string error)
+        public void DisplayErrorMessage(ErrorType errorType)
         {
             _errorParticles.SetActive(true);
-            _errorParticles.GetComponentInChildren<Text>().text = error;
-            StartCoroutine(_maiaTopScreen.WaitGeneric(2f, () =>
+            _errorParticles.GetComponentInChildren<Text>().text = _errorMessages.First(x => x.errorType == errorType).errorMessage;
+            StartCoroutine(_maiaTopScreen.WaitGeneric(_errorPopupDuration, () =>
             {
                 _errorParticles.SetActive(false);
             }));
@@ -83,7 +107,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// Fills the number of particles that have been detected on the reaction summary window.
         /// </summary>
         /// <param name="particles">The particles that have been detected.</param>
-        public void FillNbParticlesDetected(List<Particle> generatedParticles, List<Particle> particles)
+        private void FillNbParticlesDetected(List<Particle> generatedParticles, List<Particle> particles)
         {
             _nbParticlesDetected.text = _particleTextMessage.Replace("[p]", (generatedParticles.Count - particles.Count).ToString());
         }
@@ -111,30 +135,10 @@ namespace CRI.HelloHouston.Experience.MAIA
         }
 
         /// <summary>
-        /// Delete all the entered particles
-        /// </summary>
-        public void ClearParticles()
-        {
-            foreach (GridCell gridCell in _gridParticles)
-            {
-                gridCell.Show(false);
-            }
-        }
-
-        /// <summary>
-        /// Delete the last particle entered
-        /// </summary>
-        /// <param name="nbParticles">The number of particles already entered.</param>
-        public void DeleteParticle(int nbParticles)
-        {
-            _gridParticles[nbParticles].enabled = false;
-        }
-
-        /// <summary>
         /// Displays the particles combination while they are being entered.
         /// </summary>
         /// <param name="particles">The particles combination that is being entered.</param>
-        public void DisplayParticles(List<Particle> particles)
+        private void DisplayParticles(List<Particle> particles)
         {
             for (int i = 0; i < _gridParticles.Length; i++)
             {
@@ -147,5 +151,12 @@ namespace CRI.HelloHouston.Experience.MAIA
                     _gridParticles[i].Show(false);
             }
         }
+
+        public void UpdateParticles(List<Particle> enteredParticles)
+        {
+            DisplayParticles(enteredParticles);
+            FillNbParticlesDetected(_maiaTopScreen.manager.generatedParticles, enteredParticles);
+        }
+
     }
 }

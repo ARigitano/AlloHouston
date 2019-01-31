@@ -55,23 +55,15 @@ namespace CRI.HelloHouston.Experience.MAIA
         [Tooltip("Particle identification screen.")]
         private ParticlesIdentification _particleIdentificationScreen;
 
-        /// <summary>
-        /// Tells the main screen that a particle has been entered.
-        /// </summary>
-        public void EnteringParticles()
-        {
-            _topScreen.DisplayParticles(_enteredParticles);
-        }
-
         public void DeleteParticle()
         {
             if (!_isTouched)
             {
                 _isTouched = true;
-                _enteredParticles.RemoveAt(_enteredParticles.Count - 1);
-                _particleIdentificationScreen.DeleteParticle(_enteredParticles.Count);
-                _particleIdentificationScreen.FillNbParticlesDetected(_manager.generatedParticles, _enteredParticles);
-                StartCoroutine("WaitButton");
+                if (_enteredParticles.Count > 0)
+                    _enteredParticles.RemoveAt(_enteredParticles.Count - 1);
+                _particleIdentificationScreen.UpdateParticles(_enteredParticles);
+                StartCoroutine(WaitButton());
             }
         }
 
@@ -81,8 +73,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         public void ClearParticles()
         {
             _enteredParticles.Clear();
-            _particleIdentificationScreen.ClearParticles();
-            _particleIdentificationScreen.FillNbParticlesDetected(_manager.generatedParticles, _enteredParticles);
+            _particleIdentificationScreen.UpdateParticles(_enteredParticles);
         }
 
         /// <summary>
@@ -157,12 +148,11 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// Sends an error message to the top screen.
         /// </summary>
-        public void ParticleSendErrorMessage(string particleErrorString)
+        public void ParticleSendErrorMessage(ParticlesIdentification.ErrorType particleErrorType)
         {
-            _particleIdentificationScreen.DisplayErrorMessage(particleErrorString);
+            _particleIdentificationScreen.DisplayErrorMessage(particleErrorType);
         }
         
-        //TODO: replace by a generic wait
         IEnumerator WaitButton()
         {
             yield return new WaitForSeconds(0.5f);
@@ -213,28 +203,24 @@ namespace CRI.HelloHouston.Experience.MAIA
                     if (l1.SequenceEqual(l2))
                     {
                         //The right combination of particles have been entered.
-                        Debug.Log("The right combination of particles have been entered.");
                         ParticleRightCombination();
                     }
                     else
                     {
                         //A wrong combination of charges have been entered.
-                        Debug.Log("A wrong combination of charges have been entered.");
-                        ParticleSendErrorMessage("WRONG NUMBER OF CHARGES!");
+                        ParticleSendErrorMessage(ParticlesIdentification.ErrorType.WrongNumberCharges);
                     }
                 }
                 else
                 {
                     //A wrong combination of symbols have been entered.
-                    Debug.Log("A wrong combination of symbols have been entered.");
-                    ParticleSendErrorMessage("WRONG PARTICLES!");
+                    ParticleSendErrorMessage(ParticlesIdentification.ErrorType.WrongParticles);
                 }
             }
             else
             {
                 //A combination of particles with a wrong length has been entered.
-                Debug.Log("A combination of particles with a wrong length has been entered.");
-                ParticleSendErrorMessage("WRONG NUMBER OF PARTICLES!");
+                ParticleSendErrorMessage(ParticlesIdentification.ErrorType.WrongNumberParticles);
             }
         }
 
@@ -256,8 +242,8 @@ namespace CRI.HelloHouston.Experience.MAIA
             {
                 _isTouched = true;
                 _enteredParticles.Add(particle);
-                _particleIdentificationScreen.FillNbParticlesDetected(_manager.generatedParticles, _enteredParticles);
-                StartCoroutine("WaitButton");
+                _particleIdentificationScreen.UpdateParticles(_enteredParticles);
+                StartCoroutine(WaitButton());
             }
         }
 
@@ -276,7 +262,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                 bool interactable = _topScreen.CheckPassword(_enteredPassword);
                 if (_enteredPassword.Length == realPassword.Length || !interactable)
                     _enteredPassword = "";
-                StartCoroutine("WaitButton");
+                StartCoroutine(WaitButton());
             }
         }
         /// <summary>
@@ -315,14 +301,15 @@ namespace CRI.HelloHouston.Experience.MAIA
         private void Init(MAIAManager manager)
         {
             _manager = manager;
+            Debug.Log(manager);
             _topScreen = manager.topScreen;
             _particleIdentificationScreen = _topScreen.particleIdentificationScreen;
         }
 
-        public override void OnActivation(XPManager synchronizer)
+        public override void OnActivation(XPManager manager)
         {
-            base.OnActivation(synchronizer);
-            Init((MAIAManager)_manager);
+            base.OnActivation(manager);
+            Init((MAIAManager)manager);
         }
     }
 }

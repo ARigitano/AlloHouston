@@ -158,13 +158,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         protected override void PreActivate()
         {
             base.PreActivate();
-            List<Particle> particle = GenerateParticles();
-            holograms[0].CreateSplines(particle);
-        }
-
-        protected override void PostActivate()
-        {
-            base.PostActivate();
+            GenerateParticles();
         }
 
         protected override void PostInit(XPContext xpContext, ElementInfo[] info, LogExperienceController logController, XPState stateOnActivation)
