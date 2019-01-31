@@ -35,6 +35,14 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         [SerializeField]
         private ParticlesIdentification _particlesIdentification = null;
+
+        public ParticlesIdentification particleIdentificationScreen
+        {
+            get
+            {
+                return _particlesIdentification;
+            }
+        }
         /// <summary>
         /// Script for the Reactions Identification screen.
         /// </summary>
@@ -71,21 +79,10 @@ namespace CRI.HelloHouston.Experience.MAIA
             return _manualOverrideAccess.CheckPasswordInput(enteredPassword);
         }
 
-        public void FillNbParticlesDetected(List<Particle> reactionExits)
-        {
-            _particlesIdentification.FillNbParticlesDetected(reactionExits);
-        }
-
         public void DisplayParticles(List<Particle> _enteredParticles)
         {
             _particlesIdentification.DisplayParticles(_enteredParticles);
         }
-
-        //TODO: obsolete second part of experiment?
-        /*public void FillParticlesTable(int nbAntielectron, _textAntielectron)
-        {
-            _reactionsIdentification.FillParticlesTable(nbAntielectron, _textAntielectron)
-        }*/
 
         /// <summary>
         /// Tells the MAIA Overwiew panel that the start button has been pressed.
@@ -98,19 +95,6 @@ namespace CRI.HelloHouston.Experience.MAIA
             _manualOverrideAccess.gameObject.SetActive(true);
             _manualOverrideAccess.Show();
             _currentPanel = _manualOverrideAccess.gameObject;
-        }
-
-        public void DeleteParticle(int count)
-        {
-            _particlesIdentification.DeleteParticle(count);
-        }
-
-        /// <summary>
-        /// Tells the particle identification panel to clear all the entered particles.
-        /// </summary>
-        public void ClearParticles()
-        {
-            _particlesIdentification.ClearParticles();
         }
 
         /// <summary>
@@ -128,7 +112,6 @@ namespace CRI.HelloHouston.Experience.MAIA
 
         private void Start()
         {
-            //TODO: change when exile loading screen created;
             _currentPanel = _maiaLoading.gameObject;
         }
 
@@ -201,7 +184,6 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             Debug.Log(name + "Activated");
             Init((MAIAManager)manager);
-            //StartCoroutine("Loading");
         }
 
         public void AccessGranted()
@@ -232,7 +214,7 @@ namespace CRI.HelloHouston.Experience.MAIA
 
         public void ErrorParticles(string particleErrorString)
         {
-            _particlesIdentification.ErrorParticles(particleErrorString);
+            _particlesIdentification.DisplayErrorMessage(particleErrorString);
         }
 
         public void ReactionSelected(Reaction realReaction, Sprite diagramSelected)

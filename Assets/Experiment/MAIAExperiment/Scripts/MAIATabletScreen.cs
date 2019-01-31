@@ -36,7 +36,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// Stores the panels currently being displayed.
         /// </summary>
         private GameObject _currentPanelLeft, _currentPanelRight, _currentPanel;
-        public MAIATopScreen topScreen;
+        private MAIATopScreen _topScreen;
         public MAIAHologram hologram;
         public MAIATubeScreen tubeScreen;
         /// <summary>
@@ -48,13 +48,19 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         [HideInInspector]
         private List<Particle> _enteredParticles = new List<Particle>();
+        /// <summary>
+        /// Particle identification screen.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("Particle identification screen.")]
+        private ParticlesIdentification _particleIdentificationScreen;
 
         /// <summary>
         /// Tells the main screen that a particle has been entered.
         /// </summary>
         public void EnteringParticles()
         {
-            topScreen.DisplayParticles(_enteredParticles);
+            _topScreen.DisplayParticles(_enteredParticles);
         }
 
         public void DeleteParticle()
@@ -63,9 +69,20 @@ namespace CRI.HelloHouston.Experience.MAIA
             {
                 _isTouched = true;
                 _enteredParticles.RemoveAt(_enteredParticles.Count - 1);
-                topScreen.DeleteParticle(_enteredParticles.Count);
+                _particleIdentificationScreen.DeleteParticle(_enteredParticles.Count);
+                _particleIdentificationScreen.FillNbParticlesDetected(_manager.generatedParticles, _enteredParticles);
                 StartCoroutine("WaitButton");
             }
+        }
+
+        /// <summary>
+        /// Clears the particles combination entered.
+        /// </summary>
+        public void ClearParticles()
+        {
+            _enteredParticles.Clear();
+            _particleIdentificationScreen.ClearParticles();
+            _particleIdentificationScreen.FillNbParticlesDetected(_manager.generatedParticles, _enteredParticles);
         }
 
         /// <summary>
@@ -137,37 +154,14 @@ namespace CRI.HelloHouston.Experience.MAIA
             _particlesLeft.SetActive(false);
         }
 
-        
-
-        //TODO: only one of these methods needed
         /// <summary>
-        /// Tells the top screen that a combination of particles with a wrong length has been entered.
+        /// Sends an error message to the top screen.
         /// </summary>
-        public void ParticleWrongLength()
+        public void ParticleSendErrorMessage(string particleErrorString)
         {
-            topScreen.ErrorParticles(topScreen.particleErrorString);
-        }
-
-        //TODO: only one of these methods needed
-        /// <summary>
-        /// Tells the top screen that a combination of particles with the wrong symbols has been entered.
-        /// </summary>
-        public void ParticleWrongSymbol()
-        {
-            topScreen.ErrorParticles(topScreen.particleErrorString);
-        }
-
-        //TODO: only one of these methods needed
-        /// <summary>
-        /// Tells the top screen that a combination of particles with the wrong charges has been entered.
-        /// </summary>
-        public void ParticleWrongCharge()
-        {
-            topScreen.ErrorParticles(topScreen.particleErrorString);
+            _particleIdentificationScreen.DisplayErrorMessage(particleErrorString);
         }
         
-
-       
         //TODO: replace by a generic wait
         IEnumerator WaitButton()
         {
@@ -192,20 +186,11 @@ namespace CRI.HelloHouston.Experience.MAIA
         }
 
         /// <summary>
-        /// Clears the particles combination entered.
-        /// </summary>
-        public void ClearParticles()
-        {
-            _enteredParticles.Clear();
-            topScreen.ClearParticles();
-        }
-
-        /// <summary>
         /// Tells every screen that the right combination of particles has been entered.
         /// </summary>
         public void ParticleRightCombination()
         {
-            topScreen.OverrideSecond();
+            _topScreen.OverrideSecond();
             OverrideSecond();
             //Disabled for the demo version
             //_tubeScreen.OverrideSecond(_tabletScreen._allReactions);
@@ -235,24 +220,21 @@ namespace CRI.HelloHouston.Experience.MAIA
                     {
                         //A wrong combination of charges have been entered.
                         Debug.Log("A wrong combination of charges have been entered.");
-                        topScreen.particleErrorString = "WRONG NUMBER OF CHARGES!";
-                        ParticleWrongCharge();
+                        ParticleSendErrorMessage("WRONG NUMBER OF CHARGES!");
                     }
                 }
                 else
                 {
                     //A wrong combination of symbols have been entered.
                     Debug.Log("A wrong combination of symbols have been entered.");
-                    topScreen.particleErrorString = "WRONG PARTICLES!";
-                    ParticleWrongSymbol();
+                    ParticleSendErrorMessage("WRONG PARTICLES!");
                 }
             }
             else
             {
                 //A combination of particles with a wrong length has been entered.
                 Debug.Log("A combination of particles with a wrong length has been entered.");
-                topScreen.particleErrorString = "WRONG NUMBER OF PARTICLES!";
-                ParticleWrongLength();
+                ParticleSendErrorMessage("WRONG NUMBER OF PARTICLES!");
             }
         }
 
@@ -261,7 +243,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void ReactionSelected()
         {
-            topScreen.ReactionSelected(_manager.selectedReaction, tubeScreen.diagramSelected);
+            _topScreen.ReactionSelected(_manager.selectedReaction, tubeScreen.diagramSelected);
         }
 
         /// <summary>
@@ -274,7 +256,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             {
                 _isTouched = true;
                 _enteredParticles.Add(particle);
-                EnteringParticles();
+                _particleIdentificationScreen.FillNbParticlesDetected(_manager.generatedParticles, _enteredParticles);
                 StartCoroutine("WaitButton");
             }
         }
@@ -291,7 +273,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                 _isTouched = true;
                 string realPassword = _manager.settings.password;
                 _enteredPassword += character.ToString();
-                bool interactable = topScreen.CheckPassword(_enteredPassword);
+                bool interactable = _topScreen.CheckPassword(_enteredPassword);
                 if (_enteredPassword.Length == realPassword.Length || !interactable)
                     _enteredPassword = "";
                 StartCoroutine("WaitButton");
@@ -320,7 +302,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void OverrideButtonClicked()
         {
-            topScreen.AccessCode();
+            _topScreen.AccessCode();
             StartCoroutine(WaitGeneric(0.2f, () =>
             {
                 _passwordLeft.SetActive(true);
@@ -330,31 +312,17 @@ namespace CRI.HelloHouston.Experience.MAIA
 
         }
 
-        //TODO: obsolete;
-        /// <summary>
-        /// Displays override panel after start button has been clicked.
-        /// </summary>
-        /*public void StartButtonClicked()
-        {
-            Debug.Log("StartButtonClicked");
-            topScreen.ManualOverride();
-            StartCoroutine(WaitGeneric(0.2f, () =>
-            {
-                _panelFull.SetActive(true);
-                _currentPanel = _panelFull;
-                _startFull.SetActive(false);
-                StartCoroutine("FakeLoading");
-            }));
-        }*/
-
         private void Init(MAIAManager manager)
         {
             _manager = manager;
+            _topScreen = manager.topScreen;
+            _particleIdentificationScreen = _topScreen.particleIdentificationScreen;
         }
 
-        public override void OnActivation(XPManager manager)
+        public override void OnActivation(XPManager synchronizer)
         {
-            Init((MAIAManager)manager);
+            base.OnActivation(synchronizer);
+            Init((MAIAManager)_manager);
         }
     }
 }

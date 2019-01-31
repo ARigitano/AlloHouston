@@ -51,17 +51,15 @@ namespace CRI.HelloHouston.Experience.MAIA
         [Tooltip("Password input transform.")]
         private Transform _passwordBox = null;
         /// <summary>
-        /// Input box prefab.
+        /// Grid cell prefab.
         /// </summary>
         [SerializeField]
-        [Tooltip("Input box prefab.")]
-        private GameObject _inputBoxPrefab = null;
+        [Tooltip("Grid cell prefab.")]
+        private GridCell _gridCellPrefab = null;
         /// <summary>
         /// Slots to enter the numbers for the password.
         /// </summary>
-        [SerializeField]
-        [Tooltip("Slots to enter the numbers for the password")]
-        private GameObject[] _passwordSlots = null;
+        private GridCell[] _passwordSlots = null;
         /// <summary>
         /// Wait time until error message.
         /// </summary>
@@ -84,9 +82,9 @@ namespace CRI.HelloHouston.Experience.MAIA
             _realPassword = password;
             for (int i = 0; _passwordSlots != null && i < _passwordSlots.Length; i++)
                 Destroy(_passwordSlots[i]);
-            _passwordSlots = new GameObject[password.Length];
+            _passwordSlots = new GridCell[password.Length];
             for (int i = 0; i < password.Length; i++)
-                _passwordSlots[i] = GameObject.Instantiate(_inputBoxPrefab, _passwordBox);
+                _passwordSlots[i] = GameObject.Instantiate(_gridCellPrefab, _passwordBox);
             _passwordWindow.SetActive(true);
         }
 
@@ -101,8 +99,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             if (_interactable)
             {
                 for (int i = 0; i < _passwordSlots.Length; i++)
-                    _passwordSlots[i].GetComponentsInChildren<Image>()
-                        .First(x => x.gameObject != _passwordSlots[i].gameObject).enabled = i < password.Length;
+                    _passwordSlots[i].Show(i < password.Length);
                 if (password.Length == _realPassword.Length)
                 {
                     Access(password == _realPassword);
@@ -134,8 +131,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             yield return new WaitForSeconds(2);
             _popupErrorAccessDenied.SetActive(false);
             for (int i = 0; i < _passwordSlots.Length; i++)
-                _passwordSlots[i].GetComponentsInChildren<Image>()
-    .First(x => x.gameObject != _passwordSlots[i].gameObject).enabled = false;
+                _passwordSlots[i].Show(false);
             _interactable = true;
         }
 

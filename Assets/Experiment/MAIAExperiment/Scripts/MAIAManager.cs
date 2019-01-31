@@ -14,19 +14,19 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// The top left script of the experiment block.
         /// </summary>
-        private MAIATopScreen _topScreen;
+        public MAIATopScreen topScreen { get; private set; }
         /// <summary>
         /// The top right script of the experiment block.
         /// </summary>
-        private MAIATubeScreen _tubeScreen;
+        public MAIATubeScreen tubeScreen { get; private set; }
         /// <summary>
         /// The tablet script of the experiment block.
         /// </summary>
-        private MAIATabletScreen _tabletScreen;
+        public MAIATabletScreen tabletScreen { get; private set; }
         /// <summary>
         /// The hologram scripts of the table block.
         /// </summary>
-        private MAIAHologram[] _holograms;
+        public MAIAHologram[] holograms;
         /// <summary>
         /// Settings of the experience.
         /// </summary>
@@ -53,10 +53,10 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             if (generatedParticles.Count == 0)
                 GenerateParticles();
-            _holograms[0].ActivateHologram(true);
-            _tabletScreen.SkipStepOne();
-            _tubeScreen.SkipStepOne();
-            _topScreen.SkipStepOne();
+            holograms[0].ActivateHologram(true);
+            tabletScreen.SkipStepOne();
+            tubeScreen.SkipStepOne();
+            topScreen.SkipStepOne();
         }
 
 
@@ -103,15 +103,15 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void LoadingBarFinished()
         {
-            _tabletScreen.WaitingConfirmation();
+            tabletScreen.WaitingConfirmation();
         }
 
         public void AccessGranted()
         {
-            _holograms[0].ActivateHologram(true);
-            _holograms[0].StartAnimation();
-            _topScreen.AccessGranted();
-            _tabletScreen.AccessGranted();
+            holograms[0].ActivateHologram(true);
+            holograms[0].StartAnimation();
+            topScreen.AccessGranted();
+            tabletScreen.AccessGranted();
         }
 
 
@@ -122,7 +122,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void ManualOverrideActive()
         {
-            _tabletScreen.ManualOverride();
+            tabletScreen.ManualOverride();
         }
 
 
@@ -151,27 +151,32 @@ namespace CRI.HelloHouston.Experience.MAIA
         protected override void PreShow(VirtualWallTopZone wallTopZone, ElementInfo[] zones)
         {
             base.PreShow(wallTopZone, zones);
-            _tabletScreen = GetElement<MAIATabletScreen>();
-            _topScreen = GetElement<MAIATopScreen>();
-            _tubeScreen = GetElement<MAIATubeScreen>();
-            _tabletScreen.tubeScreen = _tubeScreen;
-            _tabletScreen.topScreen = _topScreen;
-            _tabletScreen.hologram = _holograms[0];
-            _topScreen.tabletScreen = _tabletScreen;
-            _holograms[0].DisplaySplines();
+            holograms[0].DisplaySplines();
+        }
+
+
+        protected override void PreActivate()
+        {
+            base.PreActivate();
+            List<Particle> particle = GenerateParticles();
+            holograms[0].CreateSplines(particle);
         }
 
         protected override void PostActivate()
         {
             base.PostActivate();
-            List<Particle> particle = GenerateParticles();
-            _holograms[0].CreateSplines(particle);
         }
 
         protected override void PostInit(XPContext xpContext, ElementInfo[] info, LogExperienceController logController, XPState stateOnActivation)
         {
             base.PostInit(xpContext, info, logController, stateOnActivation);
-            _holograms = GetElements<MAIAHologram>();
+            holograms = GetElements<MAIAHologram>();
+            tabletScreen = GetElement<MAIATabletScreen>();
+            topScreen = GetElement<MAIATopScreen>();
+            tubeScreen = GetElement<MAIATubeScreen>();
+            tabletScreen.tubeScreen = tubeScreen;
+            tabletScreen.hologram = holograms[0];
+            topScreen.tabletScreen = tabletScreen;
             settings = (MAIASettings)xpContext.xpSettings;
         }
     }
