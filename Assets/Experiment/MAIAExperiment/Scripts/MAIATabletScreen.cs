@@ -232,13 +232,13 @@ namespace CRI.HelloHouston.Experience.MAIA
             //Checks if the combination entered has the right number of particles.
             if (_enteredParticles.Count == _manager.generatedParticles.Count)
             {
-                var l1 = _enteredParticles.OrderBy(particle => particle.name);
-                var l2 = _manager.generatedParticles.OrderBy(particle => particle.name);
+                var l1 = _enteredParticles.OrderBy(particle => particle.particleName);
+                var l2 = _manager.generatedParticles.OrderBy(particle => particle.particleName);
                 // Checks if the right symbols have been entered.
-                if (l1.Select(particle => particle.name).SequenceEqual(l2.Select(particle => particle.name)))
+                if (l1.Select(particle => particle.particleName).SequenceEqual(l2.Select(particle => particle.particleName)))
                 {
                     //Check if the right symbols have been entered.
-                    if (l1.SequenceEqual(l2))
+                    if (l1.Select(particle => new { particle.particleName, particle.negative }).SequenceEqual(l2.Select(particle => new { particle.particleName, particle.negative })))
                     {
                         //The right combination of particles have been entered.
                         _advanceOverride.SetActive(true);
