@@ -15,7 +15,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         [SerializeField]
         private MAIATabletScreen _tablet; 
 
-        void OnTriggerStay(Collider other)
+        void OnTriggerEnter(Collider other)
         {
             if (other.tag == "Feynmanbox")
             {
@@ -26,5 +26,16 @@ namespace CRI.HelloHouston.Experience.MAIA
                 _tablet.DiagramValidation(diagram);
             }
         }
+
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.tag == "Feynmanbox")
+            {
+                GameObject feynmanBox = other.gameObject;
+                MeshRenderer[] renderers = feynmanBox.GetComponentsInChildren<MeshRenderer>();
+
+
+                _tablet.NoDiagram();
+            }
     }
 }

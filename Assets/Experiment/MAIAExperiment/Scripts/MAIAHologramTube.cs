@@ -226,6 +226,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             //Displaying the lines.
             if (particle.line)
             {
+                
                 var line = Instantiate(_lineRendererPrefab, Vector3.zero, Quaternion.identity, spline.transform);
                 line.transform.localPosition = Vector3.zero;
                 line.transform.localRotation = Quaternion.identity;
@@ -249,6 +250,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             //Displaying the heads.
             if (particle.head)
             {
+                
                 GameObject lineHead = (GameObject)Instantiate(_headPrefab, Vector3.zero, Quaternion.identity, spline.transform);
                 lineHead.GetComponentInChildren<XRLineRenderer>().colorGradient.SetKeys(
                     new GradientColorKey[]
@@ -265,13 +267,16 @@ namespace CRI.HelloHouston.Experience.MAIA
                 lineHead.transform.position = spline.GetPoint(1.0f);
                 lineHead.transform.localRotation = Quaternion.FromToRotation(lineHead.transform.up, vDir);
                 _particleHeads.Add(lineHead.GetComponent<XRLineRenderer>());
+                Debug.Log("splines2");
             }
         }
 
         public void DisplaySplines()
         {
+            
             foreach (HologramSpline hologramSpline in _particleSplineArray)
             {
+                
                 PopulateLine(hologramSpline);
             }
         }

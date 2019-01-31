@@ -53,6 +53,10 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// Is the holographic diagram the right one?
         /// </summary>
         public bool correctDiagram = false;
+        /// <summary>
+        /// Is there a diagram in the docking zone?
+        /// </summary>
+        private bool _isDiagram = false;
 
         /// <summary>
         /// Tests if the chosen holographic diagram is correct.
@@ -64,11 +68,20 @@ namespace CRI.HelloHouston.Experience.MAIA
             /// Is the holographic diagram the right one?
             /// </summary>
             correctDiagram = false;
+            _isDiagram = true;
 
             if (diagram == _manager.selectedReaction.diagramImage)
             {
                 correctDiagram = true;
             }
+        }
+
+        /// <summary>
+        /// No diagram is detected on docking zone.
+        /// </summary>
+        public void NoDiagram()
+        {
+            _isDiagram = false;
         }
 
         /// <summary>
@@ -302,7 +315,10 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void ReactionSelected()
         {
-            topScreen.ReactionSelected(correctDiagram);
+            if (_isDiagram)
+            {
+                topScreen.ReactionSelected(correctDiagram);
+            }
             //topScreen.ReactionSelected(_manager.selectedReaction, tubeScreen.diagramSelected);
         }
 
@@ -361,7 +377,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void AccessGranted()
         {
-            hologramTube.ActivateHologram(true);
+            hologramTube.gameObject.SetActive(true);
             hologramTube.DisplaySplines();
             topScreen.FillNbParticlesDetected(_manager.generatedParticles);
             _passwordLeft.SetActive(false);
