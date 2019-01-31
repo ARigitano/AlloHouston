@@ -17,7 +17,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// All the panels for the tablet screen.
         /// </summary>
         [SerializeField]
-        private GameObject _startFull, _panelFull, _overrideLeft, _passwordLeft, _particlesLeft, _diagramsSelectionLeft, _diagramsSelectionRight;
+        private GameObject _startFull, _panelFull, _overrideLeft, _passwordLeft, _particlesLeft, _advanceOverride, _diagramsSelectionLeft, _diagramsSelectionRight;
         /// <summary>
         /// Loading bar to display the time remaining.
         /// </summary>
