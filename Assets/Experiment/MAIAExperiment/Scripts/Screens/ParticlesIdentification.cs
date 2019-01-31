@@ -60,34 +60,22 @@ namespace CRI.HelloHouston.Experience.MAIA
         [SerializeField]
         private GameObject _successParticles = null;
         /// <summary>
-        /// Victory popup for the demo version.
-        /// </summary>
-        [SerializeField]
-        private GameObject _victoryPopup = null;
-        /// <summary>
         /// Error popup duration.
         /// </summary>
         [SerializeField]
         [Tooltip("Error popup duration.")]
         private float _errorPopupDuration = 3.0f;
         /// <summary>
+        /// Success popup duration.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("Success popup duration.")]
+        private float _successPopupDuration = 1.0f;
+        /// <summary>
         /// Dictionary with key error type and value the error message.
         /// </summary>
         [SerializeField]
         private ErrorMessage[] _errorMessages = null;
-
-        private void Start()
-        {
-            _particleTextMessage = _nbParticlesDetected.text;
-        }
-
-        /// <summary>
-        /// Ends the game for the demo version.
-        /// </summary>
-        public void OverrideSecond()
-        {
-            _victoryPopup.SetActive(true);
-        }
 
         /// <summary>
         /// Displays a popup if the player selected the wrong Feynman diagram.
@@ -106,10 +94,10 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// Fills the number of particles that have been detected on the reaction summary window.
         /// </summary>
-        /// <param name="particles">The particles that have been detected.</param>
-        private void FillNbParticlesDetected(List<Particle> generatedParticles, List<Particle> particles)
+        /// <param name="particles">The number of particles that have been detected.</param>
+        private void FillNbParticlesDetected(int count)
         {
-            _nbParticlesDetected.text = _particleTextMessage.Replace("[p]", (generatedParticles.Count - particles.Count).ToString());
+            _nbParticlesDetected.text = _particleTextMessage.Replace("[p]", count.ToString());
         }
 
         /// <summary>
@@ -118,20 +106,27 @@ namespace CRI.HelloHouston.Experience.MAIA
         private void SuccessParticles()
         {
             _successParticles.SetActive(true);
+            StartCoroutine(_maiaTopScreen.WaitGeneric(_successPopupDuration, () =>
+            {
+                _successParticles.SetActive(false);
+                _maiaTopScreen.manager.StartAdvancedManualOverride();
+            }));
         }
 
         /// <summary>
         /// Generates a grid for particles to be entered in.
         /// </summary>
         /// <param name="particles">The particles detected.</param>
-        public void ParticleGrid(List<Particle> particles)
+        public void CreateParticleGrid(List<Particle> particles)
         {
+            _particleTextMessage = _nbParticlesDetected.text;
             _gridParticles = new GridCell[particles.Count];
             for (int i = 0; i < particles.Count; i++)
             {
                 var gridCell = Instantiate(_gridCellPrefab, _particlesGrid);
                 _gridParticles[i] = gridCell;
             }
+            FillNbParticlesDetected(_maiaTopScreen.manager.generatedParticles.Count);
         }
 
         /// <summary>
@@ -155,8 +150,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         public void UpdateParticles(List<Particle> enteredParticles)
         {
             DisplayParticles(enteredParticles);
-            FillNbParticlesDetected(_maiaTopScreen.manager.generatedParticles, enteredParticles);
+            FillNbParticlesDetected(_maiaTopScreen.manager.generatedParticles.Count - enteredParticles.Count);
         }
-
     }
 }

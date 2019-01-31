@@ -51,9 +51,11 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// Particle identification screen.
         /// </summary>
-        [SerializeField]
-        [Tooltip("Particle identification screen.")]
         private ParticlesIdentification _particleIdentificationScreen;
+        /// <summary>
+        /// Manual override access screen.
+        /// </summary>
+        private MAIAManualOverrideAccess _manualOverrideAccessScreen;
 
         public void DeleteParticle()
         {
@@ -124,15 +126,6 @@ namespace CRI.HelloHouston.Experience.MAIA
             action.Invoke();
         }
 
-        //TODO: check if useful
-        /// <summary>
-        /// Selects a reaction.
-        /// </summary>
-        public void SelectReaction()
-        {
-            ReactionSelected();
-        }
-
         /// <summary>
         /// Activates the reaction selection panels.
         /// </summary>
@@ -180,7 +173,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void ParticleRightCombination()
         {
-            _topScreen.OverrideSecond();
+            _topScreen.StartAnalysisAnimation();
             OverrideSecond();
             //Disabled for the demo version
             //_tubeScreen.OverrideSecond(_tabletScreen._allReactions);
@@ -225,14 +218,6 @@ namespace CRI.HelloHouston.Experience.MAIA
         }
 
         /// <summary>
-        /// Tells the main screen that a reaction has been selected.
-        /// </summary>
-        public void ReactionSelected()
-        {
-            _topScreen.ReactionSelected(_manager.selectedReaction, tubeScreen.diagramSelected);
-        }
-
-        /// <summary>
         /// Adds a particle to the combination.
         /// </summary>
         /// <param name="particleButton">The particle to add.</param>
@@ -259,7 +244,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                 _isTouched = true;
                 string realPassword = _manager.settings.password;
                 _enteredPassword += character.ToString();
-                bool interactable = _topScreen.CheckPassword(_enteredPassword);
+                bool interactable = _manualOverrideAccessScreen.CheckPasswordInput(_enteredPassword);
                 if (_enteredPassword.Length == realPassword.Length || !interactable)
                     _enteredPassword = "";
                 StartCoroutine(WaitButton());
@@ -268,7 +253,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// Displays particle selection panel after the correct password have been entered.
         /// </summary>
-        public void AccessGranted()
+        public void StartParticleIdentification()
         {
             _passwordLeft.SetActive(false);
             _particlesLeft.SetActive(true);
@@ -288,14 +273,13 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void OverrideButtonClicked()
         {
-            _topScreen.AccessCode();
+            _topScreen.InitPasswordInput();
             StartCoroutine(WaitGeneric(0.2f, () =>
             {
                 _passwordLeft.SetActive(true);
                 _currentPanelLeft = _passwordLeft;
                 _overrideLeft.SetActive(false);
             }));
-
         }
 
         private void Init(MAIAManager manager)
@@ -304,6 +288,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             Debug.Log(manager);
             _topScreen = manager.topScreen;
             _particleIdentificationScreen = _topScreen.particleIdentificationScreen;
+            _manualOverrideAccessScreen = _topScreen.manualOverrideAccessScreen;
         }
 
         public override void OnActivation(XPManager manager)

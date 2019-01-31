@@ -26,10 +26,23 @@ namespace CRI.HelloHouston.Experience.MAIA
         [SerializeField]
         private MAIALoading _maiaLoading = null;
         /// <summary>
+        /// Analysis screen.
+        /// </summary>
+        [SerializeField]
+        private MAIAAnalysisScreen _analysisScreen = null;
+        /// <summary>
         /// Script for the Manual Override Access screen.
         /// </summary>
         [SerializeField]
         private MAIAManualOverrideAccess _manualOverrideAccess = null;
+
+        public MAIAManualOverrideAccess manualOverrideAccessScreen
+        {
+            get
+            {
+                return _manualOverrideAccess;
+            }
+        }
         /// <summary>
         /// Script for the Particles Identification screen.
         /// </summary>
@@ -47,7 +60,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// Script for the Reactions Identification screen.
         /// </summary>
         [SerializeField]
-        private ReactionsIdentification _reactionsIdentification = null;
+        private MAIAReactionIdentificationScreen _reactionsIdentification = null;
         /// <summary>
         /// Stores the panel currently being displayed.
         /// </summary>
@@ -60,29 +73,23 @@ namespace CRI.HelloHouston.Experience.MAIA
         [HideInInspector]
         public string particleErrorString;
 
-
-
-        public void ActivateManualOverride()
-        {
-            manager.ManualOverrideActive();
-        }
-
-
-        //TODO: never called
         public void ParticleGrid(List<Particle> reactionExits)
         {
-            _particlesIdentification.ParticleGrid(reactionExits);
+            _particlesIdentification.CreateParticleGrid(reactionExits);
         }
 
-        public bool CheckPassword(string enteredPassword)
+        /// <summary>
+        /// Called by the synchronizer to skip directly to the Feynman diagrams step.
+        /// </summary>
+        public void SkipStepOne()
         {
-            return _manualOverrideAccess.CheckPasswordInput(enteredPassword);
+            StartAnalysisAnimation();
         }
 
         /// <summary>
         /// Tells the MAIA Overwiew panel that the start button has been pressed.
         /// </summary>
-        public void ManualOverride()
+        public void StartManualOverride()
         {
             if (_currentPanel != null)
                 _currentPanel.SetActive(false);
@@ -92,35 +99,36 @@ namespace CRI.HelloHouston.Experience.MAIA
             _currentPanel = _manualOverrideAccess.gameObject;
         }
 
+        public void StartParticleIdentification()
+        {
+            if (_currentPanel != null)
+                _currentPanel.SetActive(false);
+            _currentPanel = _particlesIdentification.gameObject;
+            _particlesIdentification.gameObject.SetActive(true);
+            _particlesIdentification.CreateParticleGrid(manager.generatedParticles);
+        }
+
         /// <summary>
         /// Tells the Particle Identification panel that the right combination of particles has been entered.
         /// </summary>
-        public void OverrideSecond()
+        public void StartAnalysisAnimation()
         {
             if (_currentPanel != null)
                 _currentPanel.SetActive(false);
-            _particlesIdentification.OverrideSecond();
-            _reactionsIdentification.gameObject.SetActive(true);
-            _currentPanel = _reactionsIdentification.gameObject;
+            _analysisScreen.gameObject.SetActive(true);
+            _currentPanel = _analysisScreen.gameObject;
             _particlesIdentification.gameObject.SetActive(false);
+            _analysisScreen.StartAnalysisAnimation();
         }
 
-        public void ParticleIdentification()
-        {
-            ParticleGrid(manager.generatedParticles);
-            _reactionsIdentification.FillParticlesTable(manager.generatedParticles);
-            _reactionsIdentification.FillChosenDiagrams(manager.ongoingReactions, manager.selectedReaction);
-        }
-
-        /// <summary>
-        /// Called by the synchronizer to skip directly to the Feynman diagrams step.
-        /// </summary>
-        public void SkipStepOne()
+        public void StartReactionIdentification()
         {
             if (_currentPanel != null)
                 _currentPanel.SetActive(false);
+            _analysisScreen.gameObject.SetActive(false);
             _reactionsIdentification.gameObject.SetActive(true);
             _currentPanel = _reactionsIdentification.gameObject;
+            _reactionsIdentification.StartReactionIdentification();
         }
 
         /// <summary>
@@ -135,30 +143,12 @@ namespace CRI.HelloHouston.Experience.MAIA
             action.Invoke();
         }
 
-
         /// <summary>
         /// Displays the access screen when the manual override button is pressed.
         /// </summary>
-        public void AccessCode()
+        public void InitPasswordInput()
         {
             _manualOverrideAccess.InitPasswordInput(manager.settings.password);
-        }
-
-
-
-        public void AccessGranted()
-        {
-            if (_currentPanel != null)
-                _currentPanel.SetActive(false);
-            _currentPanel = _particlesIdentification.gameObject;
-            _particlesIdentification.gameObject.SetActive(true);
-            _particlesIdentification.ParticleGrid(manager.generatedParticles);
-        }
-
-
-        public void ReactionSelected(Reaction realReaction, Sprite diagramSelected)
-        {
-            _reactionsIdentification.ReactionSelected(realReaction, diagramSelected);
         }
 
         public void Init(MAIAManager synchronizer)
@@ -191,7 +181,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             Debug.Log(name + "Activated");
             Init((MAIAManager)manager);
-            ManualOverride();
+            StartManualOverride();
         }
     }
 }

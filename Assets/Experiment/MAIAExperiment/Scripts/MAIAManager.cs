@@ -44,7 +44,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public List<Particle> generatedParticles { get; private set; }
 
-        //Game Master's actions
+        #region GameMasterActions
 
         /// <summary>
         /// Selects the ongoing particle reactions for this game.
@@ -53,14 +53,15 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             if (generatedParticles.Count == 0)
                 GenerateParticles();
-            holograms[0].ActivateHologram(true);
+            holograms[0].ActivateHologram(false);
             tabletScreen.SkipStepOne();
             tubeScreen.SkipStepOne();
             topScreen.SkipStepOne();
         }
 
+        #endregion
 
-        //Particles generation
+        #region ParticleGeneration
 
         private List<Particle> GenerateParticles()
         {
@@ -95,6 +96,8 @@ namespace CRI.HelloHouston.Experience.MAIA
                 logController.AddLog(string.Format("{0}: {1}", particleGroup.Key, particleGroup.Count()), xpContext, Log.LogType.Default);
         }
 
+        #endregion
+
 
         //Exile loading screen
 
@@ -106,23 +109,32 @@ namespace CRI.HelloHouston.Experience.MAIA
             tabletScreen.WaitingConfirmation();
         }
 
-        public void AccessGranted()
+        public void StartParticleIdentification()
         {
             holograms[0].ActivateHologram(true);
             holograms[0].StartAnimation();
-            topScreen.AccessGranted();
-            tabletScreen.AccessGranted();
+            topScreen.StartParticleIdentification();
+            tabletScreen.StartParticleIdentification();
         }
-
-
-        //Manual override screen
 
         /// <summary>
         /// Activates the manual override panel of the tablet.
         /// </summary>
-        public void ManualOverrideActive()
+        public void ActivateManualOverride()
         {
             tabletScreen.ManualOverride();
+        }
+
+        public void StartAdvancedManualOverride()
+        {
+            
+            topScreen.StartAnalysisAnimation();
+            tabletScreen.OverrideSecond();
+        }
+
+        public void StartReactionIdentification()
+        {
+            topScreen.StartReactionIdentification();
         }
 
 

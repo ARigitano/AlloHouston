@@ -69,5 +69,9 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// Image of the symbol of the particle.
         /// </summary>
         public Sprite symbolImage;
+        /// <summary>
+        /// Second type of symbol of the particle.
+        /// </summary>
+        public Sprite symbolImage2;
     }
 }
