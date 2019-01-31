@@ -24,13 +24,16 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         private MAIATabletScreen _tabletScreen;
         /// <summary>
-        /// The hologram scripts of the table block.
+        /// The hologram tube of the table block.
         /// </summary>
         private MAIAHologramTube[] _hologramTube;
         /// <summary>
-        /// 
+        /// The hologram Feynman of the table block.
         /// </summary>
         private MAIAHologramFeynman _hologramFeynman;
+        /// <summary>
+        /// The bottomscreen script of the experiment block.
+        /// </summary>
         private MAIABottomScreen _bottomScreen;
         /// <summary>
         /// Settings of the experience.
@@ -52,7 +55,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         //Game Master's actions
 
         /// <summary>
-        /// 
+        /// Skips to the second part od the experiment.
         /// </summary>
         public void SkipStepOne()
         {
@@ -70,6 +73,10 @@ namespace CRI.HelloHouston.Experience.MAIA
 
         //Particles generation
 
+        /// <summary>
+        /// Generates the list of particles detected for this game.
+        /// </summary>
+        /// <returns>The list of detected particles.</returns>
         private List<Particle> GenerateParticles()
         {
             List<Reaction> currentReactions = SelectReactions();
