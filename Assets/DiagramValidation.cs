@@ -13,7 +13,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// The tabletScreen script.
         /// </summary>
         [SerializeField]
-        private MAIATabletScreen _tablet; 
+        private MAIATabletScreen _tablet;
 
         void OnTriggerEnter(Collider other)
         {
@@ -37,5 +37,6 @@ namespace CRI.HelloHouston.Experience.MAIA
 
                 _tablet.NoDiagram();
             }
+        }
     }
 }
