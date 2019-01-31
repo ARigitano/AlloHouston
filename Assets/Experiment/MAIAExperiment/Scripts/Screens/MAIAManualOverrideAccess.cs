@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -61,18 +62,28 @@ namespace CRI.HelloHouston.Experience.MAIA
         [SerializeField]
         [Tooltip("Slots to enter the numbers for the password")]
         private GameObject[] _passwordSlots = null;
+        /// <summary>
+        /// Wait time until error message.
+        /// </summary>
         [SerializeField]
         [Tooltip("Wait time until error message.")]
         private float _waitTimeBeforeErrorMessage = 2.0f;
+        /// <summary>
+        /// Wait time until info message.
+        /// </summary>
         [SerializeField]
         [Tooltip("Wait time until info message.")]
         private float _waitTimeBeforeInfoMessage = 2.0f;
 
         private string _realPassword;
 
-        public void DisplayPassword(string password)
+        private bool _interactable = true;
+
+        public void InitPasswordInput(string password)
         {
             _realPassword = password;
+            for (int i = 0; _passwordSlots != null && i < _passwordSlots.Length; i++)
+                Destroy(_passwordSlots[i]);
             _passwordSlots = new GameObject[password.Length];
             for (int i = 0; i < password.Length; i++)
                 _passwordSlots[i] = GameObject.Instantiate(_inputBoxPrefab, _passwordBox);
@@ -83,15 +94,20 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// Displays the pasword that is being entered.
         /// </summary>
         /// <param name="password">The password being entered.</param>
-        public bool CheckPassword(string password)
+        /// <returns>False if the password is already being checked.</returns>
+        public bool CheckPasswordInput(string password)
         {
             bool res = false;
-            for (int i = 0; i < _passwordSlots.Length; i++)
-                _passwordSlots[i].GetComponentInChildren<Image>().enabled = i < password.Length;
-            if (password.Length == _realPassword.Length)
+            if (_interactable)
             {
-                res = password == _realPassword;
-                Access(res);
+                for (int i = 0; i < _passwordSlots.Length; i++)
+                    _passwordSlots[i].GetComponentsInChildren<Image>()
+                        .First(x => x.gameObject != _passwordSlots[i].gameObject).enabled = i < password.Length;
+                if (password.Length == _realPassword.Length)
+                {
+                    Access(password == _realPassword);
+                }
+                res = true;
             }
             return res;
         }
@@ -101,10 +117,11 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         /// <returns></returns>
         IEnumerator WaitCorrect()
-        {        
+        {
+            _interactable = false;
             yield return new WaitForSeconds(2);
             _popupAccessGranted.SetActive(false);
-            _maiaTopScreen.AccessGranted();
+            _maiaTopScreen.manager.AccessGranted();
         }
 
         /// <summary>
@@ -113,12 +130,13 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <returns></returns>
         IEnumerator WaitDenied()
         {
+            _interactable = false;
             yield return new WaitForSeconds(2);
             _popupErrorAccessDenied.SetActive(false);
             for (int i = 0; i < _passwordSlots.Length; i++)
-            {
-                _passwordSlots[i].GetComponentInChildren<Image>().enabled = false;
-            }
+                _passwordSlots[i].GetComponentsInChildren<Image>()
+    .First(x => x.gameObject != _passwordSlots[i].gameObject).enabled = false;
+            _interactable = true;
         }
 
         /// <summary>

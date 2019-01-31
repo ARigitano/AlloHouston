@@ -106,6 +106,14 @@ namespace CRI.HelloHouston.Experience.MAIA
             _tabletScreen.WaitingConfirmation();
         }
 
+        public void AccessGranted()
+        {
+            _holograms[0].ActivateHologram(true);
+            _holograms[0].StartAnimation();
+            _topScreen.AccessGranted();
+            _tabletScreen.AccessGranted();
+        }
+
 
         //Manual override screen
 

@@ -50,22 +50,6 @@ namespace CRI.HelloHouston.Experience.MAIA
         private List<Particle> _enteredParticles = new List<Particle>();
 
         /// <summary>
-        /// Tells the main screen that the right password has been entered.
-        /// </summary>
-        public void CorrectPassword()
-        {
-            topScreen.Access(true);
-        }
-
-        /// <summary>
-        /// Tells the main screen that an incorrect password has been entered.
-        /// </summary>
-        public void IncorrectPassword()
-        {
-            topScreen.Access(false);
-        }
-
-        /// <summary>
         /// Tells the main screen that a particle has been entered.
         /// </summary>
         public void EnteringParticles()
@@ -306,26 +290,10 @@ namespace CRI.HelloHouston.Experience.MAIA
                 Debug.Log(character);
                 _isTouched = true;
                 string realPassword = _manager.settings.password;
-
-                if (_enteredPassword.Length < realPassword.Length)
-                {
-                    _enteredPassword += character.ToString();
-                    topScreen.DisplayPassword(_enteredPassword);
-                }
-                else if (_enteredPassword.Length == realPassword.Length)
-                {
-                    if (_enteredPassword == realPassword)
-                    {
-                        Debug.Log("correct");
-                        CorrectPassword();
-                    }
-                    else
-                    {
-                        Debug.Log("wrong");
-                        IncorrectPassword();
-                        _enteredPassword = "";
-                    }
-                }
+                _enteredPassword += character.ToString();
+                bool interactable = topScreen.CheckPassword(_enteredPassword);
+                if (_enteredPassword.Length == realPassword.Length || !interactable)
+                    _enteredPassword = "";
                 StartCoroutine("WaitButton");
             }
         }
@@ -334,9 +302,6 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void AccessGranted()
         {
-            hologram.ActivateHologram(true);
-            hologram.DisplaySplines();
-            topScreen.FillNbParticlesDetected(_manager.generatedParticles);
             _passwordLeft.SetActive(false);
             _particlesLeft.SetActive(true);
             _currentPanelLeft = _particlesLeft;

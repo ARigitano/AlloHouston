@@ -218,8 +218,7 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         public void Show(VirtualWallTopZone wallTopZone)
         {
-            var zones = InitZone(wallTopZone);
-            PreShow(wallTopZone, zones);
+            PreShow(wallTopZone, elements.ToArray());
             this.wallTopZone = wallTopZone;
             wallTopZone.Place(xpContext.xpWallTopZone, xpContext);
             state = XPState.Visible;
@@ -230,7 +229,7 @@ namespace CRI.HelloHouston.Experience
             {
                 element.xpElement.OnShow();
             }
-            PostShow(wallTopZone, zones);
+            PostShow(wallTopZone, elements.ToArray());
         }
 
         /// <summary>
@@ -265,7 +264,7 @@ namespace CRI.HelloHouston.Experience
             this.logController = logController;
             if (logController != null)
                 logController.AddLog("Ready", xpContext, Log.LogType.Automatic);
-            PostInit(xpContext, InitZones(zones.Where(x => !x.switchableZone).ToArray()), logController, stateOnActivation);
+            PostInit(xpContext, InitZones(zones), logController, stateOnActivation);
         }
 
         /// <summary>

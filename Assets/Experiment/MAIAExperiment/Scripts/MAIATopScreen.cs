@@ -26,11 +26,6 @@ namespace CRI.HelloHouston.Experience.MAIA
         [SerializeField]
         private MAIALoading _maiaLoading = null;
         /// <summary>
-        /// Script for the MAIA Overview screen.
-        /// </summary>
-        [SerializeField]
-        private MAIAOverview _maiaOverview = null;
-        /// <summary>
         /// Script for the Manual Override Access screen.
         /// </summary>
         [SerializeField]
@@ -71,9 +66,9 @@ namespace CRI.HelloHouston.Experience.MAIA
             _particlesIdentification.ParticleGrid(reactionExits);
         }
 
-        public void DisplayPassword(string enteredPassword)
+        public bool CheckPassword(string enteredPassword)
         {
-            _manualOverrideAccess.CheckPassword(enteredPassword);
+            return _manualOverrideAccess.CheckPasswordInput(enteredPassword);
         }
 
         public void FillNbParticlesDetected(List<Particle> reactionExits)
@@ -173,7 +168,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void AccessCode()
         {
-            _manualOverrideAccess.DisplayPassword(manager.settings.password);
+            _manualOverrideAccess.InitPasswordInput(manager.settings.password);
         }
 
         public void Init(MAIAManager synchronizer)
@@ -217,12 +212,6 @@ namespace CRI.HelloHouston.Experience.MAIA
             _manualOverrideAccess.gameObject.SetActive(false);
             _particlesIdentification.ParticleGrid(manager.generatedParticles);
             _particlesIdentification.DisplayParticles(manager.generatedParticles);
-            tabletScreen.AccessGranted();
-        }
-
-        public void Access(bool isGranted)
-        {
-            _manualOverrideAccess.Access(isGranted);
         }
 
         /// <summary>
