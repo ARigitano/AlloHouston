@@ -50,13 +50,14 @@ namespace CRI.HelloHouston.Experience.MAIA
             var dictionary = new Dictionary<Particle, int>();
             _particleGridCellDictionary = new Dictionary<Particle, ParticleGridCell>();
             var otherReactions = _maiaTopScreen.manager.ongoingReactions.Where(reaction => reaction != _maiaTopScreen.manager.selectedReaction).ToArray();
-            foreach (var particleGroup in _maiaTopScreen.manager.generatedParticles.OrderBy(particle => particle.symbol).ThenBy(particle => !particle.negative).GroupBy(particle => particle))
+            foreach (var particleGroup in _maiaTopScreen.manager.settings.allParticles.OrderBy(particle => particle.symbol).ThenBy(particle => !particle.negative).GroupBy(particle => particle))
             {
-                dictionary.Add(particleGroup.Key, particleGroup.Count());
                 var particleGridCell = Instantiate(_particleGridCellPrefab, _particleGridTransform);
                 particleGridCell.Init(particleGroup.Key);
                 _particleGridCellDictionary.Add(particleGroup.Key, particleGridCell);
             }
+            foreach (var particleGroup in _maiaTopScreen.manager.generatedParticles.GroupBy(particle => particle))
+                dictionary.Add(particleGroup.Key, particleGroup.Count());
             DisplayParticles(dictionary);
             for (int i = 0; i < otherReactions.Length; i++)
             {
@@ -72,7 +73,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             yield return new WaitForSeconds(_analysisAnimationStepDuration);
             _errorPopup.gameObject.SetActive(true);
             yield return new WaitForSeconds(_analysisAnimationStepDuration);
-            _maiaTopScreen.manager.StartReactionIdentification();
+            _maiaTopScreen.manager.StartAdvancedManualOverride();
         }
 
         private void DisplayParticles(Dictionary<Particle, int> dictionary)

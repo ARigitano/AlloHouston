@@ -62,9 +62,8 @@ namespace CRI.HelloHouston.Experience.MAIA
             if (generatedParticles.Count == 0)
                 GenerateParticles();
             _hologramTube.gameObject.SetActive(false);
-            _hologramFeynman.gameObject.SetActive(true);
+            _hologramFeynman.gameObject.SetActive(false);
             tabletScreen.SkipStepOne();
-            _hologramFeynman.SkipStepOne();
             topScreen.SkipStepOne();
         }
 
@@ -138,16 +137,23 @@ namespace CRI.HelloHouston.Experience.MAIA
             tabletScreen.ManualOverride();
         }
 
+        public void StartAnalysisAnimation()
+        {     
+            topScreen.StartAnalysisAnimation();
+            tabletScreen.StartAnalysisAnimation();
+            _hologramTube.gameObject.SetActive(false);
+        }
+
         public void StartAdvancedManualOverride()
         {
-            
-            topScreen.StartAnalysisAnimation();
-            tabletScreen.OverrideSecond();
+            tabletScreen.StartAdvancedManualOverride();
         }
 
         public void StartReactionIdentification()
         {
             topScreen.StartReactionIdentification();
+            tabletScreen.StartReactionIdentification();
+            _hologramFeynman.gameObject.SetActive(true);
         }
 
 

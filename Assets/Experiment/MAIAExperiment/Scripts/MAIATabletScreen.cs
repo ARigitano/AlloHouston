@@ -138,8 +138,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                 _currentPanelRight.SetActive(false);
 
             _panelFull.SetActive(true);
-            _diagramsSelectionLeft.SetActive(true);
-            _diagramsSelectionRight.SetActive(true);
+            StartAnalysisAnimation();
         }
 
         /// <summary>
@@ -176,7 +175,6 @@ namespace CRI.HelloHouston.Experience.MAIA
             _diagramsSelectionRight.SetActive(true);
             _currentPanelLeft = _diagramsSelectionLeft;
             _currentPanelRight = _diagramsSelectionRight;
-            _particlesLeft.SetActive(false);
         }
 
         /// <summary>
@@ -214,14 +212,33 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void ParticleRightCombination()
         {
-            topScreen.StartAnalysisAnimation();
-            OverrideSecond();
-            hologramTube.gameObject.SetActive(false);
+            topScreen.manager.StartAnalysisAnimation();
+            _particlesLeft.SetActive(false);
         }
 
-        public void AdvanceManualOverride()
+        public void StartAnalysisAnimation()
         {
-            OverrideSecond();
+            _particlesLeft.SetActive(false);
+        }
+
+        public void StartAdvancedManualOverride()
+        {
+            _advanceOverride.SetActive(true);
+        }
+
+        public void AdvancedManualOverride()
+        {
+            _advanceOverride.SetActive(false);
+            topScreen.manager.StartReactionIdentification();
+        }
+
+        public void StartReactionIdentification()
+        {
+            _advanceOverride.SetActive(false);
+            _diagramsSelectionLeft.SetActive(true);
+            _diagramsSelectionRight.SetActive(true);
+            _currentPanelLeft = _diagramsSelectionLeft;
+            _currentPanelRight = _diagramsSelectionRight;
         }
 
         /// <summary>
@@ -232,16 +249,28 @@ namespace CRI.HelloHouston.Experience.MAIA
             //Checks if the combination entered has the right number of particles.
             if (_enteredParticles.Count == _manager.generatedParticles.Count)
             {
-                var l1 = _enteredParticles.OrderBy(particle => particle.particleName);
-                var l2 = _manager.generatedParticles.OrderBy(particle => particle.particleName);
-                // Checks if the right symbols have been entered.
-                if (l1.Select(particle => particle.particleName).SequenceEqual(l2.Select(particle => particle.particleName)))
+                var l1 = _enteredParticles.OrderBy(particle => particle.symbol).ThenBy(particle => particle.negative).ToArray();
+                var l2 = _manager.generatedParticles.OrderBy(particle => particle.symbol).ThenBy(particle => particle.negative).ToArray();
+                bool symbols = true;
+                bool charges = true;
+                for (int i = 0; i < l1.Count(); i++)
                 {
-                    //Check if the right symbols have been entered.
-                    if (l1.Select(particle => new { particle.particleName, particle.negative }).SequenceEqual(l2.Select(particle => new { particle.particleName, particle.negative })))
+                    if (l1[i].symbol != l2[i].symbol)
+                    {
+                        symbols = false;
+                        Debug.Log(l1[i].symbol + " !=" + l2[i].symbol);
+                        break;
+                    }
+                    if (l1[i].negative != l2[i].negative && !l1[i].particleName.ToLower().Contains("neutrino"))
+                        charges = false;
+                }
+                // Checks if the right symbols have been entered.
+                if (symbols)
+                {
+                    //Check if the right symbols + charges have been entered. We ignore the neutrino particle in this process.
+                    if (charges)
                     {
                         //The right combination of particles have been entered.
-                        _advanceOverride.SetActive(true);
                         ParticleRightCombination();
                     }
                     else

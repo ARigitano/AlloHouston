@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
+
 namespace CRI.HelloHouston.Experience.MAIA
 {
     public class MAIAReactionIdentificationScreen : MonoBehaviour
@@ -35,6 +37,14 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         [SerializeField]
         private GameObject _popupWin = null;
+        /// <summary>
+        /// Array of text to be displayed if the reaction selected is the wrong one.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("Array of text to be displayed if the reaction selected is the wrong one.")]
+        private string[] _loseText = null;
+
+        private int _strike = 0;
 
         /// <summary>
         /// Effect if the correct Feynman diagram is selected, or a wrong one.
@@ -49,6 +59,8 @@ namespace CRI.HelloHouston.Experience.MAIA
             }
             else
             {
+                _popupLose.GetComponentInChildren<Text>().text = _strike < _loseText.Length ? _loseText[_strike] : _loseText[_loseText.Length - 1];
+                _strike++;
                 _popupLose.SetActive(true);
 
                 StartCoroutine(_topScreen.WaitGeneric(2f, () =>

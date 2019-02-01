@@ -109,7 +109,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             StartCoroutine(_maiaTopScreen.WaitGeneric(_successPopupDuration, () =>
             {
                 _successParticles.SetActive(false);
-                _maiaTopScreen.manager.StartAdvancedManualOverride();
+                _maiaTopScreen.manager.StartAnalysisAnimation();
             }));
         }
 

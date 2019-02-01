@@ -13,17 +13,17 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// The tabletScreen script.
         /// </summary>
         [SerializeField]
-        private MAIATabletScreen _tablet;
+        private MAIATabletScreen _tablet = null;
         /// <summary>
         /// A blue shader for not counted diagrams.
         /// </summary>
         [SerializeField]
-        private Material _blueShader;
+        private Material _blueShader = null;
         /// <summary>
         /// A white diagram for the counted diagram.
         /// </summary>
         [SerializeField]
-        private Material _whiteShader;
+        private Material _whiteShader = null;
         /// <summary>
         /// List of all the diagrams currently in the docking zone.
         /// </summary>
