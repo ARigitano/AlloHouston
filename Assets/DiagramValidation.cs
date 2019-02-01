@@ -43,49 +43,26 @@ namespace CRI.HelloHouston.Experience.MAIA
 
         void OnTriggerEnter(Collider other)
         {
-            //TODO: optimize this garbage
             if (other.tag == "Feynmanbox")
             {
                 GameObject feynmanBox = other.gameObject;
                 _diagrams.Add(other.gameObject);
                     ChangeChosenDiagram(_diagrams[0]);
-               
-                
-
-               /* _diagrams.Add(feynmanBox);
-                if (_diagrams[0] == feynmanBox)
-                { 
-                MeshRenderer[] renderers = feynmanBox.GetComponentsInChildren<MeshRenderer>();
-                renderers[0].material = _whiteShader;
-                Texture diagram = renderers[1].material.mainTexture;
-                _tablet.DiagramValidation(diagram);
-                }*/
             }
         }
 
         private void OnTriggerExit(Collider other)
         {
-            //TODO: optimize this garbage
             if (other.tag == "Feynmanbox")
             {
                 GameObject feynmanBox = other.gameObject;
                 _diagrams.Remove(feynmanBox);
                 MeshRenderer[] renderers = feynmanBox.GetComponentsInChildren<MeshRenderer>();
                 renderers[0].material = _blueShader;
-                if (_diagrams.Count == 0)
-                {
-                    _tablet.NoDiagram();
-                }
-                else
+                if (_diagrams.Count != 0)
                 {
                     ChangeChosenDiagram(_diagrams[0]);
-                    /*MeshRenderer[] renderers2 = _diagrams[0].GetComponentsInChildren<MeshRenderer>();
-                    renderers2[0].material = _whiteShader;
-                    Texture diagram = renderers2[1].material.mainTexture;
-                    _tablet.DiagramValidation(diagram);*/
                 }
-
-                
             }
         }
     }
