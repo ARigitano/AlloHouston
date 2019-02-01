@@ -63,6 +63,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             _hologramFeynman.gameObject.SetActive(false);
             tabletScreen.SkipStepOne();
             topScreen.SkipStepOne();
+            
         }
 
         internal void StartHologramTubeAnimation()
@@ -157,6 +158,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             topScreen.StartReactionIdentification();
             tabletScreen.StartReactionIdentification();
             _hologramFeynman.gameObject.SetActive(true);
+            _hologramFeynman.FillBoxesDiagrams();
         }
 
 

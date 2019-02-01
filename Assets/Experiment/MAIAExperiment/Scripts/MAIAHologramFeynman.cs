@@ -34,14 +34,6 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// 
         /// </summary>
-        public void SkipStepOne()
-        {
-            FillBoxesDiagrams();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
         public void FillBoxesDiagrams()
         {
             feynmanBoxes = GameObject.FindGameObjectsWithTag("Feynmanbox");
