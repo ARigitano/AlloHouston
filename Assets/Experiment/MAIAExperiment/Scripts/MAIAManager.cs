@@ -1,6 +1,7 @@
 ﻿using CRI.HelloHouston.Calibration;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 /// <summary>
 /// The synchronizer of the particle physics experiment.
@@ -70,6 +71,14 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             _hologramTube.StartAnimation();
         }
+
+
+        internal void ResetHologram()
+        {
+            _hologramTube.StartAnimation();
+            _hologramFeynman.ResetPositions();
+        }
+
 
         #endregion
 

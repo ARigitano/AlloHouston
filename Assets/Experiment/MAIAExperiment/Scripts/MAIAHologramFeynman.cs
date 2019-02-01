@@ -13,42 +13,44 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// The objects containing the Feynman diagrams.
         /// </summary>
-        public GameObject[] feynmanBoxes;
-        /// <summary>
-        /// Name of the Feynman digram chosen by the player.
-        /// </summary>
-        public string feynmanBoxName;
+        [SerializeField]
+        private GameObject[] _feynmanBoxes;
 
-        // Start is called before the first frame update
-        void Start()
-        {
-            
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-           
-        }
-
+        private Vector3[] _boxPositions;
+        private Quaternion[] _boxRotations;
         /// <summary>
         /// 
         /// </summary>
         public void FillBoxesDiagrams()
         {
-            feynmanBoxes = GameObject.FindGameObjectsWithTag("Feynmanbox");
             int i = 0;
             foreach (Reaction reaction in manager.settings.allReactions)
             {
-                MeshRenderer[] renderers = feynmanBoxes[i].GetComponentsInChildren<MeshRenderer>();
+                MeshRenderer[] renderers = _feynmanBoxes[i].GetComponentsInChildren<MeshRenderer>();
                 renderers[1].material.mainTexture = reaction.diagramImage;
                 i++;
+            }
+        }
+
+        public void ResetPositions()
+        {
+            for (int i = 0; i < _feynmanBoxes.Length; i++)
+            {
+                _feynmanBoxes[i].transform.localPosition = _boxPositions[i];
+                _feynmanBoxes[i].transform.localRotation = _boxRotations[i];
             }
         }
 
         private void Init(MAIAManager synchronizer)
         {
             manager = synchronizer;
+            _boxPositions = new Vector3[_feynmanBoxes.Length];
+            _boxRotations = new Quaternion[_feynmanBoxes.Length];
+            for (int i = 0; i < _feynmanBoxes.Length; i++)
+            {
+                _boxPositions[i] = _feynmanBoxes[i].transform.localPosition;
+                _boxRotations[i] = _feynmanBoxes[i].transform.localRotation;
+            }   
         }
 
         public override void OnActivation(XPManager manager)

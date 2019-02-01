@@ -37,16 +37,20 @@ namespace CRI.HelloHouston.Experience.MAIA
         [SerializeField]
         private GameObject _errorPopup = null;
 
+        private bool _animationStarted = false;
+
         [SerializeField]
         private float _analysisAnimationStepDuration = 2.0f;
 
         public void StartAnalysisAnimation()
         {
-            StartCoroutine(AnalysisAnimation());
+            if (_animationStarted)
+                StartCoroutine(AnalysisAnimation());
         }
 
         private IEnumerator AnalysisAnimation()
         {
+            _animationStarted = true;
             var dictionary = new Dictionary<Particle, int>();
             _particleGridCellDictionary = new Dictionary<Particle, ParticleGridCell>();
             var otherReactions = _maiaTopScreen.manager.ongoingReactions.Where(reaction => reaction != _maiaTopScreen.manager.selectedReaction).ToArray();
@@ -74,6 +78,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             _errorPopup.gameObject.SetActive(true);
             yield return new WaitForSeconds(_analysisAnimationStepDuration);
             _maiaTopScreen.manager.StartAdvancedManualOverride();
+            _animationStarted = false;
         }
 
         private void DisplayParticles(Dictionary<Particle, int> dictionary)
