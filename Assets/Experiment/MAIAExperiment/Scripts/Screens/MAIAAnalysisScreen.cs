@@ -44,7 +44,7 @@ namespace CRI.HelloHouston.Experience.MAIA
 
         public void StartAnalysisAnimation()
         {
-            if (_animationStarted)
+            if (!_animationStarted)
                 StartCoroutine(AnalysisAnimation());
         }
 
