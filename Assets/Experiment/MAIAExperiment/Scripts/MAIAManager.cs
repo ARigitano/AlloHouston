@@ -75,8 +75,10 @@ namespace CRI.HelloHouston.Experience.MAIA
 
         internal void ResetHologram()
         {
-            _hologramTube.StartAnimation();
-            _hologramFeynman.ResetPositions();
+            if (_hologramTube.isActiveAndEnabled)
+                _hologramTube.StartAnimation();
+            if (_hologramFeynman.isActiveAndEnabled)
+                _hologramFeynman.ResetPositions();
         }
 
 

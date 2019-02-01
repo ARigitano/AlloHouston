@@ -36,8 +36,8 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             for (int i = 0; i < _feynmanBoxes.Length; i++)
             {
-                _feynmanBoxes[i].transform.localPosition = _boxPositions[i];
-                _feynmanBoxes[i].transform.localRotation = _boxRotations[i];
+                _feynmanBoxes[i].transform.position = _boxPositions[i];
+                _feynmanBoxes[i].transform.rotation = _boxRotations[i];
             }
         }
 
@@ -48,8 +48,8 @@ namespace CRI.HelloHouston.Experience.MAIA
             _boxRotations = new Quaternion[_feynmanBoxes.Length];
             for (int i = 0; i < _feynmanBoxes.Length; i++)
             {
-                _boxPositions[i] = _feynmanBoxes[i].transform.localPosition;
-                _boxRotations[i] = _feynmanBoxes[i].transform.localRotation;
+                _boxPositions[i] = _feynmanBoxes[i].transform.position;
+                _boxRotations[i] = _feynmanBoxes[i].transform.rotation;
             }   
         }
 
