@@ -1,6 +1,4 @@
 ﻿using CRI.HelloHouston.Calibration;
-using System.Collections;
-using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -67,6 +65,11 @@ namespace CRI.HelloHouston.Experience.MAIA
             topScreen.SkipStepOne();
         }
 
+        internal void StartHologramTubeAnimation()
+        {
+            _hologramTube.StartAnimation();
+        }
+
         #endregion
 
         #region ParticleGeneration
@@ -90,10 +93,10 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             ongoingReactions = settings.allReactions
                 .Where(reaction => reaction.fundamental)
-                .OrderBy(reaction => Random.value)
+                .OrderBy(reaction => UnityEngine.Random.value)
                 .Take(settings.reactionCount)
                 .ToList();
-            selectedReaction = ongoingReactions[Random.Range(0, settings.reactionCount)];
+            selectedReaction = ongoingReactions[UnityEngine.Random.Range(0, settings.reactionCount)];
             logController.AddLog(selectedReaction.name, xpContext);
             return ongoingReactions;
         }
