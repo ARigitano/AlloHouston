@@ -55,10 +55,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// Is the holographic diagram the right one?
         /// </summary>
         public bool correctDiagram = false;
-        /// <summary>
-        /// Is there a diagram in the docking zone?
-        /// </summary>
-        private bool _isDiagram = false;
+        private Texture _diagram;
 
         /// <summary>
         /// Tests if the chosen holographic diagram is correct.
@@ -66,24 +63,31 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <param name="diagram">Texture of the chosen holographic diagram.</param>
         public void DiagramValidation(Texture diagram)
         {
-            /// <summary>
-            /// Is the holographic diagram the right one?
-            /// </summary>
-            correctDiagram = false;
-            _isDiagram = true;
-
-            if (diagram == _manager.selectedReaction.diagramImage)
-            {
-                correctDiagram = true;
-            }
+            _diagram = diagram;
         }
 
         /// <summary>
-        /// No diagram is detected on docking zone.
+        /// Tells the main screen that a reaction has been selected.
         /// </summary>
-        public void NoDiagram()
+        public void SelectReaction()
         {
-            _isDiagram = false;
+            if (!_isTouched)
+            {
+                _isTouched = true;
+                if (_diagram != null)
+                {
+                    if (_diagram == _manager.selectedReaction.diagramImage)
+                    {
+                        correctDiagram = true;
+                    }
+                    else
+                    {
+                        correctDiagram = false;
+                    }
+                    topScreen.ReactionSelected(correctDiagram);
+                }
+                StartCoroutine(WaitButton());
+            }
         }
 
         /// <summary>
@@ -246,63 +250,59 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void SubmitParticles()
         {
-            //Checks if the combination entered has the right number of particles.
-            if (_enteredParticles.Count == _manager.generatedParticles.Count)
+            if (!_isTouched)
             {
-                var l1 = _enteredParticles.OrderBy(particle => particle.symbol).ThenBy(particle => particle.negative).ToArray();
-                var l2 = _manager.generatedParticles.OrderBy(particle => particle.symbol).ThenBy(particle => particle.negative).ToArray();
-                bool symbols = true;
-                bool charges = true;
-                for (int i = 0; i < l1.Count(); i++)
+                _isTouched = true;
+                //Checks if the combination entered has the right number of particles.
+                if (_enteredParticles.Count == _manager.generatedParticles.Count)
                 {
-                    if (l1[i].symbol != l2[i].symbol)
+                    var l1 = _enteredParticles.OrderBy(particle => particle.symbol).ThenBy(particle => particle.negative).ToArray();
+                    var l2 = _manager.generatedParticles.OrderBy(particle => particle.symbol).ThenBy(particle => particle.negative).ToArray();
+                    bool symbols = true;
+                    bool charges = true;
+                    for (int i = 0; i < l1.Count(); i++)
                     {
-                        symbols = false;
-                        Debug.Log(l1[i].symbol + " !=" + l2[i].symbol);
-                        break;
+                        if (l1[i].symbol != l2[i].symbol)
+                        {
+                            symbols = false;
+                            Debug.Log(l1[i].symbol + " !=" + l2[i].symbol);
+                            break;
+                        }
+                        if (l1[i].negative != l2[i].negative && !l1[i].particleName.ToLower().Contains("neutrino"))
+                            charges = false;
                     }
-                    if (l1[i].negative != l2[i].negative && !l1[i].particleName.ToLower().Contains("neutrino"))
-                        charges = false;
-                }
-                // Checks if the right symbols have been entered.
-                if (symbols)
-                {
-                    //Check if the right symbols + charges have been entered. We ignore the neutrino particle in this process.
-                    if (charges)
+                    // Checks if the right symbols have been entered.
+                    if (symbols)
                     {
-                        //The right combination of particles have been entered.
-                        ParticleRightCombination();
+                        //Check if the right symbols + charges have been entered. We ignore the neutrino particle in this process.
+                        if (charges)
+                        {
+                            //The right combination of particles have been entered.
+                            ParticleRightCombination();
+                        }
+                        else
+                        {
+                            //A wrong combination of charges have been entered.
+                            ParticleSendErrorMessage(ParticlesIdentification.ErrorType.WrongNumberCharges);
+                        }
                     }
                     else
                     {
-                        //A wrong combination of charges have been entered.
-                        ParticleSendErrorMessage(ParticlesIdentification.ErrorType.WrongNumberCharges);
+                        //A wrong combination of symbols have been entered.
+                        ParticleSendErrorMessage(ParticlesIdentification.ErrorType.WrongParticles);
                     }
                 }
                 else
                 {
-                    //A wrong combination of symbols have been entered.
-                    ParticleSendErrorMessage(ParticlesIdentification.ErrorType.WrongParticles);
+                    //A combination of particles with a wrong length has been entered.
+                    ParticleSendErrorMessage(ParticlesIdentification.ErrorType.WrongNumberParticles);
                 }
+                StartCoroutine(WaitButton());
             }
-            else
-            {
-                //A combination of particles with a wrong length has been entered.
-                ParticleSendErrorMessage(ParticlesIdentification.ErrorType.WrongNumberParticles);
-            }
+            
         }
 
-        /// <summary>
-        /// Tells the main screen that a reaction has been selected.
-        /// </summary>
-        public void SelectReaction()
-        {
-            if (_isDiagram)
-            {
-                topScreen.ReactionSelected(correctDiagram);
-            }
-            //topScreen.ReactionSelected(_manager.selectedReaction, tubeScreen.diagramSelected);
-        }
+        
 
         /// Adds a particle to the combination.
         /// </summary>
