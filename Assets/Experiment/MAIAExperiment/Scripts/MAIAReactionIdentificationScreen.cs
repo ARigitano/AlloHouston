@@ -38,6 +38,16 @@ namespace CRI.HelloHouston.Experience.MAIA
         [SerializeField]
         private GameObject _popupWin = null;
         /// <summary>
+        /// Analysis popup.
+        /// </summary>
+        [SerializeField]
+        private GameObject _analysisPopup = null;
+        /// <summary>
+        /// Analysis duration.
+        /// </summary>
+        [SerializeField]
+        private float _analysisDuration = 3.0f;
+        /// <summary>
         /// Array of text to be displayed if the reaction selected is the wrong one.
         /// </summary>
         [SerializeField]
@@ -53,6 +63,14 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <param name="reactionSelected">The reaction selected by the player.</param>
         public void ReactionSelected(bool correctDiagram)
         {
+            StartCoroutine(ReactionSelectedAnimation(correctDiagram));
+        }
+
+        private IEnumerator ReactionSelectedAnimation(bool correctDiagram)
+        {
+            _analysisPopup.SetActive(true);
+            yield return new WaitForSeconds(_analysisDuration);
+            _analysisPopup.SetActive(false);
             if (correctDiagram)
             {
                 _popupWin.SetActive(true);
@@ -62,13 +80,11 @@ namespace CRI.HelloHouston.Experience.MAIA
                 _popupLose.GetComponentInChildren<Text>().text = _strike < _loseText.Length ? _loseText[_strike] : _loseText[_loseText.Length - 1];
                 _strike++;
                 _popupLose.SetActive(true);
-
                 StartCoroutine(_topScreen.WaitGeneric(2f, () =>
                 {
                     _popupLose.SetActive(false);
                 }));
             }
-
         }
 
         public void StartReactionIdentification()

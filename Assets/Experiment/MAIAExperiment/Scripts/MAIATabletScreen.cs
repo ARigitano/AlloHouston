@@ -295,7 +295,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// Tells the main screen that a reaction has been selected.
         /// </summary>
-        public void ReactionSelected()
+        public void SelectReaction()
         {
             if (_isDiagram)
             {
