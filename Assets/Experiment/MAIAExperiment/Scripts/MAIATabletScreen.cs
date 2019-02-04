@@ -38,8 +38,8 @@ namespace CRI.HelloHouston.Experience.MAIA
         private GameObject _currentPanelLeft, _currentPanelRight, _currentPanel;
 
         public MAIATopScreen topScreen { get; private set; }
-        public MAIAHologramTube hologramTube;
-        public MAIAHologramFeynman hologramFeynman;
+        public MAIAHologramTube hologramTube { get; private set; }
+        public MAIAHologramFeynman hologramFeynman { get; private set; }
 
         public MAIATubeScreen tubeScreen;
         /// <summary>
@@ -375,6 +375,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             topScreen = manager.topScreen;
             _particleIdentificationScreen = topScreen.particleIdentificationScreen;
             _manualOverrideAccessScreen = topScreen.manualOverrideAccessScreen;
+            hologramTube = manager.hologramTube;
         }
 
         public override void OnActivation(XPManager manager)

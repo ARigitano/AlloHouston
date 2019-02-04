@@ -20,6 +20,20 @@ namespace CRI.HelloHouston.Experience
         [Tooltip("The element name.")]
         private string _elementName;
         /// <summary>
+        /// If true, this element will be put on a Canvas.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("If true, this element will be put on a Canvas.")]
+        private bool _canvasElement = true;
+
+        public bool canvasElement
+        {
+            get
+            {
+                return _canvasElement;
+            }
+        }
+        /// <summary>
         /// The element name.
         /// </summary>
         public string elementName

@@ -55,6 +55,16 @@ namespace CRI.HelloHouston.Calibration
         {
             Clean();
             currentElement = Instantiate(_elementPrefab, transform);
+            if (!currentElement.canvasElement)
+            {
+                Vector3 localScale = currentElement.transform.localScale;
+                Vector3 lossyScale = gameObject.transform.lossyScale;
+                currentElement.transform.localScale = new Vector3(
+                    localScale.x / lossyScale.x,
+                    localScale.y / lossyScale.y,
+                    localScale.z / lossyScale.z
+                    );
+            }
             currentElement.Init(this);
             return currentElement;
         }

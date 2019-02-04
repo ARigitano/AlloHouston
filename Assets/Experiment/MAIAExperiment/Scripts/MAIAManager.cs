@@ -25,7 +25,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// The hologram tube of the table block.
         /// </summary>
-        private MAIAHologramTube _hologramTube;
+        public MAIAHologramTube hologramTube { get; private set; }
         /// <summary>
         /// The hologram Feynman of the table block.
         /// </summary>
@@ -60,7 +60,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             if (generatedParticles.Count == 0)
                 GenerateParticles();
-            _hologramTube.gameObject.SetActive(false);
+            hologramTube.gameObject.SetActive(false);
             _hologramFeynman.gameObject.SetActive(false);
             tabletScreen.SkipStepOne();
             topScreen.SkipStepOne();
@@ -69,14 +69,14 @@ namespace CRI.HelloHouston.Experience.MAIA
 
         internal void StartHologramTubeAnimation()
         {
-            _hologramTube.StartAnimation();
+            hologramTube.StartAnimation();
         }
 
 
         internal void ResetHologram()
         {
-            if (_hologramTube.isActiveAndEnabled)
-                _hologramTube.StartAnimation();
+            if (hologramTube.isActiveAndEnabled)
+                hologramTube.StartAnimation();
             if (_hologramFeynman.isActiveAndEnabled)
                 _hologramFeynman.ResetPositions();
         }
@@ -138,8 +138,8 @@ namespace CRI.HelloHouston.Experience.MAIA
 
         public void StartParticleIdentification()
         {
-            _hologramTube.ActivateHologram(true);
-            _hologramTube.StartAnimation();
+            hologramTube.ActivateHologram(true);
+            hologramTube.StartAnimation();
             topScreen.StartParticleIdentification();
             tabletScreen.StartParticleIdentification();
         }
@@ -156,7 +156,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         {     
             topScreen.StartAnalysisAnimation();
             tabletScreen.StartAnalysisAnimation();
-            _hologramTube.gameObject.SetActive(false);
+            hologramTube.gameObject.SetActive(false);
         }
 
         public void StartAdvancedManualOverride()
@@ -198,7 +198,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         protected override void PreShow(VirtualWallTopZone wallTopZone, ElementInfo[] zones)
         {
             base.PreShow(wallTopZone, zones);
-            _hologramTube.DisplaySplines();
+            hologramTube.DisplaySplines();
         }
 
 
@@ -211,12 +211,10 @@ namespace CRI.HelloHouston.Experience.MAIA
         protected override void PostInit(XPContext xpContext, ElementInfo[] info, LogExperienceController logController, XPState stateOnActivation)
         {
             base.PostInit(xpContext, info, logController, stateOnActivation);
-            _hologramTube = GetElement<MAIAHologramTube>();
+            hologramTube = GetElement<MAIAHologramTube>();
             tabletScreen = GetElement<MAIATabletScreen>();
             topScreen = GetElement<MAIATopScreen>();
             tubeScreen = GetElement<MAIATubeScreen>();
-            tabletScreen.tubeScreen = tubeScreen;
-            tabletScreen.hologramTube = _hologramTube;
             topScreen.tabletScreen = tabletScreen;
             _hologramFeynman = GetElement<MAIAHologramFeynman>();
             _bottomScreen = GetElement<MAIABottomScreen>();

@@ -18,7 +18,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// The symbol of the particle.
         /// </summary>
-        [Tooltip("The symbol of the particle.")]
+        [Tooltip("The signless symbol of the particle.")]
         public string symbol;
         /// <summary>
         /// Does the particle have a negative charge?
@@ -68,10 +68,17 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// Image of the symbol of the particle.
         /// </summary>
+        [Tooltip("First type of signed symbol of the particle.")]
         public Sprite symbolImage;
         /// <summary>
         /// Second type of symbol of the particle.
         /// </summary>
+        [Tooltip("Second type of signed symbol of the particle.")]
         public Sprite symbolImage2;
+        /// <summary>
+        /// Symbol of the image without sign.
+        /// </summary>
+        [Tooltip("Symbol of the image without sign.")]
+        public Sprite signlessSymbolImage;
     }
 }
