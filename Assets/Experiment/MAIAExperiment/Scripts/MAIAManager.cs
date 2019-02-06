@@ -198,7 +198,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         protected override void PreShow(VirtualWallTopZone wallTopZone, ElementInfo[] zones)
         {
             base.PreShow(wallTopZone, zones);
-            hologramTube.DisplaySplines();
+            hologramTube.DisplayAllSplines();
         }
 
 

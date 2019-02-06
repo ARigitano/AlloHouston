@@ -14,13 +14,40 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// The objects containing the Feynman diagrams.
         /// </summary>
         [SerializeField]
-        private GameObject[] _feynmanBoxes;
+        private GameObject[] _feynmanBoxes = null;
+        /// <summary>
+        /// The line manager.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("The line manager.")]
+        private MAIAHologramLineManager _lineManager;
 
         private Vector3[] _boxPositions;
         private Quaternion[] _boxRotations;
-        /// <summary>
-        /// 
-        /// </summary>
+
+        private void Reset()
+        {
+            _lineManager = GetComponentInChildren<MAIAHologramLineManager>();
+        }
+
+        private void OnEnable()
+        {
+            ResetPositions();
+            foreach (GameObject feynmanBox in _feynmanBoxes)
+            {
+                feynmanBox.SetActive(true);
+            }
+        }
+
+        private void OnDisable()
+        {
+            ResetPositions();
+            foreach (GameObject feynmanBox in _feynmanBoxes)
+            {
+                feynmanBox.SetActive(false);
+            }
+        }
+
         public void FillBoxesDiagrams()
         {
             int i = 0;
@@ -38,6 +65,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             {
                 _feynmanBoxes[i].transform.position = _boxPositions[i];
                 _feynmanBoxes[i].transform.rotation = _boxRotations[i];
+                _feynmanBoxes[i].transform.SetParent(transform);
             }
         }
 
@@ -50,13 +78,14 @@ namespace CRI.HelloHouston.Experience.MAIA
             {
                 _boxPositions[i] = _feynmanBoxes[i].transform.position;
                 _boxRotations[i] = _feynmanBoxes[i].transform.rotation;
-            }   
+            }
+            _lineManager.Init();
         }
 
         public override void OnActivation(XPManager manager)
         {
-            Init((MAIAManager)manager);
             base.OnActivation(manager);
+            Init((MAIAManager)manager);
             gameObject.SetActive(false);
         }
     }

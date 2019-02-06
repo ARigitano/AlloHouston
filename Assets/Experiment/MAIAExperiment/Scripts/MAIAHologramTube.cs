@@ -131,7 +131,9 @@ namespace CRI.HelloHouston.Experience.MAIA
             _particleSplineArray = new HologramSpline[particles.Count];
             for (int i = 0; i < particles.Count; i++)
             {
-                _particleSplineArray[i] = CreateSpline(particles[i], i);
+                HologramSpline particleSpline = CreateSpline(particles[i]);
+                particleSpline.spline.gameObject.name = particleSpline.particle.particleName + i;
+                _particleSplineArray[i] = particleSpline;
             }
         }
 
@@ -141,7 +143,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <param name="i">The index of the particle inside the combination.</param>
         /// <param name="particle">The particle which line is being generated.</param>
         /// <returns>The end position of the line.</returns>
-        private HologramSpline CreateSpline(Particle particle, int index)
+        private HologramSpline CreateSpline(Particle particle)
         {
             //Setting rotation angles.
             if (particle.straight)
@@ -191,8 +193,6 @@ namespace CRI.HelloHouston.Experience.MAIA
                 spline.points[3].x = r * Mathf.Cos(alpha);
                 spline.points[3].y = Random.Range(-lMaxFactor, lMaxFactor);
                 spline.points[3].z = r * Mathf.Sin(alpha);
-
-                spline.gameObject.name = particle.particleName + index;
                  
                 spline.points[0] = Vector3.zero;
 
@@ -217,7 +217,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             return new HologramSpline(spline, particle, vDir);
         }
 
-        private void PopulateLine(HologramSpline hologramSpline)
+        private void DisplaySpline(HologramSpline hologramSpline)
         {
             Particle particle = hologramSpline.particle;
             BezierSpline spline = hologramSpline.spline;
@@ -225,8 +225,7 @@ namespace CRI.HelloHouston.Experience.MAIA
 
             //Displaying the lines.
             if (particle.line)
-            {
-                
+            {     
                 var line = Instantiate(_lineRendererPrefab, Vector3.zero, Quaternion.identity, spline.transform);
                 line.transform.localPosition = Vector3.zero;
                 line.transform.localRotation = Quaternion.identity;
@@ -267,17 +266,14 @@ namespace CRI.HelloHouston.Experience.MAIA
                 lineHead.transform.position = spline.GetPoint(1.0f);
                 lineHead.transform.localRotation = Quaternion.FromToRotation(lineHead.transform.up, vDir);
                 _particleHeads.Add(lineHead.GetComponent<XRLineRenderer>());
-                Debug.Log("splines2");
             }
         }
 
-        public void DisplaySplines()
+        public void DisplayAllSplines()
         {
-            
             foreach (HologramSpline hologramSpline in _particleSplineArray)
-            {
-                
-                PopulateLine(hologramSpline);
+            {             
+                DisplaySpline(hologramSpline);
             }
         }
 

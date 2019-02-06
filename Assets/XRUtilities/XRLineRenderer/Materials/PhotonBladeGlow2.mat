@@ -7,13 +7,13 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: holo_blue_feynman
-  m_Shader: {fileID: 4800000, guid: 29fed12d8547e354e90be987488147c1, type: 3}
-  m_ShaderKeywords: SCANLINES _GLITCH_ON _GLOW_ON _SCAN_ON
-  m_LightmapFlags: 4
+  m_Name: PhotonBladeGlow2
+  m_Shader: {fileID: 4800000, guid: d689c77434e9ecb4084bd09df8d53140, type: 3}
+  m_ShaderKeywords: LINE_FIXED_WIDTH LINE_MODEL_SPACE
+  m_LightmapFlags: 5
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 3004
+  m_CustomRenderQueue: 3005
   stringTagMap: {}
   disabledShaderPasses: []
   m_SavedProperties:
@@ -39,27 +39,11 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _Flicker:
-        m_Texture: {fileID: 2800000, guid: a0775ddee39477446bcbcedd7ca1bd22, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _FlickerTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _Noise:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _NoiseControl:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -71,53 +55,30 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _Scanline:
-        m_Texture: {fileID: 2800000, guid: 20a617585b6151b4e8e177fc19a927c5, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _ScanlinePattern:
-        m_Texture: {fileID: 2800000, guid: 7b0819c792d27f7448ecc71e55fce6aa, type: 3}
+    - _lineMap:
+        m_Texture: {fileID: 2800000, guid: 97ccbea2599c2ef4898bce1c04becddc, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _Alpha: 0.4
-    - _Brightness: 0.8
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
-    - _Flicker: 0
-    - _FlickerSpeed: 0.01
-    - _Fold: 63
-    - _Glitch: 0
-    - _GlitchIntensity: 0.001
-    - _GlitchSpeed: 27.5
-    - _GlossMapScale: 1
     - _Glossiness: 0.5
-    - _GlossyReflections: 1
-    - _GlowSpeed: -2.5
-    - _GlowTiling: 1
+    - _LineDepthScale: 0
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _RimFallness: 0.5
-    - _RimPower: 2
-    - _RimStrength: 1
-    - _ScanSpeed: 0.1
-    - _ScanTiling: 20
-    - _Scanline: 0
-    - _ScanlineSpeed: 0.05
-    - _ScanlineTiling: 5.9
-    - _SmoothnessTextureChannel: 0
-    - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _UVSec: 0
+    - _WorldData: 0
     - _ZWrite: 1
+    - _lineRadius: 0.5
+    - _lineRadiusMin: 0
     m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Direction: {r: 0, g: 1, b: 0, a: 0}
+    - _Color: {r: 0, g: 0.79607844, b: 1, a: 0.56078434}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _MainColor: {r: 0, g: 0.7249935, b: 0.9622642, a: 1}
-    - _RimColor: {r: 0, g: 0.4339623, b: 0.42715505, a: 1}
-    - _ScanlineColor: {r: 0.0719575, g: 0.9485294, b: 0, a: 1}
+    - _lineColor: {r: 1, g: 0, b: 0, a: 1}
+    - _lineRadius: {r: 0, g: 0.25, b: 98.8, a: 1}
+    - _lineSettings: {r: 0.16, g: 1, b: 0.18, a: 1}

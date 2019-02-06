@@ -91,7 +91,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             }));
         }
 
-        /// <summary>
+        /// <summdwary>
         /// Fills the number of particles that have been detected on the reaction summary window.
         /// </summary>
         /// <param name="particles">The number of particles that have been detected.</param>
