@@ -43,11 +43,14 @@ namespace CRI.HelloHouston.Calibration
                 this.xpWallBottomZone = null;
                 wallBottomVirtualElement.PlaceObject(null, null);
             }
-            var xpWallBottomZone = xpZone as XPWallBottomZone;
-            if (!xpWallBottomZone)
-                throw new WrongZoneTypeException();
-            this.xpWallBottomZone = xpWallBottomZone;
-            wallBottomVirtualElement.PlaceObject(xpWallBottomZone.element, xpContext);
+            else
+            {
+                var xpWallBottomZone = xpZone as XPWallBottomZone;
+                if (!xpWallBottomZone)
+                    throw new WrongZoneTypeException();
+                this.xpWallBottomZone = xpWallBottomZone;
+                wallBottomVirtualElement.PlaceObject(xpWallBottomZone.element, xpContext);
+            }
         }
 
         public VirtualElement wallBottomVirtualElement;

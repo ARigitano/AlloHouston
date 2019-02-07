@@ -14,7 +14,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// The objects containing the Feynman diagrams.
         /// </summary>
         [SerializeField]
-        private GameObject[] _feynmanBoxes = null;
+        private MAIAHologramDiagram[] _feynmanBoxes = null;
         /// <summary>
         /// The line manager.
         /// </summary>
@@ -32,30 +32,26 @@ namespace CRI.HelloHouston.Experience.MAIA
 
         private void OnEnable()
         {
-            ResetPositions();
-            foreach (GameObject feynmanBox in _feynmanBoxes)
+            foreach(MAIAHologramDiagram feynmanBox in _feynmanBoxes)
             {
-                feynmanBox.SetActive(true);
+                feynmanBox.gameObject.SetActive(true);
             }
         }
 
         private void OnDisable()
         {
-            ResetPositions();
-            foreach (GameObject feynmanBox in _feynmanBoxes)
+            foreach (MAIAHologramDiagram feynmanBox in _feynmanBoxes)
             {
-                feynmanBox.SetActive(false);
+                feynmanBox.gameObject.SetActive(false);
             }
         }
 
         public void FillBoxesDiagrams()
         {
-            int i = 0;
-            foreach (Reaction reaction in manager.settings.allReactions)
+            for (int i = 0; i < manager.settings.allReactions.Length && i < _feynmanBoxes.Length; i++)
             {
-                MeshRenderer[] renderers = _feynmanBoxes[i].GetComponentsInChildren<MeshRenderer>();
-                renderers[1].material.mainTexture = reaction.diagramImage;
-                i++;
+                _feynmanBoxes[i].contentRenderer.material.mainTexture = manager.settings.allReactions[i].diagramImage;
+                _feynmanBoxes[i].displayLine = true;
             }
         }
 
@@ -79,7 +75,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                 _boxPositions[i] = _feynmanBoxes[i].transform.position;
                 _boxRotations[i] = _feynmanBoxes[i].transform.rotation;
             }
-            _lineManager.Init();
+            _lineManager.Init(_feynmanBoxes);
         }
 
         public override void OnActivation(XPManager manager)

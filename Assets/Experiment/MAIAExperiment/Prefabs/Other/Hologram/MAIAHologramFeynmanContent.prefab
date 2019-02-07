@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 850404184963733632}
   - component: {fileID: 6265108097785624247}
   - component: {fileID: 1562929001705957707}
+  - component: {fileID: 3627546386878782110}
   m_Layer: 0
   m_Name: MAIAHologramFeynmanContent
   m_TagString: Untagged
@@ -79,6 +80,21 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!114 &3627546386878782110
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2681439294105340437}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27dd1e69b502ef34ea947fd7d8871653, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _screenRenderer: {fileID: 1562929001705957707}
+  _contentRenderer: {fileID: 2301288350229152955}
+  _anchorPoint: {fileID: 3539075184819380041}
 --- !u!1 &3816751743985865114
 GameObject:
   m_ObjectHideFlags: 0
@@ -180,7 +196,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5322279530402216657}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.08, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0.008}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 850404184963733632}

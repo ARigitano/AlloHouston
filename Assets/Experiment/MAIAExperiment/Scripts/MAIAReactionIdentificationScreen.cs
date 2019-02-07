@@ -56,6 +56,8 @@ namespace CRI.HelloHouston.Experience.MAIA
 
         private int _strike = 0;
 
+        private bool _analysis = false;
+
         /// <summary>
         /// Effect if the correct Feynman diagram is selected, or a wrong one.
         /// </summary>
@@ -63,11 +65,13 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <param name="reactionSelected">The reaction selected by the player.</param>
         public void ReactionSelected(bool correctDiagram)
         {
-            StartCoroutine(ReactionSelectedAnimation(correctDiagram));
+            if (!_analysis)
+                StartCoroutine(ReactionSelectedAnimation(correctDiagram));
         }
 
         private IEnumerator ReactionSelectedAnimation(bool correctDiagram)
         {
+            _analysis = true;
             _analysisPopup.SetActive(true);
             yield return new WaitForSeconds(_analysisDuration);
             _analysisPopup.SetActive(false);
@@ -85,6 +89,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                     _popupLose.SetActive(false);
                 }));
             }
+            _analysis = false;
         }
 
         public void StartReactionIdentification()
