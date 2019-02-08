@@ -57,7 +57,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             line.SetPositions(points);
         }
 
-        private void Update()
+        private void LateUpdate()
         {
             if (gameObject.activeInHierarchy && _lines != null && _diagrams != null)
             {
