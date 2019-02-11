@@ -139,7 +139,6 @@ namespace CRI.HelloHouston.Experience.MAIA
         public void StartParticleIdentification()
         {
             hologramTube.ActivateHologram(true);
-            hologramTube.StartAnimation();
             topScreen.StartParticleIdentification();
             tabletScreen.StartParticleIdentification();
         }

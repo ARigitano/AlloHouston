@@ -10,8 +10,19 @@ namespace CRI.HelloHouston
         [Tooltip("The camera that will be used for the visibility detection.")]
         private Camera _camera;
 
-        private GameObject[] _targets;
-        private List<GameObject> _currentTargets = new List<GameObject>();
+        private static List<CameraTarget> s_targets = new List<CameraTarget>();
+        private List<CameraTarget> _currentTargets = new List<CameraTarget>();
+
+        public static void Register(CameraTarget ct)
+        {
+            s_targets.Add(ct);
+        }
+
+        public static void Remove(CameraTarget ct)
+        {
+            s_targets.Remove(ct);
+            ct.OnVisibleExit(null);
+        }
 
         private void Reset()
         {
@@ -23,43 +34,37 @@ namespace CRI.HelloHouston
 
         private void Start()
         {
-            _currentTargets = new List<GameObject>();
-            UpdateCameraVisibleList();
+            _currentTargets = new List<CameraTarget>();
         }
 
-        public void UpdateCameraVisibleList()
+        private bool IsVisible(CameraTarget ct)
         {
-            _targets = FindObjectsOfType<MonoBehaviour>().Where(x => x is ICameraTarget).Select(x => x.gameObject).ToArray();
-        }
-
-        private bool IsVisible(GameObject go)
-        {
-            Vector3 screenPoint = _camera.WorldToViewportPoint(go.transform.position);
-            return (screenPoint.z > 0 && screenPoint.x > 0 && screenPoint.x < 1 && screenPoint.y > 0 && screenPoint.y < 1);
+            Vector3 screenPoint = _camera.WorldToViewportPoint(ct.transform.position);
+            return ct.gameObject.activeInHierarchy && (screenPoint.z > 0 && screenPoint.x > 0 && screenPoint.x < 1 && screenPoint.y > 0 && screenPoint.y < 1);
         }
 
         private void Update()
         {
-            for (int i = 0; i < _targets.Length; i++)
+            _currentTargets.RemoveAll(x => !x.gameObject.activeInHierarchy);
+            foreach (var target in s_targets)
             {
-                var target = _targets[i];
-                ICameraTarget cameraTarget = target.GetComponent<ICameraTarget>();
+                CameraTarget cameraTarget = target.GetComponent<CameraTarget>();
                 bool visible = IsVisible(target);
                 // Visible for the first time
                 if (visible && !_currentTargets.Contains(target))
                 {
-                    cameraTarget.OnVisibleEnter();
+                    cameraTarget.OnVisibleEnter(_camera);
                     _currentTargets.Add(target);
                 }
                 // Visible and already in the current target list.
                 else if (visible)
                 {
-                    cameraTarget.OnVisibleStay();
+                    cameraTarget.OnVisibleStay(_camera);
                 }
                 // Not visible
                 else
                 {
-                    cameraTarget.OnVisibleExit();
+                    cameraTarget.OnVisibleExit(_camera);
                     _currentTargets.Remove(target);
                 }
             }

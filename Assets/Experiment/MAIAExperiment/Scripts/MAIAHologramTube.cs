@@ -1,5 +1,4 @@
-﻿using CRI.HelloHouston.Experience;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -112,6 +111,10 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// Angle for shaping the bezier curves of the particle lines.
         /// </summary>
         private float _phi = 0f;
+
+        private bool _splinesDisplayed = false;
+
+        private bool _animationPlayedOnce = false;
 
         /// <summary>
         /// Activates or deactivates the hologram.
@@ -271,9 +274,13 @@ namespace CRI.HelloHouston.Experience.MAIA
 
         public void DisplayAllSplines()
         {
-            foreach (HologramSpline hologramSpline in _particleSplineArray)
-            {             
-                DisplaySpline(hologramSpline);
+            if (!_splinesDisplayed)
+            {
+                foreach (HologramSpline hologramSpline in _particleSplineArray)
+                {
+                    DisplaySpline(hologramSpline);
+                }
+                _splinesDisplayed = true;
             }
         }
 
@@ -295,12 +302,16 @@ namespace CRI.HelloHouston.Experience.MAIA
             yield return new WaitForSeconds(_lineRendererPrefab.GetComponent<MAIAHologramLineAnimation>().explosionDuration * 0.7f);
             foreach (var head in heads)
                 head.StartAnimation();
+            _animationPlayedOnce = true;
         }
 
         public void StartAnimation()
         {
-            StopAllCoroutines();
-            StartCoroutine(Animate());
+            if (_splinesDisplayed)
+            {
+                StopAllCoroutines();
+                StartCoroutine(Animate());
+            }
         }
 
         private void Init(MAIAManager synchronizer)
@@ -353,6 +364,14 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             Debug.Log(name + "Unpaused");
             gameObject.SetActive(false);
+        }
+
+        public void OnVisibleEnter()
+        {
+            if (_splinesDisplayed && !_animationPlayedOnce)
+            {
+                StartAnimation();
+            }
         }
     }
 }
