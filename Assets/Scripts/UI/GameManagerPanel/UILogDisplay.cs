@@ -183,8 +183,8 @@ namespace CRI.HelloHouston.Experience.UI
         {
             if (Input.GetKey(KeyCode.A))
             {
-                var logOrigin = Extensions.RandomEnumValue<Log.LogOrigin>();
-                var logType = Extensions.RandomEnumValue<Log.LogType>();
+                var logOrigin = EnumExtensions.RandomEnumValue<Log.LogOrigin>();
+                var logType = EnumExtensions.RandomEnumValue<Log.LogType>();
                 string name = string.Format("{0} {1}", logType, logOrigin);
                 if (logOrigin == Log.LogOrigin.Experience)
                     _logManager.logExperienceController.AddLog(name, null, logType);

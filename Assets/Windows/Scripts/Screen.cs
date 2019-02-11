@@ -24,6 +24,14 @@ public class Screen : MonoBehaviour
     //public Window win;
     private List<Window> listWindows = new List<Window>();
 
+    public int currentNbWin
+    {
+        get
+        {
+            return listWindows.Count;
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -39,13 +47,15 @@ public class Screen : MonoBehaviour
         
     }
 
-    public void CreateWindow(Window tmpWin, Vector2 firstPos)
+    public Window CreateWindow(Window tmpWin, Vector2 firstPos)
     {
         Vector3 firstWinPos = new Vector3(firstPos.x, firstPos.y, 0.0f);
-        listWindows.Add(Instantiate(tmpWin, transform.position, transform.rotation, transform));
-        listWindows[listWindows.Count - 1].transform.localPosition = firstPos;
-        listWindows[listWindows.Count - 1].Init(firstWinPos);
+        Window window = Instantiate(tmpWin, transform.position, transform.rotation, transform);
+        window.transform.localPosition = firstPos;
+        window.Init(firstWinPos);
+        listWindows.Add(window);
         RearrangeDepth();
+        return window;
     }
 
     public void RearrangeDepth()
@@ -59,7 +69,7 @@ public class Screen : MonoBehaviour
             else
             {
                 float currentDepth = (listWindows.Count - i) * depthStep;
-                listWindows[i].SetDestXYZ(new Vector3(listWindows[i].GetDestXYZ().x, listWindows[i].GetDestXYZ().y, currentDepth));
+                listWindows[i].dest = new Vector3(listWindows[i].dest.x, listWindows[i].dest.y, currentDepth);
                 listWindows[i].Move2XYZ();
             }
         }
@@ -79,70 +89,47 @@ public class Screen : MonoBehaviour
     }
 
     // WINDOWS
-
-    public void CreateWinAlert(string title, string text)
+    public WinAlert CreateWinAlert(string title, string text)
     {
-        WinAlert tmpWinAlert = prefabWinAlert;
-        CreateWindow(tmpWinAlert, new Vector2(0.0f, 0.0f));
-        tmpWinAlert.SetTitle(title);
-        tmpWinAlert.SetMessage(text);
+        WinAlert winAlert = (WinAlert)CreateWindow(prefabWinAlert, new Vector2(0.0f, 0.0f));
+        winAlert.SetTitle(title);
+        winAlert.SetMessage(text);
+        return winAlert;
     }
 
-    public void CreateWinSuccess(string title, string text)
+    public WinSuccess CreateWinSuccess(string title, string text)
     {
-        WinSuccess tmpWinSuccess = prefabWinSuccess;
-        CreateWindow(tmpWinSuccess, new Vector2(0.0f, 0.0f));
-        tmpWinSuccess.SetTitle(title);
-        tmpWinSuccess.SetMessage(text);
+        WinSuccess winSuccess = (WinSuccess)CreateWindow(prefabWinSuccess, new Vector2(0.0f, 0.0f));
+        winSuccess.SetTitle(title);
+        winSuccess.SetMessage(text);
+        return winSuccess;
     }
 
-    public void CreateWinMsg(string title, string text)
+    public WinMessage CreateWinMessage(string title, string text)
     {
-        WinMessage tmpWinMsg = prefabWinMsg;
-        CreateWindow(tmpWinMsg, new Vector2(0.0f, 0.0f));
-        tmpWinMsg.SetTitle(title);
-        tmpWinMsg.SetMessage(text);
+        WinMessage winMsg = (WinMessage)CreateWindow(prefabWinMsg, new Vector2(0.0f, 0.0f));
+        winMsg.SetTitle(title);
+        winMsg.SetMessage(text);
+        return winMsg;
     }
 
-    public void CreateWinBlurb(string text)
+    public WinBlurb CreateWinBlurb(string text)
     {
-        WinBlurb tmpWinBlurb = prefabWinBlurb;
-        CreateWindow(tmpWinBlurb, new Vector2(0.0f, 0.0f));
-        tmpWinBlurb.SetMessage(text);
+        WinBlurb winBlurb = (WinBlurb)CreateWindow(prefabWinBlurb, new Vector2(0.0f, 0.0f));
+        winBlurb.SetMessage(text);
+        return winBlurb;
     }
 
-    public void CreateWinImg(Sprite img)
+    public WinImage CreateWinImage(Sprite img)
     {
-        WinImage tmpWinImg = prefabWinImage;
-        CreateWindow(tmpWinImg, new Vector2(0.0f, 0.0f));
-        tmpWinImg.SetImage(img);
+        WinImage winImage = (WinImage)CreateWindow(prefabWinImage, new Vector2(0.0f, 0.0f));
+        winImage.SetImage(img);
+        return winImage;
     }
 
-
-
-    // GETSET
-    public void SetDepthStep(int tmpDepthStep)
+    public Window CreateWinCustom(Window prefabWin)
     {
-        depthStep = tmpDepthStep;
-    }
-
-    public int GetDepthStep()
-    {
-        return depthStep;
-    }
-
-    public void SetNbLayers(int tmpNbLayers)
-    {
-        nbLayersMax = tmpNbLayers;
-    }
-
-    public int GetNbLayersMax()
-    {
-        return nbLayersMax;
-    }
-
-    public int GetCurrentNbWin()
-    {
-        return listWindows.Count;
+        Window win = CreateWindow(prefabWin, new Vector2(0.0f, 0.0f));
+        return win;
     }
 }

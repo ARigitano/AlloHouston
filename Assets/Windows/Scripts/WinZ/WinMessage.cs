@@ -5,19 +5,8 @@ using UnityEngine.UI;
 
 public class WinMessage : Window
 {
-
     public Text txtTitle;
     public Text txtMessage;
-
-    void Start()
-    {
-
-    }
-
-    void Update()
-    {
-        
-    }
 
     public void SetTitle(string tmpTitle)
     {
@@ -28,6 +17,4 @@ public class WinMessage : Window
     {
         txtMessage.text = tmpMsg;
     }
-
-
 }

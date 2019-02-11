@@ -38,7 +38,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             feynmanBox.screenRenderer.material = _whiteShader;
             feynmanBox.displayLine = false;
             Texture diagram = feynmanBox.contentRenderer.material.mainTexture;
-            _tablet.DiagramValidation(diagram);
+            _tablet.selectedDiagram = diagram;
         }
 
         void OnTriggerEnter(Collider other)

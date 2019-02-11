@@ -13,6 +13,10 @@ namespace CRI.HelloHouston.Experience.MAIA
     public class MAIATabletScreen : XPElement
     {
         private MAIAManager _manager;
+        private MAIATopScreen _topScreen;
+        private MAIAHologramTube _hologramTube;
+        private MAIAHologramFeynman _hologramFeynman;
+        private MAIATubeScreen _tubeScreen;
         /// <summary>
         /// All the panels for the tablet screen.
         /// </summary>
@@ -20,7 +24,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         private GameObject _startFull, _panelFull, _overrideLeft, _passwordLeft, _particlesLeft, _advanceOverride, _diagramsSelectionLeft, _diagramsSelectionRight;
         /// <summary>
         /// Loading bar to display the time remaining.
-        /// </summary>
+        /// </summary> 
         [SerializeField]
         private Slider _slider = null;
         /// <summary>
@@ -36,12 +40,6 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// Stores the panels currently being displayed.
         /// </summary>
         private GameObject _currentPanelLeft, _currentPanelRight, _currentPanel;
-
-        public MAIATopScreen topScreen { get; private set; }
-        public MAIAHologramTube hologramTube { get; private set; }
-        public MAIAHologramFeynman hologramFeynman { get; private set; }
-
-        public MAIATubeScreen tubeScreen;
         /// <summary>
         /// Password entered by the player.
         /// </summary>
@@ -51,20 +49,8 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         [HideInInspector]
         private List<Particle> _enteredParticles = new List<Particle>();
-        /// <summary>
-        /// Is the holographic diagram the right one?
-        /// </summary>
-        public bool correctDiagram = false;
-        private Texture _diagram;
 
-        /// <summary>
-        /// Tests if the chosen holographic diagram is correct.
-        /// </summary>
-        /// <param name="diagram">Texture of the chosen holographic diagram.</param>
-        public void DiagramValidation(Texture diagram)
-        {
-            _diagram = diagram;
-        }
+        public Texture selectedDiagram { get; set; }
 
         /// <summary>
         /// Tells the main screen that a reaction has been selected.
@@ -74,17 +60,10 @@ namespace CRI.HelloHouston.Experience.MAIA
             if (!_isTouched)
             {
                 _isTouched = true;
-                if (_diagram != null)
+                if (selectedDiagram != null)
                 {
-                    if (_diagram == _manager.selectedReaction.diagramImage)
-                    {
-                        correctDiagram = true;
-                    }
-                    else
-                    {
-                        correctDiagram = false;
-                    }
-                    topScreen.ReactionSelected(correctDiagram);
+                    bool correctDiagram = (selectedDiagram == _manager.selectedReaction.diagramImage);
+                    _topScreen.OnReactionSelected(correctDiagram);
                 }
                 StartCoroutine(WaitButton());
             }
@@ -216,7 +195,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void ParticleRightCombination()
         {
-            topScreen.manager.StartAnalysisAnimation();
+            _topScreen.manager.StartAnalysisAnimation();
             _particlesLeft.SetActive(false);
         }
 
@@ -233,7 +212,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         public void AdvancedManualOverride()
         {
             _advanceOverride.SetActive(false);
-            topScreen.manager.StartReactionIdentification();
+            _topScreen.manager.StartReactionIdentification();
         }
 
         public void StartReactionIdentification()
@@ -302,8 +281,6 @@ namespace CRI.HelloHouston.Experience.MAIA
             
         }
 
-        
-
         /// Adds a particle to the combination.
         /// </summary>
         /// <param name="particleButton">The particle to add.</param>
@@ -359,7 +336,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void OverrideButtonClicked()
         {
-            topScreen.InitPasswordInput();
+            _topScreen.InitPasswordInput();
             StartCoroutine(WaitGeneric(0.2f, () =>
             {
                 _passwordLeft.SetActive(true);
@@ -372,10 +349,10 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             _manager = manager;
             Debug.Log(manager);
-            topScreen = manager.topScreen;
-            _particleIdentificationScreen = topScreen.particleIdentificationScreen;
-            _manualOverrideAccessScreen = topScreen.manualOverrideAccessScreen;
-            hologramTube = manager.hologramTube;
+            _topScreen = manager.topScreen;
+            _particleIdentificationScreen = _topScreen.particleIdentificationScreen;
+            _manualOverrideAccessScreen = _topScreen.manualOverrideAccessScreen;
+            _hologramTube = manager.hologramTube;
         }
 
         public override void OnActivation(XPManager manager)

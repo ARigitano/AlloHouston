@@ -5,23 +5,10 @@ using UnityEngine.UI;
 
 public class WinBlurb : Window
 {
-
     public Text txtMessage;
-
-    void Start()
-    {
-
-    }
-
-    void Update()
-    {
-
-    }
 
     public void SetMessage(string tmpMsg)
     {
         txtMessage.text = tmpMsg;
     }
-
-
 }

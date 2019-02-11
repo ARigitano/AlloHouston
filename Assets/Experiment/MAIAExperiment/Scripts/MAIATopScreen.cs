@@ -189,7 +189,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             _manualOverrideAccess.Access(isGranted);
         }
 
-        public void ReactionSelected(bool correctDiagram)
+        public void OnReactionSelected(bool correctDiagram)
         {
             _reactionsIdentification.ReactionSelected(correctDiagram);
         }

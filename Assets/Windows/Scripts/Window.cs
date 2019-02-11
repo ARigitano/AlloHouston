@@ -5,11 +5,10 @@ using UnityEngine;
 public class Window : MonoBehaviour
 {
     [Header("Parameters")]
+    public Vector3 dest = new Vector3(0.0f, 0.0f, 0.0f);
 
-    public Vector3 destXYZ = new Vector3(0.0f, 0.0f, 0.0f);
-
-    private float widthWin;
-    private float heightWin;
+    public float widthWin { get; set; }
+    public float heightWin { get; set; }
 
     private bool isMoving = false;
     private float speed = 500f;
@@ -34,7 +33,7 @@ public class Window : MonoBehaviour
 
     public void Init(Vector3 initPosition)
     {
-        destXYZ = initPosition;
+        dest = initPosition;
     }
 
     public void ComeIn()
@@ -56,48 +55,17 @@ public class Window : MonoBehaviour
 
     private void Movement()
     {
-        float sqrDist = (transform.localPosition - destXYZ).sqrMagnitude;
+        float sqrDist = (transform.localPosition - dest).sqrMagnitude;
         if (sqrDist > distmin)
         {
             float step = speed * Time.deltaTime;
-            transform.localPosition = Vector3.MoveTowards(transform.localPosition, destXYZ, step);
+            transform.localPosition = Vector3.MoveTowards(transform.localPosition, dest, step);
         }
         else
         {
             isMoving = false;
             CancelInvoke("Movement");
         }
-    }
-
-    // SETGET
-    public void SetWidth(float tmpWidth)
-    {
-        widthWin = tmpWidth;
-    }
-
-    public float GetWidth()
-    {
-        return widthWin;
-    }
-
-    public void SetHeight(float tmpHeight)
-    {
-        heightWin = tmpHeight;
-    }
-
-    public float GetHeight()
-    {
-        return heightWin;
-    }
-
-    public void SetDestXYZ(Vector3 tmpDestXYZ)
-    {
-        destXYZ = tmpDestXYZ;
-    }
-
-    public Vector3 GetDestXYZ()
-    {
-        return destXYZ;
     }
 
 }
