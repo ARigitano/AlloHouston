@@ -13,6 +13,7 @@ namespace CRI.HelloHouston.Experience
         /// The element's type.
         /// </summary>
         public ElementType elementType { get; protected set; }
+        [Header("XPElement Attributes")]
         /// <summary>
         /// The element name
         /// </summary>

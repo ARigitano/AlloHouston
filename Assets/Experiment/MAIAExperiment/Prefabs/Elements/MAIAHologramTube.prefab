@@ -551,10 +551,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4993085576833532}
   - component: {fileID: 114681139431253332}
+  - component: {fileID: 1120915866531385538}
   - component: {fileID: 3665088112656205309}
   - component: {fileID: 156946901251726513}
   - component: {fileID: 3039194931266411233}
-  - component: {fileID: 1120915866531385538}
   m_Layer: 0
   m_Name: MAIAHologramTube
   m_TagString: Untagged
@@ -602,18 +602,58 @@ MonoBehaviour:
     type: 3}
   _sparkPrefab: {fileID: 3433516500169364685, guid: 57628a8e6b0f566419dc7c193961f389,
     type: 3}
-  _start1: {fileID: 744187390491120669}
-  _start2: {fileID: 2033453594320576561}
-  _amplitudeA: 0.15
-  _amplitudeB: 0.15
   _particleSplinePrefab: {fileID: 114330974348385556, guid: f3741c479c435b84dae26c8388f02e22,
     type: 3}
+  _numberOfPoints: 20
+  _amplitudeA: 0.15
+  _amplitudeB: 0.15
+  _factor: 0.3
   _cylArray:
   - {fileID: 33614257511252690}
   - {fileID: 33778873967638092}
   - {fileID: 33533058801098216}
   - {fileID: 33970273169914432}
-  _factor: 0.3
+  _start1: {fileID: 744187390491120669}
+  _start2: {fileID: 2033453594320576561}
+--- !u!114 &1120915866531385538
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1657341404690666}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73dbf5a7d782fc641a4190eb3f23dfb7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _onVisibleEnter:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 114681139431253332}
+        m_MethodName: OnVisibleEnter
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: CRI.HelloHouston.CameraTarget+CameraEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  _onVisibleStay:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: CRI.HelloHouston.CameraTarget+CameraEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  _onVisibleExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: CRI.HelloHouston.CameraTarget+CameraEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  allowedCameras: []
 --- !u!135 &3665088112656205309
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -683,44 +723,6 @@ MonoBehaviour:
   dbgPathLimit: 50
   debugText: {fileID: 0}
   outAngle: 0
---- !u!114 &1120915866531385538
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1657341404690666}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 73dbf5a7d782fc641a4190eb3f23dfb7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _onVisibleEnter:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 114681139431253332}
-        m_MethodName: OnVisibleEnter
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_TypeName: CRI.HelloHouston.CameraTarget+CameraEvent, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  _onVisibleStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: CRI.HelloHouston.CameraTarget+CameraEvent, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  _onVisibleExit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: CRI.HelloHouston.CameraTarget+CameraEvent, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
 --- !u!1 &1837168784898774
 GameObject:
   m_ObjectHideFlags: 0

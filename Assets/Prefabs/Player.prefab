@@ -404,6 +404,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _camera: {fileID: 2083460}
+  _rect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
 --- !u!114 &11476190
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -526,11 +532,11 @@ GameObject:
   m_Component:
   - component: {fileID: 429506}
   - component: {fileID: 2014920}
-  - component: {fileID: 9118060715202021566}
   - component: {fileID: 11450526}
   - component: {fileID: 12440092}
   - component: {fileID: 1709320629}
-  - component: {fileID: 6259055042610355936}
+  - component: {fileID: 8038170860962549158}
+  - component: {fileID: 3700044121958485583}
   m_Layer: 0
   m_Name: VRCamera
   m_TagString: MainCamera
@@ -595,19 +601,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!114 &9118060715202021566
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 125964}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: affe85b5bd97dcc47bceec36dbf4404a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _camera: {fileID: 2014920}
 --- !u!114 &11450526
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -641,7 +634,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   profile: {fileID: 11400000, guid: 258513f1ebb8ebd42993a6137e2f7d4c, type: 2}
---- !u!114 &6259055042610355936
+--- !u!114 &8038170860962549158
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 125964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: affe85b5bd97dcc47bceec36dbf4404a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _camera: {fileID: 2014920}
+  _rect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+--- !u!114 &3700044121958485583
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

@@ -27,6 +27,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         [Tooltip("The manager of the experiment.")]
         private MAIAManager _manager = null;
+        [Header("Particle Prefabs")]
         /// <summary>
         /// Prefab of the head of a particle line.
         /// </summary>
@@ -46,21 +47,18 @@ namespace CRI.HelloHouston.Experience.MAIA
         [Tooltip("Prefab of the spark effect of the particle generation.")]
         private MAIAHologramSparkAnimation _sparkPrefab = null;
         /// <summary>
-        /// Transform of a starting point of the spark effect.
+        /// Spline prefab.
         /// </summary>
         [SerializeField]
-        [Tooltip("Transform of a starting point of the spark effect.")]
-        private Transform _start1 = null;
-        /// <summary>
-        /// Transform of a starting point of the spark effect.
-        /// </summary>
-        [SerializeField]
-        [Tooltip("Transform of a starting point of the spark effect.")]
-        private Transform _start2= null;
+        [Tooltip("Spline prefab.")]
+        private BezierSpline _particleSplinePrefab = null;
+
+        [Header("Curve Parameters")]
         /// <summary>
         /// Number of points in the lines.
         /// </summary>
         [Tooltip("Number of points in the lines.")]
+        [SerializeField]
         private int _numberOfPoints = 20;
         /// <summary>
         /// Amplitude for the bezier curves curvature.
@@ -74,12 +72,17 @@ namespace CRI.HelloHouston.Experience.MAIA
         [SerializeField]
         [Tooltip("Amplitude for the bezier curves curvature.")]
         private float _amplitudeB = 0.15f;
-        /// <summary>
-        /// Spline prefab.
-        /// </summary>
         [SerializeField]
-        [Tooltip("Spline prefab.")]
-        private BezierSpline _particleSplinePrefab = null;
+        [Tooltip("Angle for shaping the bezier curves of the particle lines.")]
+        private float _factor = 0.2f;
+        /// <summary>
+        /// Angle for shaping the bezier curves of the particle lines.
+        /// </summary>
+        private float _theta = 0f;
+        /// <summary>
+        /// Angle for shaping the bezier curves of the particle lines.
+        /// </summary>
+        private float _phi = 0f;
         /// <summary>
         /// Array of particle splines.
         /// </summary>
@@ -92,9 +95,6 @@ namespace CRI.HelloHouston.Experience.MAIA
         [SerializeField]
         [Tooltip("Array of the cylinders' mesh filters.")]
         private MeshFilter[] _cylArray = null;
-        [SerializeField]
-        [Tooltip("Angle for shaping the bezier curves of the particle lines.")]
-        private float _factor = 0.2f;
         /// <summary>
         /// Array of the cylinders' radiuses.
         /// </summary>
@@ -103,14 +103,20 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// Array of the cylinders' lengths.
         /// </summary>
         private float[] _lMaxCylArray;
+
+        [Header("Animation Starting Points")]
         /// <summary>
-        /// Angle for shaping the bezier curves of the particle lines.
+        /// Transform of a starting point of the spark effect.
         /// </summary>
-        private float _theta = 0f;
+        [SerializeField]
+        [Tooltip("Transform of a starting point of the spark effect.")]
+        private Transform _start1 = null;
         /// <summary>
-        /// Angle for shaping the bezier curves of the particle lines.
+        /// Transform of a starting point of the spark effect.
         /// </summary>
-        private float _phi = 0f;
+        [SerializeField]
+        [Tooltip("Transform of a starting point of the spark effect.")]
+        private Transform _start2 = null;
 
         private bool _splinesDisplayed = false;
 
@@ -366,7 +372,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             gameObject.SetActive(false);
         }
 
-        public void OnVisibleEnter()
+        public void OnVisibleEnter(Camera camera)
         {
             if (_splinesDisplayed && !_animationPlayedOnce)
             {

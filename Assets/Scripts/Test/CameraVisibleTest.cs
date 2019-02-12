@@ -4,21 +4,25 @@ using UnityEngine;
 
 namespace CRI.HelloHouston.Test
 {
-    public class CameraVisibleTest : CameraTarget
+    public class CameraVisibleTest : MonoBehaviour
     {
-        public override void OnVisibleExit(Camera camera)
+        public void OnVisibleExit(Camera camera)
         {
+            Debug.Log(string.Format("Exit {0}", camera));
             GetComponent<MeshRenderer>().material.SetColor("_Color", Color.white);
+            gameObject.name += "-";
         }
 
-        public override void OnVisibleEnter(Camera camera)
+        public void OnVisibleEnter(Camera camera)
         {
+            Debug.Log(string.Format("Enter {0}", camera));
             GetComponent<MeshRenderer>().material.SetColor("_Color", Color.red);
             gameObject.name += "+";
         }
 
-        public override void OnVisibleStay(Camera camera)
+        public void OnVisibleStay(Camera camera)
         {
+            Debug.Log(string.Format("Stay {0}", camera));
             GetComponent<MeshRenderer>().material.SetColor("_Color", Color.blue);
         }
     }

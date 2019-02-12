@@ -9,6 +9,9 @@ namespace CRI.HelloHouston
         [SerializeField]
         [Tooltip("The camera that will be used for the visibility detection.")]
         private Camera _camera;
+        [SerializeField]
+        [Tooltip("Rect of the camera visibility.")]
+        private Rect _rect = new Rect(0.0f, 0.0f, 1.0f, 1.0f);
 
         private static List<CameraTarget> s_targets = new List<CameraTarget>();
         private List<CameraTarget> _currentTargets = new List<CameraTarget>();
@@ -40,7 +43,7 @@ namespace CRI.HelloHouston
         private bool IsVisible(CameraTarget ct)
         {
             Vector3 screenPoint = _camera.WorldToViewportPoint(ct.transform.position);
-            return ct.gameObject.activeInHierarchy && (screenPoint.z > 0 && screenPoint.x > 0 && screenPoint.x < 1 && screenPoint.y > 0 && screenPoint.y < 1);
+            return ct.gameObject.activeInHierarchy && (screenPoint.z > 0 && _rect.Contains(screenPoint));
         }
 
         private void Update()
@@ -61,11 +64,11 @@ namespace CRI.HelloHouston
                 {
                     cameraTarget.OnVisibleStay(_camera);
                 }
-                // Not visible
-                else
+                // Not visible and in the current target list.
+                else if (!visible && _currentTargets.Contains(target))
                 {
-                    cameraTarget.OnVisibleExit(_camera);
                     _currentTargets.Remove(target);
+                    cameraTarget.OnVisibleExit(_camera);
                 }
             }
         }
