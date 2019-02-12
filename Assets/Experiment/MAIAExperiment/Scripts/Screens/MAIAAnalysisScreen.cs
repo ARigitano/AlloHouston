@@ -87,6 +87,8 @@ namespace CRI.HelloHouston.Experience.MAIA
             {
                 var group = dictionary.ElementAt(i);
                 _particleGridCellDictionary[group.Key].SetText(group.Value.ToString());
+                if (group.Value == 0)
+                    _particleGridCellDictionary[group.Key].Disable();
             }
         }
 

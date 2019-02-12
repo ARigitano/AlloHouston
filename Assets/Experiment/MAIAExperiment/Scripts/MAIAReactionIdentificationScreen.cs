@@ -47,6 +47,8 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         [SerializeField]
         private float _analysisDuration = 3.0f;
+
+        private float _popupDuration = 4.0f;
         /// <summary>
         /// Array of text to be displayed if the reaction selected is the wrong one.
         /// </summary>
@@ -84,7 +86,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                 _popupLose.GetComponentInChildren<Text>().text = _strike < _loseText.Length ? _loseText[_strike] : _loseText[_loseText.Length - 1];
                 _strike++;
                 _popupLose.SetActive(true);
-                StartCoroutine(_topScreen.WaitGeneric(2f, () =>
+                StartCoroutine(_topScreen.WaitGeneric(_popupDuration, () =>
                 {
                     _popupLose.SetActive(false);
                 }));
@@ -114,6 +116,8 @@ namespace CRI.HelloHouston.Experience.MAIA
             {
                 var group = dictionary.ElementAt(i);
                 _particleGridCellDictionary[group.Key].SetText(group.Value.ToString());
+                if (group.Value == 0)
+                    _particleGridCellDictionary[group.Key].Disable();
             }
         }
     }

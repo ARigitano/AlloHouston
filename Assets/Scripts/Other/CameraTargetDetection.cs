@@ -67,6 +67,7 @@ namespace CRI.HelloHouston
                 // Not visible and in the current target list.
                 else if (!visible && _currentTargets.Contains(target))
                 {
+
                     _currentTargets.Remove(target);
                     cameraTarget.OnVisibleExit(_camera);
                 }

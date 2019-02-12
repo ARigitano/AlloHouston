@@ -37,7 +37,7 @@ public class MAIAHologramHeadAnimation : MonoBehaviour
 
     private void Reset()
     {
-        _lineRenderer = GetComponent<XRLineRenderer>();
+        _lineRenderer = GetComponentInChildren<XRLineRenderer>();
     }
 
     public void StartAnimation()

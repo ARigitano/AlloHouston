@@ -34,7 +34,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 20, y: 0}
+  m_AnchoredPosition: {x: -20, y: 0}
   m_SizeDelta: {x: -40, y: -20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8043363501350100225
@@ -79,6 +79,18 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 0
+--- !u!225 &7145726443220325865
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2132920340181848026}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!114 &6095932562316148357
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -92,6 +104,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _icon: {fileID: 3744057943136284225}
+  _canvasGroup: {fileID: 7145726443220325865}
+  _disabledAlpha: 0.3
   _text: {fileID: 1711122597666988855}
 --- !u!1001 &3544874347561550993
 PrefabInstance:
@@ -104,6 +118,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: ParticleGridCell Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 199421364989536976, guid: 904e7039b1e0e7348996b4943feaf90d,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8767657157360715261, guid: 904e7039b1e0e7348996b4943feaf90d,
+        type: 3}
+      propertyPath: m_Name
+      value: Icon
       objectReference: {fileID: 0}
     - target: {fileID: 5828467890649518045, guid: 904e7039b1e0e7348996b4943feaf90d,
         type: 3}
@@ -213,7 +237,7 @@ PrefabInstance:
     - target: {fileID: 3570726368113865121, guid: 904e7039b1e0e7348996b4943feaf90d,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -20
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 3570726368113865121, guid: 904e7039b1e0e7348996b4943feaf90d,
         type: 3}
@@ -230,18 +254,12 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: -20
       objectReference: {fileID: 0}
-    - target: {fileID: 8767657157360715261, guid: 904e7039b1e0e7348996b4943feaf90d,
+    - target: {fileID: 4623026412944525362, guid: 904e7039b1e0e7348996b4943feaf90d,
         type: 3}
-      propertyPath: m_Name
-      value: Icon
-      objectReference: {fileID: 0}
-    - target: {fileID: 199421364989536976, guid: 904e7039b1e0e7348996b4943feaf90d,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 6632403206492670212, guid: 904e7039b1e0e7348996b4943feaf90d, type: 3}
+      propertyPath: _icon
+      value: 
+      objectReference: {fileID: 3744057943136284225}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 904e7039b1e0e7348996b4943feaf90d, type: 3}
 --- !u!1 &2132920340181848026 stripped
 GameObject:
