@@ -286,6 +286,7 @@ namespace CRI.HelloHouston.Experience.MAIA
 
         private IEnumerator Animate()
         {
+            _animationPlayedOnce = true;
             var lines = GetComponentsInChildren<MAIAHologramLineAnimation>();
             var heads = GetComponentsInChildren<MAIAHologramHeadAnimation>();
             foreach (var line in lines)
@@ -302,7 +303,6 @@ namespace CRI.HelloHouston.Experience.MAIA
             yield return new WaitForSeconds(_lineRendererPrefab.GetComponent<MAIAHologramLineAnimation>().explosionDuration * 0.7f);
             foreach (var head in heads)
                 head.StartAnimation();
-            _animationPlayedOnce = true;
         }
 
         public void StartAnimation()
