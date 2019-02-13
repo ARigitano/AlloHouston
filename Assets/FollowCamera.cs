@@ -11,6 +11,10 @@ public class FollowCamera : MonoBehaviour
     private float _initialRotation, _secondRotation;
     private Vector3 _initialPosition, _secondPosition;
     private bool _isMoving;
+    [SerializeField]
+    private float _angle;
+    [SerializeField]
+    private float _distance;
 
     // Start is called before the first frame update
     void Start()
@@ -27,7 +31,7 @@ public class FollowCamera : MonoBehaviour
             yield return new WaitForSeconds(1f);
             _secondRotation = _camera.transform.eulerAngles.y;
             _secondPosition = transform.position;
-            if (Mathf.Abs(_initialRotation - _secondRotation) > 30f || Mathf.Abs(_initialPosition.x - _secondPosition.x) > 0.1f || Mathf.Abs(_initialPosition.z - _secondPosition.z) > 0.1f)
+            if (Mathf.Abs(_initialRotation - _secondRotation) > _angle || Mathf.Abs(_initialPosition.x - _secondPosition.x) > _distance || Mathf.Abs(_initialPosition.z - _secondPosition.z) > _distance)
             {
                 _isMoving = true;
             }

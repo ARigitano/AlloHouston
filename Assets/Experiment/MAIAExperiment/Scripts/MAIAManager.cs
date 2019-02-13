@@ -14,6 +14,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// The top left script of the experiment block.
         /// </summary>
         public MAIATopScreen topScreen { get; private set; }
+
         /// <summary>
         /// The top right script of the experiment block.
         /// </summary>
@@ -77,6 +78,12 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             _hologramTube.StartAnimation();
             _hologramFeynman.ResetPositions();
+        }
+
+        internal void LaunchVictory()
+        {
+            topScreen.Victory();
+            tabletScreen.Victory();
         }
 
 
