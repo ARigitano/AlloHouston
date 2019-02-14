@@ -630,9 +630,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _onVisibleEnter:
     m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: CRI.HelloHouston.CameraTarget+CameraEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  _onVisibleStay:
+    m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 114681139431253332}
-        m_MethodName: OnVisibleEnter
+        m_MethodName: OnVisibleStay
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -644,17 +649,13 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: CRI.HelloHouston.CameraTarget+CameraEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  _onVisibleStay:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: CRI.HelloHouston.CameraTarget+CameraEvent, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   _onVisibleExit:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: CRI.HelloHouston.CameraTarget+CameraEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   allowedCameras: []
+  _checkOcclusion: 0
 --- !u!135 &3665088112656205309
 SphereCollider:
   m_ObjectHideFlags: 0

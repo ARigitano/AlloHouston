@@ -377,7 +377,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             gameObject.SetActive(false);
         }
 
-        public void OnVisibleEnter(Camera camera)
+        public void OnVisibleStay(Camera camera)
         {
             if (_splinesDisplayed && !_animationPlayedOnce)
             {
