@@ -23,6 +23,7 @@ public class Screen : MonoBehaviour
     public Sprite background;
     //public Window win;
     private List<Window> listWindows = new List<Window>();
+    internal static int height;
 
     public int currentNbWin
     {

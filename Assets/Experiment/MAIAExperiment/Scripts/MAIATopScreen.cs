@@ -21,7 +21,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         [SerializeField]
         private ExileLoading _exileLoading = null;
         /// <summary>
-        /// Script for the Exile Loading screen.
+        /// Script for the Maia Loading screen.
         /// </summary>
         [SerializeField]
         private MAIALoading _maiaLoading = null;
@@ -61,6 +61,8 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         [SerializeField]
         private MAIAReactionIdentificationScreen _reactionsIdentification = null;
+        [SerializeField]
+        private GameObject _victoryScreen = null;
         /// <summary>
         /// Stores the panel currently being displayed.
         /// </summary>
@@ -76,6 +78,12 @@ namespace CRI.HelloHouston.Experience.MAIA
         public void ParticleGrid(List<Particle> reactionExits)
         {
             _particlesIdentification.CreateParticleGrid(reactionExits);
+        }
+
+        public void Victory()
+        {
+            _currentPanel.SetActive(false);
+            _victoryScreen.SetActive(true);
         }
 
         /// <summary>

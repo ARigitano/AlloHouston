@@ -69,6 +69,11 @@ namespace CRI.HelloHouston.Experience.MAIA
             }
         }
 
+        public void Victory()
+        {
+            _panelFull.SetActive(false);
+        }
+
         /// <summary>
         /// Particle identification screen.
         /// </summary>
