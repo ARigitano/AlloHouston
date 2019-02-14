@@ -170,7 +170,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public override void OnSuccess()
         {
-            Debug.Log(name + "Resolved");
+            Victory();
         }
 
         //TO DO
