@@ -1,10 +1,4 @@
-﻿//======= Copyright (c) Valve Corporation, All rights reserved. ===============
-//
-// Purpose: Sends simple controller button events to UnityEvents
-//
-//=============================================================================
-
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Events;
 
 namespace Valve.VR.InteractionSystem
@@ -27,6 +21,7 @@ namespace Valve.VR.InteractionSystem
 		{
 			for ( int i = 0; i < Player.instance.handCount; i++ )
 			{
+                Debug.Log("hey");
 				Hand hand = Player.instance.GetHand( i );
 
 				if ( hand.controller != null )

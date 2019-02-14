@@ -1,10 +1,4 @@
-﻿//======= Copyright (c) Valve Corporation, All rights reserved. ===============
-//
-// Purpose: The hands used by the player in the vr interaction system
-//
-//=============================================================================
-
-using UnityEngine;
+﻿using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -862,8 +856,9 @@ namespace Valve.VR.InteractionSystem
 				controllerObject.SetActive( true );
 				controllerObject.name = controllerPrefab.name + "_" + this.name;
 				controllerObject.layer = gameObject.layer;
-				controllerObject.tag = gameObject.tag;
-				AttachObject( controllerObject );
+                controllerObject.tag = "ViveController";
+                //controllerObject.tag = gameObject.tag;
+                AttachObject( controllerObject );
 				controller.TriggerHapticPulse( 800 );
 
 				// If the player's scale has been changed the object to attach will be the wrong size.

@@ -1,10 +1,4 @@
-﻿//======= Copyright (c) Valve Corporation, All rights reserved. ===============
-//
-// Purpose: Interactable that can be used to move in a circular motion
-//
-//=============================================================================
-
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Events;
 using System.Collections;
 
@@ -15,14 +9,16 @@ namespace Valve.VR.InteractionSystem
 	[RequireComponent( typeof( Interactable ) )]
 	public class CircularDrive : MonoBehaviour
 	{
+        [System.Flags]
 		public enum Axis_t
 		{
-			XAxis,
-			YAxis,
-			ZAxis
+			XAxis = (1 << 0),
+			YAxis  = (1 << 1),
+			ZAxis = (1 << 2),
 		};
 
 		[Tooltip( "The axis around which the circular drive will rotate in local space" )]
+        [EnumFlags]
 		public Axis_t axisOfRotation = Axis_t.XAxis;
 
 		[Tooltip( "Child GameObject which has the Collider component to initiate interaction, only needs to be set if there is more than one Collider child" )]
@@ -140,8 +136,9 @@ namespace Valve.VR.InteractionSystem
 				linearMapping = gameObject.AddComponent<LinearMapping>();
 			}
 
-			worldPlaneNormal = new Vector3( 0.0f, 0.0f, 0.0f );
-			worldPlaneNormal[(int)axisOfRotation] = 1.0f;
+			worldPlaneNormal = new Vector3((axisOfRotation & Axis_t.XAxis) == Axis_t.XAxis ? 1.0f : 0.0f, 
+                (axisOfRotation & Axis_t.YAxis) == Axis_t.YAxis ? 1.0f : 0.0f,
+                (axisOfRotation & Axis_t.ZAxis) == Axis_t.ZAxis ? 1.0f : 0.0f);
 
 			localPlaneNormal = worldPlaneNormal;
 
@@ -162,7 +159,7 @@ namespace Valve.VR.InteractionSystem
 			}
 			else
 			{
-				start = Quaternion.AngleAxis( transform.localEulerAngles[(int)axisOfRotation], localPlaneNormal );
+                start = Quaternion.identity;
 				outAngle = 0.0f;
 			}
 
