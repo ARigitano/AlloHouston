@@ -99,6 +99,31 @@ namespace CRI.HelloHouston.Experience
             return res;
         }
 
+        /// <summary>
+        /// Called before the state changed to the reset state.
+        /// </summary>
+        protected virtual void PreReset() { }
+        /// <summary>
+        /// Called after the state changed to the reset state.
+        /// </summary>
+        /// <returns></returns>
+        protected virtual void PostReset() { }
+
+        public void ResetExperiment()
+        {
+            PreReset();
+            var previousState = state;
+            state = XPState.Visible;
+            if (onStateChange != null && previousState != state)
+                onStateChange(state);
+            logController.AddLog("Reset", xpContext, Log.LogType.Automatic);
+            foreach (var element in elements)
+            {
+                element.xpElement.OnReset ();
+            }
+            PostReset();
+        }
+
 
         /// <summary>
         /// To be called in case of success of the experiment.
@@ -106,7 +131,7 @@ namespace CRI.HelloHouston.Experience
         public void Success()
         {
             PreSuccess();
-            state = XPState.Success;
+            XPState state = XPState.Success;
             if (onStateChange != null)
                 onStateChange(state);
             if (onEnd != null)

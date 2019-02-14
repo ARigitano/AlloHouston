@@ -43,7 +43,17 @@ namespace CRI.HelloHouston
         private bool IsVisible(CameraTarget ct)
         {
             Vector3 screenPoint = _camera.WorldToViewportPoint(ct.transform.position);
-            return ct.gameObject.activeInHierarchy && (screenPoint.z > 0 && _rect.Contains(screenPoint));
+            bool res;
+            res = ct.gameObject.activeInHierarchy && (screenPoint.z > 0 && _rect.Contains(screenPoint));
+            if (res && ct.checkOcclusion)
+            {
+                // Only counts those that are in the default layer.
+                RaycastHit hit;
+                int layerMask = 1 << 0;
+                layerMask = ~layerMask;
+                res = Physics.Raycast(transform.position, (ct.transform.position - transform.position).normalized, out hit) && hit.collider.gameObject == ct.gameObject;
+            }
+            return res;
         }
 
         private void Update()
@@ -67,7 +77,6 @@ namespace CRI.HelloHouston
                 // Not visible and in the current target list.
                 else if (!visible && _currentTargets.Contains(target))
                 {
-
                     _currentTargets.Remove(target);
                     cameraTarget.OnVisibleExit(_camera);
                 }

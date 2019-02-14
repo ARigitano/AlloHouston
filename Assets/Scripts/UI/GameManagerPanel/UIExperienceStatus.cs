@@ -137,19 +137,11 @@ namespace CRI.HelloHouston.Experience.UI
         private void FailAction()
         {
             _xpManager.Fail();
-            _successButton.interactable = false;
-            _failButton.interactable = false;
-            if (_successButton.GetComponentInChildren<Text>())
-                _successButton.GetComponentInChildren<Text>().color = _unselectedButtonColor;
         }
 
         private void SuccessAction()
         {
             _xpManager.Success();
-            _successButton.interactable = false;
-            _failButton.interactable = false;
-            if (_failButton.GetComponentInChildren<Text>())
-                _failButton.GetComponentInChildren<Text>().color = _unselectedButtonColor;
         }
 
         private void SetState(XPState state)
@@ -159,6 +151,20 @@ namespace CRI.HelloHouston.Experience.UI
                 _inProgress.Hide();
                 _finished.Hide();
                 _inactive.Show();
+            }
+            else if (state == XPState.Success)
+            {
+                _successButton.interactable = false;
+                _failButton.interactable = false;
+                if (_failButton.GetComponentInChildren<Text>())
+                    _failButton.GetComponentInChildren<Text>().color = _unselectedButtonColor;
+            }
+            else if (state == XPState.Failure)
+            {
+                _successButton.interactable = false;
+                _failButton.interactable = false;
+                if (_successButton.GetComponentInChildren<Text>())
+                    _successButton.GetComponentInChildren<Text>().color = _unselectedButtonColor;
             }
             else if (_xpManager.active)
             {

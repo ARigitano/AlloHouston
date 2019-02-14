@@ -1,4 +1,5 @@
-﻿using CRI.HelloHouston.Calibration;
+﻿using System;
+using CRI.HelloHouston.Calibration;
 using UnityEngine;
 
 namespace CRI.HelloHouston.Experience
@@ -65,5 +66,7 @@ namespace CRI.HelloHouston.Experience
         public virtual void OnHide() { }
 
         public virtual void OnShow() { }
+
+        public virtual void OnReset() { }
     }
 }

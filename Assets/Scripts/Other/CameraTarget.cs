@@ -54,6 +54,19 @@ namespace CRI.HelloHouston
         /// </summary>
         [Tooltip("List of allowed cameras. If the list is empty, any camera with the CameraTargetDetection script will trigger the events.")]
         public List<Camera> allowedCameras = new List<Camera>();
+        [SerializeField]
+        [Tooltip("If true, the camera target detection will check for occlusion.")]
+        private bool _checkOcclusion = false;
+        /// <summary>
+        /// If true, the camera target detecttion will check for occlusion.
+        /// </summary>
+        public bool checkOcclusion
+        {
+            get
+            {
+                return _checkOcclusion;
+            }
+        }
 
         internal virtual void OnVisibleEnter(Camera camera)
         {

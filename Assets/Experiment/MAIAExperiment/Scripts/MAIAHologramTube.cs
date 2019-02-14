@@ -74,10 +74,14 @@ namespace CRI.HelloHouston.Experience.MAIA
         private float _amplitudeB = 0.15f;
         [SerializeField]
         [Tooltip("Angle for shaping the bezier curves of the particle lines.")]
-        private float _factor = 0.2f;
+        private float _factorMin = 0.2f;
+        [SerializeField]
+        [Tooltip("Angle for shaping the bezier curves of the particle lines.")]
+        private float _factorMax = 0.2f;
         /// <summary>
         /// Angle for shaping the bezier curves of the particle lines.
         /// </summary>
+        /// 
         private float _theta = 0f;
         /// <summary>
         /// Angle for shaping the bezier curves of the particle lines.
@@ -186,11 +190,12 @@ namespace CRI.HelloHouston.Experience.MAIA
             Vector3 vDir = Vector3.zero;
 
 
-            float factorTmp = particle.extremity ? 0.0f : _factor;
-            float lMaxFactor = lMax - factorTmp * (lMax - lMin);
-            float lMinFactor = lMin + factorTmp * (lMax - lMin);
-            float rMaxFactor = rMax - factorTmp * (rMax - rMin);
-            float rMinFactor = rMin + factorTmp * (rMax - rMin);
+            float factorTmpMin = particle.extremity ? 0.0f : _factorMin;
+            float factorTmpMax = particle.extremity ? 0.0f : _factorMax;
+            float lMaxFactor = lMax - factorTmpMax * (lMax - lMin);
+            float lMinFactor = lMin + factorTmpMin * (lMax - lMin);
+            float rMaxFactor = rMax - factorTmpMax * (rMax - rMin);
+            float rMinFactor = rMin + factorTmpMin * (rMax - rMin);
 
             bool res = false;
 
