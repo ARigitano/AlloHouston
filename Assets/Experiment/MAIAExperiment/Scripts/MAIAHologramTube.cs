@@ -337,40 +337,25 @@ namespace CRI.HelloHouston.Experience.MAIA
                 _lMaxCylArray[i] = _cylArray[i].mesh.bounds.extents.y * _cylArray[i].transform.localScale.y;
                 _rMaxCylArray[i] = _cylArray[i].mesh.bounds.extents.x * _cylArray[i].transform.localScale.x;
             }
-            _rand = new System.Random(GameManager.randomSeed);
         }
-        /// <summary>
-        /// Effect when the experiment is correctly resolved.
-        /// </summary>
-        public override void OnSuccess()
+
+        public override void OnInit(XPManager manager, int randomSeed)
         {
-            Debug.Log(name + "Resolved");
+            base.OnInit(manager, randomSeed);
+            Init((MAIAManager)manager);
+            _rand = new System.Random(randomSeed);
         }
-        /// <summary>
-        /// Effect when the experiment is failed.
-        /// </summary>
-        public override void OnFailure()
-        {
-            Debug.Log(name + "Failed");
-        }
+
         /// <summary>
         /// Effect when the experiment is activated the first time.
         /// </summary>
-        public override void OnActivation(XPManager manager)
+        public override void OnActivation()
         {
-            Debug.Log(name + "Activated");
-            Init((MAIAManager)manager);
+            base.OnActivation();
             CreateSplines(_manager.generatedParticles);
             gameObject.SetActive(false);
         }
 
-        /// <summary>
-        /// Effect when the experiment is paused.
-        /// </summary>
-        public override void OnShow()
-        {
-            Debug.Log(name + "Paused");
-        }
         /// <summary>
         /// Effect when the experiment is unpaused.
         /// </summary>

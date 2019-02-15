@@ -160,10 +160,10 @@ namespace CRI.HelloHouston.Experience
         /// Initializes and returns the synchronizer.
         /// </summary>
         /// <returns></returns>
-        public XPManager InitSynchronizer(LogExperienceController logExperienceController, VirtualZone[] zones)
+        public XPManager InitManager(LogExperienceController logExperienceController, VirtualZone[] zones, int randomSeed)
         {
             XPManager res = GameObject.Instantiate(_xpManagerPrefab);
-            res.Init(this, zones, logExperienceController, XPState.Visible);
+            res.Init(this, zones, logExperienceController, randomSeed, XPState.Visible);
             //TODO: Remove this line when then XP selection is complete.
             res.Activate();
             res.Show((VirtualWallTopZone)zones.First(x => x.zoneType == ZoneType.WallTop));

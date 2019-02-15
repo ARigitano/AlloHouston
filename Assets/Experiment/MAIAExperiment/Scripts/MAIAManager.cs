@@ -215,15 +215,15 @@ namespace CRI.HelloHouston.Experience.MAIA
             GenerateParticles();
         }
 
-        protected override void PreInit(XPContext xpContext, LogExperienceController logController, XPState stateOnActivation)
+        protected override void PreInit(XPContext xpContext, LogExperienceController logController, int randomSeed, XPState stateOnActivation)
         {
-            base.PreInit(xpContext, logController, stateOnActivation);
-            _rand = new System.Random(GameManager.randomSeed);
+            base.PreInit(xpContext, logController, randomSeed, stateOnActivation);
+            _rand = new System.Random(randomSeed);
         }
 
-        protected override void PostInit(XPContext xpContext, ElementInfo[] info, LogExperienceController logController, XPState stateOnActivation)
+        protected override void PostInit(XPContext xpContext, ElementInfo[] info, LogExperienceController logController, int randomSeed, XPState stateOnActivation)
         {
-            base.PostInit(xpContext, info, logController, stateOnActivation);
+            base.PostInit(xpContext, info, logController, randomSeed, stateOnActivation);
             hologramTube = GetElement<MAIAHologramTube>();
             tabletScreen = GetElement<MAIATabletScreen>();
             topScreen = GetElement<MAIATopScreen>();

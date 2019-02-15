@@ -78,10 +78,15 @@ namespace CRI.HelloHouston.Experience.MAIA
             _lineManager.Init(_feynmanBoxes);
         }
 
-        public override void OnActivation(XPManager manager)
+        public override void OnInit(XPManager manager, int randomSeed)
         {
-            base.OnActivation(manager);
+            base.OnInit(manager, randomSeed);
             Init((MAIAManager)manager);
+        }
+
+        public override void OnActivation()
+        {
+            base.OnActivation();
             gameObject.SetActive(false);
         }
     }

@@ -61,7 +61,9 @@ namespace CRI.HelloHouston.Experience
 
         public virtual void OnFailure() { }
 
-        public virtual void OnActivation(XPManager synchronizer) { }
+        public virtual void OnInit(XPManager manager, int randomSeed) { }
+
+        public virtual void OnActivation() { }
 
         public virtual void OnHide() { }
 

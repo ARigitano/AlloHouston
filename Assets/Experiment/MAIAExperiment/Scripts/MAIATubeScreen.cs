@@ -55,8 +55,9 @@ namespace CRI.HelloHouston.Experience.MAIA
             _manager = synchronizer;
         }
 
-        public override void OnActivation(XPManager manager)
+        public override void OnInit(XPManager manager, int randomSeed)
         {
+            base.OnInit(manager, randomSeed);
             Init((MAIAManager)manager);
         }
     }

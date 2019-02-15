@@ -353,17 +353,21 @@ namespace CRI.HelloHouston.Experience.MAIA
         private void Init(MAIAManager manager)
         {
             _manager = manager;
-            Debug.Log(manager);
-            _topScreen = manager.topScreen;
-            _particleIdentificationScreen = _topScreen.particleIdentificationScreen;
-            _manualOverrideAccessScreen = _topScreen.manualOverrideAccessScreen;
-            _hologramTube = manager.hologramTube;
         }
 
-        public override void OnActivation(XPManager manager)
+        public override void OnInit(XPManager manager, int randomSeed)
         {
-            base.OnActivation(manager);
+            base.OnInit(manager, randomSeed);
             Init((MAIAManager)manager);
+        }
+
+        public override void OnActivation()
+        {
+            base.OnActivation();
+            _topScreen = _manager.topScreen;
+            _particleIdentificationScreen = _topScreen.particleIdentificationScreen;
+            _manualOverrideAccessScreen = _topScreen.manualOverrideAccessScreen;
+            _hologramTube = _manager.hologramTube;
         }
     }
 }
