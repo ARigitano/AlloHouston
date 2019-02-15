@@ -9,6 +9,16 @@ namespace CRI.HelloHouston.Experience
 {
     public class GameManager : MonoBehaviour, ISource
     {
+        private static int s_randomSeed;
+
+        public static int randomSeed
+        {
+            get
+            {
+                return s_randomSeed;
+            }
+        }
+
         private static GameManager s_instance;
 
         public static GameManager instance
@@ -86,12 +96,20 @@ namespace CRI.HelloHouston.Experience
 
         public XPManager[] Init(XPContext[] xpContexts, VirtualRoom room)
         {
+            return Init(xpContexts, room, UnityEngine.Random.Range(0, int.MaxValue));
+        }
+
+        public XPManager[] Init(XPContext[] xpContexts, VirtualRoom room, int seed)
+        {
+            s_randomSeed = seed;
             globalSoundManager = GetComponent<SoundManager>();
             gameActionController = new GameActionController(this);
             logManager = new LogManager(this);
             _mainSettings = Resources.Load<XPMainSettings>("Settings/MainSettings");
             xpManagers = xpContexts.Select(xpContext => xpContext.InitSynchronizer(logManager.logExperienceController, room.GetZones().Where(zone => zone.xpContext == xpContext).ToArray())).ToArray();
             _startTime = Time.time;
+            Debug.Log(seed);
+            logGeneralController.AddLog(string.Format("Random Seed: {0}", randomSeed), this, Log.LogType.Important);
             return xpManagers;
         }
 

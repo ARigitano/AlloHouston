@@ -14,7 +14,6 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// The top left script of the experiment block.
         /// </summary>
         public MAIATopScreen topScreen { get; private set; }
-
         /// <summary>
         /// The top right script of the experiment block.
         /// </summary>
@@ -51,6 +50,8 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// The particles produced by the ongoing reactions.
         /// </summary>
         public List<Particle> generatedParticles { get; private set; }
+
+        private System.Random _rand;
 
         #region GameMasterActions
 
@@ -112,10 +113,10 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             ongoingReactions = settings.allReactions
                 .Where(reaction => reaction.fundamental)
-                .OrderBy(reaction => UnityEngine.Random.value)
+                .OrderBy(reaction => _rand.Next())
                 .Take(settings.reactionCount)
                 .ToList();
-            selectedReaction = ongoingReactions[UnityEngine.Random.Range(0, settings.reactionCount)];
+            selectedReaction = ongoingReactions[_rand.Next(0, settings.reactionCount)];
             logController.AddLog(selectedReaction.name, xpContext);
             return ongoingReactions;
         }
@@ -212,6 +213,12 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             base.PreActivate();
             GenerateParticles();
+        }
+
+        protected override void PreInit(XPContext xpContext, LogExperienceController logController, XPState stateOnActivation)
+        {
+            base.PreInit(xpContext, logController, stateOnActivation);
+            _rand = new System.Random(GameManager.randomSeed);
         }
 
         protected override void PostInit(XPContext xpContext, ElementInfo[] info, LogExperienceController logController, XPState stateOnActivation)
