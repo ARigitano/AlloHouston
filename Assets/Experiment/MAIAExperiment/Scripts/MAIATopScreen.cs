@@ -86,6 +86,14 @@ namespace CRI.HelloHouston.Experience.MAIA
             _victoryScreen.SetActive(true);
         }
 
+        private void ActivatePanel(GameObject newPanel)
+        {
+            if (_currentPanel != null)
+                _currentPanel.SetActive(false);
+            newPanel.SetActive(true);
+            _currentPanel = newPanel;
+        }
+
         /// <summary>
         /// Called by the synchronizer to skip directly to the Feynman diagrams step.
         /// </summary>
@@ -99,20 +107,14 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void StartManualOverride()
         {
-            if (_currentPanel != null)
-                _currentPanel.SetActive(false);
-            _currentPanel = _manualOverrideAccess.gameObject;
-            _manualOverrideAccess.gameObject.SetActive(true);
+            ActivatePanel(_manualOverrideAccess.gameObject);
             _manualOverrideAccess.Show();
             _currentPanel = _manualOverrideAccess.gameObject;
         }
 
         public void StartParticleIdentification()
         {
-            if (_currentPanel != null)
-                _currentPanel.SetActive(false);
-            _currentPanel = _particlesIdentification.gameObject;
-            _particlesIdentification.gameObject.SetActive(true);
+            ActivatePanel(_particlesIdentification.gameObject);
             _particlesIdentification.CreateParticleGrid(manager.generatedParticles);
         }
 
@@ -121,21 +123,15 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void StartAnalysisAnimation()
         {
-            if (_currentPanel != null)
-                _currentPanel.SetActive(false);
-            _analysisScreen.gameObject.SetActive(true);
-            _currentPanel = _analysisScreen.gameObject;
+            ActivatePanel(_analysisScreen.gameObject);
             _particlesIdentification.gameObject.SetActive(false);
             _analysisScreen.StartAnalysisAnimation();
         }
 
         public void StartReactionIdentification()
         {
-            if (_currentPanel != null)
-                _currentPanel.SetActive(false);
             _analysisScreen.gameObject.SetActive(false);
-            _reactionsIdentification.gameObject.SetActive(true);
-            _currentPanel = _reactionsIdentification.gameObject;
+            ActivatePanel(_reactionsIdentification.gameObject);
             _reactionsIdentification.StartReactionIdentification();
         }
 

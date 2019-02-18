@@ -133,21 +133,11 @@ namespace CRI.HelloHouston.Experience.MAIA
         #endregion
 
 
-        //Exile loading screen
-
-        /// <summary>
-        /// Tells the tablet that the experiment has finished loading.
-        /// </summary>
-        public void LoadingBarFinished()
-        {
-            tabletScreen.WaitingConfirmation();
-        }
-
         public void StartParticleIdentification()
         {
             hologramTube.ActivateHologram(true);
             topScreen.StartParticleIdentification();
-            tabletScreen.StartParticleIdentification();
+            tabletScreen.ShowParticlesPanel();
         }
 
         /// <summary>
@@ -155,25 +145,25 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void ActivateManualOverride()
         {
-            tabletScreen.ManualOverride();
+            tabletScreen.ShowManualOverridePanel();
         }
 
         public void StartAnalysisAnimation()
         {     
             topScreen.StartAnalysisAnimation();
-            tabletScreen.StartAnalysisAnimation();
+            tabletScreen.HideAllPanels();
             hologramTube.gameObject.SetActive(false);
         }
 
         public void StartAdvancedManualOverride()
         {
-            tabletScreen.StartAdvancedManualOverride();
+            tabletScreen.ShowAdvanceManualOverride();
         }
 
         public void StartReactionIdentification()
         {
             topScreen.StartReactionIdentification();
-            tabletScreen.StartReactionIdentification();
+            tabletScreen.ShowReactionIdentification();
             _hologramFeynman.gameObject.SetActive(true);
             _hologramFeynman.FillBoxesDiagrams();
         }
