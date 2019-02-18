@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace CRI.HelloHouston.Experience.MAIA
@@ -24,6 +25,10 @@ namespace CRI.HelloHouston.Experience.MAIA
 
         private Vector3[] _boxPositions;
         private Quaternion[] _boxRotations;
+        /// <summary>
+        /// Random generated with the GameManager's seed.
+        /// </summary>
+        private System.Random _rand;
 
         private void Reset()
         {
@@ -48,9 +53,11 @@ namespace CRI.HelloHouston.Experience.MAIA
 
         public void FillBoxesDiagrams()
         {
-            for (int i = 0; i < manager.settings.allReactions.Length && i < _feynmanBoxes.Length; i++)
+            IList<Reaction> allReactions = manager.settings.allReactions.Shuffle(_rand);
+            for (int i = 0; i < allReactions.Count && i < _feynmanBoxes.Length; i++)
             {
-                _feynmanBoxes[i].contentRenderer.material.mainTexture = manager.settings.allReactions[i].diagramImage;
+                _feynmanBoxes[i].contentRenderer.material.mainTexture = allReactions[i].diagramImage;
+                _feynmanBoxes[i].name = "hologram_content: " + allReactions[i].diagramImage.name;
                 _feynmanBoxes[i].displayLine = true;
             }
         }
@@ -78,10 +85,16 @@ namespace CRI.HelloHouston.Experience.MAIA
             _lineManager.Init(_feynmanBoxes);
         }
 
-        public override void OnActivation(XPManager manager)
+        public override void OnInit(XPManager manager, int randomSeed)
         {
-            base.OnActivation(manager);
+            base.OnInit(manager, randomSeed);
+            _rand = new System.Random(randomSeed);
             Init((MAIAManager)manager);
+        }
+
+        public override void OnActivation()
+        {
+            base.OnActivation();
             gameObject.SetActive(false);
         }
     }

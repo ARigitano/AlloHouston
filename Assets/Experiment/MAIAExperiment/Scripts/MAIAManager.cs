@@ -14,7 +14,6 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// The top left script of the experiment block.
         /// </summary>
         public MAIATopScreen topScreen { get; private set; }
-
         /// <summary>
         /// The top right script of the experiment block.
         /// </summary>
@@ -51,6 +50,8 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// The particles produced by the ongoing reactions.
         /// </summary>
         public List<Particle> generatedParticles { get; private set; }
+
+        private System.Random _rand;
 
         #region GameMasterActions
 
@@ -112,10 +113,10 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             ongoingReactions = settings.allReactions
                 .Where(reaction => reaction.fundamental)
-                .OrderBy(reaction => UnityEngine.Random.value)
+                .OrderBy(reaction => _rand.Next())
                 .Take(settings.reactionCount)
                 .ToList();
-            selectedReaction = ongoingReactions[UnityEngine.Random.Range(0, settings.reactionCount)];
+            selectedReaction = ongoingReactions[_rand.Next(0, settings.reactionCount)];
             logController.AddLog(selectedReaction.name, xpContext);
             return ongoingReactions;
         }
@@ -214,9 +215,15 @@ namespace CRI.HelloHouston.Experience.MAIA
             GenerateParticles();
         }
 
-        protected override void PostInit(XPContext xpContext, ElementInfo[] info, LogExperienceController logController, XPState stateOnActivation)
+        protected override void PreInit(XPContext xpContext, LogExperienceController logController, int randomSeed, XPState stateOnActivation)
         {
-            base.PostInit(xpContext, info, logController, stateOnActivation);
+            base.PreInit(xpContext, logController, randomSeed, stateOnActivation);
+            _rand = new System.Random(randomSeed);
+        }
+
+        protected override void PostInit(XPContext xpContext, ElementInfo[] info, LogExperienceController logController, int randomSeed, XPState stateOnActivation)
+        {
+            base.PostInit(xpContext, info, logController, randomSeed, stateOnActivation);
             hologramTube = GetElement<MAIAHologramTube>();
             tabletScreen = GetElement<MAIATabletScreen>();
             topScreen = GetElement<MAIATopScreen>();

@@ -68,6 +68,8 @@ namespace CRI.HelloHouston.Experience
 
         public ExperienceActionController actionController { get; protected set; }
 
+        public int randomSeed { get; private set; }
+
         protected XPState _stateOnActivation;
 
         public bool active
@@ -196,7 +198,7 @@ namespace CRI.HelloHouston.Experience
             logController.AddLog("Activation", xpContext, Log.LogType.Automatic);
             foreach (var element in elements)
             {
-                element.xpElement.OnActivation(this);
+                element.xpElement.OnActivation();
             }
             PostActivate();
         }
@@ -279,27 +281,31 @@ namespace CRI.HelloHouston.Experience
             return res.ToArray();
         }
 
-        public void Init(XPContext xpContext, VirtualZone[] zones, LogExperienceController logController, XPState stateOnActivation = XPState.Hidden)
+        public void Init(XPContext xpContext, VirtualZone[] zones, LogExperienceController logController, int randomSeed, XPState stateOnActivation = XPState.Hidden)
         {
-            PreInit(xpContext, logController, stateOnActivation);
+            PreInit(xpContext, logController, randomSeed, stateOnActivation);
             this.xpContext = xpContext;
+            this.randomSeed = randomSeed;
             state = XPState.Inactive;
             _stateOnActivation = stateOnActivation;
             actionController = new ExperienceActionController(this);
             this.logController = logController;
             if (logController != null)
                 logController.AddLog("Ready", xpContext, Log.LogType.Automatic);
-            PostInit(xpContext, InitZones(zones), logController, stateOnActivation);
+            ElementInfo[] zoneInfo = InitZones(zones);
+            foreach (var element in elements)
+                element.xpElement.OnInit(this, randomSeed);
+            PostInit(xpContext, zoneInfo, logController, randomSeed, stateOnActivation);
         }
 
         /// <summary>
         /// Called before the initialization.
         /// </summary>
-        protected virtual void PreInit(XPContext xpContext, LogExperienceController logController, XPState stateOnActivation) { }
+        protected virtual void PreInit(XPContext xpContext, LogExperienceController logController, int randomSeed, XPState stateOnActivation) { }
         /// <summary>
         /// Called after the initialization.
         /// </summary>
-        protected virtual void PostInit(XPContext xpContext, ElementInfo[] info, LogExperienceController logController, XPState stateOnActivation) { }
+        protected virtual void PostInit(XPContext xpContext, ElementInfo[] info, LogExperienceController logController, int randomSeed, XPState stateOnActivation) { }
 
         public virtual void SkipToStep(int step)
         {

@@ -126,6 +126,8 @@ namespace CRI.HelloHouston.Experience.MAIA
 
         private bool _animationPlayedOnce = false;
 
+        private System.Random _rand;
+
         /// <summary>
         /// Activates or deactivates the hologram.
         /// </summary>
@@ -166,8 +168,8 @@ namespace CRI.HelloHouston.Experience.MAIA
             }
             else
             {
-                _theta = Random.Range(Mathf.PI / 6f, Mathf.PI / 3f);
-                _phi = Random.Range(Mathf.PI / 4f, Mathf.PI / 3f);
+                _theta = (float)_rand.Range(Mathf.PI / 6f, Mathf.PI / 3f);
+                _phi = (float)_rand.Range(Mathf.PI / 4f, Mathf.PI / 3f);
 
                 if (particle.negative)
                 {
@@ -201,11 +203,11 @@ namespace CRI.HelloHouston.Experience.MAIA
 
             do
             {
-                float r = particle.extremity ? rMax : Random.Range(_rMaxCylArray[0], rMaxFactor);
-                float alpha = Random.Range(0, Mathf.PI * 2f);
+                float r = particle.extremity ? rMax : (float)_rand.Range(_rMaxCylArray[0], rMaxFactor);
+                float alpha = (float)_rand.Range(0, Mathf.PI * 2f);
 
                 spline.points[3].x = r * Mathf.Cos(alpha);
-                spline.points[3].y = Random.Range(-lMaxFactor, lMaxFactor);
+                spline.points[3].y = (float)_rand.Range(-lMaxFactor, lMaxFactor);
                 spline.points[3].z = r * Mathf.Sin(alpha);
                  
                 spline.points[0] = Vector3.zero;
@@ -336,38 +338,24 @@ namespace CRI.HelloHouston.Experience.MAIA
                 _rMaxCylArray[i] = _cylArray[i].mesh.bounds.extents.x * _cylArray[i].transform.localScale.x;
             }
         }
-        /// <summary>
-        /// Effect when the experiment is correctly resolved.
-        /// </summary>
-        public override void OnSuccess()
+
+        public override void OnInit(XPManager manager, int randomSeed)
         {
-            Debug.Log(name + "Resolved");
+            base.OnInit(manager, randomSeed);
+            Init((MAIAManager)manager);
+            _rand = new System.Random(randomSeed);
         }
-        /// <summary>
-        /// Effect when the experiment is failed.
-        /// </summary>
-        public override void OnFailure()
-        {
-            Debug.Log(name + "Failed");
-        }
+
         /// <summary>
         /// Effect when the experiment is activated the first time.
         /// </summary>
-        public override void OnActivation(XPManager manager)
+        public override void OnActivation()
         {
-            Debug.Log(name + "Activated");
-            Init((MAIAManager)manager);
+            base.OnActivation();
             CreateSplines(_manager.generatedParticles);
             gameObject.SetActive(false);
         }
 
-        /// <summary>
-        /// Effect when the experiment is paused.
-        /// </summary>
-        public override void OnShow()
-        {
-            Debug.Log(name + "Paused");
-        }
         /// <summary>
         /// Effect when the experiment is unpaused.
         /// </summary>
