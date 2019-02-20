@@ -81,8 +81,8 @@ namespace CRI.HelloHouston.Experience
         {
             _textManager = textManager;
             _text = GetComponent<Text>();
-            this._textKey = textKey;
-            this._isCommon = isCommon;
+            _textKey = textKey;
+            _isCommon = isCommon;
             SetText();
         }
 
@@ -100,6 +100,7 @@ namespace CRI.HelloHouston.Experience
         public void Init(XPTextManager textManager)
         {
             _textManager = textManager;
+            _text = GetComponent<Text>();
             SetText();
         }
     }

@@ -275,7 +275,7 @@ namespace CRI.HelloHouston.Experience
             var res = zone.InitAll().Select(xpElement => new ElementInfo(xpElement, xpElement.virtualElement, zone));
             foreach (var element in res)
             {
-                foreach (var translatedText in element.xpElement.GetComponentsInChildren<XPTranslatedText>())
+                foreach (var translatedText in element.xpElement.GetComponentsInChildren<XPTranslatedText>(true))
                 {
                     translatedText.Init(textManager);
                 }

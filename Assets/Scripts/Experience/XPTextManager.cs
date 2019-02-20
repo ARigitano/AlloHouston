@@ -1,8 +1,7 @@
 ﻿using CRI.HelloHouston.Translation;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using UnityEngine;
 
 namespace CRI.HelloHouston.Experience
 {
@@ -32,14 +31,20 @@ namespace CRI.HelloHouston.Experience
             }
         }
 
-        private LangText[] _textFiles;
+        private LangText[] _langTexts;
 
         private string[] _availableLangCode;
 
-        public XPTextManager(LangText[] textFiles)
+        public XPTextManager(TextAsset[] textFiles)
         {
-            _textFiles = textFiles;
-            _availableLangCode = textFiles.Select(textFile => textFile.code).ToArray();
+            _langTexts = LoadLangText(textFiles);
+            _availableLangCode = _langTexts.Select(textFile => textFile.code).ToArray();
+            ChangeLang(_langTexts[0].code);
+        }
+
+        public LangText[] LoadLangText(TextAsset[] textFiles)
+        {
+            return textFiles.Select(textFile => LangText.LoadFromText(textFile.text)).ToArray();
         }
         
         /// <summary>
@@ -55,7 +60,7 @@ namespace CRI.HelloHouston.Experience
             string res = "";
             try
             {
-                res = _textFiles.First(x => x.code == langCode).arrayOfLangTextEntry.First(x => x.key == key).text;
+                res = _langTexts.First(x => x.code == langCode).arrayOfLangTextEntry.First(x => x.key == key).text;
             }
             catch (InvalidOperationException)
             {
@@ -77,13 +82,18 @@ namespace CRI.HelloHouston.Experience
             return GetText(key, common ? "COM" : _currentLang);
         }
 
+        public void ChangeLang(string langCode)
+        {
+            LangText textFile = _langTexts.FirstOrDefault(x => x.code == langCode);
+            if (textFile == null && _langTexts[0] != null)
+                _currentLang = _langTexts[0].code;
+            else if (textFile != null)
+                _currentLang = langCode;
+        }
+
         public void ChangeLang(LangApp langApp)
         {
-            LangText textFile = _textFiles.FirstOrDefault(x => x.code == langApp.code);
-            if (textFile == null && _textFiles[0] != null)
-                _currentLang = _textFiles[0].code;
-            else if (textFile != null)
-                _currentLang = langApp.code;
+            ChangeLang(langApp.code);
         }
     }
 }

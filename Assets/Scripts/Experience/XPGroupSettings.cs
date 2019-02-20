@@ -21,6 +21,6 @@ namespace CRI.HelloHouston.Experience
         /// All the different text files (one for each available language) of the experiment group. The first language of the array will be considered the default language.
         /// </summary>
         [Tooltip("All the different text files (one for each available language) of the experiment group. The first language of the array will be considered the default language.")]
-        public LangText[] textFiles;
+        public TextAsset[] textFiles;
     }
 }
