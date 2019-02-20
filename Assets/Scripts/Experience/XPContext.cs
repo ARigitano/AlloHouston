@@ -38,7 +38,7 @@ namespace CRI.HelloHouston.Experience
         /// All the settings of this particular experience.
         /// </summary>
         [Tooltip("All the settings of this particular experience.")]
-        public XPSettings xpSettings;
+        public XPContextSettings xpSettings;
 
         /// <summary>
         /// An empty object with the XpSynchronizer inhreting script of the experiment.

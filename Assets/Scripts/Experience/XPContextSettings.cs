@@ -1,11 +1,10 @@
 ﻿using CRI.HelloHouston.Experience.Actions;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace CRI.HelloHouston.Experience
 {
-    [CreateAssetMenu(fileName = "New XPSettings", menuName = "Experience/XpSettings", order = 3)]
-    public class XPSettings : ScriptableObject
+    [CreateAssetMenu(fileName = "New Context Settings", menuName = "Experience/Context Settings", order = 3)]
+    public class XPContextSettings : ScriptableObject
     {
         /// <summary>
         /// All the possible actions for this experiment.

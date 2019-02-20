@@ -68,6 +68,8 @@ namespace CRI.HelloHouston.Experience
 
         public ExperienceActionController actionController { get; protected set; }
 
+        public XPTextManager textManager { get; protected set; }
+
         public int randomSeed { get; private set; }
 
         protected XPState _stateOnActivation;
@@ -271,6 +273,13 @@ namespace CRI.HelloHouston.Experience
         protected virtual ElementInfo[] InitZone(VirtualZone zone)
         {
             var res = zone.InitAll().Select(xpElement => new ElementInfo(xpElement, xpElement.virtualElement, zone));
+            foreach (var element in res)
+            {
+                foreach (var translatedText in element.xpElement.GetComponentsInChildren<XPTranslatedText>())
+                {
+                    translatedText.Init(textManager);
+                }
+            }
             elements.AddRange(res);
             return res.ToArray();
         }
@@ -289,6 +298,7 @@ namespace CRI.HelloHouston.Experience
             state = XPState.Inactive;
             _stateOnActivation = stateOnActivation;
             actionController = new ExperienceActionController(this);
+            textManager = new XPTextManager(xpContext.xpGroup.settings.textFiles);
             this.logController = logController;
             if (logController != null)
                 logController.AddLog("Ready", xpContext, Log.LogType.Automatic);
