@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using CRI.HelloHouston.Translation;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -74,19 +75,19 @@ namespace CRI.HelloHouston.Experience.UI
         /// </summary>
         [SerializeField]
         [Tooltip("Text of the fail popup.")]
-        private string _failPopupText = null;
+        private string _failPopupTextKey = null;
         /// <summary>
         /// Text of the success popup.
         /// </summary>
         [SerializeField]
         [Tooltip("Text of the success popup.")]
-        private string _successPopupText = null;
+        private string _successPopupTextKey = null;
         /// <summary>
         /// Text of the popup when there's not enough time left.
         /// </summary>
         [SerializeField]
         [Tooltip("Text of the popup when there's not enough time left.")]
-        private string _notEnoughTimeText = null;
+        private string _timePopupTextKey = null;
 
         private XPManager _xpManager;
 
@@ -98,12 +99,12 @@ namespace CRI.HelloHouston.Experience.UI
             _launchButton.onClick.AddListener(() =>
             {
                 if (gameManager.xpTimeEstimate * 60 < gameManager.timeSinceGameStart + (xpSynchronizer.xpContext.xpSettings.duration * 60))
-                    CreatePopup(_notEnoughTimeText, LaunchAction);
+                    CreatePopup(TextManager.instance.GetText(_timePopupTextKey), LaunchAction);
                 else
                     LaunchAction();
             });
-            _failButton.onClick.AddListener(() => CreatePopup(_failPopupText, FailAction));
-            _successButton.onClick.AddListener(() => CreatePopup(_successPopupText, SuccessAction));
+            _failButton.onClick.AddListener(() => CreatePopup(TextManager.instance.GetText(_failPopupTextKey), FailAction));
+            _successButton.onClick.AddListener(() => CreatePopup(TextManager.instance.GetText(_successPopupTextKey), SuccessAction));
             if (!xpSynchronizer.active)
             {
                 _launchButton.GetComponent<CanvasGroup>().Show();

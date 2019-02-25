@@ -218,5 +218,11 @@ namespace CRI.HelloHouston.Translation
         {
             currentLang = _appSettings.langAppAvailable[index];
         }
+
+        public void ChangeLang(string langCode)
+        {
+            if (_appSettings.langAppAvailable.Any(x => x.code == langCode))
+                currentLang = _appSettings.langAppAvailable.First(x => x.code == langCode);
+        }
     }
 }
