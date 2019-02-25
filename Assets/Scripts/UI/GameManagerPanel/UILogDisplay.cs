@@ -86,9 +86,9 @@ namespace CRI.HelloHouston.Experience.UI
         private LogManager _logManager;
 
         [SerializeField]
-        private LogSettings[] _logSettings;
+        private LogSettings[] _logSettings = null;
         [SerializeField]
-        private LogOriginSettings[] _logOriginSettings;
+        private LogOriginSettings[] _logOriginSettings = null;
 
         private LogFilter[] _allFilters = new LogFilter[]
         {
@@ -145,11 +145,10 @@ namespace CRI.HelloHouston.Experience.UI
         private LogFilter[] InitAllFilters(LogSettings[] logSettings, LogOriginSettings[] logOriginSettings)
         {
             LogFilter[] res = new LogFilter[logSettings.Length + logOriginSettings.Length];
-            TextManager textManager = TextManager.instance;
             for (int i = 0; i < logSettings.Length; i++)
-                res[i] = new LogTypeFilter(textManager.GetText(logSettings[i].textKey, false), (logFilter) => logFilter.logType == logSettings[i].logType);
+                res[i] = new LogTypeFilter(logSettings[i].textKey, (logFilter) => logFilter.logType == logSettings[i].logType);
             for (int i = 0; i < logOriginSettings.Length; i++)
-                res[i + logSettings.Length] = new LogOriginFilter(textManager.GetText(logOriginSettings[i].textKey, false), (logFilter) => logFilter.logOrigin == logOriginSettings[i].logOriginType);
+                res[i + logSettings.Length] = new LogOriginFilter(logOriginSettings[i].textKey, (logFilter) => logFilter.logOrigin == logOriginSettings[i].logOriginType);
             return res;
         }
 
