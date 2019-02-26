@@ -38,7 +38,7 @@ namespace CRI.HelloHouston.Experience.UI {
                     _categoryToggle.Refresh();
                 });
                 go.isOn = true;
-                go.GetComponentInChildren<TranslatedText>().InitTranslatedText(filter.filterTextKey);
+                go.GetComponentInChildren<TranslatedText>().InitTranslatedText(MainTextManager.instance, filter.filterTextKey);
                 go.name = "Toggle " + filter.filterTextKey;
                 toggles[i] = go;
             }

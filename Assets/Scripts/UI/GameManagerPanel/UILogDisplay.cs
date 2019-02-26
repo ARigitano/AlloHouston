@@ -146,9 +146,15 @@ namespace CRI.HelloHouston.Experience.UI
         {
             LogFilter[] res = new LogFilter[logSettings.Length + logOriginSettings.Length];
             for (int i = 0; i < logSettings.Length; i++)
-                res[i] = new LogTypeFilter(logSettings[i].textKey, (logFilter) => logFilter.logType == logSettings[i].logType);
+            {
+                var logType = logSettings[i].logType;
+                res[i] = new LogTypeFilter(logSettings[i].textKey, (logFilter) => logFilter.logType == logType);
+            }
             for (int i = 0; i < logOriginSettings.Length; i++)
-                res[i + logSettings.Length] = new LogOriginFilter(logOriginSettings[i].textKey, (logFilter) => logFilter.logOrigin == logOriginSettings[i].logOriginType);
+            {
+                var originType = logOriginSettings[i].logOriginType;
+                res[i + logSettings.Length] = new LogOriginFilter(logOriginSettings[i].textKey, (logFilter) => logFilter.logOrigin == originType);
+            }
             return res;
         }
 
@@ -198,7 +204,7 @@ namespace CRI.HelloHouston.Experience.UI
             if (logs.Length == 0)
             {
                 var go = Instantiate(_logPrefab, _logPanel);
-                go.Init(TextManager.instance.GetText(_emptyLogTextKey));
+                go.Init(MainTextManager.instance.GetText(_emptyLogTextKey));
                 uiLogs.Enqueue(go);
             }
             foreach (var log in logs)

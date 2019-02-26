@@ -18,9 +18,22 @@ namespace CRI.HelloHouston.Experience
         [Tooltip("The checklist of the experiment.")]
         public string[] checklist;
         /// <summary>
+        /// List of all lang available.
+        /// </summary>
+        [Tooltip("List of all lang available.")]
+        public LangApp[] langAppAvailable;
+        /// <summary>
+        /// The default language.
+        /// </summary>
+        public LangApp defaultLanguage { get { return langAppAvailable[0]; } }
+        /// <summary>
         /// All the different text files (one for each available language) of the experiment group. The first language of the array will be considered the default language.
         /// </summary>
         [Tooltip("All the different text files (one for each available language) of the experiment group. The first language of the array will be considered the default language.")]
-        public TextAsset[] textFiles;
+        public TextAsset[] langTextFiles;
+        /// <summary>
+        /// The text file for the common text.
+        /// </summary>
+        public TextAsset commonTextFile;
     }
 }

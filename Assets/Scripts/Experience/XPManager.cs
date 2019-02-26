@@ -298,7 +298,7 @@ namespace CRI.HelloHouston.Experience
             state = XPState.Inactive;
             _stateOnActivation = stateOnActivation;
             actionController = new ExperienceActionController(this);
-            textManager = new XPTextManager(xpContext.xpGroup.settings.textFiles);
+            textManager = new XPTextManager(xpContext.xpGroup.settings);
             this.logController = logController;
             if (logController != null)
                 logController.AddLog("Ready", xpContext, Log.LogType.Automatic);

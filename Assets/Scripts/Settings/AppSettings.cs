@@ -23,4 +23,14 @@ public class AppSettings : ScriptableObject
     /// The default language.
     /// </summary>
     public LangApp defaultLanguage { get { return langAppAvailable[0]; } }
+    /// <summary>
+    /// All the different text files (one for each available language) of the application.
+    /// </summary>
+    [Tooltip("All the different text files (one for each available language) of the application.")]
+    public TextAsset[] langTextFiles;
+    /// <summary>
+    /// The text file for the common text.
+    /// </summary>
+    [Tooltip("The text file for the common text")]
+    public TextAsset commonTextFile;
 }

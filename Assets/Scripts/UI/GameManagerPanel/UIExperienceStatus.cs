@@ -99,12 +99,12 @@ namespace CRI.HelloHouston.Experience.UI
             _launchButton.onClick.AddListener(() =>
             {
                 if (gameManager.xpTimeEstimate * 60 < gameManager.timeSinceGameStart + (xpSynchronizer.xpContext.xpSettings.duration * 60))
-                    CreatePopup(TextManager.instance.GetText(_timePopupTextKey), LaunchAction);
+                    CreatePopup(MainTextManager.instance.GetText(_timePopupTextKey), LaunchAction);
                 else
                     LaunchAction();
             });
-            _failButton.onClick.AddListener(() => CreatePopup(TextManager.instance.GetText(_failPopupTextKey), FailAction));
-            _successButton.onClick.AddListener(() => CreatePopup(TextManager.instance.GetText(_successPopupTextKey), SuccessAction));
+            _failButton.onClick.AddListener(() => CreatePopup(MainTextManager.instance.GetText(_failPopupTextKey), FailAction));
+            _successButton.onClick.AddListener(() => CreatePopup(MainTextManager.instance.GetText(_successPopupTextKey), SuccessAction));
             if (!xpSynchronizer.active)
             {
                 _launchButton.GetComponent<CanvasGroup>().Show();
@@ -117,6 +117,7 @@ namespace CRI.HelloHouston.Experience.UI
                 _failButton.GetComponent<CanvasGroup>().Show();
                 _successButton.GetComponent<CanvasGroup>().Show();
             }
+            MainTextManager.instance.InitAllText(GetComponentsInChildren<TranslatedText>());
             SetState(xpSynchronizer.state);
             xpSynchronizer.onStateChange += SetState;
         }

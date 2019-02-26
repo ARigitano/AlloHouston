@@ -23,7 +23,7 @@ namespace CRI.HelloHouston.Experience.UI
         /// </summary>
         [SerializeField]
         [Tooltip("Key of the estimate text")]
-        private string _estimateTextKey;
+        private string _estimateTextKey = null;
 
         private string _baseColorHex;
         private string _overestimateColorHex;
@@ -32,20 +32,23 @@ namespace CRI.HelloHouston.Experience.UI
         private FontStyle _baseFontStyle;
 
         private GameManager _gameManager;
+        private TextManager _textManager;
 
         private void OnEnable()
         {
-            TextManager.onLangChange += OnLangChange;
+            if (_textManager != null)
+                _textManager.onLangChange += OnLangChange;
         }
 
         private void OnDisable()
         {
-            TextManager.onLangChange -= OnLangChange;
+            if (_textManager != null)
+                _textManager.onLangChange -= OnLangChange;
         }
 
         private void OnLangChange(LangApp lang)
         {
-            _estimateText = TextManager.instance.GetText(_estimateTextKey);
+            _estimateText = MainTextManager.instance.GetText(_estimateTextKey);
         }
 
         private void Reset()
@@ -60,7 +63,8 @@ namespace CRI.HelloHouston.Experience.UI
             _baseColorHex = ColorUtility.ToHtmlStringRGB(_text.color);
             _overestimateColorHex = ColorUtility.ToHtmlStringRGB(_overestimateColor);
             _baseFontStyle = _text.fontStyle;
-            _estimateText = TextManager.instance.GetText(_estimateTextKey);
+            _estimateText = MainTextManager.instance.GetText(_estimateTextKey);
+            _textManager = MainTextManager.instance;
         }
 
         private void Update()

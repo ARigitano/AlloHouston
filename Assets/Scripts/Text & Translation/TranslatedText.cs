@@ -51,14 +51,18 @@ namespace CRI.HelloHouston.Translation
         [Tooltip("If true, the translated text will use the font of the text component instead of the font defined for the language.")]
         protected bool _useFont = true;
 
+        protected TextManager _textManager;
+
         private void OnEnable()
         {
-            TextManager.onLangChange += OnLangChange;
+            if (_textManager != null)
+                _textManager.onLangChange += OnLangChange;
         }
 
         private void OnDisable()
         {
-            TextManager.onLangChange -= OnLangChange;
+            if (_textManager != null)
+                _textManager.onLangChange -= OnLangChange;
         }
 
         private void Reset()
@@ -80,11 +84,20 @@ namespace CRI.HelloHouston.Translation
         /// </summary>
         /// <param name="textKey">The text key.</param>
         /// <param name="isCommon">Is the text common ?</param>
-        public void InitTranslatedText(string textKey, bool isCommon = false)
+        public void InitTranslatedText(TextManager textManager, string textKey, bool isCommon = false)
         {
+            _textKey = textKey;
+            _isCommon = isCommon;
+            Init(textManager);
+        }
+        /// <summary>
+        /// Init the translated text.
+        /// </summary>
+        /// <param name="textManager">The text manager.</param>
+        public void Init(TextManager textManager)
+        {
+            _textManager = textManager;
             _text = GetComponent<Text>();
-            this._textKey = textKey;
-            this._isCommon = isCommon;
             SetText();
         }
 
@@ -95,15 +108,8 @@ namespace CRI.HelloHouston.Translation
         {
             if (textKey != "")
             {
-                _text.text = TextManager.instance.GetText(textKey, _isCommon);
-                if (!_useFont && TextManager.instance.HasFont(_isCommon))
-                    _text.font = TextManager.instance.GetFont(_isCommon);
+                _text.text = _textManager.GetText(textKey, _isCommon);
             }
-        }
-
-        private void Start()
-        {
-            SetText();
         }
     }
 }

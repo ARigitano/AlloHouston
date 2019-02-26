@@ -7,45 +7,15 @@ using UnityEngine;
 
 namespace CRI.HelloHouston.Translation
 {
-    public class TextManager : MonoBehaviour
+    public class TextManager
     {
         public delegate void TextManagerLangHandler(LangApp lang);
-        public static event TextManagerLangHandler onLangChange;
+        public event TextManagerLangHandler onLangChange;
 
-        /// <summary>
-        /// Static instance of the TextManager. If it's called an no TextManager exists, creates one.
-        /// </summary>
-        public static TextManager instance
-        {
-            get
-            {
-                if (s_instance == null)
-                {
-                    new GameObject("TextManager").AddComponent<TextManager>().Init();
-                }
-                return s_instance;
-            }
-        }
-
-        /// <summary>
-        /// Static instance of the TextManager.
-        /// </summary>
-        private static TextManager s_instance = null;
-
-        /// <summary>
-        /// The path of the text data for each language. The [lang_app] value will be replaced by the code of the language. For exemple for French, it will be "fr".
-        /// </summary>
-        public const string text_lang_path_base = "Lang/[lang_app]/text/text";
-        /// <summary>
-        /// The path of the text data for all the text that is common between all languages.
-        /// </summary>
-        public const string text_lang_common_path = "Lang/Common/text/text";
-
-        private const string default_setting_path = "DefaultSettings";
         /// <summary>
         /// The current language of the application.
         /// </summary>
-        private LangApp _currentLang;
+        protected LangApp _currentLang;
         /// <summary>
         /// The current language of the application. If the value is changed, it will trigger the OnLangChange event.
         /// </summary>
@@ -63,94 +33,33 @@ namespace CRI.HelloHouston.Translation
             }
         }
         /// <summary>
+        /// List of all lang available.
+        /// </summary>]
+        protected LangApp[] _langAppAvailable;
+        /// <summary>
+        /// The default language of the application.
+        /// </summary>
+        protected LangApp _defaultLanguage;
+        /// <summary>
         /// A list of all the LangText.
         /// </summary>
         [SerializeField]
-        private List<LangText> _langTextList = new List<LangText>();
-        /// <summary>
-        /// The app settings of the project.
-        /// </summary>
-        [SerializeField]
-        [Tooltip("The app settings of the project.")]
-        private AppSettings _appSettings = null;
+        protected List<LangText> _langTextList = new List<LangText>();
 
-        private void Awake()
+        protected TextManager(LangApp[] langAppAvailable, LangApp defaultLanguage)
         {
-            Init();
-            if (_langTextList.Count == 0)
-            {
-                foreach (var langEnable in _appSettings.langAppAvailable)
-                {
-                    var langText = LoadLangText(langEnable.code);
-                    _langTextList.Add(langText);
-                }
-
-                var commonText = LoadCommonLangText();
-                _langTextList.Add(commonText);
-            }
-            else
-            {
-                foreach (var langText in _langTextList)
-                {
-                    langText.Save(string.Format("Resources/{0}.json", GetLangTextPath(langText.code)));
-                }
-            }
-            _currentLang = _appSettings.defaultLanguage;
-        }
-
-        private void Init()
-        {
-            if (!s_instance)
-            {
-                s_instance = this;
-                if (!_appSettings)
-                    _appSettings = Resources.Load<AppSettings>(default_setting_path);
-                DontDestroyOnLoad(gameObject);
-            }
-            else if (s_instance != this)
-                Destroy(gameObject);
+            _langAppAvailable = langAppAvailable;
+            _defaultLanguage = defaultLanguage;
+            SetDefaultLang();
         }
 
         /// <summary>
         /// Sets the current language to the default language of the application as described in the game settings.
         /// </summary>
-        public void SetDefaultLang()
+        public virtual void SetDefaultLang()
         {
-            currentLang = _appSettings.defaultLanguage;
+            currentLang = _defaultLanguage;
         }
-
-        /// <summary>
-        /// Get the path of the text of a language.
-        /// </summary>
-        /// <param name="langCode">The code of the language.</param>
-        /// <returns>The path to find the text of that language.</returns>
-        public string GetLangTextPath(string langCode)
-        {
-            var path = text_lang_path_base.Replace("[lang_app]", langCode);
-            return path;
-        }
-
-        /// <summary>
-        /// Loads the text that is common for all languages.
-        /// </summary>
-        /// <returns>A LangText with all the common data.</returns>
-        public LangText LoadCommonLangText()
-        {
-            var text = Resources.Load<TextAsset>(text_lang_common_path) as TextAsset;
-            return LangText.LoadFromText(text.text);
-        }
-        /// <summary>
-        /// Loads the text for a specific language.
-        /// </summary>
-        /// <param name="langCode">The code of the language.</param>
-        /// <returns>A LangText will all the data for that language.</returns>
-        public LangText LoadLangText(string langCode)
-        {
-            var path = GetLangTextPath(langCode);
-            var text = Resources.Load<TextAsset>(path);
-            return LangText.LoadFromText(text.text);
-        }
-
         /// <summary>
         /// Finds the text of a language by using a specific key and a lang code.
         /// Exemple: For the key "SCREEN2_TITLE" and the lang "fr" it will return "REGLES DU JEU."
@@ -187,42 +96,20 @@ namespace CRI.HelloHouston.Translation
             return GetText(key, common ? "COM" : _currentLang.code);
         }
 
-        /// <summary>
-        /// Returns true if the current language or the common language have a defined font.
-        /// </summary>
-        /// <param name="common">If true, it will check only the common language instead.</param>
-        /// <returns>True if the current language has a defined font.</returns>
-        public bool HasFont(bool common = false)
-        {
-            return ((common && _appSettings.commonFont != null) || _currentLang.font != null || _appSettings.commonFont != null);
-        }
-
-        /// <summary>
-        /// Gets the current language's font. If there's no current language's font, gets the common font.
-        /// </summary>
-        /// <param name="common">If true, it will check the common language's font instead.</param>
-        /// <returns>The current language's font.</returns>
-        public Font GetFont(bool common = false)
-        {
-            if (common || _currentLang.font == null)
-                return _appSettings.commonFont;
-            return _currentLang.font;
-        }
-
-        private void OnDestroy()
-        {
-            s_instance = null;
-        }
-
         public void ChangeLang(int index)
         {
-            currentLang = _appSettings.langAppAvailable[index];
+            currentLang = _langAppAvailable[index];
         }
 
         public void ChangeLang(string langCode)
         {
-            if (_appSettings.langAppAvailable.Any(x => x.code == langCode))
-                currentLang = _appSettings.langAppAvailable.First(x => x.code == langCode);
+            if (currentLang.code != langCode && _langAppAvailable.Any(x => x.code == langCode))
+                currentLang = _langAppAvailable.First(x => x.code == langCode);
+        }
+
+        public void ChangeLang(LangApp lang)
+        {
+            ChangeLang(lang.code);
         }
     }
 }

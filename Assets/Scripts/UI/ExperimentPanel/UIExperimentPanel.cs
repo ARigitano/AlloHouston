@@ -120,7 +120,7 @@ namespace CRI.HelloHouston.Calibration.UI
             {
                 listingExperiment.CheckNext();
             });
-            _contextDropdown.options.Add(new Dropdown.OptionData() { text = TextManager.instance.GetText(_chooseTextKey) });
+            _contextDropdown.options.Add(new Dropdown.OptionData() { text = MainTextManager.instance.GetText(_chooseTextKey) });
             foreach (var option in _contexts)
             {
                 _contextDropdown.options.Add(new Dropdown.OptionData() { text = option.contextName });
@@ -131,6 +131,7 @@ namespace CRI.HelloHouston.Calibration.UI
                     listingExperiment.CheckNext();
                 });
             }
+            MainTextManager.instance.InitAllText(GetComponentsInChildren<TranslatedText>());
         }
 
         private void LoadAllContexts(string name, string experiencePath)

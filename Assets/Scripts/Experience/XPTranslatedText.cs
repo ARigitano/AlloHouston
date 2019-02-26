@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using CRI.HelloHouston.Translation;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace CRI.HelloHouston.Experience
@@ -44,7 +45,7 @@ namespace CRI.HelloHouston.Experience
         [Tooltip("If true, the translated text will use the font of the text component instead of the font defined for the language.")]
         protected bool _useFont = true;
 
-        protected XPTextManager _textManager;
+        protected TextManager _textManager;
 
         private void OnEnable()
         {
@@ -67,22 +68,8 @@ namespace CRI.HelloHouston.Experience
         /// Called whenever the OnLangChange event of the TextManager is triggered. Sets the text to its current lang value.
         /// </summary>
         /// <param name="lang"></param>
-        private void OnLangChange(string lang)
+        private void OnLangChange(LangApp lang)
         {
-            SetText();
-        }
-
-        /// <summary>
-        /// Init the translated text.
-        /// </summary>
-        /// <param name="textKey">The text key.</param>
-        /// <param name="isCommon">Is the text common ?</param>
-        public void InitTranslatedText(XPTextManager textManager, string textKey, bool isCommon = false)
-        {
-            _textManager = textManager;
-            _text = GetComponent<Text>();
-            _textKey = textKey;
-            _isCommon = isCommon;
             SetText();
         }
 
@@ -97,7 +84,7 @@ namespace CRI.HelloHouston.Experience
             }
         }
 
-        public void Init(XPTextManager textManager)
+        public void Init(TextManager textManager)
         {
             _textManager = textManager;
             _text = GetComponent<Text>();
