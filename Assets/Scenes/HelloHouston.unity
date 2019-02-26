@@ -112,6 +112,40 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!21 &6117173
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Sprites/Default
+  m_Shader: {fileID: 10753, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _AlphaTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - PixelSnap: 0
+    - _EnableExternalAlpha: 0
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Flip: {r: 1, g: 1, b: 1, a: 1}
+    - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1001 &114447724
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -119,10 +153,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1345652080}
     m_Modifications:
-    - target: {fileID: 1369708548889768, guid: 40645d72a578bd04db5a874106484780, type: 3}
-      propertyPath: m_Name
-      value: StartPanel
-      objectReference: {fileID: 0}
     - target: {fileID: 224542172499682894, guid: 40645d72a578bd04db5a874106484780,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -228,10 +258,10 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 1712266619, guid: 40645d72a578bd04db5a874106484780, type: 3}
-      propertyPath: _next
-      value: 
-      objectReference: {fileID: 1339998325}
+    - target: {fileID: 1369708548889768, guid: 40645d72a578bd04db5a874106484780, type: 3}
+      propertyPath: m_Name
+      value: StartPanel
+      objectReference: {fileID: 0}
     - target: {fileID: 2088629197, guid: 40645d72a578bd04db5a874106484780, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 2
@@ -240,6 +270,10 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: -47.7
       objectReference: {fileID: 0}
+    - target: {fileID: 1712266619, guid: 40645d72a578bd04db5a874106484780, type: 3}
+      propertyPath: _next
+      value: 
+      objectReference: {fileID: 1339998325}
     - target: {fileID: 2088629198, guid: 40645d72a578bd04db5a874106484780, type: 3}
       propertyPath: m_FontData.m_Alignment
       value: 4
@@ -532,6 +566,11 @@ PrefabInstance:
       propertyPath: m_Text
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 114064567940386882, guid: 7d1c7a25558bac542b191584ab022f0e,
+        type: 3}
+      propertyPath: _textKey
+      value: EXPERIMENT_WALL_BOTTOM_LABEL
+      objectReference: {fileID: 0}
     - target: {fileID: 114918157170362812, guid: 7d1c7a25558bac542b191584ab022f0e,
         type: 3}
       propertyPath: m_Text
@@ -552,6 +591,11 @@ PrefabInstance:
       propertyPath: _textKey
       value: EXPERIMENT_DOOR_LABEL
       objectReference: {fileID: 0}
+    - target: {fileID: 114060334815391322, guid: 7d1c7a25558bac542b191584ab022f0e,
+        type: 3}
+      propertyPath: _textKey
+      value: EXPERIMENT_CONTEXT_LABEL
+      objectReference: {fileID: 0}
     - target: {fileID: 114515857084294970, guid: 7d1c7a25558bac542b191584ab022f0e,
         type: 3}
       propertyPath: _textKey
@@ -561,6 +605,11 @@ PrefabInstance:
         type: 3}
       propertyPath: _textKey
       value: EXPERIMENT_TOTAL_CORNER_LABEL
+      objectReference: {fileID: 0}
+    - target: {fileID: 114150456861663182, guid: 7d1c7a25558bac542b191584ab022f0e,
+        type: 3}
+      propertyPath: _textKey
+      value: EXPERIMENT_REMOVE_LABEL
       objectReference: {fileID: 0}
     - target: {fileID: 114100399605996904, guid: 7d1c7a25558bac542b191584ab022f0e,
         type: 3}
@@ -638,21 +687,6 @@ PrefabInstance:
       propertyPath: _textKey
       value: CLOSE_BUTTON
       objectReference: {fileID: 0}
-    - target: {fileID: 114060334815391322, guid: 7d1c7a25558bac542b191584ab022f0e,
-        type: 3}
-      propertyPath: _textKey
-      value: EXPERIMENT_CONTEXT_LABEL
-      objectReference: {fileID: 0}
-    - target: {fileID: 114150456861663182, guid: 7d1c7a25558bac542b191584ab022f0e,
-        type: 3}
-      propertyPath: _textKey
-      value: EXPERIMENT_REMOVE_LABEL
-      objectReference: {fileID: 0}
-    - target: {fileID: 114064567940386882, guid: 7d1c7a25558bac542b191584ab022f0e,
-        type: 3}
-      propertyPath: _textKey
-      value: EXPERIMENT_WALL_BOTTOM_LABEL
-      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 114728148610672288, guid: 7d1c7a25558bac542b191584ab022f0e, type: 3}
     - {fileID: 114794162170688788, guid: 7d1c7a25558bac542b191584ab022f0e, type: 3}
@@ -708,12 +742,12 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 1386220331}
+      objectReference: {fileID: 1500139113}
     - target: {fileID: 23688785139918056, guid: 248aaa0ad766ad04289ce7254eb528ac,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 651942672}
+      objectReference: {fileID: 6117173}
     - target: {fileID: 114339278490425148, guid: 248aaa0ad766ad04289ce7254eb528ac,
         type: 3}
       propertyPath: color.r
@@ -949,7 +983,7 @@ PrefabInstance:
     - target: {fileID: 224552973984779288, guid: ffdadb5b396197a4698823c5cf64ac24,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.000030517578
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224587750077257494, guid: ffdadb5b396197a4698823c5cf64ac24,
         type: 3}
@@ -1040,10 +1074,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1345652080}
     m_Modifications:
-    - target: {fileID: 1594529836040450, guid: c6a64767c0de26843b49beae1d29e682, type: 3}
-      propertyPath: m_Name
-      value: RoomPanel
-      objectReference: {fileID: 0}
     - target: {fileID: 224013409918244936, guid: c6a64767c0de26843b49beae1d29e682,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1159,6 +1189,10 @@ PrefabInstance:
       propertyPath: _laserClicker
       value: 
       objectReference: {fileID: 259710212}
+    - target: {fileID: 1594529836040450, guid: c6a64767c0de26843b49beae1d29e682, type: 3}
+      propertyPath: m_Name
+      value: RoomPanel
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c6a64767c0de26843b49beae1d29e682, type: 3}
 --- !u!114 &574266079 stripped
@@ -1173,40 +1207,6 @@ MonoBehaviour:
   m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!21 &651942672
-Material:
-  serializedVersion: 6
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Sprites/Default
-  m_Shader: {fileID: 10753, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: 
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - _AlphaTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _MainTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Floats:
-    - PixelSnap: 0
-    - _EnableExternalAlpha: 0
-    m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Flip: {r: 1, g: 1, b: 1, a: 1}
-    - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &712885325 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 114046479808626668, guid: 7d1c7a25558bac542b191584ab022f0e,
@@ -1603,10 +1603,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1345652080}
     m_Modifications:
-    - target: {fileID: 1445513590061882, guid: bd782467e7c3c0342a67798b5ad6b0a1, type: 3}
-      propertyPath: m_Name
-      value: CalibrationPanel
-      objectReference: {fileID: 0}
     - target: {fileID: 224405520580862580, guid: bd782467e7c3c0342a67798b5ad6b0a1,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1745,7 +1741,7 @@ PrefabInstance:
     - target: {fileID: 224730047043658078, guid: bd782467e7c3c0342a67798b5ad6b0a1,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.000015258789
+      value: 0.000045776367
       objectReference: {fileID: 0}
     - target: {fileID: 224943127743461482, guid: bd782467e7c3c0342a67798b5ad6b0a1,
         type: 3}
@@ -1761,6 +1757,10 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SizeDelta.x
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1445513590061882, guid: bd782467e7c3c0342a67798b5ad6b0a1, type: 3}
+      propertyPath: m_Name
+      value: CalibrationPanel
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bd782467e7c3c0342a67798b5ad6b0a1, type: 3}
@@ -1888,7 +1888,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!43 &1386220331
+--- !u!43 &1500139113
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2243,10 +2243,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1345652080}
     m_Modifications:
-    - target: {fileID: 1736158421388116, guid: f1015e403a98e0442be1fe978a775287, type: 3}
-      propertyPath: m_Name
-      value: HomePanel
-      objectReference: {fileID: 0}
     - target: {fileID: 224355993533110252, guid: f1015e403a98e0442be1fe978a775287,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2357,6 +2353,10 @@ PrefabInstance:
       propertyPath: _next
       value: 
       objectReference: {fileID: 1734244619}
+    - target: {fileID: 1736158421388116, guid: f1015e403a98e0442be1fe978a775287, type: 3}
+      propertyPath: m_Name
+      value: HomePanel
+      objectReference: {fileID: 0}
     - target: {fileID: 225620803013177306, guid: f1015e403a98e0442be1fe978a775287,
         type: 3}
       propertyPath: m_Alpha
@@ -2469,10 +2469,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1345652080}
     m_Modifications:
-    - target: {fileID: 1966059619580324, guid: ff374eff59807314db806e0a9ffcf82f, type: 3}
-      propertyPath: m_Name
-      value: GameManagerPanel
-      objectReference: {fileID: 0}
     - target: {fileID: 114469091266423474, guid: ff374eff59807314db806e0a9ffcf82f,
         type: 3}
       propertyPath: _player
@@ -2613,6 +2609,11 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 224807432534908598, guid: ff374eff59807314db806e0a9ffcf82f,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 224469576076714998, guid: ff374eff59807314db806e0a9ffcf82f,
         type: 3}
       propertyPath: m_AnchorMin.x
@@ -2651,7 +2652,7 @@ PrefabInstance:
     - target: {fileID: 224770688601779968, guid: ff374eff59807314db806e0a9ffcf82f,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000042247444
+      value: 0.000034871635
       objectReference: {fileID: 0}
     - target: {fileID: 224770688601779968, guid: ff374eff59807314db806e0a9ffcf82f,
         type: 3}
@@ -2666,7 +2667,7 @@ PrefabInstance:
     - target: {fileID: 224701058379906122, guid: ff374eff59807314db806e0a9ffcf82f,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.000011258691
+      value: 0.000039088747
       objectReference: {fileID: 0}
     - target: {fileID: 224701058379906122, guid: ff374eff59807314db806e0a9ffcf82f,
         type: 3}
@@ -2681,7 +2682,7 @@ PrefabInstance:
     - target: {fileID: 224215250169408886, guid: ff374eff59807314db806e0a9ffcf82f,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000012062837
+      value: -0.0000031819545
       objectReference: {fileID: 0}
     - target: {fileID: 224680649961143680, guid: ff374eff59807314db806e0a9ffcf82f,
         type: 3}
@@ -2752,6 +2753,10 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SizeDelta.x
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1966059619580324, guid: ff374eff59807314db806e0a9ffcf82f, type: 3}
+      propertyPath: m_Name
+      value: GameManagerPanel
       objectReference: {fileID: 0}
     - target: {fileID: 225617070366120466, guid: ff374eff59807314db806e0a9ffcf82f,
         type: 3}
