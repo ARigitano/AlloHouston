@@ -51,7 +51,7 @@ namespace CRI.HelloHouston.Calibration
         /// </summary>
         /// <param name="xpManager"></param>
         /// <returns></returns>
-        public virtual XPElement Init()
+        public virtual XPElement Init(XPManager manager)
         {
             Clean();
             currentElement = Instantiate(_elementPrefab, transform);
@@ -65,7 +65,7 @@ namespace CRI.HelloHouston.Calibration
                     localScale.z / lossyScale.z
                     );
             }
-            currentElement.Init(this);
+            currentElement.Init(this, manager);
             return currentElement;
         }
         /// <summary>

@@ -272,14 +272,7 @@ namespace CRI.HelloHouston.Experience
 
         protected virtual ElementInfo[] InitZone(VirtualZone zone)
         {
-            var res = zone.InitAll().Select(xpElement => new ElementInfo(xpElement, xpElement.virtualElement, zone));
-            foreach (var element in res)
-            {
-                foreach (var translatedText in element.xpElement.GetComponentsInChildren<XPTranslatedText>(true))
-                {
-                    translatedText.Init(textManager);
-                }
-            }
+            var res = zone.InitAll(this).Select(xpElement => new ElementInfo(xpElement, xpElement.virtualElement, zone));
             elements.AddRange(res);
             return res.ToArray();
         }

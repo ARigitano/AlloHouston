@@ -73,7 +73,7 @@ namespace CRI.HelloHouston.Calibration.UI
         {
             this.virtualItem = virtualItem;
             _dateText.text = virtualItem.lastUpdate.ToString();
-            _calibrationButton.GetComponentInChildren<TranslatedText>().InitTranslatedText(MainTextManager.instance, _calibrationText);
+            _calibrationButton.GetComponentInChildren<MainTranslatedText>().InitTranslatedText(MainTextManager.instance, _calibrationText);
             _calibrationValidationButton.SetValidation(virtualItem.calibrated);
             virtualItem.onDateChange += OnDateChange;
             virtualItem.onCalibratedChange += OnCalibratedChange;
@@ -129,7 +129,7 @@ namespace CRI.HelloHouston.Calibration.UI
         private void OnCalibrationEnd()
         {
             _calibrationButton.interactable = true;
-            _calibrationButton.GetComponentInChildren<TranslatedText>().InitTranslatedText(MainTextManager.instance, _calibrationText);
+            _calibrationButton.GetComponentInChildren<MainTranslatedText>().InitTranslatedText(MainTextManager.instance, _calibrationText);
             CalibrationManager.onUpdatePositionTag -= OnUpdatePositionTag;
         }
     }

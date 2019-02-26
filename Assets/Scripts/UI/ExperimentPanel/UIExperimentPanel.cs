@@ -131,7 +131,6 @@ namespace CRI.HelloHouston.Calibration.UI
                     listingExperiment.CheckNext();
                 });
             }
-            MainTextManager.instance.InitAllText(GetComponentsInChildren<TranslatedText>());
         }
 
         private void LoadAllContexts(string name, string experiencePath)

@@ -89,15 +89,6 @@ namespace CRI.HelloHouston.Translation
                 }
             }
             _commonFont = commonFont;
-            InitAllText(SceneManager.GetActiveScene().GetRootGameObjects().SelectMany(go => go.GetComponentsInChildren<TranslatedText>(true)));
-        }
-
-        public void InitAllText(IEnumerable<TranslatedText> texts)
-        {
-            foreach (var text in texts)
-            {
-                text.Init(this);
-            }
         }
 
         /// <summary>

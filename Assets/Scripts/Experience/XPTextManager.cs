@@ -1,4 +1,5 @@
 ﻿using CRI.HelloHouston.Translation;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -13,7 +14,14 @@ namespace CRI.HelloHouston.Experience
 
         public XPTextManager(LangApp[] langAppAvailable, LangApp defaultLanguage, TextAsset[] langTextFiles) : base(langAppAvailable, defaultLanguage)
         {
-            _langTextList = LoadLangText(langTextFiles);
+            try
+            {
+                _langTextList = LoadLangText(langTextFiles);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e.Message);
+            }
             ChangeLang(defaultLanguage);
         }
 

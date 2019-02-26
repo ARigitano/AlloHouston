@@ -56,10 +56,6 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         public SoundManager globalSoundManager { get; private set; }
         /// <summary>
-        /// The main text manager.
-        /// </summary>
-        public MainTextManager textManager { get; private set; }
-        /// <summary>
         /// Experience list.
         /// </summary>
         public XPManager[] xpManagers { get; private set; }
@@ -98,11 +94,6 @@ namespace CRI.HelloHouston.Experience
             {
                 return "Main";
             }
-        }
-        
-        private void Start()
-        {
-            textManager = MainTextManager.instance;
         }
 
         public XPManager[] Init(XPContext[] xpContexts, VirtualRoom room)

@@ -117,7 +117,6 @@ namespace CRI.HelloHouston.Experience.UI
                 _failButton.GetComponent<CanvasGroup>().Show();
                 _successButton.GetComponent<CanvasGroup>().Show();
             }
-            MainTextManager.instance.InitAllText(GetComponentsInChildren<TranslatedText>());
             SetState(xpSynchronizer.state);
             xpSynchronizer.onStateChange += SetState;
         }

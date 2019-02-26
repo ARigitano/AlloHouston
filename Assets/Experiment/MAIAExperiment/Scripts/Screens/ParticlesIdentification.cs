@@ -109,7 +109,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             StartCoroutine(_maiaTopScreen.WaitGeneric(_successPopupDuration, () =>
             {
                 _successParticles.SetActive(false);
-                _maiaTopScreen.manager.StartAnalysisAnimation();
+                _maiaTopScreen.maiaManager.StartAnalysisAnimation();
             }));
         }
 
@@ -126,7 +126,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                 var gridCell = Instantiate(_gridCellPrefab, _particlesGrid);
                 _gridParticles[i] = gridCell;
             }
-            FillNbParticlesDetected(_maiaTopScreen.manager.generatedParticles.Count);
+            FillNbParticlesDetected(_maiaTopScreen.maiaManager.generatedParticles.Count);
         }
 
         /// <summary>
@@ -150,7 +150,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         public void UpdateParticles(List<Particle> enteredParticles)
         {
             DisplayParticles(enteredParticles);
-            FillNbParticlesDetected(_maiaTopScreen.manager.generatedParticles.Count - enteredParticles.Count);
+            FillNbParticlesDetected(_maiaTopScreen.maiaManager.generatedParticles.Count - enteredParticles.Count);
         }
     }
 }

@@ -118,7 +118,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             _interactable = false;
             yield return new WaitForSeconds(2);
             _popupAccessGranted.SetActive(false);
-            _maiaTopScreen.manager.StartParticleIdentification();
+            _maiaTopScreen.maiaManager.StartParticleIdentification();
         }
 
         /// <summary>
@@ -159,7 +159,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             _errorMessage.SetActive(true);
             yield return new WaitForSeconds(_waitTimeBeforeInfoMessage);
             _infoMessage.SetActive(true);
-            _maiaTopScreen.manager.ActivateManualOverride();
+            _maiaTopScreen.maiaManager.ActivateManualOverride();
         }
 
         //TODO: remove when windows class integrated

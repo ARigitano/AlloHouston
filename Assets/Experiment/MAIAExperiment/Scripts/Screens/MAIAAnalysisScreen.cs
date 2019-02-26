@@ -53,14 +53,14 @@ namespace CRI.HelloHouston.Experience.MAIA
             _animationStarted = true;
             var dictionary = new Dictionary<Particle, int>();
             _particleGridCellDictionary = new Dictionary<Particle, ParticleGridCell>();
-            var otherReactions = _maiaTopScreen.manager.ongoingReactions.Where(reaction => reaction != _maiaTopScreen.manager.selectedReaction).ToArray();
-            foreach (var particleGroup in _maiaTopScreen.manager.settings.allParticles.OrderBy(particle => particle.symbol).ThenBy(particle => !particle.negative).GroupBy(particle => particle))
+            var otherReactions = _maiaTopScreen.maiaManager.ongoingReactions.Where(reaction => reaction != _maiaTopScreen.maiaManager.selectedReaction).ToArray();
+            foreach (var particleGroup in _maiaTopScreen.maiaManager.settings.allParticles.OrderBy(particle => particle.symbol).ThenBy(particle => !particle.negative).GroupBy(particle => particle))
             {
                 var particleGridCell = Instantiate(_particleGridCellPrefab, _particleGridTransform);
                 particleGridCell.Init(particleGroup.Key);
                 _particleGridCellDictionary.Add(particleGroup.Key, particleGridCell);
             }
-            foreach (var particleGroup in _maiaTopScreen.manager.generatedParticles.GroupBy(particle => particle))
+            foreach (var particleGroup in _maiaTopScreen.maiaManager.generatedParticles.GroupBy(particle => particle))
                 dictionary.Add(particleGroup.Key, particleGroup.Count());
             DisplayParticles(dictionary);
             for (int i = 0; i < otherReactions.Length; i++)
@@ -77,7 +77,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             yield return new WaitForSeconds(_analysisAnimationStepDuration);
             _errorPopup.gameObject.SetActive(true);
             yield return new WaitForSeconds(_analysisAnimationStepDuration);
-            _maiaTopScreen.manager.StartAdvancedManualOverride();
+            _maiaTopScreen.maiaManager.StartAdvancedManualOverride();
             _animationStarted = false;
         }
 
