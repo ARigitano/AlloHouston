@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections;
+﻿using CRI.HelloHouston.Settings;
+using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using UnityEngine;
 
@@ -9,57 +8,48 @@ namespace CRI.HelloHouston.Translation
 {
     public class TextManager
     {
-        public delegate void TextManagerLangHandler(LangApp lang);
-        public event TextManagerLangHandler onLangChange;
-
-        /// <summary>
-        /// The current language of the application.
-        /// </summary>
-        protected LangApp _currentLang;
-        /// <summary>
-        /// The current language of the application. If the value is changed, it will trigger the OnLangChange event.
-        /// </summary>
-        public LangApp currentLang
-        {
-            get
-            {
-                return _currentLang;
-            }
-            set
-            {
-                _currentLang = value;
-                if (onLangChange != null)
-                    onLangChange(_currentLang);
-            }
-        }
-        /// <summary>
-        /// List of all lang available.
-        /// </summary>]
-        protected LangApp[] _langAppAvailable;
-        /// <summary>
-        /// The default language of the application.
-        /// </summary>
-        protected LangApp _defaultLanguage;
         /// <summary>
         /// A list of all the LangText.
         /// </summary>
         [SerializeField]
         protected List<LangText> _langTextList = new List<LangText>();
+        /// <summary>
+        /// The language manager.
+        /// </summary>
+        public LangManager langManager { get; protected set; }
 
-        protected TextManager(LangApp[] langAppAvailable, LangApp defaultLanguage)
+        public TextManager(LangManager langManager, LangSettings langSettings) : this(langManager, langSettings.langTextFiles, langSettings.commonTextFile) { }
+
+        public TextManager(LangManager langManager, TextAsset[] langTextFiles, TextAsset commonTextFile)
         {
-            _langAppAvailable = langAppAvailable;
-            _defaultLanguage = defaultLanguage;
-            SetDefaultLang();
+            this.langManager = langManager;
+            foreach (var textAsset in langTextFiles)
+            {
+                try
+                {
+                    LangText langText = LoadLangText(textAsset);
+                    _langTextList.Add(langText);
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError(e.Message);
+                }
+            }
+            LangText commonText = LoadLangText(commonTextFile);
+            commonText.code = "COM";
+            _langTextList.Add(commonText);
         }
 
         /// <summary>
-        /// Sets the current language to the default language of the application as described in the game settings.
+        /// Loads the text from a specific text file.
         /// </summary>
-        public virtual void SetDefaultLang()
+        /// <param name="langTextAsset">The text asset</param>
+        /// <returns>An instance of LangText</returns>
+        public LangText LoadLangText(TextAsset langTextAsset)
         {
-            currentLang = _defaultLanguage;
+            return LangText.LoadFromText(langTextAsset.text);
         }
+
         /// <summary>
         /// Finds the text of a language by using a specific key and a lang code.
         /// Exemple: For the key "SCREEN2_TITLE" and the lang "fr" it will return "REGLES DU JEU."
@@ -93,23 +83,7 @@ namespace CRI.HelloHouston.Translation
         /// <returns>The text translated to a specific language.</returns>
         public string GetText(string key, bool common = false)
         {
-            return GetText(key, common ? "COM" : _currentLang.code);
-        }
-
-        public void ChangeLang(int index)
-        {
-            currentLang = _langAppAvailable[index];
-        }
-
-        public void ChangeLang(string langCode)
-        {
-            if (currentLang.code != langCode && _langAppAvailable.Any(x => x.code == langCode))
-                currentLang = _langAppAvailable.First(x => x.code == langCode);
-        }
-
-        public void ChangeLang(LangApp lang)
-        {
-            ChangeLang(lang.code);
+            return GetText(key, common ? "COM" : langManager.currentLang.code);
         }
     }
 }

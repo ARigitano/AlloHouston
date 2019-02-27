@@ -33,22 +33,23 @@ namespace CRI.HelloHouston.Experience.UI
 
         private GameManager _gameManager;
         private TextManager _textManager;
+        private LangManager _langManager;
 
         private void OnEnable()
         {
-            if (_textManager != null)
-                _textManager.onLangChange += OnLangChange;
+            if (_langManager != null)
+                _langManager.onLangChange += OnLangChange;
         }
 
         private void OnDisable()
         {
-            if (_textManager != null)
-                _textManager.onLangChange -= OnLangChange;
+            if (_langManager != null)
+                _langManager.onLangChange -= OnLangChange;
         }
 
         private void OnLangChange(LangApp lang)
         {
-            _estimateText = MainTextManager.instance.GetText(_estimateTextKey);
+            _estimateText = _textManager.GetText(_estimateTextKey);
         }
 
         private void Reset()
@@ -63,8 +64,9 @@ namespace CRI.HelloHouston.Experience.UI
             _baseColorHex = ColorUtility.ToHtmlStringRGB(_text.color);
             _overestimateColorHex = ColorUtility.ToHtmlStringRGB(_overestimateColor);
             _baseFontStyle = _text.fontStyle;
-            _estimateText = MainTextManager.instance.GetText(_estimateTextKey);
-            _textManager = MainTextManager.instance;
+            _textManager = GameManager.instance.textManager;
+            _langManager = GameManager.instance.langManager;
+            _estimateText = _textManager.GetText(_estimateTextKey);
         }
 
         private void Update()

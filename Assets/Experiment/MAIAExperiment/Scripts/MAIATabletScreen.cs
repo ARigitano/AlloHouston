@@ -308,7 +308,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             if (!_isTouched)
             {
-                Debug.Log(character);
+                manager.logController.AddLog("Digit entered:" + character, manager.xpContext, Log.LogType.Input);
                 _isTouched = true;
                 string realPassword = _maiaManager.settings.password;
                 _enteredPassword += character.ToString();

@@ -93,18 +93,19 @@ namespace CRI.HelloHouston.Experience.UI
 
         public void Init(GameManager gameManager, XPManager xpSynchronizer)
         {
+            TextManager textManager = GameManager.instance.textManager;
             _xpManager = xpSynchronizer;
             _nameText.text = xpSynchronizer.xpContext.contextName;
             _actionButton.Init(xpSynchronizer.xpContext.xpSettings.actions, xpSynchronizer.actionController);
             _launchButton.onClick.AddListener(() =>
             {
                 if (gameManager.xpTimeEstimate * 60 < gameManager.timeSinceGameStart + (xpSynchronizer.xpContext.xpSettings.duration * 60))
-                    CreatePopup(MainTextManager.instance.GetText(_timePopupTextKey), LaunchAction);
+                    CreatePopup(textManager.GetText(_timePopupTextKey), LaunchAction);
                 else
                     LaunchAction();
             });
-            _failButton.onClick.AddListener(() => CreatePopup(MainTextManager.instance.GetText(_failPopupTextKey), FailAction));
-            _successButton.onClick.AddListener(() => CreatePopup(MainTextManager.instance.GetText(_successPopupTextKey), SuccessAction));
+            _failButton.onClick.AddListener(() => CreatePopup(textManager.GetText(_failPopupTextKey), FailAction));
+            _successButton.onClick.AddListener(() => CreatePopup(textManager.GetText(_successPopupTextKey), SuccessAction));
             if (!xpSynchronizer.active)
             {
                 _launchButton.GetComponent<CanvasGroup>().Show();

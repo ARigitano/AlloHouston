@@ -1,36 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using CRI.HelloHouston.Translation;
-using UnityEngine;
+﻿using UnityEngine;
 
-
-[CreateAssetMenu(fileName = "New Application Settings", menuName = "Settings/New Application Settings", order = 1)]
-public class AppSettings : ScriptableObject
+namespace CRI.HelloHouston.Settings
 {
-    /// <summary>
-    /// List of all lang available.
-    /// </summary>
-    [Tooltip("List of all lang available.")]
-    public LangApp[] langAppAvailable;
-    /// <summary>
-    /// The font used for the common.
-    /// </summary>
-    [Tooltip("The font used for the common.")]
-    public Font commonFont;
-    /// <summary>
-    /// The default language.
-    /// </summary>
-    public LangApp defaultLanguage { get { return langAppAvailable[0]; } }
-    /// <summary>
-    /// All the different text files (one for each available language) of the application.
-    /// </summary>
-    [Tooltip("All the different text files (one for each available language) of the application.")]
-    public TextAsset[] langTextFiles;
-    /// <summary>
-    /// The text file for the common text.
-    /// </summary>
-    [Tooltip("The text file for the common text")]
-    public TextAsset commonTextFile;
+    [CreateAssetMenu(fileName = "New Application Settings", menuName = "Settings/New Application Settings", order = 1)]
+    public class AppSettings : ScriptableObject
+    {
+        /// <summary>
+        /// The language settings.
+        /// </summary>
+        [Tooltip("The language settings.")]
+        public LangSettings langSettings;
+    }
 }

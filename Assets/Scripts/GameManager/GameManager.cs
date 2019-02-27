@@ -6,6 +6,7 @@ using CRI.HelloHouston.Calibration;
 using CRI.HelloHouston.Audio;
 using CRI.HelloHouston.Translation;
 using UnityEngine.SceneManagement;
+using CRI.HelloHouston.Settings;
 
 namespace CRI.HelloHouston.Experience
 {
@@ -42,6 +43,8 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         public GameActionController gameActionController { get; private set; }
         [SerializeField]
+        private AppSettings _appSettings = null;
+        [SerializeField]
         private XPMainSettings _mainSettings = null;
         /// <summary>
         /// The Log controller.
@@ -55,6 +58,20 @@ namespace CRI.HelloHouston.Experience
         /// globalSoundManager
         /// </summary>
         public SoundManager globalSoundManager { get; private set; }
+        /// <summary>
+        /// Language manager.
+        /// </summary>
+        public LangManager langManager { get; private set; }
+        /// <summary>
+        /// Text manager.
+        /// </summary>
+        public TextManager textManager
+        {
+            get
+            {
+                return langManager.textManager;
+            }
+        }
         /// <summary>
         /// Experience list.
         /// </summary>
@@ -96,18 +113,27 @@ namespace CRI.HelloHouston.Experience
             }
         }
 
-        public XPManager[] Init(XPContext[] xpContexts, VirtualRoom room)
+        private void Awake()
         {
-            return Init(xpContexts, room, UnityEngine.Random.Range(0, int.MaxValue));
+            InitGameManager();
         }
 
-        public XPManager[] Init(XPContext[] xpContexts, VirtualRoom room, int seed)
+        private void InitGameManager()
         {
-            s_randomSeed = seed;
             globalSoundManager = GetComponent<SoundManager>();
             gameActionController = new GameActionController(this);
             logManager = new LogManager(this);
-            _mainSettings = Resources.Load<XPMainSettings>("Settings/MainSettings");
+            langManager = new LangManager(_appSettings.langSettings);
+        }
+
+        public XPManager[] InitGame(XPContext[] xpContexts, VirtualRoom room)
+        {
+            return InitGame(xpContexts, room, UnityEngine.Random.Range(0, int.MaxValue));
+        }
+
+        public XPManager[] InitGame(XPContext[] xpContexts, VirtualRoom room, int seed)
+        {
+            s_randomSeed = seed;
             xpManagers = xpContexts.Select(xpContext => xpContext.InitManager(logManager.logExperienceController, room.GetZones().Where(zone => zone.xpContext == xpContext).ToArray(), s_randomSeed)).ToArray();
             _startTime = Time.time;
             logGeneralController.AddLog(string.Format("Random Seed: {0}", randomSeed), this, Log.LogType.Important);

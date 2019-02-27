@@ -7,11 +7,15 @@ namespace CRI.HelloHouston.Experience
     [RequireComponent(typeof(Text))]
     public class XPTranslatedText : TranslatedText
     {
-        private void Awake()
+        private void Start()
         {
-            Debug.Log(GetComponentInParent<XPElement>());
-            Debug.Log(GetComponentInParent<XPElement>().manager);
-            Init(GetComponentInParent<XPElement>().manager.textManager);
+            if (!_initialized)
+            {
+                XPElement element = GetComponentInParent<XPElement>();
+                LangManager langManager = element.manager.langManager;
+                TextManager textManager = langManager.textManager;
+                Init(langManager, textManager);
+            }
         }
     }
 }

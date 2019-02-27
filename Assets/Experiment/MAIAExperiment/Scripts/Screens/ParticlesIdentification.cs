@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using System.Linq;
+using CRI.HelloHouston.Translation;
 
 namespace CRI.HelloHouston.Experience.MAIA
 {
@@ -119,6 +120,12 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <param name="particles">The particles detected.</param>
         public void CreateParticleGrid(List<Particle> particles)
         {
+            if (!_nbParticlesDetected.GetComponent<XPTranslatedText>().initialized)
+            {
+                LangManager langManager = GetComponentInParent<XPElement>().manager.langManager;
+                TextManager textManager = langManager.textManager;
+                _nbParticlesDetected.GetComponent<XPTranslatedText>().Init(langManager, textManager);
+            }
             _particleTextMessage = _nbParticlesDetected.text;
             _gridParticles = new GridCell[particles.Count];
             for (int i = 0; i < particles.Count; i++)

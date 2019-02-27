@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using CRI.HelloHouston.Experience;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,7 +12,12 @@ namespace CRI.HelloHouston.Translation
     {
         private void Awake()
         {
-            Init(MainTextManager.instance);
+            if (!_initialized)
+            {
+                LangManager langManager = GameManager.instance.langManager;
+                TextManager textManager = GameManager.instance.textManager;
+                Init(langManager, textManager);
+            }
         }
     }
 }

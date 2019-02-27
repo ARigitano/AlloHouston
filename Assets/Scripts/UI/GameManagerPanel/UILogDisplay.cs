@@ -204,7 +204,9 @@ namespace CRI.HelloHouston.Experience.UI
             if (logs.Length == 0)
             {
                 var go = Instantiate(_logPrefab, _logPanel);
-                go.Init(MainTextManager.instance.GetText(_emptyLogTextKey));
+                LangManager langManager = GameManager.instance.langManager;
+                TextManager textManager = GameManager.instance.textManager;
+                go.Init(textManager.GetText(_emptyLogTextKey));
                 uiLogs.Enqueue(go);
             }
             foreach (var log in logs)

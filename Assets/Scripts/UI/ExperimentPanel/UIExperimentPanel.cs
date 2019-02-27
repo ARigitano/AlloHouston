@@ -111,6 +111,7 @@ namespace CRI.HelloHouston.Calibration.UI
             UIExperimentListing listingExperiment,
             string experimentPath)
         {
+            TextManager textManager = GameManager.instance.textManager;
             _experimentText.text = name;
             this.id = id;
             totalPanel.AddContext(id);
@@ -120,7 +121,7 @@ namespace CRI.HelloHouston.Calibration.UI
             {
                 listingExperiment.CheckNext();
             });
-            _contextDropdown.options.Add(new Dropdown.OptionData() { text = MainTextManager.instance.GetText(_chooseTextKey) });
+            _contextDropdown.options.Add(new Dropdown.OptionData() { text = textManager.GetText(_chooseTextKey) });
             foreach (var option in _contexts)
             {
                 _contextDropdown.options.Add(new Dropdown.OptionData() { text = option.contextName });

@@ -51,18 +51,31 @@ namespace CRI.HelloHouston.Translation
         [Tooltip("If true, the translated text will use the font of the text component instead of the font defined for the language.")]
         protected bool _useFont = true;
 
+        protected bool _initialized = false;
+        /// <summary>
+        /// If true, this translated text has already been initialized once.
+        /// </summary>
+        public bool initialized
+        {
+            get
+            {
+                return _initialized;
+            }
+        }
+
         protected TextManager _textManager;
+        protected LangManager _langManager;
 
         private void OnEnable()
         {
             if (_textManager != null)
-                _textManager.onLangChange += OnLangChange;
+                _textManager.langManager.onLangChange += OnLangChange;
         }
 
         private void OnDisable()
         {
             if (_textManager != null)
-                _textManager.onLangChange -= OnLangChange;
+                _textManager.langManager.onLangChange -= OnLangChange;
         }
 
         private void Reset()
@@ -84,18 +97,20 @@ namespace CRI.HelloHouston.Translation
         /// </summary>
         /// <param name="textKey">The text key.</param>
         /// <param name="isCommon">Is the text common ?</param>
-        public void InitTranslatedText(TextManager textManager, string textKey, bool isCommon = false)
+        public void InitTranslatedText(LangManager langManager, TextManager textManager, string textKey, bool isCommon = false)
         {
             _textKey = textKey;
             _isCommon = isCommon;
-            Init(textManager);
+            Init(langManager, textManager);
         }
         /// <summary>
         /// Init the translated text.
         /// </summary>
         /// <param name="textManager">The text manager.</param>
-        public void Init(TextManager textManager)
+        public void Init(LangManager langManager, TextManager textManager)
         {
+            _initialized = true;
+            _langManager = langManager;
             _textManager = textManager;
             _text = GetComponent<Text>();
             SetText();

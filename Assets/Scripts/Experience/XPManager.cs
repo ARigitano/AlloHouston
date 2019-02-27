@@ -5,6 +5,7 @@ using UnityEngine;
 using CRI.HelloHouston.Experience.Actions;
 using System;
 using CRI.HelloHouston.Audio;
+using CRI.HelloHouston.Translation;
 
 namespace CRI.HelloHouston.Experience
 {
@@ -68,7 +69,7 @@ namespace CRI.HelloHouston.Experience
 
         public ExperienceActionController actionController { get; protected set; }
 
-        public XPTextManager textManager { get; protected set; }
+        public LangManager langManager { get; protected set; }
 
         public int randomSeed { get; private set; }
 
@@ -291,7 +292,7 @@ namespace CRI.HelloHouston.Experience
             state = XPState.Inactive;
             _stateOnActivation = stateOnActivation;
             actionController = new ExperienceActionController(this);
-            textManager = new XPTextManager(xpContext.xpGroup.settings);
+            langManager = new LangManager(xpContext.xpGroup.settings.langSettings);
             this.logController = logController;
             if (logController != null)
                 logController.AddLog("Ready", xpContext, Log.LogType.Automatic);
