@@ -60,7 +60,7 @@ namespace CRI.HelloHouston.Translation
 
         public void ChangeLang(int index)
         {
-            _currentLang = langAppAvailable[index];
+            currentLang = langAppAvailable[index];
         }
 
         public void ChangeLang(string langCode)
