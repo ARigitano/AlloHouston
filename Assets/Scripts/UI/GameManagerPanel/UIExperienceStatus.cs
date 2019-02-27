@@ -34,6 +34,12 @@ namespace CRI.HelloHouston.Experience.UI
         [Tooltip("Button to finish successfully the experiment.")]
         private Button _successButton = null;
         /// <summary>
+        /// Dropdown that selects the language of the experiment.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("Dropdown that selects the language of the experiment.")]
+        private UILangDropdown _langDropdown = null;
+        /// <summary>
         /// Button to automatically fail the experiment.
         /// </summary>
         [SerializeField]
@@ -91,22 +97,24 @@ namespace CRI.HelloHouston.Experience.UI
 
         private XPManager _xpManager;
 
-        public void Init(GameManager gameManager, XPManager xpSynchronizer)
+        public void Init(GameManager gameManager, XPManager xpManager)
         {
             TextManager textManager = GameManager.instance.textManager;
-            _xpManager = xpSynchronizer;
-            _nameText.text = xpSynchronizer.xpContext.contextName;
-            _actionButton.Init(xpSynchronizer.xpContext.xpSettings.actions, xpSynchronizer.actionController);
+            LangManager langManager = xpManager.langManager;
+            _xpManager = xpManager;
+            _nameText.text = xpManager.xpContext.contextName;
+            _actionButton.Init(xpManager.xpContext.xpSettings.actions, xpManager.actionController);
+            _langDropdown.InitDropdown(langManager);
             _launchButton.onClick.AddListener(() =>
             {
-                if (gameManager.xpTimeEstimate * 60 < gameManager.timeSinceGameStart + (xpSynchronizer.xpContext.xpSettings.duration * 60))
+                if (gameManager.xpTimeEstimate * 60 < gameManager.timeSinceGameStart + (xpManager.xpContext.xpSettings.duration * 60))
                     CreatePopup(textManager.GetText(_timePopupTextKey), LaunchAction);
                 else
                     LaunchAction();
             });
             _failButton.onClick.AddListener(() => CreatePopup(textManager.GetText(_failPopupTextKey), FailAction));
             _successButton.onClick.AddListener(() => CreatePopup(textManager.GetText(_successPopupTextKey), SuccessAction));
-            if (!xpSynchronizer.active)
+            if (!xpManager.active)
             {
                 _launchButton.GetComponent<CanvasGroup>().Show();
                 _failButton.GetComponent<CanvasGroup>().Hide();
@@ -118,8 +126,8 @@ namespace CRI.HelloHouston.Experience.UI
                 _failButton.GetComponent<CanvasGroup>().Show();
                 _successButton.GetComponent<CanvasGroup>().Show();
             }
-            SetState(xpSynchronizer.state);
-            xpSynchronizer.onStateChange += SetState;
+            SetState(xpManager.state);
+            xpManager.onStateChange += SetState;
         }
 
         private void CreatePopup(string popupText, UnityAction action)

@@ -4,11 +4,13 @@ using UnityEngine.UI;
 
 namespace CRI.HelloHouston.Translation
 {
-    public class UILangPanel : MonoBehaviour
+    public class UILangDropdown : MonoBehaviour
     {
         [SerializeField]
         [Tooltip("The language dropdown.")]
         private Dropdown _langDropdown;
+
+        private bool _initialized = false;
 
         private void Reset()
         {
@@ -17,12 +19,16 @@ namespace CRI.HelloHouston.Translation
 
         private void Start()
         {
-            LangManager langManager = GameManager.instance.langManager;
-            InitDropdown(langManager);
+            if (!_initialized)
+            {
+                LangManager langManager = GameManager.instance.langManager;
+                InitDropdown(langManager);
+            }
         }
 
-        private void InitDropdown(LangManager langManager)
+        public void InitDropdown(LangManager langManager)
         {
+            _initialized = true;
             _langDropdown.options.Clear();
             foreach (LangApp lang in langManager.langAppAvailable)
             {

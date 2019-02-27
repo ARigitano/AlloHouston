@@ -68,14 +68,14 @@ namespace CRI.HelloHouston.Translation
 
         private void OnEnable()
         {
-            if (_textManager != null)
-                _textManager.langManager.onLangChange += OnLangChange;
+            if (_langManager != null)
+                _langManager.onLangChange += OnLangChange;
         }
 
         private void OnDisable()
         {
-            if (_textManager != null)
-                _textManager.langManager.onLangChange -= OnLangChange;
+            if (_langManager != null)
+                _langManager.onLangChange -= OnLangChange;
         }
 
         private void Reset()
@@ -112,6 +112,8 @@ namespace CRI.HelloHouston.Translation
             _initialized = true;
             _langManager = langManager;
             _textManager = textManager;
+            if (_langManager != null)
+                _langManager.onLangChange += OnLangChange;
             _text = GetComponent<Text>();
             SetText();
         }

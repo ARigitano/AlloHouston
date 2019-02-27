@@ -282,8 +282,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                     ParticleSendErrorMessage(ParticlesIdentification.ErrorType.WrongNumberParticles);
                 }
                 StartCoroutine(WaitButton());
-            }
-            
+            }       
         }
 
         /// Adds a particle to the combination.

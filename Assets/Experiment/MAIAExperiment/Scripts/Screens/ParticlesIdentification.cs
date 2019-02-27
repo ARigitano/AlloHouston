@@ -84,8 +84,10 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <param name="error">The error to be displayed on the popup depending on the player's mistake.</param>
         public void DisplayErrorMessage(ErrorType errorType)
         {
+            LangManager langManager = GetComponentInParent<XPElement>().manager.langManager;
+            TextManager textManager = GetComponentInParent<XPElement>().manager.langManager.textManager;
             _errorParticles.SetActive(true);
-            _errorParticles.GetComponentInChildren<Text>().text = _errorMessages.First(x => x.errorType == errorType).errorMessage;
+            _errorParticles.GetComponentInChildren<TranslatedText>().InitTranslatedText(langManager, textManager, _errorMessages.First(x => x.errorType == errorType).errorMessage);
             StartCoroutine(_maiaTopScreen.WaitGeneric(_errorPopupDuration, () =>
             {
                 _errorParticles.SetActive(false);
