@@ -37,5 +37,11 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         [Tooltip("An int to identify the experiment.")]
         public int id;
+
+        /// <summary>
+        /// The settings of the group.
+        /// </summary>
+        [Tooltip("The settings of the group.")]
+        public XPGroupSettings settings;
     }
 }

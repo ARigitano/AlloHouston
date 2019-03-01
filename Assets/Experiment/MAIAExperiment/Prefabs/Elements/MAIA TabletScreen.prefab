@@ -483,6 +483,7 @@ GameObject:
   - component: {fileID: 224787021662322382}
   - component: {fileID: 222526716581530740}
   - component: {fileID: 114750194222406520}
+  - component: {fileID: 3041993618156340440}
   m_Layer: 0
   m_Name: Text
   m_TagString: Untagged
@@ -550,7 +551,23 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Clear
+  m_Text: 
+--- !u!114 &3041993618156340440
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1014634368523232}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f129c5421f5a8c4bb04e570edfae8af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _textKey: TABLET_CLEAR_BUTTON
+  _text: {fileID: 114750194222406520}
+  _isCommon: 0
+  _useFont: 1
 --- !u!1 &1023190048600794
 GameObject:
   m_ObjectHideFlags: 0
@@ -761,6 +778,7 @@ GameObject:
   - component: {fileID: 224385028691400386}
   - component: {fileID: 222580196669471224}
   - component: {fileID: 114030711097225062}
+  - component: {fileID: 4846752606499668559}
   m_Layer: 0
   m_Name: Text
   m_TagString: Untagged
@@ -829,6 +847,22 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: "Final selection\n for analysis"
+--- !u!114 &4846752606499668559
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1055839706656388}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f129c5421f5a8c4bb04e570edfae8af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _textKey: TABLET_DIAGRAM_ANALYSIS_BUTTON
+  _text: {fileID: 114030711097225062}
+  _isCommon: 0
+  _useFont: 1
 --- !u!1 &1071240479165054
 GameObject:
   m_ObjectHideFlags: 0
@@ -2226,6 +2260,7 @@ GameObject:
   - component: {fileID: 224717582028083918}
   - component: {fileID: 222156226054311538}
   - component: {fileID: 114015701865006252}
+  - component: {fileID: 1065949621586050241}
   m_Layer: 0
   m_Name: Text
   m_TagString: Untagged
@@ -2293,7 +2328,23 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Enter
+  m_Text: 
+--- !u!114 &1065949621586050241
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1214697850500156}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f129c5421f5a8c4bb04e570edfae8af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _textKey: TABLET_ENTER_BUTTON
+  _text: {fileID: 114015701865006252}
+  _isCommon: 0
+  _useFont: 1
 --- !u!1 &1217929825097100
 GameObject:
   m_ObjectHideFlags: 0
@@ -3503,8 +3554,9 @@ GameObject:
   - component: {fileID: 224663302152282834}
   - component: {fileID: 222985509811128188}
   - component: {fileID: 114566397115737950}
+  - component: {fileID: 7981623314052364973}
   m_Layer: 0
-  m_Name: Text
+  m_Name: OverrideButtonText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3571,6 +3623,22 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: "Manual \noverride"
+--- !u!114 &7981623314052364973
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1358901169552266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f129c5421f5a8c4bb04e570edfae8af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _textKey: TABLET_MO_BUTTON
+  _text: {fileID: 114566397115737950}
+  _isCommon: 0
+  _useFont: 1
 --- !u!1 &1387800292872206
 GameObject:
   m_ObjectHideFlags: 0
@@ -6827,6 +6895,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _elementName: 
+  _canvasElement: 1
   _startFull: {fileID: 1850184948146124}
   _panelFull: {fileID: 1763254911668026}
   _overrideLeft: {fileID: 1629631835874508}
@@ -6837,10 +6906,6 @@ MonoBehaviour:
   _diagramsSelectionRight: {fileID: 4053082315209169074}
   _slider: {fileID: 114234886123134030}
   _speed: 0.001
-  hologramTube: {fileID: 0}
-  hologramFeynman: {fileID: 0}
-  tubeScreen: {fileID: 0}
-  correctDiagram: 0
 --- !u!1 &1920043398525408
 GameObject:
   m_ObjectHideFlags: 0
@@ -7681,6 +7746,7 @@ GameObject:
   - component: {fileID: 2748171018548660233}
   - component: {fileID: 1215236213046805338}
   - component: {fileID: 1256975524301693747}
+  - component: {fileID: 2174134256952056674}
   m_Layer: 0
   m_Name: Text
   m_TagString: Untagged
@@ -7749,6 +7815,22 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Advanced manual override
+--- !u!114 &2174134256952056674
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1112432920014793470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f129c5421f5a8c4bb04e570edfae8af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _textKey: TABLET_AMO_BUTTON
+  _text: {fileID: 1256975524301693747}
+  _isCommon: 0
+  _useFont: 1
 --- !u!1 &3384271183517087115
 GameObject:
   m_ObjectHideFlags: 0
@@ -8370,7 +8452,6 @@ MonoBehaviour:
   _tablet: {fileID: 114957955983375362}
   _blueShader: {fileID: 2100000, guid: c29f2fbadfb452a408e2d16148879d03, type: 2}
   _whiteShader: {fileID: 2100000, guid: 1c0c279b39a4f0640a19d30cb84bcd8d, type: 2}
-  _diagrams: []
 --- !u!1 &8661381423111995419
 GameObject:
   m_ObjectHideFlags: 0
@@ -8382,6 +8463,7 @@ GameObject:
   - component: {fileID: 2078474830431776510}
   - component: {fileID: 8461696086767304620}
   - component: {fileID: 1501978718586739668}
+  - component: {fileID: 6245529148665759780}
   m_Layer: 0
   m_Name: Text
   m_TagString: Untagged
@@ -8449,7 +8531,23 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: DELETE
+  m_Text: 
+--- !u!114 &6245529148665759780
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8661381423111995419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f129c5421f5a8c4bb04e570edfae8af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _textKey: TABLET_DELETE_BUTTON
+  _text: {fileID: 1501978718586739668}
+  _isCommon: 0
+  _useFont: 1
 --- !u!1001 &5583102405898675264
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8457,11 +8555,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5242034027167963465}
     m_Modifications:
-    - target: {fileID: 2343640617444806786, guid: 13b7fe2908de67542b6077f3ebffb0c3,
-        type: 3}
-      propertyPath: m_Name
-      value: zone_feynman
-      objectReference: {fileID: 0}
     - target: {fileID: 6082595649187981454, guid: 13b7fe2908de67542b6077f3ebffb0c3,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -8531,6 +8624,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 260.98
+      objectReference: {fileID: 0}
+    - target: {fileID: 2343640617444806786, guid: 13b7fe2908de67542b6077f3ebffb0c3,
+        type: 3}
+      propertyPath: m_Name
+      value: zone_feynman
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 13b7fe2908de67542b6077f3ebffb0c3, type: 3}

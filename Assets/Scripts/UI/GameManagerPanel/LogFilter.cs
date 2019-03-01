@@ -38,7 +38,7 @@ namespace CRI.HelloHouston.Experience.UI
     internal abstract class LogFilter
     {
         public abstract string logCategoryKey { get; }
-        public string filterName { get; protected set; }
+        public string filterTextKey { get; protected set; }
         protected Func<Log, bool> _filter;
 
         public bool enabled = true;
@@ -48,9 +48,9 @@ namespace CRI.HelloHouston.Experience.UI
             return enabled && _filter(log);
         }
 
-        public LogFilter(string filterName, Func<Log, bool> filter)
+        public LogFilter(string filterTextKey, Func<Log, bool> filter)
         {
-            this.filterName = filterName;
+            this.filterTextKey = filterTextKey;
             this._filter = filter;
         }
     }

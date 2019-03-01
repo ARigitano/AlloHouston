@@ -26,7 +26,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// The manager of the experiment.
         /// </summary>
         [Tooltip("The manager of the experiment.")]
-        private MAIAManager _manager = null;
+        private MAIAManager _maiaManager = null;
         [Header("Particle Prefabs")]
         /// <summary>
         /// Prefab of the head of a particle line.
@@ -329,7 +329,7 @@ namespace CRI.HelloHouston.Experience.MAIA
 
         private void Init(MAIAManager synchronizer)
         {
-            _manager = synchronizer;
+            _maiaManager = synchronizer;
             _lMaxCylArray = new float[_cylArray.Length];
             _rMaxCylArray = new float[_cylArray.Length];
             for (int i = 0; i < _cylArray.Length; i++)
@@ -352,7 +352,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         public override void OnActivation()
         {
             base.OnActivation();
-            CreateSplines(_manager.generatedParticles);
+            CreateSplines(_maiaManager.generatedParticles);
             gameObject.SetActive(false);
         }
 

@@ -10,7 +10,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// The synchronizer of the experiment.
         /// </summary>
-        public MAIAManager manager { get; private set; }
+        public MAIAManager maiaManager { get; private set; }
         /// <summary>
         /// The objects containing the Feynman diagrams.
         /// </summary>
@@ -53,7 +53,7 @@ namespace CRI.HelloHouston.Experience.MAIA
 
         public void FillBoxesDiagrams()
         {
-            IList<Reaction> allReactions = manager.settings.allReactions.Shuffle(_rand);
+            IList<Reaction> allReactions = maiaManager.settings.allReactions.Shuffle(_rand);
             for (int i = 0; i < allReactions.Count && i < _feynmanBoxes.Length; i++)
             {
                 _feynmanBoxes[i].contentRenderer.material.mainTexture = allReactions[i].diagramImage;
@@ -74,7 +74,7 @@ namespace CRI.HelloHouston.Experience.MAIA
 
         private void Init(MAIAManager synchronizer)
         {
-            manager = synchronizer;
+            maiaManager = synchronizer;
             _boxPositions = new Vector3[_feynmanBoxes.Length];
             _boxRotations = new Quaternion[_feynmanBoxes.Length];
             for (int i = 0; i < _feynmanBoxes.Length; i++)

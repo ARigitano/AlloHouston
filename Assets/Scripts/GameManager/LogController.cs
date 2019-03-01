@@ -52,6 +52,31 @@ namespace CRI.HelloHouston.Experience
             _logManager.AddLog(str, _gameManager.timeSinceGameStart, logType, logOrigin, context);
         }
 
+        public void AddLogInput(string str, XPContext context)
+        {
+            AddLog(str, context, Log.LogType.Input);
+        }
+
+        public void AddLogError(string str, XPContext context)
+        {
+            AddLog(str, context, Log.LogType.Error);
+        }
+
+        public void AddLogHint(string str, XPContext context)
+        {
+            AddLog(str, context, Log.LogType.Hint);
+        }
+
+        public void AddLogImportant(string str, XPContext context)
+        {
+            AddLog(str, context, Log.LogType.Important);
+        }
+
+        public void AddLogAutomatic(string str, XPContext context)
+        {
+            AddLog(str, context, Log.LogType.Automatic);
+        }
+
         public LogExperienceController(GameManager gameManager, LogManager logManager) : base(gameManager, logManager)
         {
         }

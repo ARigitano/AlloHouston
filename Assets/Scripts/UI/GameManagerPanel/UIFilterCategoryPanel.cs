@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using CRI.HelloHouston.Translation;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -37,8 +38,8 @@ namespace CRI.HelloHouston.Experience.UI {
                     _categoryToggle.Refresh();
                 });
                 go.isOn = true;
-                go.GetComponentInChildren<Text>().text = filter.filterName;
-                go.name = "Toggle " + filter.filterName;
+                go.GetComponentInChildren<MainTranslatedText>().InitTranslatedText(GameManager.instance, filter.filterTextKey);
+                go.name = "Toggle " + filter.filterTextKey;
                 toggles[i] = go;
             }
             _panel.sizeDelta = new Vector2(20 + filters.Length * _togglePrefab.GetComponent<RectTransform>().sizeDelta.x, _panel.sizeDelta.y);

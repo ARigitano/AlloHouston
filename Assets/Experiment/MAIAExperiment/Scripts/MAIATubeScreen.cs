@@ -12,7 +12,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// Manager for this experiment.
         /// </summary>
         [Tooltip("Manager for this experiment.")]
-        private MAIAManager _manager = null;
+        private MAIAManager _maiaManager = null;
         /// <summary>
         /// Thumbnails for all the possible Feynman diagrams.
         /// </summary>
@@ -52,7 +52,7 @@ namespace CRI.HelloHouston.Experience.MAIA
 
         private void Init(MAIAManager synchronizer)
         {
-            _manager = synchronizer;
+            _maiaManager = synchronizer;
         }
 
         public override void OnInit(XPManager manager, int randomSeed)

@@ -98,14 +98,14 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             var dictionary = new Dictionary<Particle, int>();
             _particleGridCellDictionary = new Dictionary<Particle, ParticleGridCell>();
-            foreach (var particleGroup in _topScreen.manager.settings.allParticles.OrderBy(particle => particle.symbol).ThenBy(particle => !particle.negative).GroupBy(particle => particle))
+            foreach (var particleGroup in _topScreen.maiaManager.settings.allParticles.OrderBy(particle => particle.symbol).ThenBy(particle => !particle.negative).GroupBy(particle => particle))
             {
                 dictionary.Add(particleGroup.Key, 0);
                 var particleGridCell = Instantiate(_particleGridCellPrefab, _particleGridTransform);
                 particleGridCell.Init(particleGroup.Key);
                 _particleGridCellDictionary.Add(particleGroup.Key, particleGridCell);
             }
-            foreach (var particleGroup in _topScreen.manager.selectedReaction.exit.particles.GroupBy(particle => particle))
+            foreach (var particleGroup in _topScreen.maiaManager.selectedReaction.exit.particles.GroupBy(particle => particle))
                 dictionary[particleGroup.Key] += particleGroup.Count();
             DisplayParticles(dictionary);
         }

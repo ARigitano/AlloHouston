@@ -14,7 +14,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// The synchronizer of the experiment.
         /// </summary>
-        public MAIAManager manager { get; private set; }
+        public MAIAManager maiaManager { get; private set; }
         /// <summary>
         /// Script for the Exile Loading screen.
         /// </summary>
@@ -75,7 +75,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         [HideInInspector]
         public string particleErrorString;
 
-        public void ParticleGrid(List<Particle> reactionExits)
+        public void CreateParticleGrid(List<Particle> reactionExits)
         {
             _particlesIdentification.CreateParticleGrid(reactionExits);
         }
@@ -113,7 +113,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                 _currentPanel.SetActive(false);
             _currentPanel = _particlesIdentification.gameObject;
             _particlesIdentification.gameObject.SetActive(true);
-            _particlesIdentification.CreateParticleGrid(manager.generatedParticles);
+            _particlesIdentification.CreateParticleGrid(maiaManager.generatedParticles);
         }
 
         /// <summary>
@@ -156,12 +156,12 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void InitPasswordInput()
         {
-            _manualOverrideAccess.InitPasswordInput(manager.settings.password);
+            _manualOverrideAccess.InitPasswordInput(maiaManager.settings.password);
         }
 
         public void Init(MAIAManager synchronizer)
         {
-            manager = synchronizer;
+            maiaManager = synchronizer;
         }
 
         public void Access(bool isGranted)

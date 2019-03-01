@@ -3,7 +3,7 @@
 namespace CRI.HelloHouston.Experience.MAIA
 {
     [CreateAssetMenu(fileName = "New MAIASettings", menuName = "Experience/MAIA/MAIASettings", order = 3)]
-    public class MAIASettings : XPSettings
+    public class MAIASettings : XPContextSettings
     {
         /// <summary>
         /// All the particle scriptable objects.

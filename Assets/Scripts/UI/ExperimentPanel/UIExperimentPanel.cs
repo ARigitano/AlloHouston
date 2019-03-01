@@ -74,6 +74,12 @@ namespace CRI.HelloHouston.Calibration.UI
         [Tooltip("The remove button. When clicken on, the experiment will call the destroy method of the Experience Listing.")]
         private Button _removeButton = null;
         /// <summary>
+        /// The text key for the choose option of the dropdown.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("The text key for the choose option of the dropdown.")]
+        private string _chooseTextKey = "";
+        /// <summary>
         /// All the possible contexts for this experiment.
         /// </summary>
         private XPContext[] _contexts;
@@ -105,6 +111,7 @@ namespace CRI.HelloHouston.Calibration.UI
             UIExperimentListing listingExperiment,
             string experimentPath)
         {
+            TextManager textManager = GameManager.instance.textManager;
             _experimentText.text = name;
             this.id = id;
             totalPanel.AddContext(id);
@@ -114,7 +121,7 @@ namespace CRI.HelloHouston.Calibration.UI
             {
                 listingExperiment.CheckNext();
             });
-            _contextDropdown.options.Add(new Dropdown.OptionData() { text = TextManager.instance.GetText("CHOOSE") });
+            _contextDropdown.options.Add(new Dropdown.OptionData() { text = textManager.GetText(_chooseTextKey) });
             foreach (var option in _contexts)
             {
                 _contextDropdown.options.Add(new Dropdown.OptionData() { text = option.contextName });
