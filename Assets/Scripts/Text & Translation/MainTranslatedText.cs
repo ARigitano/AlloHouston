@@ -1,4 +1,5 @@
-﻿using CRI.HelloHouston.Experience;
+﻿using System;
+using CRI.HelloHouston.Experience;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,14 +11,9 @@ namespace CRI.HelloHouston.Translation
     [RequireComponent(typeof(Text))]
     public class MainTranslatedText : TranslatedText
     {
-        private void Awake()
+        protected override void FindManager()
         {
-            if (!_initialized)
-            {
-                LangManager langManager = GameManager.instance.langManager;
-                TextManager textManager = GameManager.instance.textManager;
-                Init(langManager, textManager);
-            }
+            Init(GameManager.instance);
         }
     }
 }

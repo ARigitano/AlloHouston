@@ -26,8 +26,6 @@ namespace CRI.HelloHouston.Experience.UI {
         public void Init(UILogDisplay logDisplay, LogFilter[] filters, string categoryName)
         {
             Toggle[] toggles = new Toggle[filters.Length];
-            LangManager langManager = GameManager.instance.langManager;
-            TextManager textManager = GameManager.instance.textManager;
             _toggleTransform.SetParent(null);
             for (int i = 0; i < filters.Length; i++)
             {
@@ -40,7 +38,7 @@ namespace CRI.HelloHouston.Experience.UI {
                     _categoryToggle.Refresh();
                 });
                 go.isOn = true;
-                go.GetComponentInChildren<MainTranslatedText>().InitTranslatedText(langManager, textManager, filter.filterTextKey);
+                go.GetComponentInChildren<MainTranslatedText>().InitTranslatedText(GameManager.instance, filter.filterTextKey);
                 go.name = "Toggle " + filter.filterTextKey;
                 toggles[i] = go;
             }

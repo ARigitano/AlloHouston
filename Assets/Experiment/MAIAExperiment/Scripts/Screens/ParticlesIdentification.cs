@@ -84,10 +84,9 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <param name="error">The error to be displayed on the popup depending on the player's mistake.</param>
         public void DisplayErrorMessage(ErrorType errorType)
         {
-            LangManager langManager = GetComponentInParent<XPElement>().manager.langManager;
-            TextManager textManager = GetComponentInParent<XPElement>().manager.langManager.textManager;
+            ILangManager manager = GetComponentInParent<XPElement>().manager;
             _errorParticles.SetActive(true);
-            _errorParticles.GetComponentInChildren<TranslatedText>().InitTranslatedText(langManager, textManager, _errorMessages.First(x => x.errorType == errorType).errorMessage);
+            _errorParticles.GetComponentInChildren<TranslatedText>().InitTranslatedText(manager, _errorMessages.First(x => x.errorType == errorType).errorMessage);
             StartCoroutine(_maiaTopScreen.WaitGeneric(_errorPopupDuration, () =>
             {
                 _errorParticles.SetActive(false);
@@ -124,9 +123,8 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             if (!_nbParticlesDetected.GetComponent<XPTranslatedText>().initialized)
             {
-                LangManager langManager = GetComponentInParent<XPElement>().manager.langManager;
-                TextManager textManager = langManager.textManager;
-                _nbParticlesDetected.GetComponent<XPTranslatedText>().Init(langManager, textManager);
+                ILangManager manager = GetComponentInParent<XPElement>().manager;
+                _nbParticlesDetected.GetComponent<XPTranslatedText>().Init(manager);
             }
             _particleTextMessage = _nbParticlesDetected.text;
             _gridParticles = new GridCell[particles.Count];

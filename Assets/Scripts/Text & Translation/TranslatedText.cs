@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CRI.HelloHouston.Experience;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,7 +12,7 @@ namespace CRI.HelloHouston.Translation
     /// A text UI that will be translated.
     /// </summary>
     [RequireComponent(typeof(Text))]
-    public class TranslatedText : MonoBehaviour
+    public abstract class TranslatedText : MonoBehaviour
     {
         /// <summary>
         /// The key to the text to translate.
@@ -50,6 +51,12 @@ namespace CRI.HelloHouston.Translation
         [SerializeField]
         [Tooltip("If true, the translated text will use the font of the text component instead of the font defined for the language.")]
         protected bool _useFont = true;
+        /// <summary>
+        /// If true, the translated text will find a textmanager by itself at start.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("If true, the translated text will find a textmanager by itself at start.")]
+        protected bool _autoInit = true;
 
         protected bool _initialized = false;
         /// <summary>
@@ -63,19 +70,20 @@ namespace CRI.HelloHouston.Translation
             }
         }
 
-        protected TextManager _textManager;
-        protected LangManager _langManager;
+        [SerializeField]
+        [Tooltip("The lang manager. If this field is empty, the TranslatedText component will find a suitable LangManager automatically. (recommended)")]
+        protected ILangManager _manager;
 
         private void OnEnable()
         {
-            if (_langManager != null)
-                _langManager.onLangChange += OnLangChange;
+            if (_manager != null)
+                _manager.langManager.onLangChange += OnLangChange;
         }
 
         private void OnDisable()
         {
-            if (_langManager != null)
-                _langManager.onLangChange -= OnLangChange;
+            if (_manager != null)
+                _manager.langManager.onLangChange -= OnLangChange;
         }
 
         private void Reset()
@@ -97,23 +105,22 @@ namespace CRI.HelloHouston.Translation
         /// </summary>
         /// <param name="textKey">The text key.</param>
         /// <param name="isCommon">Is the text common ?</param>
-        public void InitTranslatedText(LangManager langManager, TextManager textManager, string textKey, bool isCommon = false)
+        public void InitTranslatedText(ILangManager manager, string textKey, bool isCommon = false)
         {
             _textKey = textKey;
             _isCommon = isCommon;
-            Init(langManager, textManager);
+            Init(manager);
         }
         /// <summary>
         /// Init the translated text.
         /// </summary>
         /// <param name="textManager">The text manager.</param>
-        public void Init(LangManager langManager, TextManager textManager)
+        public void Init(ILangManager manager)
         {
             _initialized = true;
-            _langManager = langManager;
-            _textManager = textManager;
-            if (_langManager != null)
-                _langManager.onLangChange += OnLangChange;
+            _manager = manager;
+            if (_manager.langManager != null)
+                _manager.langManager.onLangChange += OnLangChange;
             _text = GetComponent<Text>();
             SetText();
         }
@@ -125,7 +132,17 @@ namespace CRI.HelloHouston.Translation
         {
             if (textKey != "")
             {
-                _text.text = _textManager.GetText(textKey, _isCommon);
+                _text.text = _manager.textManager.GetText(textKey, _isCommon);
+            }
+        }
+
+        protected abstract void FindManager();
+
+        private void Start()
+        {
+            if (!_initialized && _autoInit && _manager == null)
+            {
+                FindManager();
             }
         }
     }

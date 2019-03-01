@@ -10,7 +10,7 @@ using CRI.HelloHouston.Settings;
 
 namespace CRI.HelloHouston.Experience
 {
-    public class GameManager : MonoBehaviour, ISource
+    public class GameManager : MonoBehaviour, ISource, ILangManager
     {
         private static int s_randomSeed;
 
@@ -61,7 +61,7 @@ namespace CRI.HelloHouston.Experience
         /// <summary>
         /// Language manager.
         /// </summary>
-        public LangManager langManager { get; private set; }
+        public LangManager langManager { get; protected set; }
         /// <summary>
         /// Text manager.
         /// </summary>

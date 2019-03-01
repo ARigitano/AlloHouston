@@ -22,7 +22,7 @@ namespace CRI.HelloHouston.Experience
     /// The XPManager is responsible for the communication of every prefabs of one particular experiment among themselves as well as with the Gamecontroller.
     /// </summary>
     [System.Serializable]
-    public abstract class XPManager : MonoBehaviour
+    public abstract class XPManager : MonoBehaviour, ILangManager
     {
         [System.Serializable]
         public struct ElementInfo
@@ -70,6 +70,13 @@ namespace CRI.HelloHouston.Experience
         public ExperienceActionController actionController { get; protected set; }
 
         public LangManager langManager { get; protected set; }
+
+        public TextManager textManager {
+            get
+            {
+                return langManager.textManager;
+            }
+        }
 
         public int randomSeed { get; private set; }
 

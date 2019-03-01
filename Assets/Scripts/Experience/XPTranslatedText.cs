@@ -1,4 +1,5 @@
-﻿using CRI.HelloHouston.Translation;
+﻿using System;
+using CRI.HelloHouston.Translation;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,15 +12,10 @@ namespace CRI.HelloHouston.Experience
     [RequireComponent(typeof(Text))]
     public class XPTranslatedText : TranslatedText
     {
-        private void Start()
+        protected override void FindManager()
         {
-            if (!_initialized)
-            {
-                XPElement element = GetComponentInParent<XPElement>();
-                LangManager langManager = element.manager.langManager;
-                TextManager textManager = langManager.textManager;
-                Init(langManager, textManager);
-            }
-        }
+            ILangManager manager = GetComponentInParent<XPElement>().manager;
+            Init(manager);
+        }                
     }
 }
