@@ -110,7 +110,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// Called by the synchronizer to skip directly to the Feynman diagrams step.
         /// </summary>
-        public void SkipStepOne()
+        public void SkipToSecondPart()
         {
             if (_currentPanel != null)
                 _currentPanel.SetActive(false);
@@ -200,7 +200,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void ParticleRightCombination()
         {
-            _topScreen.maiaManager.StartAnalysisAnimation();
+            _topScreen.maiaManager.OnPISuccess();
             _particlesLeft.SetActive(false);
         }
 
@@ -209,7 +209,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             _particlesLeft.SetActive(false);
         }
 
-        public void StartAdvancedManualOverride()
+        public void StartAMO()
         {
             _advanceOverride.SetActive(true);
         }
@@ -217,10 +217,10 @@ namespace CRI.HelloHouston.Experience.MAIA
         public void AdvancedManualOverride()
         {
             _advanceOverride.SetActive(false);
-            _topScreen.maiaManager.StartReactionIdentification();
+            _topScreen.maiaManager.OnAMOSuccess();
         }
 
-        public void StartReactionIdentification()
+        public void StartRI()
         {
             _advanceOverride.SetActive(false);
             _diagramsSelectionLeft.SetActive(true);
@@ -320,7 +320,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// Displays particle selection panel after the correct password have been entered.
         /// </summary>
-        public void StartParticleIdentification()
+        public void StartPI()
         {
             _passwordLeft.SetActive(false);
             _particlesLeft.SetActive(true);
@@ -340,7 +340,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void OverrideButtonClicked()
         {
-            _topScreen.InitPasswordInput();
+            _maiaManager.OnMOSuccess();
             StartCoroutine(WaitGeneric(0.2f, () =>
             {
                 _passwordLeft.SetActive(true);

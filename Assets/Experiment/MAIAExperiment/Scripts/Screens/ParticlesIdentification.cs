@@ -111,7 +111,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             StartCoroutine(_maiaTopScreen.WaitGeneric(_successPopupDuration, () =>
             {
                 _successParticles.SetActive(false);
-                _maiaTopScreen.maiaManager.StartAnalysisAnimation();
+                _maiaTopScreen.maiaManager.OnPISuccess();
             }));
         }
 

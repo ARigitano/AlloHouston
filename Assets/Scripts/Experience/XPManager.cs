@@ -65,6 +65,24 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         public XPState state { get; protected set; }
 
+        private int _currentStep;
+        /// <summary>
+        /// The current step of the experiment. The value should be lower than the max number of step in the context settings.
+        /// </summary>
+        public int currentStep
+        {
+            get
+            {
+                if (_currentStep > xpContext.xpSettings.steps)
+                    _currentStep = xpContext.xpSettings.steps;
+                return currentStep;
+            }
+            protected set
+            {
+                _currentStep = value > xpContext.xpSettings.steps ? xpContext.xpSettings.steps : value;
+            }
+        }
+
         public LogExperienceController logController { get; protected set; }
 
         public ExperienceActionController actionController { get; protected set; }
@@ -318,9 +336,19 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         protected virtual void PostInit(XPContext xpContext, ElementInfo[] info, LogExperienceController logController, int randomSeed, XPState stateOnActivation) { }
 
+        /// <summary>
+        /// Advance the steps by a set number (default = 1).
+        /// </summary>
+        /// <param name="step">The number of steps to advance to.</param>
+        public virtual void AdvanceStep(int step = 1)
+        {
+            currentStep += step;
+        }
+
         public virtual void SkipToStep(int step)
         {
             logController.AddLog(string.Format("Skip to step {0}", step), xpContext, Log.LogType.Automatic);
+            currentStep = step;
         }
 
         public virtual void PlaySound(PlayableSound sound)

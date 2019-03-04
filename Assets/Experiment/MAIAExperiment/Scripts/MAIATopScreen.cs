@@ -89,7 +89,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// Called by the synchronizer to skip directly to the Feynman diagrams step.
         /// </summary>
-        public void SkipStepOne()
+        public void SkipToSecondPart()
         {
             StartAnalysisAnimation();
         }
@@ -107,7 +107,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             _currentPanel = _manualOverrideAccess.gameObject;
         }
 
-        public void StartParticleIdentification()
+        public void StartPI()
         {
             if (_currentPanel != null)
                 _currentPanel.SetActive(false);
@@ -129,7 +129,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             _analysisScreen.StartAnalysisAnimation();
         }
 
-        public void StartReactionIdentification()
+        public void StartRI()
         {
             if (_currentPanel != null)
                 _currentPanel.SetActive(false);

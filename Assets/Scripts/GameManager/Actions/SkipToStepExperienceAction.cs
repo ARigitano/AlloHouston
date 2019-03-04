@@ -10,7 +10,7 @@ namespace CRI.HelloHouston.Experience.Actions
         {
             MAIAManager synchronizer = controller as MAIAManager;
             if (synchronizer != null)
-                synchronizer.SkipStepOne();
+                synchronizer.SkipToStep(10);
         }
     }
 }
