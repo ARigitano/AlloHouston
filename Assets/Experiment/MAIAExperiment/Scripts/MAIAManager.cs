@@ -37,7 +37,13 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// Settings of the experience.
         /// </summary>
-        public MAIASettings settings { get; private set; }
+        public MAIASettings settings
+        {
+            get
+            {
+                return (MAIASettings)xpContext.xpSettings;
+            }
+        }
         /// <summary>
         /// The ongoing reactions.
         /// </summary>
@@ -51,7 +57,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public List<Particle> generatedParticles { get; private set; }
 
-        public Dictionary<string, int> step = new Dictionary<string, int>
+        private Dictionary<string, int> _steps = new Dictionary<string, int>
         {
             { "MO", 1 },
             { "Password", 2 },
@@ -59,7 +65,6 @@ namespace CRI.HelloHouston.Experience.MAIA
             { "AMO", 1 },
             { "RI", 6 },
         };
-
         private System.Random _rand;
 
         #region GameMasterActions
@@ -96,7 +101,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                 _hologramFeynman.ResetPositions();
         }
 
-        internal void LaunchVictory()
+        internal void OnRISuccess()
         {
             topScreen.Victory();
             tabletScreen.Victory();
@@ -145,35 +150,23 @@ namespace CRI.HelloHouston.Experience.MAIA
         }
 
         #endregion
-
-
-        //Exile loading screen
-
-        /// <summary>
-        /// Tells the tablet that the experiment has finished loading.
-        /// </summary>
-        public void LoadingBarFinished()
-        {
-            tabletScreen.WaitingConfirmation();
-        }
-
         /// <summary>
         /// Activates the manual override panel of the tablet.
         /// </summary>
         public void OnLoadingSuccess()
         {
-            tabletScreen.ManualOverride();
+            tabletScreen.StartMO();
         }
 
         public void OnMOSuccess()
         {
-            AdvanceStep(step["MO"]);
+            AdvanceStep(_steps["MO"]);
             topScreen.InitPasswordInput();
         }
 
         public void OnPasswordSuccess()
         {
-            AdvanceStep(step["Password"]);
+            AdvanceStep(_steps["Password"]);
             hologramTube.ActivateHologram(true);
             topScreen.StartPI();
             tabletScreen.StartPI();
@@ -181,9 +174,9 @@ namespace CRI.HelloHouston.Experience.MAIA
 
         public void OnPISuccess()
         {
-            AdvanceStep(step["PI"]);
+            AdvanceStep(_steps["PI"]);
             topScreen.StartAnalysisAnimation();
-            tabletScreen.StartAnalysisAnimation();
+            tabletScreen.HideAllPanels();
             hologramTube.gameObject.SetActive(false);
         }
 
@@ -194,7 +187,7 @@ namespace CRI.HelloHouston.Experience.MAIA
 
         public void OnAMOSuccess()
         {
-            AdvanceStep(step["AMO"]);
+            AdvanceStep(_steps["AMO"]);
             topScreen.StartRI();
             tabletScreen.StartRI();
             _hologramFeynman.gameObject.SetActive(true);
@@ -230,7 +223,6 @@ namespace CRI.HelloHouston.Experience.MAIA
             topScreen.tabletScreen = tabletScreen;
             _hologramFeynman = GetElement<MAIAHologramFeynman>();
             _bottomScreen = GetElement<MAIABottomScreen>();
-            settings = (MAIASettings)xpContext.xpSettings;
         }
     }
 }

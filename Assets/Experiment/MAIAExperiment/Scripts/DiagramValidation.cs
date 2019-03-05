@@ -13,7 +13,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// The tabletScreen script.
         /// </summary>
         [SerializeField]
-        private MAIATabletScreen _tablet = null;
+        private MAIAReactionPanel _reactionPanel = null;
         /// <summary>
         /// A blue shader for not counted diagrams.
         /// </summary>
@@ -38,7 +38,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             feynmanBox.screenRenderer.material = _whiteShader;
             feynmanBox.displayLine = false;
             Texture diagram = feynmanBox.contentRenderer.material.mainTexture;
-            _tablet.selectedDiagram = diagram;
+            _reactionPanel.selectedDiagram = diagram;
         }
 
         void OnTriggerEnter(Collider other)

@@ -161,8 +161,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             _infoMessage.SetActive(true);
             _maiaTopScreen.maiaManager.OnLoadingSuccess();
         }
-
-        //TODO: remove when windows class integrated
+        
         /// <summary>
         /// Displays the manual override screen when the start button is pressed.
         /// </summary>

@@ -7,6 +7,7 @@ using CRI.HelloHouston.Audio;
 using CRI.HelloHouston.Translation;
 using UnityEngine.SceneManagement;
 using CRI.HelloHouston.Settings;
+using CRI.HelloHouston.GameElements;
 
 namespace CRI.HelloHouston.Experience
 {
@@ -77,6 +78,10 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         public XPManager[] xpManagers { get; private set; }
         /// <summary>
+        /// The communication screen.
+        /// </summary>
+        private UIComScreen _comScreen;
+        /// <summary>
         /// All the available game actions.
         /// </summary>
         public GameAction[] actions
@@ -137,6 +142,8 @@ namespace CRI.HelloHouston.Experience
             xpManagers = xpContexts.Select(xpContext => xpContext.InitManager(logManager.logExperienceController, room.GetZones().Where(zone => zone.xpContext == xpContext).ToArray(), s_randomSeed)).ToArray();
             _startTime = Time.time;
             logGeneralController.AddLog(string.Format("Random Seed: {0}", randomSeed), this, Log.LogType.Important);
+            _comScreen = room.GetComponentInChildren<UIComScreen>();
+            _comScreen.Init(this, xpManagers);
             return xpManagers;
         }
 
