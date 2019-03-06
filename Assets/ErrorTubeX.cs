@@ -3,27 +3,42 @@ using System.Collections.Generic;
 using UnityEngine;
 using CRI.HelloHouston.Experience.MAIA;
 
+
 namespace Valve.VR.InteractionSystem
 {
-    public class SnapToSlot : MonoBehaviour
+    public class ErrorTubeX : MonoBehaviour
     {
 
         [SerializeField]
         private Transform _originalSlot, _destinationSlot;
         [SerializeField]
         private MaiaHologramTest _station;
+        [SerializeField]
+        private Material _available, _notAvailable;
        
 
         // Start is called before the first frame update
         void Start()
         {
-            //_station.tubes 
+            _station.tubes.Add(this);
         }
 
         // Update is called once per frame
         void Update()
         {
 
+        }
+
+        public void IsAvailable()
+        {
+            gameObject.GetComponent<MeshRenderer>().material = _available;
+            gameObject.GetComponent<CapsuleCollider>().enabled = true;
+        }
+
+        public void IsNotAvailable()
+        {
+            gameObject.GetComponent<MeshRenderer>().material = _notAvailable;
+            gameObject.GetComponent<CapsuleCollider>().enabled = false;
         }
 
         private void OnDetachedFromHand(Hand hand)
@@ -45,7 +60,7 @@ namespace Valve.VR.InteractionSystem
 
         private void OnTriggerEnter(Collider other)
         {
-            if(other.tag == "TubeDock" && other.transform.childCount == 0 && !_station.isLoading)
+            if(other.tag == "TubeDock" && other.transform.childCount == 0)
             {
                 _destinationSlot = other.transform;
             }
