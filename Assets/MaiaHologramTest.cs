@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Valve.VR.InteractionSystem;
 
-namespace CRI.HelloHouston.Experience.MAIA
+namespace CRI.HelloHouston.Experience
 {
     public class MaiaHologramTest : XPHologramElement
     {
@@ -16,7 +16,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             LoadingFinished();
         }
 
-        public void LoadingTube()
+        public void LoadingTube(XPManager experience, XPWallTopZone topZone)
         {
             foreach(ErrorTubeX tube in tubes)
             {

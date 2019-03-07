@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using CRI.HelloHouston.Experience.MAIA;
+using CRI.HelloHouston.Experience;
 
 
 namespace Valve.VR.InteractionSystem
@@ -15,6 +16,7 @@ namespace Valve.VR.InteractionSystem
         private MaiaHologramTest _station;
         [SerializeField]
         private Material _available, _notAvailable;
+        public XPManager experience;
        
 
         // Start is called before the first frame update
@@ -48,7 +50,7 @@ namespace Valve.VR.InteractionSystem
                 gameObject.transform.parent = _destinationSlot;
                 gameObject.transform.position = _destinationSlot.position;
                 gameObject.transform.rotation = _destinationSlot.rotation;
-                _station.LoadingTube();
+                _station.LoadingTube(experience, _destinationSlot.GetComponent<TubeSlot>().topZone);
             } 
             else
             {
