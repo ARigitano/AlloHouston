@@ -24,18 +24,6 @@ namespace CRI.HelloHouston.Experience
     [System.Serializable]
     public abstract class XPManager : MonoBehaviour, ILangManager
     {
-        protected struct Step
-        {
-            public int value;
-            public Action action;
-
-            public Step(int value, Action action)
-            {
-                this.value = value;
-                this.action = action;
-            }
-        }
-
         [System.Serializable]
         public struct ElementInfo
         {
@@ -51,10 +39,8 @@ namespace CRI.HelloHouston.Experience
             }
         }
         public delegate void XPStateEvent(XPState state);
-        public delegate void XPStepEvent(int step);
         public delegate void XPManagerEvent(XPManager synchronizer);
         public XPStateEvent onStateChange;
-        public XPStepEvent onStepChange;
         public static XPManagerEvent onActivation;
         public static XPManagerEvent onEnd;
         /// <summary>
@@ -79,26 +65,6 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         public XPState state { get; protected set; }
 
-        private int _currentStep;
-        /// <summary>
-        /// The current step of the experiment. The value should be lower than the max number of step in the context settings.
-        /// </summary>
-        public int currentStep
-        {
-            get
-            {
-                if (_currentStep > xpContext.xpSettings.steps)
-                    _currentStep = xpContext.xpSettings.steps;
-                return _currentStep;
-            }
-            protected set
-            {
-                _currentStep = value > xpContext.xpSettings.steps ? xpContext.xpSettings.steps : value;
-                if (onStepChange != null)
-                    onStepChange(_currentStep);
-            }
-        }
-
         public LogExperienceController logController { get; protected set; }
 
         public ExperienceActionController actionController { get; protected set; }
@@ -111,6 +77,8 @@ namespace CRI.HelloHouston.Experience
                 return langManager.textManager;
             }
         }
+
+        public XPStepManager stepManager { get; protected set; }
 
         public int randomSeed { get; private set; }
 
@@ -160,12 +128,13 @@ namespace CRI.HelloHouston.Experience
             PreReset();
             var previousState = state;
             state = XPState.Visible;
+            stepManager.currentStepValue = 0;
             if (onStateChange != null && previousState != state)
                 onStateChange(state);
             logController.AddLog("Reset", xpContext, Log.LogType.Automatic);
             foreach (var element in elements)
             {
-                element.xpElement.OnReset ();
+                element.xpElement.OnReset();
             }
             PostReset();
         }
@@ -289,17 +258,17 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         public void Show(VirtualWallTopZone wallTopZone)
         {
-            PreShow(wallTopZone, elements.ToArray());
             this.wallTopZone = wallTopZone;
             wallTopZone.Place(xpContext.xpWallTopZone, xpContext);
             InitZone(wallTopZone);
+            PreShow(wallTopZone, elements.ToArray());
             state = XPState.Visible;
             if (onStateChange != null)
                 onStateChange(state);
             logController.AddLog("Show", xpContext, Log.LogType.Automatic);
             foreach (var element in elements)
             {
-                element.xpElement.OnShow();
+                element.xpElement.OnShow(stepManager.currentStepValue);
             }
             PostShow(wallTopZone, elements.ToArray());
         }
@@ -322,11 +291,15 @@ namespace CRI.HelloHouston.Experience
         protected virtual ElementInfo[] InitZone(VirtualZone zone)
         {
             var res = zone.InitAll(this).Select(xpElement => new ElementInfo(xpElement, xpElement.virtualElement, zone));
+            foreach (var element in res)
+            {
+                element.xpElement.OnInit(this, randomSeed);
+            }
             elements.AddRange(res);
             return res.ToArray();
         }
 
-        protected virtual ElementInfo[] InitZones(VirtualZone[] zones)
+        protected virtual ElementInfo[] InitZones(IEnumerable<VirtualZone> zones)
         {
             var res = zones.SelectMany(zone => InitZone(zone));
             return res.ToArray();
@@ -341,12 +314,11 @@ namespace CRI.HelloHouston.Experience
             _stateOnActivation = stateOnActivation;
             actionController = new ExperienceActionController(this);
             langManager = new LangManager(xpContext.xpGroup.settings.langSettings);
+            stepManager = new XPStepManager(xpContext.xpSettings.steps);
             this.logController = logController;
             if (logController != null)
                 logController.AddLog("Ready", xpContext, Log.LogType.Automatic);
-            ElementInfo[] zoneInfo = InitZones(zones);
-            foreach (var element in elements)
-                element.xpElement.OnInit(this, randomSeed);
+            ElementInfo[] zoneInfo = InitZones(zones.Where(zone => !zone.switchableZone));
             PostInit(xpContext, zoneInfo, logController, randomSeed, stateOnActivation);
         }
 
@@ -358,19 +330,11 @@ namespace CRI.HelloHouston.Experience
         /// Called after the initialization.
         /// </summary>
         protected virtual void PostInit(XPContext xpContext, ElementInfo[] info, LogExperienceController logController, int randomSeed, XPState stateOnActivation) { }
-        /// <summary>
-        /// Advance the steps by a set number (default = 1).
-        /// </summary>
-        /// <param name="step">The number of steps to advance to.</param>
-        public virtual void AdvanceStep(int step = 1)
-        {
-            currentStep += step;
-        }
 
         public virtual void SkipToStep(int step)
         {
             logController.AddLog(string.Format("Skip to step {0}", step), xpContext, Log.LogType.Automatic);
-            currentStep = step;
+            stepManager.currentStepValue = step;
         }
 
         public virtual void PlaySound(PlayableSound sound)

@@ -49,20 +49,20 @@ namespace CRI.HelloHouston.Calibration
         /// Initializes all the elements defined in the current XPZone.
         /// </summary>
         /// <returns>All the elements, initialized.</returns>
-        public virtual IEnumerable<XPElement> InitAll(XPManager manager)
+        public virtual XPElement[] InitAll(XPManager manager)
         {
             IEnumerable<XPElement> res = virtualElements.Where(x => x.xpContext != null).Select(x => x.Init(manager));
             this.manager = manager;
-            return res;
+            return res.ToArray();
         }
 
         /// <summary>
         /// Clean all virtual elements of this VirtualZone.
         /// <return>All the cleaned elements.</return> 
         /// </summary>
-        public virtual IEnumerable<XPElement> CleanAll()
+        public virtual XPElement[] CleanAll()
         {
-            return virtualElements.Select(x => x.Clean());
+            return virtualElements.Select(x => x.Clean()).ToArray();
         }
 
         protected abstract void AddXPZone(XPZone xpZone, XPContext xpContext);

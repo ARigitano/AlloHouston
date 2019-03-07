@@ -32,25 +32,25 @@ namespace CRI.HelloHouston.GameElements
         public void OnEnable()
         {
             if (_xpManager != null)
-                _xpManager.onStepChange += OnStepChange;
+                _xpManager.stepManager.onStepChange += OnStepChange;
         }
 
         public void OnDisable()
         {
             if (_xpManager != null)
-                _xpManager.onStepChange -= OnStepChange;
+                _xpManager.stepManager.onStepChange -= OnStepChange;
         }
 
         public void Init(XPManager xpManager)
         {
             int steps = xpManager.xpContext.xpSettings.steps;
             _xpManager = xpManager;
-            _xpManager.onStepChange += OnStepChange;
+            _xpManager.stepManager.onStepChange += OnStepChange;
             _fillItems = new CanvasGroup[steps];
             _xpNameText.text = xpManager.xpContext.xpGroup.experimentName;
             for (int i = 0; i < steps; i++)
                 _fillItems[i] = Instantiate(_fillItemPrefab, _fillGroup);
-            OnStepChange(_xpManager.currentStep);
+            OnStepChange(_xpManager.stepManager.currentStepValue);
         }
 
         public void OnStepChange(int step)

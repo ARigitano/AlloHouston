@@ -124,7 +124,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// Displays password panel adter override button has been clicked.
         /// </summary>
-        public void OnOverrideButtonClicked()
+        public void OnMOClick()
         {
             maiaManager.OnMOSuccess();
             StartCoroutine(WaitGeneric(0.2f, () =>
@@ -139,10 +139,10 @@ namespace CRI.HelloHouston.Experience.MAIA
             this.maiaManager = (MAIAManager)manager;
         }
 
-        public override void OnActivation()
+        public override void OnShow(int step)
         {
             topScreen = maiaManager.topScreen;
-            _passwordPanel.Init(topScreen.manualOverrideAccessScreen, this.maiaManager.settings.password);
+            _passwordPanel.Init(topScreen.manualOverrideAccessScreen, maiaManager.settings.password);
             _particlesPanel.Init(maiaManager, topScreen.particleIdentificationScreen);
             _reactionPanel.Init(topScreen, maiaManager);
             _hologramTube = maiaManager.hologramTube;

@@ -187,9 +187,9 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// Effect when the experiment is activated the first time.
         /// </summary>
-        public override void OnShow()
+        public override void OnShow(int step)
         {
-            base.OnActivation();
+            base.OnShow(step);
             StartManualOverride();
         }
     }

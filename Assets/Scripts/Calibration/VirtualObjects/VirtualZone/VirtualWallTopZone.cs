@@ -61,7 +61,7 @@ namespace CRI.HelloHouston.Calibration
             }
         }
 
-        public override IEnumerable<XPElement> CleanAll()
+        public override XPElement[] CleanAll()
         {
             var res = base.CleanAll();
             if (_leftSpeaker != null)

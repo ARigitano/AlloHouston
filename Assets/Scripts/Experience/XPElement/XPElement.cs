@@ -69,7 +69,7 @@ namespace CRI.HelloHouston.Experience
 
         public virtual void OnHide() { }
 
-        public virtual void OnShow() { }
+        public virtual void OnShow(int currentStep) { }
 
         public virtual void OnReset() { }
     }

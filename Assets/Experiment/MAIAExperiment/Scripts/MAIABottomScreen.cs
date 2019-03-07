@@ -45,6 +45,9 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void DisplayInteraction()
         {
+            Debug.Log(maiaManager);
+            Debug.Log(maiaManager.selectedReaction);
+            Debug.Log(maiaManager.selectedReaction.entries);
             foreach(EntriesSprite entrySprite in interactionDiagrams)
             {
                 if(maiaManager.selectedReaction.entries == entrySprite.type)
@@ -55,9 +58,11 @@ namespace CRI.HelloHouston.Experience.MAIA
             }
         }
 
-        private void Init(MAIAManager synchronizer)
+        private void Init(MAIAManager manager)
         {
-            maiaManager = synchronizer;
+            Debug.Log(manager);
+            maiaManager = manager;
+            Debug.Log(maiaManager);
         }
 
         public override void OnInit(XPManager manager, int randomSeed)
