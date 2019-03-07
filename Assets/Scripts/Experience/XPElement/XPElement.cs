@@ -56,7 +56,7 @@ namespace CRI.HelloHouston.Experience
 
         public virtual void Dismiss()
         {
-            Destroy(gameObject);
+            Destroy(this);
         }
 
         public virtual void OnSuccess() { }

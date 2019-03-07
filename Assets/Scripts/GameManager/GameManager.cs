@@ -145,6 +145,12 @@ namespace CRI.HelloHouston.Experience
             return _mainSettings.hints.Select(hint => new GameHint(hint, this)).Concat(xpManagers.Where(x => x.active).SelectMany(x => x.xpContext.hints)).ToArray();
         }
 
+        public void LoadXP(XPManager manager, VirtualWallTopZone zone)
+        {
+            zone.manager.Hide();
+            manager.Show(zone);
+        }
+
         public void SendHintToPlayers(string hint)
         {
             logGeneralController.AddLog(string.Format("Hint sent to players: \"{0}\"", hint), this, Log.LogType.Automatic);

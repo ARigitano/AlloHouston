@@ -1,5 +1,6 @@
 ﻿using CRI.HelloHouston.Experience;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -25,6 +26,10 @@ namespace CRI.HelloHouston.Calibration
         /// </summary>
         public XPContext xpContext { get; protected set; }
         /// <summary>
+        /// The manager currently on this virtualZone.
+        /// </summary>
+        public XPManager manager { get; protected set; }
+        /// <summary>
         /// Gets all the virtual elements inside the zone.
         /// </summary>
         public abstract VirtualElement[] virtualElements { get; }
@@ -44,19 +49,20 @@ namespace CRI.HelloHouston.Calibration
         /// Initializes all the elements defined in the current XPZone.
         /// </summary>
         /// <returns>All the elements, initialized.</returns>
-        public virtual XPElement[] InitAll(XPManager manager)
+        public virtual IEnumerable<XPElement> InitAll(XPManager manager)
         {
-            XPElement[] res = virtualElements.Where(x => x.xpContext != null).Select(x => x.Init(manager)).ToArray();
+            IEnumerable<XPElement> res = virtualElements.Where(x => x.xpContext != null).Select(x => x.Init(manager));
+            this.manager = manager;
             return res;
         }
 
         /// <summary>
         /// Clean all virtual elements of this VirtualZone.
+        /// <return>All the cleaned elements.</return> 
         /// </summary>
-        public virtual void CleanAll()
+        public virtual IEnumerable<XPElement> CleanAll()
         {
-            foreach (var virtualElement in virtualElements)
-                virtualElement.Clean();
+            return virtualElements.Select(x => x.Clean());
         }
 
         protected abstract void AddXPZone(XPZone xpZone, XPContext xpContext);

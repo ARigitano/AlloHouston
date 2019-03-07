@@ -229,7 +229,7 @@ namespace CRI.HelloHouston.Experience
         {
             PreHide();
             if (this.wallTopZone != null)
-                wallTopZone.CleanAll();
+                CleanZone(wallTopZone);
             state = XPState.Hidden;
             if (onStateChange != null)
                 onStateChange(state);
@@ -258,6 +258,7 @@ namespace CRI.HelloHouston.Experience
             PreShow(wallTopZone, elements.ToArray());
             this.wallTopZone = wallTopZone;
             wallTopZone.Place(xpContext.xpWallTopZone, xpContext);
+            InitZone(wallTopZone);
             state = XPState.Visible;
             if (onStateChange != null)
                 onStateChange(state);
@@ -277,6 +278,12 @@ namespace CRI.HelloHouston.Experience
         /// Called after the state changes to the visible state.
         /// </summary>
         protected virtual void PostShow(VirtualWallTopZone wallTopZone, ElementInfo[] info) { }
+
+        protected virtual void CleanZone(VirtualZone zone)
+        {
+            IEnumerable<XPElement> res = zone.CleanAll().ToList();
+            elements.RemoveAll(x => res.Contains(x.xpElement));
+        }
 
         protected virtual ElementInfo[] InitZone(VirtualZone zone)
         {

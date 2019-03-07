@@ -1,5 +1,6 @@
 ﻿using CRI.HelloHouston.Audio;
 using CRI.HelloHouston.Experience;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace CRI.HelloHouston.Calibration
@@ -60,13 +61,14 @@ namespace CRI.HelloHouston.Calibration
             }
         }
 
-        public override void CleanAll()
+        public override IEnumerable<XPElement> CleanAll()
         {
-            base.CleanAll();
+            var res = base.CleanAll();
             if (_leftSpeaker != null)
             _leftSpeaker.StopAll();
             if (_leftSpeaker != null)
             _rightSpeaker.StopAll();
+            return res;
         }
 
         public VirtualElement wallTopLeftVirtualElement;
