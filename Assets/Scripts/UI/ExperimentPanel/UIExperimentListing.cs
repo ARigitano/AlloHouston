@@ -115,7 +115,7 @@ namespace CRI.HelloHouston.Calibration.UI
             bool emptyPanel = _experimentPanels.Any(panel => panel.currentContext == null);
             _nextButton.interactable = !_experimentTotalPanel.overflow && !emptyPanel;
             if (_nextButton.interactable)
-                _nextObject = new RoomXPPair(_currentRoom, _experimentPanels.Select(x => x.currentContext).ToArray(), _experimentPanels.Select(x => x.start).ToArray());
+                _nextObject = new RoomSettings(_currentRoom, _experimentPanels.Select(x => x.currentContext).ToArray(), _experimentPanels.Select(x => x.start).ToArray());
         }
 
         public override void Init(object obj)

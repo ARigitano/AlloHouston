@@ -69,24 +69,24 @@ namespace CRI.HelloHouston.Experience.UI
 
         public override void Init(object obj)
         {
-            var rxpp = (RoomXPPair)obj;
+            var rxpp = (RoomSettings)obj;
             Init(rxpp);
         }
 
-        private void Init(RoomXPPair rxpp)
+        private void Init(RoomSettings rst)
         {
             GameManager gameManager = GameManager.instance;
             XPManager[] synchronizers;
-            Debug.Log(rxpp.seed);
-            if (rxpp.seed <= 0)
-                synchronizers = gameManager.InitGame(rxpp.xpContexts, rxpp.vroom);
+            Debug.Log(rst.seed);
+            if (rst.seed <= 0)
+                synchronizers = gameManager.InitGame(rst.xpContexts, rst.vroom, rst.timeEstimate);
             else
-                synchronizers = gameManager.InitGame(rxpp.xpContexts, rxpp.vroom, rxpp.seed);
+                synchronizers = gameManager.InitGame(rst.xpContexts, rst.vroom, rst.timeEstimate, rst.seed);
             if (_player != null)
                 _player.SetActive(true);
             if (_calibrationPlayer != null)
                 _calibrationPlayer.SetActive(false);
-            var cameras = _player.GetComponentsInChildren<Camera>().Where(x => x.tag == "DisplayCamera").Concat(rxpp.vroom.GetComponentsInChildren<Camera>(true).Where(x => x.tag == "DisplayCamera"));
+            var cameras = _player.GetComponentsInChildren<Camera>().Where(x => x.tag == "DisplayCamera").Concat(rst.vroom.GetComponentsInChildren<Camera>(true).Where(x => x.tag == "DisplayCamera"));
             _cameraDisplay.Init(cameras.ToArray());
 
             // Needs to be initialized before the start of the game.
@@ -94,7 +94,7 @@ namespace CRI.HelloHouston.Experience.UI
             _hintDisplay.Init(gameManager);
             _timerDisplay.Init(gameManager);
 
-            gameManager.StartGame(rxpp.starting);
+            gameManager.StartGame(rst.starting);
             
             //Needs to be initialized after the start of the game.
             _experienceDisplay.Init(synchronizers);

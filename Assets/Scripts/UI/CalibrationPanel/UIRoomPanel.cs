@@ -22,7 +22,7 @@ namespace CRI.HelloHouston.Calibration.UI {
 
         public override void Init(object obj)
         {
-            var rxpp = (RoomXPPair)obj;
+            var rxpp = (RoomSettings)obj;
             var zoneManager = new ZoneManager(_laserClicker);
             VirtualRoom vroom = rxpp.vroom;
             XPContext[] xpContexts = rxpp.xpContexts;

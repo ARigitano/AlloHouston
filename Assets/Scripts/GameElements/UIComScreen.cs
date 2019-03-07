@@ -15,6 +15,9 @@ namespace CRI.HelloHouston.GameElements
         [SerializeField]
         [Tooltip("The transform of the tube group.")]
         public Transform _tubeGroupTransform = null;
+        [SerializeField]
+        [Tooltip("Slider representing the time left.")]
+        public Slider _timeSlider;
 
         private UIComTube[] _tubes;
         private GameManager _gameManager;
@@ -34,10 +37,13 @@ namespace CRI.HelloHouston.GameElements
         {
             if (_gameManager != null)
             {
+                int timeEstimate = 60 * _gameManager.xpTimeEstimate;
                 float timeSinceGameStart = _gameManager.timeSinceGameStart;
+                int time = timeEstimate - (int)timeSinceGameStart;
                 _timerText.text = string.Format("{0:00}:{1:00}",
-                    (timeSinceGameStart / 60) % 60,
-                    timeSinceGameStart % 60);
+                    (time / 60) % 60,
+                    time % 60);
+                _timeSlider.value = timeSinceGameStart / (float)timeEstimate;
             }
         } 
     }
