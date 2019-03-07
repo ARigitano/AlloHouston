@@ -24,6 +24,18 @@ namespace CRI.HelloHouston.Experience
     [System.Serializable]
     public abstract class XPManager : MonoBehaviour, ILangManager
     {
+        protected struct Step
+        {
+            public int value;
+            public Action action;
+
+            public Step(int value, Action action)
+            {
+                this.value = value;
+                this.action = action;
+            }
+        }
+
         [System.Serializable]
         public struct ElementInfo
         {
@@ -39,8 +51,10 @@ namespace CRI.HelloHouston.Experience
             }
         }
         public delegate void XPStateEvent(XPState state);
+        public delegate void XPStepEvent(int step);
         public delegate void XPManagerEvent(XPManager synchronizer);
         public XPStateEvent onStateChange;
+        public XPStepEvent onStepChange;
         public static XPManagerEvent onActivation;
         public static XPManagerEvent onEnd;
         /// <summary>
@@ -64,6 +78,26 @@ namespace CRI.HelloHouston.Experience
         /// The state of the XPSynchronizer.
         /// </summary>
         public XPState state { get; protected set; }
+
+        private int _currentStep;
+        /// <summary>
+        /// The current step of the experiment. The value should be lower than the max number of step in the context settings.
+        /// </summary>
+        public int currentStep
+        {
+            get
+            {
+                if (_currentStep > xpContext.xpSettings.steps)
+                    _currentStep = xpContext.xpSettings.steps;
+                return _currentStep;
+            }
+            protected set
+            {
+                _currentStep = value > xpContext.xpSettings.steps ? xpContext.xpSettings.steps : value;
+                if (onStepChange != null)
+                    onStepChange(_currentStep);
+            }
+        }
 
         public LogExperienceController logController { get; protected set; }
 
@@ -324,10 +358,19 @@ namespace CRI.HelloHouston.Experience
         /// Called after the initialization.
         /// </summary>
         protected virtual void PostInit(XPContext xpContext, ElementInfo[] info, LogExperienceController logController, int randomSeed, XPState stateOnActivation) { }
+        /// <summary>
+        /// Advance the steps by a set number (default = 1).
+        /// </summary>
+        /// <param name="step">The number of steps to advance to.</param>
+        public virtual void AdvanceStep(int step = 1)
+        {
+            currentStep += step;
+        }
 
         public virtual void SkipToStep(int step)
         {
             logController.AddLog(string.Format("Skip to step {0}", step), xpContext, Log.LogType.Automatic);
+            currentStep = step;
         }
 
         public virtual void PlaySound(PlayableSound sound)
@@ -342,11 +385,6 @@ namespace CRI.HelloHouston.Experience
             logController.AddLog(string.Format("Play music {0}", music), xpContext, Log.LogType.Automatic);
             if (wallTopZone != null)
                 wallTopZone.leftSpeaker.PlayMusic(music);
-        }
-
-        internal void PlayableSound(AudioSource sound)
-        {
-            throw new NotImplementedException();
         }
     }
 }

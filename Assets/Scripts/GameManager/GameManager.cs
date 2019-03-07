@@ -7,6 +7,7 @@ using CRI.HelloHouston.Audio;
 using CRI.HelloHouston.Translation;
 using UnityEngine.SceneManagement;
 using CRI.HelloHouston.Settings;
+using CRI.HelloHouston.GameElements;
 
 namespace CRI.HelloHouston.Experience
 {
@@ -77,6 +78,10 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         public XPManager[] xpManagers { get; private set; }
         /// <summary>
+        /// The communication screen.
+        /// </summary>
+        private UIComScreen _comScreen;
+        /// <summary>
         /// All the available game actions.
         /// </summary>
         public GameAction[] actions
@@ -97,13 +102,7 @@ namespace CRI.HelloHouston.Experience
             }
         }
 
-        public int xpTimeEstimate
-        {
-            get
-            {
-                return xpManagers.Sum(x => x.xpContext.xpSettings.duration);
-            }
-        }
+        public int xpTimeEstimate { get; private set; }
 
         public string sourceName
         {
@@ -126,17 +125,20 @@ namespace CRI.HelloHouston.Experience
             langManager = new LangManager(_appSettings.langSettings);
         }
 
-        public XPManager[] InitGame(XPContext[] xpContexts, VirtualRoom room)
+        public XPManager[] InitGame(XPContext[] xpContexts, VirtualRoom room, int timeEstimate)
         {
-            return InitGame(xpContexts, room, UnityEngine.Random.Range(0, int.MaxValue));
+            return InitGame(xpContexts, room, timeEstimate, UnityEngine.Random.Range(0, int.MaxValue));
         }
 
-        public XPManager[] InitGame(XPContext[] xpContexts, VirtualRoom room, int seed)
+        public XPManager[] InitGame(XPContext[] xpContexts, VirtualRoom room, int timeEstimate, int seed)
         {
             s_randomSeed = seed;
+            this.xpTimeEstimate = timeEstimate;
             xpManagers = xpContexts.Select(xpContext => xpContext.InitManager(logManager.logExperienceController, room.GetZones().Where(zone => zone.xpContext == xpContext).ToArray(), s_randomSeed)).ToArray();
             _startTime = Time.time;
             logGeneralController.AddLog(string.Format("Random Seed: {0}", randomSeed), this, Log.LogType.Important);
+            _comScreen = room.GetComponentInChildren<UIComScreen>();
+            _comScreen.Init(this, xpManagers);
             return xpManagers;
         }
 

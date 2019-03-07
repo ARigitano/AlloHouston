@@ -77,7 +77,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             yield return new WaitForSeconds(_analysisAnimationStepDuration);
             _errorPopup.gameObject.SetActive(true);
             yield return new WaitForSeconds(_analysisAnimationStepDuration);
-            _maiaTopScreen.maiaManager.StartAdvancedManualOverride();
+            _maiaTopScreen.maiaManager.OnAnalysisAnimationFinished();
             _animationStarted = false;
         }
 

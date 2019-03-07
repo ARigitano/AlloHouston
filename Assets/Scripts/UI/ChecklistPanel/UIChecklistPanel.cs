@@ -35,7 +35,7 @@ namespace CRI.HelloHouston.Calibration.UI
 
         public override void Init(object obj)
         {
-            Init((RoomXPPair)obj);
+            Init((RoomSettings)obj);
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace CRI.HelloHouston.Calibration.UI
         /// </summary>
         /// <param name="vroom"></param>
         /// <param name="calibrationManager"></param>
-        public void Init(RoomXPPair rxpp)
+        public void Init(RoomSettings rxpp)
         {
             string[] checklist = rxpp.vroom.checklist.Concat(rxpp.xpContexts.SelectMany(x => x.xpSettings.checklist)).ToArray();
             foreach (string check in checklist)

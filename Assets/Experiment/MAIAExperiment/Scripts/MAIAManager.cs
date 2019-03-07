@@ -37,7 +37,13 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// Settings of the experience.
         /// </summary>
-        public MAIASettings settings { get; private set; }
+        public MAIASettings settings
+        {
+            get
+            {
+                return (MAIASettings)xpContext.xpSettings;
+            }
+        }
         /// <summary>
         /// The ongoing reactions.
         /// </summary>
@@ -51,6 +57,14 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public List<Particle> generatedParticles { get; private set; }
 
+        private Dictionary<string, int> _steps = new Dictionary<string, int>
+        {
+            { "MO", 1 },
+            { "Password", 2 },
+            { "PI", 6 },
+            { "AMO", 1 },
+            { "RI", 6 },
+        };
         private System.Random _rand;
 
         #region GameMasterActions
@@ -58,15 +72,19 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// Skips to the second part od the experiment.
         /// </summary>
-        public void SkipStepOne()
+        public override void SkipToStep(int step)
         {
-            if (generatedParticles.Count == 0)
-                GenerateParticles();
-            hologramTube.gameObject.SetActive(false);
-            _hologramFeynman.gameObject.SetActive(false);
-            tabletScreen.SkipStepOne();
-            topScreen.SkipStepOne();
-            
+            base.SkipToStep(step);
+            if (step > 9)
+            {
+                AdvanceStep(step);
+                if (generatedParticles.Count == 0)
+                    GenerateParticles();
+                hologramTube.gameObject.SetActive(false);
+                _hologramFeynman.gameObject.SetActive(false);
+                tabletScreen.SkipToSecondPart();
+                topScreen.SkipToSecondPart();
+            }
         }
 
         internal void StartHologramTubeAnimation()
@@ -83,7 +101,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                 _hologramFeynman.ResetPositions();
         }
 
-        internal void LaunchVictory()
+        internal void OnRISuccess()
         {
             topScreen.Victory();
             tabletScreen.Victory();
@@ -132,75 +150,49 @@ namespace CRI.HelloHouston.Experience.MAIA
         }
 
         #endregion
-
-
-        //Exile loading screen
-
-        /// <summary>
-        /// Tells the tablet that the experiment has finished loading.
-        /// </summary>
-        public void LoadingBarFinished()
-        {
-            tabletScreen.WaitingConfirmation();
-        }
-
-        public void StartParticleIdentification()
-        {
-            hologramTube.ActivateHologram(true);
-            topScreen.StartParticleIdentification();
-            tabletScreen.StartParticleIdentification();
-        }
-
         /// <summary>
         /// Activates the manual override panel of the tablet.
         /// </summary>
-        public void ActivateManualOverride()
+        public void OnLoadingSuccess()
         {
-            tabletScreen.ManualOverride();
+            tabletScreen.StartMO();
         }
 
-        public void StartAnalysisAnimation()
-        {     
+        public void OnMOSuccess()
+        {
+            AdvanceStep(_steps["MO"]);
+            topScreen.InitPasswordInput();
+        }
+
+        public void OnPasswordSuccess()
+        {
+            AdvanceStep(_steps["Password"]);
+            hologramTube.ActivateHologram(true);
+            topScreen.StartPI();
+            tabletScreen.StartPI();
+        }
+
+        public void OnPISuccess()
+        {
+            AdvanceStep(_steps["PI"]);
             topScreen.StartAnalysisAnimation();
-            tabletScreen.StartAnalysisAnimation();
+            tabletScreen.HideAllPanels();
             hologramTube.gameObject.SetActive(false);
         }
 
-        public void StartAdvancedManualOverride()
+        public void OnAnalysisAnimationFinished()
         {
-            tabletScreen.StartAdvancedManualOverride();
+            tabletScreen.StartAMO();
         }
 
-        public void StartReactionIdentification()
+        public void OnAMOSuccess()
         {
-            topScreen.StartReactionIdentification();
-            tabletScreen.StartReactionIdentification();
+            AdvanceStep(_steps["AMO"]);
+            topScreen.StartRI();
+            tabletScreen.StartRI();
             _hologramFeynman.gameObject.SetActive(true);
             _hologramFeynman.FillBoxesDiagrams();
         }
-
-
-        //Reaction identification screen
-
-        //TODO: obsolete second part of experiment?
-        /// <summary>
-        /// Converts the produced particles into a string.
-        /// </summary
-        /*private void GenerateParticleString()
-        {
-            CorrectParticle();
-        }*/
-
-        //TODO: obsolete second part experiment?
-        /// <summary>
-        /// Tells the main screen that the correct combination of particles has been entered.
-        /// </summary>
-        public void CorrectParticle()
-        {
-            //_topScreen.reactionIdentification():
-            //_holograms[0].DisplaySplines();
-        }
-
 
         protected override void PreShow(VirtualWallTopZone wallTopZone, ElementInfo[] zones)
         {
@@ -231,7 +223,6 @@ namespace CRI.HelloHouston.Experience.MAIA
             topScreen.tabletScreen = tabletScreen;
             _hologramFeynman = GetElement<MAIAHologramFeynman>();
             _bottomScreen = GetElement<MAIABottomScreen>();
-            settings = (MAIASettings)xpContext.xpSettings;
         }
     }
 }

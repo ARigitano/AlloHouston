@@ -118,7 +118,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             _interactable = false;
             yield return new WaitForSeconds(2);
             _popupAccessGranted.SetActive(false);
-            _maiaTopScreen.maiaManager.StartParticleIdentification();
+            _maiaTopScreen.maiaManager.OnPasswordSuccess();
         }
 
         /// <summary>
@@ -159,10 +159,9 @@ namespace CRI.HelloHouston.Experience.MAIA
             _errorMessage.SetActive(true);
             yield return new WaitForSeconds(_waitTimeBeforeInfoMessage);
             _infoMessage.SetActive(true);
-            _maiaTopScreen.maiaManager.ActivateManualOverride();
+            _maiaTopScreen.maiaManager.OnLoadingSuccess();
         }
-
-        //TODO: remove when windows class integrated
+        
         /// <summary>
         /// Displays the manual override screen when the start button is pressed.
         /// </summary>
