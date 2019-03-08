@@ -42,6 +42,12 @@ namespace CRI.HelloHouston.Experience.MAIA
         [SerializeField]
         private float _analysisAnimationStepDuration = 2.0f;
 
+        private void OnDisable()
+        {
+            _animationStarted = false;
+            StopAllCoroutines();
+        }
+
         public void StartAnalysisAnimation()
         {
             if (!_animationStarted)

@@ -128,6 +128,11 @@ namespace CRI.HelloHouston.Experience.MAIA
 
         private System.Random _rand;
 
+        private void OnDisable()
+        {
+            _animationPlayedOnce = false;
+        }
+
         /// <summary>
         /// Animates the particle reaction hologram.
         /// </summary>
