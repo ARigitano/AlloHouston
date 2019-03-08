@@ -30,11 +30,11 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// The hologram Feynman of the table block.
         /// </summary>
-        private MAIAHologramFeynman _hologramFeynman;
+        public MAIAHologramFeynman hologramFeynman { get; private set; }
         /// <summary>
         /// The bottomscreen script of the experiment block.
         /// </summary>
-        private MAIABottomScreen _bottomScreen;
+        public MAIABottomScreen bottomScreen { get; private set; }
         /// <summary>
         /// Settings of the experience.
         /// </summary>
@@ -67,8 +67,6 @@ namespace CRI.HelloHouston.Experience.MAIA
         public override void SkipToStep(int step)
         {
             base.SkipToStep(step);
-            XPStepManager.StepAction stepAction = stepManager.currentStepAction;
-            stepAction.action();
         }
 
         internal void StartHologramTubeAnimation()
@@ -81,8 +79,8 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             if (hologramTube.isActiveAndEnabled)
                 hologramTube.StartAnimation();
-            if (_hologramFeynman.isActiveAndEnabled)
-                _hologramFeynman.ResetPositions();
+            if (hologramFeynman.isActiveAndEnabled)
+                hologramFeynman.ResetPositions();
         }
         #endregion
 
@@ -127,69 +125,74 @@ namespace CRI.HelloHouston.Experience.MAIA
         }
 
         #endregion
+
+        public void OnStart()
+        {
+            stepManager.SkipToStep("Start");
+            topScreen.StartLoading();
+        }
         /// <summary>
         /// Activates the manual override panel of the tablet.
         /// </summary>
         public void OnLoadingSuccess()
         {
+            stepManager.SkipToStep("MO");
             tabletScreen.StartMO();
+            topScreen.StartMO();
+            hologramFeynman.gameObject.SetActive(false);
+            hologramTube.gameObject.SetActive(false);
         }
 
         public void OnMOSuccess()
         {
-            stepManager.AdvanceStep("MO");
-            topScreen.InitPasswordInput();
+            stepManager.SkipToStep("Password");
+            topScreen.StartPassword();
+            tabletScreen.StartPassword();
+            hologramFeynman.gameObject.SetActive(false);
+            hologramTube.gameObject.SetActive(false);
         }
 
         public void OnPasswordSuccess()
         {
-            stepManager.AdvanceStep("Password");
-            hologramTube.ActivateHologram(true);
+            stepManager.SkipToStep("PI");
             topScreen.StartPI();
             tabletScreen.StartPI();
+            hologramFeynman.gameObject.SetActive(false);
+            hologramTube.gameObject.SetActive(true);
         }
 
         public void OnPISuccess()
         {
-            stepManager.AdvanceStep("PI");
+            stepManager.SkipToStep("AMO");
             topScreen.StartAnalysisAnimation();
             tabletScreen.HideAllPanels();
+            hologramFeynman.gameObject.SetActive(false);
             hologramTube.gameObject.SetActive(false);
         }
 
         public void OnAnalysisAnimationFinished()
         {
             tabletScreen.StartAMO();
+            hologramFeynman.gameObject.SetActive(false);
+            hologramTube.gameObject.SetActive(false);
         }
 
         public void OnAMOSuccess()
         {
-            stepManager.AdvanceStep("AMO");
+            stepManager.SkipToStep("RI");
             topScreen.StartRI();
             tabletScreen.StartRI();
-            _hologramFeynman.gameObject.SetActive(true);
-            _hologramFeynman.FillBoxesDiagrams();
+            hologramFeynman.gameObject.SetActive(true);
+            hologramTube.gameObject.SetActive(false);
         }
 
-        internal void OnRISuccess()
+        public void OnRISuccess()
         {
-            stepManager.AdvanceStep("RI");
+            stepManager.SkipToStep("Finish");
             topScreen.Victory();
             tabletScreen.Victory();
-        }
-
-        public XPStepManager.StepAction[] InitStepActions()
-        {
-            return new XPStepManager.StepAction[]
-            {
-                new XPStepManager.StepAction("Start", 0, OnLoadingSuccess),
-                new XPStepManager.StepAction("MO", 1, OnLoadingSuccess),
-                new XPStepManager.StepAction("Password", 2, OnMOSuccess),
-                new XPStepManager.StepAction("PI", 6, OnPasswordSuccess),
-                new XPStepManager.StepAction("AMO", 2, OnPISuccess),
-                new XPStepManager.StepAction("RI", 6, OnAMOSuccess),
-                new XPStepManager.StepAction("Finish", 0, OnRISuccess)
-            };
+            hologramFeynman.gameObject.SetActive(true);
+            hologramTube.gameObject.SetActive(false);
         }
 
 
@@ -220,6 +223,8 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             base.PostShow(wallTopZone, zones);
             hologramTube.DisplayAllSplines();
+            if (stepManager.currentStep != null && stepManager.currentStep.action != null)
+                stepManager.currentStep.action.Invoke();
         }
 
         protected override void PreInit(XPContext xpContext, LogExperienceController logController, int randomSeed, XPState stateOnActivation)
@@ -231,10 +236,9 @@ namespace CRI.HelloHouston.Experience.MAIA
         protected override void PostInit(XPContext xpContext, ElementInfo[] info, LogExperienceController logController, int randomSeed, XPState stateOnActivation)
         {
             base.PostInit(xpContext, info, logController, randomSeed, stateOnActivation);
-            stepManager.stepActions = InitStepActions();
             hologramTube = GetElement<MAIAHologramTube>();
-            _hologramFeynman = GetElement<MAIAHologramFeynman>();
-            _bottomScreen = GetElement<MAIABottomScreen>();
+            hologramFeynman = GetElement<MAIAHologramFeynman>();
+            bottomScreen = GetElement<MAIABottomScreen>();
         }
     }
 }

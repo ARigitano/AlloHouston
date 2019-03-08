@@ -78,7 +78,17 @@ namespace CRI.HelloHouston.Experience
             }
         }
 
-        public XPStepManager stepManager { get; protected set; }
+        [SerializeField]
+        [Tooltip("The step manager.")]
+        protected XPStepManager _stepManager;
+
+        public XPStepManager stepManager
+        {
+            get
+            {
+                return _stepManager;
+            }
+        }
 
         public int randomSeed { get; private set; }
 
@@ -128,7 +138,7 @@ namespace CRI.HelloHouston.Experience
             PreReset();
             var previousState = state;
             state = XPState.Visible;
-            stepManager.currentStepValue = 0;
+            stepManager.SkipToStep(0);
             if (onStateChange != null && previousState != state)
                 onStateChange(state);
             logController.AddLog("Reset", xpContext, Log.LogType.Automatic);
@@ -314,7 +324,6 @@ namespace CRI.HelloHouston.Experience
             _stateOnActivation = stateOnActivation;
             actionController = new ExperienceActionController(this);
             langManager = new LangManager(xpContext.xpGroup.settings.langSettings);
-            stepManager = new XPStepManager(xpContext.xpSettings.steps);
             this.logController = logController;
             if (logController != null)
                 logController.AddLog("Ready", xpContext, Log.LogType.Automatic);
@@ -330,11 +339,35 @@ namespace CRI.HelloHouston.Experience
         /// Called after the initialization.
         /// </summary>
         protected virtual void PostInit(XPContext xpContext, ElementInfo[] info, LogExperienceController logController, int randomSeed, XPState stateOnActivation) { }
-
-        public virtual void SkipToStep(int step)
+        
+        public virtual void SkipToStep(int stepValue)
         {
-            logController.AddLog(string.Format("Skip to step {0}", step), xpContext, Log.LogType.Automatic);
-            stepManager.currentStepValue = step;
+            if (stepManager.SkipToStep(stepValue))
+            {
+                logController.AddLogAutomatic(string.Format("Skip to step {0}", stepValue), xpContext);
+                XPStepManager.StepAction stepAction = stepManager.currentStep;
+                if (stepAction != null && stepAction.action != null)
+                    stepAction.action.Invoke();
+            }
+            else
+            {
+                logController.AddLogError(string.Format("Skip to step unsuccessful for step {0}", stepValue), xpContext);
+            }
+        }
+
+        public virtual void SkipToStep(string stepName)
+        {
+            if (stepManager.SkipToStep(stepName))
+            {
+                logController.AddLogAutomatic(string.Format("Skip to step {0}", stepName), xpContext);
+                XPStepManager.StepAction stepAction = stepManager.currentStep;
+                if (stepAction != null && stepAction.action != null)
+                    stepAction.action.Invoke();
+            }
+            else
+            {
+                logController.AddLogError(string.Format("Skip to step unsuccessful for step {0}", stepName), xpContext);
+            }
         }
 
         public virtual void PlaySound(PlayableSound sound)

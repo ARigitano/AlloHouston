@@ -85,6 +85,11 @@ namespace CRI.HelloHouston.Experience.MAIA
             _lineManager.Init(_feynmanBoxes);
         }
 
+        public override void OnShow(int currentStep)
+        {
+            FillBoxesDiagrams();
+        }
+
         public override void OnInit(XPManager manager, int randomSeed)
         {
             base.OnInit(manager, randomSeed);

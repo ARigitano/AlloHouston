@@ -43,22 +43,22 @@ namespace CRI.HelloHouston.GameElements
 
         public void Init(XPManager xpManager)
         {
-            int steps = xpManager.xpContext.xpSettings.steps;
+            int steps = xpManager.stepManager.maxStepValue;
             _xpManager = xpManager;
             _xpManager.stepManager.onStepChange += OnStepChange;
             _fillItems = new CanvasGroup[steps];
             _xpNameText.text = xpManager.xpContext.xpGroup.experimentName;
             for (int i = 0; i < steps; i++)
                 _fillItems[i] = Instantiate(_fillItemPrefab, _fillGroup);
-            OnStepChange(_xpManager.stepManager.currentStepValue);
+            OnStepChange(null, _xpManager.stepManager.currentStepValue);
         }
 
-        public void OnStepChange(int step)
+        public void OnStepChange(XPStepManager.StepAction stepAction, int stepValue)
         {
             int maxSteps = _fillItems.Length;
             for (int i = 0; i < _fillItems.Length; i++)
             {
-                _fillItems[i].alpha = i >= (maxSteps - step) ? _alphaFilledValue : _alphaEmptyValue;
+                _fillItems[i].alpha = i >= (maxSteps - stepValue) ? _alphaFilledValue : _alphaEmptyValue;
             }
         }
     }

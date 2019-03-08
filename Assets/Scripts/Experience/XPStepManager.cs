@@ -1,17 +1,21 @@
 ﻿using System;
 using System.Linq;
+using UnityEngine;
+using UnityEngine.Events;
 
 namespace CRI.HelloHouston.Experience
 {
+    [Serializable]
     public class XPStepManager
     {
+        [Serializable]
         public class StepAction
         {
             public string name;
             public int value;
-            public Action action;
+            public UnityEvent action;
 
-            public StepAction(string name, int value, Action action)
+            public StepAction(string name, int value, UnityEvent action)
             {
                 this.name = name;
                 this.value = value;
@@ -20,86 +24,109 @@ namespace CRI.HelloHouston.Experience
         }
 
         public XPStepEvent onStepChange;
-        public delegate void XPStepEvent(int step);
+        public delegate void XPStepEvent(StepAction currentStep, int currentStepValue);
 
-        public int maxSteps { get; private set; }
+        private int? _maxStepValue;
 
-        private int _currentStepValue;
+        public int maxStepValue
+        {
+            get
+            {
+                if (_maxStepValue == null)
+                {
+                    _maxStepValue = stepActions.Sum(x => x.value);
+                }
+                return _maxStepValue.Value;
+            }
+        }
+        
         /// <summary>
-        /// The current step of the experiment. The value should be lower than the max number of step in the context settings.
+        /// The current step value of the experiment. The value should be lower than the max number of step in the context settings.
         /// </summary>
         public int currentStepValue
         {
             get
             {
-                if (_currentStepValue > maxSteps)
-                    _currentStepValue = maxSteps;
-                return _currentStepValue;
-            }
-            set
-            {
-                _currentStepValue = value > maxSteps ? maxSteps : value;
-                if (onStepChange != null)
-                    onStepChange(_currentStepValue);
+                return GetCurrentStepValue();
             }
         }
 
-        public StepAction currentStepAction
+        private int _currentStepIndex;
+
+        public int currentStepIndex {
+            get
+            {
+                return _currentStepIndex;
+            }
+            private set
+            {
+                _currentStepIndex = value;
+                if (onStepChange != null)
+                    onStepChange(currentStep, currentStepValue);
+            }
+        }
+
+        public StepAction currentStep
         {
             get
             {
-                return GetCurrentStepAction();
+                return stepActions != null ? stepActions[currentStepIndex] : null;
             }
         }
 
         public StepAction[] stepActions;
 
-        public XPStepManager(int maxSteps)
-        {
-            this.maxSteps = maxSteps;
-        }
-
         /// <summary>
         /// Advance the steps by a set number (default = 1).
         /// </summary>
         /// <param name="step">The number of steps to advance to.</param>
-        public void AdvanceStep(int step = 1)
+        public void AdvanceStep(int val = 1)
         {
-            currentStepValue += step;
+            currentStepIndex = Mathf.Clamp((currentStepIndex + val), 0, stepActions.Length - 1);
         }
 
-        public void AdvanceStep(string stepName)
+        /// <summary>
+        /// Skip to the step with the name in the parameter.
+        /// </summary>
+        /// <param name="stepName">The name of the index this method will skip top</param>
+        /// <returns>True if the skip was successful, false otherwise.</returns>
+        public bool SkipToStep(string stepName)
         {
-            int count = 0;
-            bool found = false;
-            foreach (var stepAction in stepActions)
+            for (int i = 0; stepActions != null && i < stepActions.Length; i++)
             {
-                count += stepAction.value;
-                if (stepAction.name == stepName)
+                if (stepActions[i].name == stepName)
                 {
-                    found = true;
-                    break;
+                    currentStepIndex = i;
+                    return true;
                 }
             }
-            if (found)
-                currentStepValue = count;
+            return false;
         }
 
-        private StepAction GetCurrentStepAction()
+        public bool SkipToStep(int stepIndex)
         {
-            StepAction res = null;
+            if (stepActions != null && stepIndex >= 0 && stepIndex < stepActions.Length)
+            {
+                currentStepIndex = stepIndex;
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Get the sum of all the step values before the current step.
+        /// </summary>
+        /// <returns>The sum of all the step values before the current step.</returns>
+        private int GetCurrentStepValue()
+        {
             int count = 0;
             for (int i = 0; stepActions != null && i < stepActions.Length; i++)
             {
-                StepAction stepAction = stepActions[i];
-                if (count + stepAction.value > currentStepValue || (i + 1) == stepActions.Length)
-                {
-                    res = stepAction;
-                    break;
-                }
-                count += stepAction.value;
+                if (i == currentStepIndex)
+                    return count;
+                count += stepActions[i].value;
             }
-            return res;
+            return 0;
         }
     }
 }

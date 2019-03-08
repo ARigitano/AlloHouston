@@ -16,9 +16,6 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         [Tooltip("The estimated duration (in minutes) of this version of the experiment.")]
         public int duration;
-        [Tooltip("The number of steps of the context.")]
-        [Range(1, 30)]
-        public int steps;
         /// <summary>
         /// All the hints available for the experiment.
         /// </summary>

@@ -18,6 +18,12 @@ namespace CRI.HelloHouston.Experience.MAIA
         private MAIAManager _manager;
 
         private bool _isTouched;
+
+        private void OnDisable()
+        {
+            _enteredParticles.Clear();
+        }
+
         /// <summary>
         /// Clears the particles combination entered.
         /// </summary>

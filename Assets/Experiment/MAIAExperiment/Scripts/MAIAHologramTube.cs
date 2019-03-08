@@ -129,15 +129,6 @@ namespace CRI.HelloHouston.Experience.MAIA
         private System.Random _rand;
 
         /// <summary>
-        /// Activates or deactivates the hologram.
-        /// </summary>
-        /// <param name="isActivated">Is the hologram activated or deactivated?</param>
-        public void ActivateHologram(bool isActivated)
-        {
-            gameObject.SetActive(isActivated);
-        }
-
-        /// <summary>
         /// Animates the particle reaction hologram.
         /// </summary>
         /// <param name="particles">The combination of particles.</param>
@@ -349,7 +340,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// Effect when the experiment is activated the first time.
         /// </summary>
-        public override void OnActivation()
+        public override void OnShow(int currentStep)
         {
             base.OnActivation();
             CreateSplines(_maiaManager.generatedParticles);

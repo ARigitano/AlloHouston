@@ -121,16 +121,17 @@ namespace CRI.HelloHouston.Experience.MAIA
             ActivatePanel(_moPanel);
         }
 
+        public void StartPassword()
+        {
+            ActivatePanel(_passwordPanel.gameObject);
+        }
+
         /// <summary>
         /// Displays password panel adter override button has been clicked.
         /// </summary>
         public void OnMOClick()
         {
             maiaManager.OnMOSuccess();
-            StartCoroutine(WaitGeneric(0.2f, () =>
-            {
-                ActivatePanel(_passwordPanel.gameObject);
-            }));
         }
         
         public override void OnInit(XPManager manager, int randomSeed)

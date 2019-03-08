@@ -93,29 +93,27 @@ namespace CRI.HelloHouston.Experience.MAIA
             newPanel.SetActive(true);
             _currentPanel = newPanel;
         }
-
-        /// <summary>
-        /// Called by the synchronizer to skip directly to the Feynman diagrams step.
-        /// </summary>
-        public void SkipToSecondPart()
-        {
-            StartAnalysisAnimation();
-        }
-
-        /// <summary>
-        /// Tells the MAIA Overwiew panel that the start button has been pressed.
-        /// </summary>
-        public void StartManualOverride()
+        
+        public void StartLoading()
         {
             ActivatePanel(_manualOverrideAccess.gameObject);
             _manualOverrideAccess.Show();
-            _currentPanel = _manualOverrideAccess.gameObject;
+        }
+
+        public void StartMO()
+        {
+            ActivatePanel(_manualOverrideAccess.gameObject);
+        }
+
+        public void StartPassword()
+        {
+            ActivatePanel(_manualOverrideAccess.gameObject);
+            _manualOverrideAccess.DisplayPasswordWindow();
         }
 
         public void StartPI()
         {
             ActivatePanel(_particlesIdentification.gameObject);
-            _particlesIdentification.CreateParticleGrid(maiaManager.generatedParticles);
         }
 
         /// <summary>
@@ -124,13 +122,11 @@ namespace CRI.HelloHouston.Experience.MAIA
         public void StartAnalysisAnimation()
         {
             ActivatePanel(_analysisScreen.gameObject);
-            _particlesIdentification.gameObject.SetActive(false);
             _analysisScreen.StartAnalysisAnimation();
         }
 
         public void StartRI()
         {
-            _analysisScreen.gameObject.SetActive(false);
             ActivatePanel(_reactionsIdentification.gameObject);
             _reactionsIdentification.StartReactionIdentification();
         }
@@ -145,14 +141,6 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             yield return new WaitForSeconds(time);
             action.Invoke();
-        }
-
-        /// <summary>
-        /// Displays the access screen when the manual override button is pressed.
-        /// </summary>
-        public void InitPasswordInput()
-        {
-            _manualOverrideAccess.InitPasswordInput(maiaManager.settings.password);
         }
 
         public void Init(MAIAManager synchronizer)
@@ -190,7 +178,8 @@ namespace CRI.HelloHouston.Experience.MAIA
         public override void OnShow(int step)
         {
             base.OnShow(step);
-            StartManualOverride();
+            _manualOverrideAccess.InitPasswordInput(maiaManager.settings.password);
+            _particlesIdentification.CreateParticleGrid(maiaManager.generatedParticles);
         }
     }
 }
