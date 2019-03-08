@@ -50,7 +50,7 @@ namespace CRI.HelloHouston.GameElements
             _xpNameText.text = xpManager.xpContext.xpGroup.experimentName;
             for (int i = 0; i < steps; i++)
                 _fillItems[i] = Instantiate(_fillItemPrefab, _fillGroup);
-            OnStepChange(null, _xpManager.stepManager.currentStepValue);
+            OnStepChange(null, _xpManager.stepManager.sumValue);
         }
 
         public void OnStepChange(XPStepManager.StepAction stepAction, int stepValue)

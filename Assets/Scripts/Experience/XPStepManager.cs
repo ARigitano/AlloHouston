@@ -43,7 +43,7 @@ namespace CRI.HelloHouston.Experience
         /// <summary>
         /// The current step value of the experiment. The value should be lower than the max number of step in the context settings.
         /// </summary>
-        public int currentStepValue
+        public int sumValue
         {
             get
             {
@@ -62,7 +62,7 @@ namespace CRI.HelloHouston.Experience
             {
                 _currentStepIndex = value;
                 if (onStepChange != null)
-                    onStepChange(currentStep, currentStepValue);
+                    onStepChange(currentStep, sumValue);
             }
         }
 

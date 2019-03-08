@@ -189,10 +189,11 @@ namespace CRI.HelloHouston.Experience.MAIA
         public void OnRISuccess()
         {
             stepManager.SkipToStep("Finish");
-            topScreen.Victory();
-            tabletScreen.Victory();
+            topScreen.StartVictory();
+            tabletScreen.StartVictory();
             hologramFeynman.gameObject.SetActive(true);
             hologramTube.gameObject.SetActive(false);
+            Success();
         }
 
 

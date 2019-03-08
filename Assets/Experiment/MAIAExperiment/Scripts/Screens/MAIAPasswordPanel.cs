@@ -17,6 +17,14 @@ namespace CRI.HelloHouston.Experience.MAIA
 
         private MAIAManualOverrideAccess _moaScreen;
 
+        private LogExperienceController _logController;
+
+        private XPContext _xpContext;
+        
+        private void OnDisable()
+        {
+            _enteredPassword = "";
+        }
 
         /// <summary>
         /// Adds a number to the password.
@@ -24,26 +32,17 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <param name="character">The character to add.</param>
         public void EnteringDigit(string character)
         {
-            if (!_isTouched)
-            {
-                Debug.Log(character);
-                _isTouched = true;
-                _enteredPassword += character.ToString();
-                bool interactable = _moaScreen.CheckPasswordInput(_enteredPassword);
-                if (_enteredPassword.Length == _realPassword.Length || !interactable)
-                    _enteredPassword = "";
-                StartCoroutine(WaitButton());
-            }
+            _logController.AddLogInput("Input Password: " + character, _xpContext);
+            _enteredPassword += character.ToString();
+            bool interactable = _moaScreen.CheckPasswordInput(_enteredPassword);
+            if (_enteredPassword.Length == _realPassword.Length || !interactable)
+                _enteredPassword = "";
         }
 
-        IEnumerator WaitButton()
+        public void Init(LogExperienceController logController, XPContext context, MAIAManualOverrideAccess manualOverrideAccessScreen, string realPassword)
         {
-            yield return new WaitForSeconds(0.5f);
-            _isTouched = false;
-        }
-
-        public void Init(MAIAManualOverrideAccess manualOverrideAccessScreen, string realPassword)
-        {
+            _logController = logController;
+            _xpContext = context;
             _realPassword = realPassword;
             _moaScreen = manualOverrideAccessScreen;
         }

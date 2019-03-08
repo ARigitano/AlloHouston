@@ -278,7 +278,7 @@ namespace CRI.HelloHouston.Experience
             logController.AddLog("Show", xpContext, Log.LogType.Automatic);
             foreach (var element in elements)
             {
-                element.xpElement.OnShow(stepManager.currentStepValue);
+                element.xpElement.OnShow(stepManager.sumValue);
             }
             PostShow(wallTopZone, elements.ToArray());
         }
@@ -339,6 +339,35 @@ namespace CRI.HelloHouston.Experience
         /// Called after the initialization.
         /// </summary>
         protected virtual void PostInit(XPContext xpContext, ElementInfo[] info, LogExperienceController logController, int randomSeed, XPState stateOnActivation) { }
+
+        public virtual void SkipToNextStep()
+        {
+            if (stepManager.currentStepIndex < stepManager.stepActions.Length - 1)
+            {
+                SkipToStep(stepManager.currentStepIndex + 1);
+            }
+            else
+            {
+                logController.AddLogError(string.Format("Can't skip to next step."), xpContext);
+            }
+        }
+
+        public virtual void SkipToPreviousStep()
+        {
+            if (stepManager.currentStepIndex > 0)
+            {
+                SkipToStep(stepManager.currentStepIndex - 1);
+            }
+            else
+            {
+                logController.AddLogError(string.Format("Can't skip to previous step."), xpContext);
+            }
+        }
+
+        public virtual void RestartStep()
+        {
+            SkipToStep(stepManager.currentStepIndex);
+        }
         
         public virtual void SkipToStep(int stepValue)
         {

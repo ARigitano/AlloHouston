@@ -316,7 +316,7 @@ namespace CRI.HelloHouston.Experience.MAIA
 
         public void StartAnimation()
         {
-            if (_splinesDisplayed)
+            if (_splinesDisplayed && gameObject.activeInHierarchy)
             {
                 StopAllCoroutines();
                 StartCoroutine(Animate());

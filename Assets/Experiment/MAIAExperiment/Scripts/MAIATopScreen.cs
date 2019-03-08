@@ -80,12 +80,6 @@ namespace CRI.HelloHouston.Experience.MAIA
             _particlesIdentification.CreateParticleGrid(reactionExits);
         }
 
-        public void Victory()
-        {
-            _currentPanel.SetActive(false);
-            _victoryScreen.SetActive(true);
-        }
-
         private void ActivatePanel(GameObject newPanel)
         {
             if (_currentPanel != null)
@@ -131,6 +125,11 @@ namespace CRI.HelloHouston.Experience.MAIA
             _reactionsIdentification.StartReactionIdentification();
         }
 
+        public void StartVictory()
+        {
+            ActivatePanel(_victoryScreen.gameObject);
+        }
+
         /// <summary>
         /// A generic coroutine to wait during a method.
         /// </summary>
@@ -163,7 +162,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public override void OnSuccess()
         {
-            Victory();
+            StartVictory();
         }
 
         public override void OnInit(XPManager manager, int randomSeed)

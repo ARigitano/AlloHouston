@@ -77,11 +77,17 @@ namespace CRI.HelloHouston.Experience.MAIA
 
         private bool _interactable = true;
 
+        private void OnEnable()
+        {
+            _interactable = true;
+        }
+
         private void OnDisable()
         {
-            _passwordWindow.SetActive(false);
             for (int i = 0; _passwordSlots != null && i < _passwordSlots.Length; i++)
                 _passwordSlots[i].Show(false);
+            _passwordWindow.SetActive(false);
+            StopAllCoroutines();
         }
 
         public void DisplayPasswordWindow()
@@ -128,6 +134,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             _interactable = false;
             yield return new WaitForSeconds(2);
+            _interactable = true;
             _popupAccessGranted.SetActive(false);
             _maiaTopScreen.maiaManager.OnPasswordSuccess();
         }

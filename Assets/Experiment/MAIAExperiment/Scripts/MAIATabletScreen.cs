@@ -38,17 +38,9 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         private GameObject _currentPanel;
 
-        public void Victory()
+        public void StartVictory()
         {
             ActivatePanel(null);
-        }
-
-        /// <summary>
-        /// Called by the synchronizer to skip directly to the Feynman diagrams step.
-        /// </summary>
-        public void SkipToSecondPart()
-        {
-            HideAllPanels();
         }
 
         private void ActivatePanel(GameObject newPanel)
@@ -143,7 +135,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         public override void OnShow(int step)
         {
             topScreen = maiaManager.topScreen;
-            _passwordPanel.Init(topScreen.manualOverrideAccessScreen, maiaManager.settings.password);
+            _passwordPanel.Init(maiaManager.logController, maiaManager.xpContext, topScreen.manualOverrideAccessScreen, maiaManager.settings.password);
             _particlesPanel.Init(maiaManager, topScreen.particleIdentificationScreen);
             _reactionPanel.Init(topScreen, maiaManager);
             _hologramTube = maiaManager.hologramTube;

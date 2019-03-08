@@ -17,11 +17,9 @@ namespace CRI.HelloHouston.Experience.MAIA
         private ParticlesIdentification _piScreen;
         private MAIAManager _manager;
 
-        private bool _isTouched;
-
         private void OnDisable()
         {
-            _enteredParticles.Clear();
+            ClearParticles();
         }
 
         /// <summary>
@@ -46,14 +44,9 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void DeleteParticle()
         {
-            if (!_isTouched)
-            {
-                _isTouched = true;
-                if (_enteredParticles.Count > 0)
-                    _enteredParticles.RemoveAt(_enteredParticles.Count - 1);
-                _piScreen.UpdateParticles(_enteredParticles);
-                StartCoroutine(WaitButton());
-            }
+            if (_enteredParticles.Count > 0)
+                _enteredParticles.RemoveAt(_enteredParticles.Count - 1);
+            _piScreen.UpdateParticles(_enteredParticles);
         }
 
         /// Adds a particle to the combination.
@@ -61,12 +54,11 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <param name="particleButton">The particle to add.</param>
         public void AddParticle(Particle particle)
         {
-            if (/*!_isTouched &&*/ _enteredParticles.Count < _manager.generatedParticles.Count)
+            if (_enteredParticles.Count < _manager.generatedParticles.Count)
             {
-                _isTouched = true;
+                _manager.logController.AddLogInput("Particle input: " + particle.particleName, _manager.xpContext);
                 _enteredParticles.Add(particle);
                 _piScreen.UpdateParticles(_enteredParticles);
-                //StartCoroutine(WaitButton());
             }
         }
 
@@ -75,62 +67,50 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void SubmitParticles()
         {
-            if (/*!_isTouched*/ true)
+            //Checks if the combination entered has the right number of particles.
+            if (_enteredParticles.Count == _manager.generatedParticles.Count)
             {
-                _isTouched = true;
-                //Checks if the combination entered has the right number of particles.
-                if (_enteredParticles.Count == _manager.generatedParticles.Count)
+                var l1 = _enteredParticles.OrderBy(particle => particle.symbol).ThenBy(particle => particle.negative).ToArray();
+                var l2 = _manager.generatedParticles.OrderBy(particle => particle.symbol).ThenBy(particle => particle.negative).ToArray();
+                bool symbols = true;
+                bool charges = true;
+                for (int i = 0; i < l1.Count(); i++)
                 {
-                    var l1 = _enteredParticles.OrderBy(particle => particle.symbol).ThenBy(particle => particle.negative).ToArray();
-                    var l2 = _manager.generatedParticles.OrderBy(particle => particle.symbol).ThenBy(particle => particle.negative).ToArray();
-                    bool symbols = true;
-                    bool charges = true;
-                    for (int i = 0; i < l1.Count(); i++)
+                    if (l1[i].symbol != l2[i].symbol)
                     {
-                        if (l1[i].symbol != l2[i].symbol)
-                        {
-                            symbols = false;
-                            Debug.Log(l1[i].symbol + " !=" + l2[i].symbol);
-                            break;
-                        }
-                        if (l1[i].negative != l2[i].negative && !l1[i].particleName.ToLower().Contains("neutrino"))
-                            charges = false;
+                        symbols = false;
+                        Debug.Log(l1[i].symbol + " !=" + l2[i].symbol);
+                        break;
                     }
-                    // Checks if the right symbols have been entered.
-                    if (symbols)
+                    if (l1[i].negative != l2[i].negative && !l1[i].particleName.ToLower().Contains("neutrino"))
+                        charges = false;
+                }
+                // Checks if the right symbols have been entered.
+                if (symbols)
+                {
+                    //Check if the right symbols + charges have been entered. We ignore the neutrino particle in this process.
+                    if (charges)
                     {
-                        //Check if the right symbols + charges have been entered. We ignore the neutrino particle in this process.
-                        if (charges)
-                        {
-                            //The right combination of particles have been entered.
-                            _tablet.OnRightParticleCombination();
-                        }
-                        else
-                        {
-                            //A wrong combination of charges have been entered.
-                            ParticleSendErrorMessage(ParticlesIdentification.ErrorType.WrongNumberCharges);
-                        }
+                        //The right combination of particles have been entered.
+                        _tablet.OnRightParticleCombination();
                     }
                     else
                     {
-                        //A wrong combination of symbols have been entered.
-                        ParticleSendErrorMessage(ParticlesIdentification.ErrorType.WrongParticles);
+                        //A wrong combination of charges have been entered.
+                        ParticleSendErrorMessage(ParticlesIdentification.ErrorType.WrongNumberCharges);
                     }
                 }
                 else
                 {
-                    //A combination of particles with a wrong length has been entered.
-                    ParticleSendErrorMessage(ParticlesIdentification.ErrorType.WrongNumberParticles);
+                    //A wrong combination of symbols have been entered.
+                    ParticleSendErrorMessage(ParticlesIdentification.ErrorType.WrongParticles);
                 }
-                //StartCoroutine(WaitButton());
             }
-
-        }
-
-        IEnumerator WaitButton()
-        {
-            yield return new WaitForSeconds(0.5f);
-            _isTouched = false;
+            else
+            {
+                //A combination of particles with a wrong length has been entered.
+                ParticleSendErrorMessage(ParticlesIdentification.ErrorType.WrongNumberParticles);
+            }
         }
 
         public void Init(MAIAManager manager, ParticlesIdentification piScreen)
