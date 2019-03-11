@@ -28,6 +28,10 @@ namespace CRI.HelloHouston.Experience.MAIA
         [SerializeField]
         private MAIATopScreen _maiaTopScreen = null;
         /// <summary>
+        /// The lang manager.
+        /// </summary>
+        private ILangManager _langManager;
+        /// <summary>
         /// Message to  be displayed for the number of particles.
         /// </summary>
         private string _particleTextMessage = "";
@@ -78,6 +82,20 @@ namespace CRI.HelloHouston.Experience.MAIA
         [SerializeField]
         private ErrorMessage[] _errorMessages = null;
 
+        private int _currentCount;
+
+        private void OnEnable()
+        {
+            if (_langManager != null)
+                _langManager.langManager.onLangChange += OnLangChange;
+        }
+
+        private void OnLangChange(LangApp lang)
+        {
+            _particleTextMessage = _langManager.textManager.GetText(_nbParticlesDetected.GetComponent<TranslatedText>().textKey);
+            FillNbParticlesDetected(_currentCount);
+        }
+
         /// <summary>
         /// Displays a popup if the player selected the wrong Feynman diagram.
         /// </summary>
@@ -99,6 +117,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <param name="particles">The number of particles that have been detected.</param>
         private void FillNbParticlesDetected(int count)
         {
+            _currentCount = count;
             _nbParticlesDetected.text = _particleTextMessage.Replace("[p]", count.ToString());
         }
 
@@ -123,8 +142,9 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             if (!_nbParticlesDetected.GetComponent<XPTranslatedText>().initialized)
             {
-                ILangManager manager = GetComponentInParent<XPElement>().manager;
-                _nbParticlesDetected.GetComponent<XPTranslatedText>().Init(manager);
+                _langManager = GetComponentInParent<XPElement>().manager;
+                _nbParticlesDetected.GetComponent<XPTranslatedText>().Init(_langManager);
+                _langManager.langManager.onLangChange += OnLangChange;
             }
             _particleTextMessage = _nbParticlesDetected.text;
             _gridParticles = new GridCell[particles.Count];

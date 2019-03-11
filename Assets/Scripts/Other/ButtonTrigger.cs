@@ -5,10 +5,6 @@ public class ButtonTrigger : MonoBehaviour {
 
     private bool _controllerIn = false;
     private bool _activated = false;
-    [SerializeField]
-    private Sprite _touchedSprite;
-    private Sprite _untouchedSprite;
-    private Image _buttonImage;
 
     private float _time;
 
@@ -16,8 +12,6 @@ public class ButtonTrigger : MonoBehaviour {
 	void Start ()
     {
         _time = Time.time;
-        _buttonImage = this.gameObject.GetComponent<Image>();
-        _untouchedSprite = _buttonImage.sprite;
 	}
 	
 	// Update is called once per frame
@@ -38,7 +32,6 @@ public class ButtonTrigger : MonoBehaviour {
         else if ((other.tag == "ViveTracker" || other.tag == "ViveController") && enabled)
         {
             this.gameObject.GetComponent<Button>().onClick.Invoke();
-            _buttonImage.sprite = _touchedSprite;
         }
     }
 
@@ -47,7 +40,6 @@ public class ButtonTrigger : MonoBehaviour {
         if ((other.tag == "ViveTracker" || other.tag == "ViveController") && enabled)
         {
             _controllerIn = false;
-            _buttonImage.sprite = _untouchedSprite;
         }
     }
 }

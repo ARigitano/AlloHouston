@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using CRI.HelloHouston.Window;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,6 +21,11 @@ namespace CRI.HelloHouston.Experience.MAIA
         private LogExperienceController _logController;
 
         private XPContext _xpContext;
+
+        private void OnEnable()
+        {
+            GetComponent<GroupAnimator>().StartShowAnimation();
+        }
         
         private void OnDisable()
         {
