@@ -243,7 +243,6 @@ GameObject:
   - component: {fileID: 3493826781171272426}
   - component: {fileID: 4179813291720873435}
   - component: {fileID: 4872992870966154566}
-  - component: {fileID: 3530111612027405990}
   m_Layer: 0
   m_Name: Button
   m_TagString: Untagged
@@ -382,6 +381,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b38ac2199a7b744fac121058115a23a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onHandClick:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Valve.VR.InteractionSystem.CustomEvents+UnityEventHand, Assembly-CSharp-firstpass,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!114 &4872992870966154566
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -394,20 +398,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b93b6a877adcbf94c89a9d6e0c0e844d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &3530111612027405990
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7510399086172621051}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 53cd2ef2dd3d5d64e96af4420220d1d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  onHandClick:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: Valve.VR.InteractionSystem.CustomEvents+UnityEventHand, Assembly-CSharp-firstpass,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null

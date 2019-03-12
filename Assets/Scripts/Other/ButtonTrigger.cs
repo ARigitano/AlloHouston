@@ -1,53 +1,31 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using Valve.VR.InteractionSystem;
 
-public class ButtonTrigger : MonoBehaviour {
-
-    private bool _controllerIn = false;
-    private bool _activated = false;
+public class ButtonTrigger : UIElement {
     private Sprite _touchedSprite;
     private Sprite _untouchedSprite;
     private Image _buttonImage;
 
-    private float _time;
-
-	// Use this for initialization
-	void Start ()
+    // Use this for initialization
+    void Start()
     {
-        _time = Time.time;
         _buttonImage = GetComponent<Button>().targetGraphic.GetComponent<Image>();
         _untouchedSprite = _buttonImage.sprite;
-        _touchedSprite = GetComponent<Button>().spriteState.pressedSprite;     
-    }
-	
-	// Update is called once per frame
-	void Update ()
-    {
-        if(Time.time - _time > 0.5f && !_activated && !_controllerIn)
-        {
-            _activated = true;
-        }
-	}
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if ((other.tag == "ViveTracker" || other.tag == "ViveController") && !_activated && enabled)
-        {
-            _controllerIn = true;
-        }
-        else if ((other.tag == "ViveTracker" || other.tag == "ViveController") && enabled)
-        {
-            this.gameObject.GetComponent<Button>().onClick.Invoke();
-            _buttonImage.sprite = _touchedSprite;
-        }
+        _touchedSprite = GetComponent<Button>().spriteState.pressedSprite;
     }
 
-    private void OnTriggerExit(Collider other)
+    //-------------------------------------------------
+    protected override void OnHandHoverBegin(Hand hand)
     {
-        if ((other.tag == "ViveTracker" || other.tag == "ViveController") && enabled)
-        {
-            _controllerIn = false;
-            _buttonImage.sprite = _untouchedSprite;
-        }
+        base.OnHandHoverBegin(hand);
+        onHandClick.Invoke(currentHand);
+        _buttonImage.sprite = _touchedSprite;
+    }
+
+    protected override void OnHandHoverEnd(Hand hand)
+    {
+        base.OnHandHoverEnd(hand);
+        _buttonImage.sprite = _untouchedSprite;
     }
 }

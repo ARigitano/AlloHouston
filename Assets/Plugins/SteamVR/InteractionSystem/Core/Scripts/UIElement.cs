@@ -11,7 +11,7 @@ namespace Valve.VR.InteractionSystem
 	{
 		public CustomEvents.UnityEventHand onHandClick;
 
-		private Hand currentHand;
+		protected Hand currentHand;
 
 		//-------------------------------------------------
 		void Awake()
@@ -25,7 +25,7 @@ namespace Valve.VR.InteractionSystem
 
 
 		//-------------------------------------------------
-		private void OnHandHoverBegin( Hand hand )
+		protected virtual void OnHandHoverBegin( Hand hand )
 		{
 			currentHand = hand;
 			InputModule.instance.HoverBegin( gameObject );
@@ -34,7 +34,7 @@ namespace Valve.VR.InteractionSystem
 
 
 		//-------------------------------------------------
-		private void OnHandHoverEnd( Hand hand )
+		protected virtual void OnHandHoverEnd( Hand hand )
 		{
 			InputModule.instance.HoverEnd( gameObject );
 			ControllerButtonHints.HideButtonHint( hand, Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger );
@@ -43,7 +43,7 @@ namespace Valve.VR.InteractionSystem
 
 
 		//-------------------------------------------------
-		private void HandHoverUpdate( Hand hand )
+		protected virtual void HandHoverUpdate( Hand hand )
 		{
 			if ( hand.GetStandardInteractionButtonDown() )
 			{
