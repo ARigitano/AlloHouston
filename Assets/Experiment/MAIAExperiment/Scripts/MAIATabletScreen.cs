@@ -1,9 +1,7 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using System;
-using System.Linq;
+using CRI.HelloHouston.WindowTemplate;
 
 namespace CRI.HelloHouston.Experience.MAIA
 {
@@ -20,7 +18,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         [Header("MAIATabletScreen Attributes")]
         [SerializeField]
         [Tooltip("The manual override panel.")]
-        private GameObject _moPanel = null;
+        private Window _moPanel = null;
         [SerializeField]
         [Tooltip("The password identification panel.")]
         private MAIAPasswordPanel _passwordPanel = null;
@@ -29,26 +27,39 @@ namespace CRI.HelloHouston.Experience.MAIA
         private MAIAParticlePanel _particlesPanel = null;
         [SerializeField]
         [Tooltip("The advanced manual override panel.")]
-        private GameObject _amoPanel = null;
+        private Window _amoPanel = null;
         [SerializeField]
         [Tooltip("The diagrams panel.")]
         private MAIAReactionPanel _reactionPanel = null;
         /// <summary>
         /// The panel currently being displayed.
         /// </summary>
-        private GameObject _currentPanel;
+        private Window _currentPanel;
+
+        private Window _previousPanel;
 
         public void StartVictory()
         {
             ActivatePanel(null);
         }
 
-        private void ActivatePanel(GameObject newPanel)
+        private void ActivatePanel(Window newPanel)
         {
-            if (_currentPanel != null)
-                _currentPanel.gameObject.SetActive(false);
-            if (newPanel != null)
-                newPanel.gameObject.SetActive(true);
+            // We stop the previous panel animation if it didn't finish yet.
+            if (_previousPanel != null && !_previousPanel.hidden)
+            {
+                _previousPanel.StopAllCoroutines();
+                _previousPanel.gameObject.SetActive(false);
+            }
+            if (_currentPanel == newPanel)
+                return;
+            else if (_currentPanel != null && newPanel != null)
+                _currentPanel.HideWindow(newPanel.ShowWindow);
+            else if (_currentPanel != null && newPanel == null)
+                _currentPanel.HideWindow();
+            else if (newPanel != null)
+                newPanel.ShowWindow();
+            _previousPanel = _currentPanel;
             _currentPanel = newPanel;
         }
 
@@ -94,7 +105,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void StartRI()
         {
-            ActivatePanel(_reactionPanel.gameObject);
+            ActivatePanel(_reactionPanel);
         }
 
         /// <summary>
@@ -102,7 +113,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void StartPI()
         {
-            ActivatePanel(_particlesPanel.gameObject);
+            ActivatePanel(_particlesPanel);
         }
 
         /// <summary>
@@ -115,7 +126,7 @@ namespace CRI.HelloHouston.Experience.MAIA
 
         public void StartPassword()
         {
-            ActivatePanel(_passwordPanel.gameObject);
+            ActivatePanel(_passwordPanel);
         }
 
         /// <summary>
@@ -139,7 +150,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             _particlesPanel.Init(maiaManager, topScreen.particleIdentificationScreen);
             _reactionPanel.Init(topScreen, maiaManager);
             _hologramTube = maiaManager.hologramTube;
-            _currentPanel = _moPanel;
+            ActivatePanel(_moPanel);
         }
     }
 }

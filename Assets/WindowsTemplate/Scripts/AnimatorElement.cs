@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CRI.HelloHouston.Window
+namespace CRI.HelloHouston.WindowTemplate
 {
     [RequireComponent(typeof(Animator))]
-    public class ButtonAnimator : GenericAnimator
+    public class AnimatorElement : AnimationElement
     {
         private Animator _animator;
 

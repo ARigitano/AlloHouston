@@ -1,10 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using CRI.HelloHouston.WindowTemplate;
+using System.Collections;
 using UnityEngine;
 
 namespace CRI.HelloHouston.Experience.MAIA
 {
-    public class MAIAReactionPanel : MonoBehaviour
+    public class MAIAReactionPanel : Window
     {
         private bool _isTouched;
         private MAIATopScreen _topScreen;

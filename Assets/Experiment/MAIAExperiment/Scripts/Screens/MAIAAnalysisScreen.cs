@@ -62,7 +62,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                 var particleGridCell = Instantiate(_particleGridCellPrefab, _particleGridTransform);
                 particleGridCell.Init(particleGroup.Key);
                 _particleGridCellDictionary.Add(particleGroup.Key, particleGridCell);
-            }
+            }  
         }
 
         private IEnumerator AnalysisAnimation()

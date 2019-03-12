@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace CRI.HelloHouston.Window
+namespace CRI.HelloHouston.WindowTemplate
 {
     [ExecuteInEditMode]
     public class SliderValue : MonoBehaviour

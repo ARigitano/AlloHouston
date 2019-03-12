@@ -1,11 +1,12 @@
-﻿using System.Collections;
+﻿using CRI.HelloHouston.WindowTemplate;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 namespace CRI.HelloHouston.Experience.MAIA
 {
-    public class MAIAParticlePanel : MonoBehaviour
+    public class MAIAParticlePanel : Window
     {
         /// <summary>
         /// The particles entered by the player.

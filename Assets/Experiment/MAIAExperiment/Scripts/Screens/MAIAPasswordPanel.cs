@@ -1,11 +1,11 @@
-﻿using CRI.HelloHouston.Window;
+﻿using CRI.HelloHouston.WindowTemplate;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace CRI.HelloHouston.Experience.MAIA
 {
-    public class MAIAPasswordPanel : MonoBehaviour
+    public class MAIAPasswordPanel : Window
     {
         /// <summary>
         /// Password entered by the player.
@@ -21,11 +21,6 @@ namespace CRI.HelloHouston.Experience.MAIA
         private LogExperienceController _logController;
 
         private XPContext _xpContext;
-
-        private void OnEnable()
-        {
-            GetComponent<GroupAnimator>().StartShowAnimation();
-        }
         
         private void OnDisable()
         {
