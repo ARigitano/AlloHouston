@@ -3,6 +3,9 @@ using UnityEngine.UI;
 using Valve.VR.InteractionSystem;
 
 public class ButtonTrigger : UIElement {
+
+    private bool _controllerIn = false;
+    private bool _activated = false;
     private Sprite _touchedSprite;
     private Sprite _untouchedSprite;
     private Image _buttonImage;
@@ -19,7 +22,7 @@ public class ButtonTrigger : UIElement {
     protected override void OnHandHoverBegin(Hand hand)
     {
         base.OnHandHoverBegin(hand);
-        onHandClick.Invoke(currentHand);
+        GetComponent<Button>().onClick.Invoke();
         _buttonImage.sprite = _touchedSprite;
     }
 
