@@ -40,24 +40,24 @@ namespace Valve.VR.InteractionSystem
         /// </summary>
         [SerializeField]
         private float _speed = 2f;
+        [SerializeField]
+        private GameObject _statusPanel;
        
 
         // Start is called before the first frame update
         void Start()
         {
+            _station = GameObject.FindGameObjectWithTag("Station").GetComponent <ChangingTube>();
             _station.tubes.Add(this);
         }
 
         // Update is called once per frame
         void Update()
         {
-            if (transform.position != _originalSlot.position && isDocked)
+            if (transform.position != transform.parent.position && isDocked)
             {
-                transform.position = Vector3.Lerp(transform.position, _originalSlot.position, Time.deltaTime * _speed);
-            }
-            else 
-            {
-                isDocked = false;
+                transform.rotation = Quaternion.Lerp(transform.rotation, transform.parent.rotation, Time.deltaTime * _speed);
+                transform.position = Vector3.Lerp(transform.position, transform.parent.position, Time.deltaTime * _speed);
             }
         }
 
@@ -67,7 +67,7 @@ namespace Valve.VR.InteractionSystem
         public void IsAvailable()
         {
             gameObject.GetComponent<MeshRenderer>().material = _available;
-            gameObject.GetComponent<CapsuleCollider>().enabled = true;
+            gameObject.GetComponent<BoxCollider>().enabled = true;
         }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace Valve.VR.InteractionSystem
         public void IsNotAvailable()
         {
             gameObject.GetComponent<MeshRenderer>().material = _notAvailable;
-            gameObject.GetComponent<CapsuleCollider>().enabled = false;
+            gameObject.GetComponent<BoxCollider>().enabled = false;
         }
 
         /// <summary>
@@ -97,15 +97,13 @@ namespace Valve.VR.InteractionSystem
             if(_destinationSlot != null)
             {
                 gameObject.transform.parent = _destinationSlot;
-                gameObject.transform.position = _destinationSlot.position;
-                gameObject.transform.rotation = _destinationSlot.rotation;
+                isDocked = true;
                 _station.LoadingTube(experience, _destinationSlot.GetComponent<TubeSlot>().topZone);
             } 
             else
             {
                 gameObject.transform.parent = _originalSlot;
                 isDocked = true;
-                gameObject.transform.rotation = _originalSlot.rotation;
             }
         }
 
@@ -115,6 +113,13 @@ namespace Valve.VR.InteractionSystem
             {
                 _destinationSlot = other.transform;
             }
+            else if (other.tag == "TubeBase")
+            {
+                _statusPanel.SetActive(true);
+                isDocked = false;
+                transform.position = other.transform.position;
+                transform.rotation = other.transform.rotation;
+            }
         }
 
         private void OnTriggerExit(Collider other)
@@ -122,6 +127,10 @@ namespace Valve.VR.InteractionSystem
             if (other.tag == "TubeDock")
             {
                 _destinationSlot = null;
+            }
+            else if (other.tag == "TubeBase")
+            {
+                _statusPanel.SetActive(false);
             }
         }
     }
