@@ -1,6 +1,7 @@
 ﻿using CRI.HelloHouston.Calibration.UI;
 using System;
 using UnityEngine;
+using Valve.VR.Extras;
 
 namespace CRI.HelloHouston.Calibration
 {

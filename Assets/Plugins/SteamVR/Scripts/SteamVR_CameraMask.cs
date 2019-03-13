@@ -1,12 +1,20 @@
-﻿using UnityEngine;
+﻿//======= Copyright (c) Valve Corporation, All rights reserved. ===============
+//
+// Purpose: Masks out pixels that cannot be seen through the connected hmd.
+//
+//=============================================================================
 
-[ExecuteInEditMode]
-public class SteamVR_CameraMask : MonoBehaviour
+using UnityEngine;
+
+namespace Valve.VR
 {
-	void Awake()
-	{
-		Debug.Log("SteamVR_CameraMask is deprecated in Unity 5.4 - REMOVING");
-		DestroyImmediate(this);
-	}
+    [ExecuteInEditMode]
+    public class SteamVR_CameraMask : MonoBehaviour
+    {
+        void Awake()
+        {
+            Debug.Log("<b>[SteamVR]</b> SteamVR_CameraMask is deprecated in Unity 5.4 - REMOVING");
+            DestroyImmediate(this);
+        }
+    }
 }
-

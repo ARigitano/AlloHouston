@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Valve.VR.Extras;
 
 /// <summary>
 /// Inputs linked to the Vive controller's laser

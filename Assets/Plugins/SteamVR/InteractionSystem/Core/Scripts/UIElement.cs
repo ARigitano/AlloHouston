@@ -1,20 +1,24 @@
-﻿using UnityEngine;
-using UnityEngine.Events;
+﻿//======= Copyright (c) Valve Corporation, All rights reserved. ===============
+//
+// Purpose: UIElement that responds to VR hands and generates UnityEvents
+//
+//=============================================================================
+
+using UnityEngine;
 using UnityEngine.UI;
-using System;
 
 namespace Valve.VR.InteractionSystem
 {
-	//-------------------------------------------------------------------------
-	[RequireComponent( typeof( Interactable ) )]
+    //-------------------------------------------------------------------------
+    [RequireComponent( typeof( Interactable ) )]
 	public class UIElement : MonoBehaviour
 	{
 		public CustomEvents.UnityEventHand onHandClick;
 
-		protected Hand currentHand;
+        protected Hand currentHand;
 
 		//-------------------------------------------------
-		void Awake()
+		protected virtual void Awake()
 		{
 			Button button = GetComponent<Button>();
 			if ( button )
@@ -29,32 +33,34 @@ namespace Valve.VR.InteractionSystem
 		{
 			currentHand = hand;
 			InputModule.instance.HoverBegin( gameObject );
-			ControllerButtonHints.ShowButtonHint( hand, Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger );
+			ControllerButtonHints.ShowButtonHint( hand, hand.uiInteractAction);
 		}
 
 
-		//-------------------------------------------------
-		protected virtual void OnHandHoverEnd( Hand hand )
+        //-------------------------------------------------
+        protected virtual void OnHandHoverEnd( Hand hand )
 		{
 			InputModule.instance.HoverEnd( gameObject );
-			ControllerButtonHints.HideButtonHint( hand, Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger );
+			ControllerButtonHints.HideButtonHint( hand, hand.uiInteractAction);
 			currentHand = null;
 		}
 
 
-		//-------------------------------------------------
-		protected virtual void HandHoverUpdate( Hand hand )
+        //-------------------------------------------------
+        protected virtual void HandHoverUpdate( Hand hand )
 		{
-			if ( hand.GetStandardInteractionButtonDown() )
+            Debug.Log(hand.uiInteractAction.GetStateDown(hand.handType));
+			if ( hand.uiInteractAction != null && hand.uiInteractAction.GetStateDown(hand.handType) )
 			{
+                Debug.Log(gameObject);
 				InputModule.instance.Submit( gameObject );
-				ControllerButtonHints.HideButtonHint( hand, Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger );
+				ControllerButtonHints.HideButtonHint( hand, hand.uiInteractAction);
 			}
 		}
 
 
-		//-------------------------------------------------
-		protected void OnButtonClick()
+        //-------------------------------------------------
+        protected virtual void OnButtonClick()
 		{
 			onHandClick.Invoke( currentHand );
 		}

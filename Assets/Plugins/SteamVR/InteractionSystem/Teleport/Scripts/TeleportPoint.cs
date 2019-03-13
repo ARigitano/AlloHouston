@@ -1,4 +1,10 @@
-﻿using UnityEngine;
+﻿//======= Copyright (c) Valve Corporation, All rights reserved. ===============
+//
+// Purpose: Single location that the player can teleport to
+//
+//=============================================================================
+
+using UnityEngine;
 using UnityEngine.UI;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -215,11 +221,11 @@ namespace Valve.VR.InteractionSystem
 		{
 			if ( !string.IsNullOrEmpty( switchToScene ) )
 			{
-				Debug.Log( "TeleportPoint: Hook up your level loading logic to switch to new scene: " + switchToScene );
+				Debug.Log("<b>[SteamVR Interaction]</b> TeleportPoint: Hook up your level loading logic to switch to new scene: " + switchToScene );
 			}
 			else
 			{
-				Debug.LogError( "TeleportPoint: Invalid scene name to switch to: " + switchToScene );
+				Debug.LogError("<b>[SteamVR Interaction]</b> TeleportPoint: Invalid scene name to switch to: " + switchToScene );
 			}
 		}
 
@@ -317,7 +323,8 @@ namespace Valve.VR.InteractionSystem
 			if ( Selection.activeTransform )
 			{
 				TeleportPoint teleportPoint = Selection.activeTransform.GetComponent<TeleportPoint>();
-				teleportPoint.UpdateVisualsInEditor();
+                if (teleportPoint != null)
+				    teleportPoint.UpdateVisualsInEditor();
 			}
 		}
 

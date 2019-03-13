@@ -1,4 +1,10 @@
-﻿using UnityEngine;
+﻿//======= Copyright (c) Valve Corporation, All rights reserved. ===============
+//
+// Purpose: Stores the play area size info from the players chaperone data
+//
+//=============================================================================
+
+using UnityEngine;
 using UnityEngine.Events;
 using System.Collections;
 
@@ -51,7 +57,7 @@ namespace Valve.VR.InteractionSystem
 			var chaperone = OpenVR.Chaperone;
 			if ( chaperone == null )
 			{
-				Debug.LogWarning( "Failed to get IVRChaperone interface." );
+				Debug.LogWarning("<b>[SteamVR Interaction]</b> Failed to get IVRChaperone interface.");
 				initialized = true;
 				yield break;
 			}
@@ -67,7 +73,7 @@ namespace Valve.VR.InteractionSystem
 					playAreaSizeZ = pz;
 					roomscale = Mathf.Max( px, pz ) > 1.01f;
 
-					Debug.LogFormat( "ChaperoneInfo initialized. {2} play area {0:0.00}m x {1:0.00}m", px, pz, roomscale ? "Roomscale" : "Standing" );
+					Debug.LogFormat("<b>[SteamVR Interaction]</b> ChaperoneInfo initialized. {2} play area {0:0.00}m x {1:0.00}m", px, pz, roomscale ? "Roomscale" : "Standing" );
 
 					ChaperoneInfo.Initialized.Send();
 

@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using Valve.VR;
+using Valve.VR.InteractionSystem;
 
 namespace CRI.HelloHouston.Calibration
 {
@@ -10,8 +12,11 @@ namespace CRI.HelloHouston.Calibration
         /// </summary>
         [SerializeField]
         [Tooltip("Tracked object.")]
-        private SteamVR_TrackedObject _trackedObject;
-        private SteamVR_Controller.Device _device;
+        private Hand _device;
+        [SerializeField]
+        private SteamVR_Action_Boolean _grip;
+        [SerializeField]
+        private SteamVR_Action_Boolean _trigger;
         /// <summary>
         /// The transform of the position on which the position tags will be created.
         /// </summary>
@@ -21,12 +26,7 @@ namespace CRI.HelloHouston.Calibration
 
         private void Reset()
         {
-            _trackedObject = GetComponent<SteamVR_TrackedObject>();
-        }
-
-        private void Start()
-        {
-            _device = SteamVR_Controller.Input((int)_trackedObject.index);
+            _device = gameObject.GetComponent<Hand>();
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace CRI.HelloHouston.Calibration
         /// <returns></returns>
         public bool GetCalibrationResetUp()
         {
-            return _device.GetTouchUp(SteamVR_Controller.ButtonMask.Grip);
+            return _grip.stateUp;
         }
         /// <summary>
         /// True if the trigger button is up.
@@ -43,7 +43,7 @@ namespace CRI.HelloHouston.Calibration
         /// <returns></returns>
         public bool GetCalibrationTriggerUp()
         {
-            return _device.GetPressUp(SteamVR_Controller.ButtonMask.Trigger);
+            return _trigger.stateUp;
         }
 
         public Vector3 GetCalibrationPosition()

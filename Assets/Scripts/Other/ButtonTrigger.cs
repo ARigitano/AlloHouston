@@ -11,4 +11,11 @@ public class ButtonTrigger : UIElement
         if (!hand.noSteamVRFallbackCamera)
             InputModule.instance.Submit(gameObject);
     }
+
+    protected override void HandHoverUpdate(Hand hand)
+    {
+        base.HandHoverUpdate(hand);
+        if (hand.noSteamVRFallbackCamera && Input.GetMouseButtonUp(0))
+            InputModule.instance.Submit(gameObject);
+    }
 }
