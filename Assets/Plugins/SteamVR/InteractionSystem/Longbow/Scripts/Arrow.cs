@@ -1,10 +1,4 @@
-﻿//======= Copyright (c) Valve Corporation, All rights reserved. ===============
-//
-// Purpose: The arrow for the longbow
-//
-//=============================================================================
-
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
 namespace Valve.VR.InteractionSystem
@@ -94,20 +88,8 @@ namespace Valve.VR.InteractionSystem
 			prevHeadPosition = arrowHeadRB.transform.position;
 			prevVelocity = GetComponent<Rigidbody>().velocity;
 
-            SetCollisionMode(CollisionDetectionMode.ContinuousDynamic);
-
 			Destroy( gameObject, 30 );
 		}
-
-        protected void SetCollisionMode(CollisionDetectionMode newMode, bool force = false)
-        {
-            Rigidbody[] rigidBodies = this.GetComponentsInChildren<Rigidbody>();
-            for (int rigidBodyIndex = 0; rigidBodyIndex < rigidBodies.Length; rigidBodyIndex++)
-            {
-                if (rigidBodies[rigidBodyIndex].isKinematic == false || force)
-                    rigidBodies[rigidBodyIndex].collisionDetectionMode = newMode;
-            }
-        }
 
 
 		//-------------------------------------------------
@@ -223,9 +205,7 @@ namespace Valve.VR.InteractionSystem
 
 			inFlight = false;
 
-            SetCollisionMode(CollisionDetectionMode.Discrete, true);
-
-            shaftRB.velocity = Vector3.zero;
+			shaftRB.velocity = Vector3.zero;
 			shaftRB.angularVelocity = Vector3.zero;
 			shaftRB.isKinematic = true;
 			shaftRB.useGravity = false;

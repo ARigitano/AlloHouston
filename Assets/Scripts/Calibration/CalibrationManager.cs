@@ -5,7 +5,6 @@ using VRCalibrationTool;
 using CRI.HelloHouston.Calibration.Data;
 using System;
 using UnityEngine.UI;
-using Valve.VR;
 
 namespace CRI.HelloHouston.Calibration
 {
@@ -278,6 +277,8 @@ namespace CRI.HelloHouston.Calibration
                 tracker.AddComponent<SteamVR_TrackedObject>();
                 tracker.GetComponent<SteamVR_TrackedObject>().index = SteamVR_TrackedObject.EIndex.Device2;
             }
+            SteamVR_ControllerManager cameraVive = GameObject.Find("[CameraRig]").GetComponent<SteamVR_ControllerManager>();
+            cameraVive.objects[2] = tracker;
         }
     }
 }
