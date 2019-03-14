@@ -53,7 +53,8 @@ namespace Valve.VR.InteractionSystem
         public void OnBeginDrag( GameObject gameObject, Hand hand)
         {
             PointerEventData pointerEventData = new PointerEventData(eventSystem);
-            RaycastHit[] hits = Physics.RaycastAll(hand.transform.position, gameObject.transform.position - hand.transform.position, Mathf.Infinity);
+            Vector3 controllerTipPosition = hand.GetAttachmentTransform("Attach_ControllerTip").position;
+            RaycastHit[] hits = Physics.RaycastAll(controllerTipPosition, gameObject.transform.position - controllerTipPosition, Mathf.Infinity);
             Debug.DrawRay(hand.transform.position, gameObject.transform.position - hand.transform.position, Color.red);
             if (hits.Length > 0)
             {
@@ -68,7 +69,8 @@ namespace Valve.VR.InteractionSystem
         public void OnEndDrag ( GameObject gameObject, Hand hand)
         {
             PointerEventData pointerEventData = new PointerEventData(eventSystem);
-            RaycastHit[] hits = Physics.RaycastAll(hand.transform.position, gameObject.transform.position - hand.transform.position, Mathf.Infinity);
+            Vector3 controllerTipPosition = hand.GetAttachmentTransform("Attach_ControllerTip").position;
+            RaycastHit[] hits = Physics.RaycastAll(controllerTipPosition, gameObject.transform.position - controllerTipPosition, Mathf.Infinity);
             Debug.DrawRay(hand.transform.position, gameObject.transform.position - hand.transform.position, Color.red);
             if (hits.Length > 0)
             {
@@ -82,7 +84,8 @@ namespace Valve.VR.InteractionSystem
         public void OnDragUpdate ( GameObject gameObject, Hand hand)
         {
             PointerEventData pointerEventData = new PointerEventData(eventSystem);
-            RaycastHit[] hits = Physics.RaycastAll(hand.transform.position, gameObject.transform.position - hand.transform.position, Mathf.Infinity);
+            Vector3 controllerTipPosition = hand.GetAttachmentTransform("Attach_ControllerTip").position;
+            RaycastHit[] hits = Physics.RaycastAll(controllerTipPosition, gameObject.transform.position - controllerTipPosition, Mathf.Infinity);
             Debug.DrawRay(hand.transform.position, gameObject.transform.position - hand.transform.position, Color.red);
             if (hits.Length > 0)
             {
