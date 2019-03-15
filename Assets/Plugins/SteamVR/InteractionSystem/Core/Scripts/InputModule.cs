@@ -55,7 +55,6 @@ namespace Valve.VR.InteractionSystem
             PointerEventData pointerEventData = new PointerEventData(eventSystem);
             Vector3 controllerTipPosition = hand.GetAttachmentTransform("Attach_ControllerTip").position;
             RaycastHit[] hits = Physics.RaycastAll(controllerTipPosition, gameObject.transform.position - controllerTipPosition, Mathf.Infinity);
-            Debug.DrawRay(hand.transform.position, gameObject.transform.position - hand.transform.position, Color.red);
             if (hits.Length > 0)
             {
                 Debug.Log(hits);
@@ -71,7 +70,6 @@ namespace Valve.VR.InteractionSystem
             PointerEventData pointerEventData = new PointerEventData(eventSystem);
             Vector3 controllerTipPosition = hand.GetAttachmentTransform("Attach_ControllerTip").position;
             RaycastHit[] hits = Physics.RaycastAll(controllerTipPosition, gameObject.transform.position - controllerTipPosition, Mathf.Infinity);
-            Debug.DrawRay(hand.transform.position, gameObject.transform.position - hand.transform.position, Color.red);
             if (hits.Length > 0)
             {
                 Debug.Log(hits);
@@ -86,7 +84,6 @@ namespace Valve.VR.InteractionSystem
             PointerEventData pointerEventData = new PointerEventData(eventSystem);
             Vector3 controllerTipPosition = hand.GetAttachmentTransform("Attach_ControllerTip").position;
             RaycastHit[] hits = Physics.RaycastAll(controllerTipPosition, gameObject.transform.position - controllerTipPosition, Mathf.Infinity);
-            Debug.DrawRay(hand.transform.position, gameObject.transform.position - hand.transform.position, Color.red);
             if (hits.Length > 0)
             {
                 Debug.Log(hits);
