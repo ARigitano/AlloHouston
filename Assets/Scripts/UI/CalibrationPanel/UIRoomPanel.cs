@@ -44,7 +44,11 @@ namespace CRI.HelloHouston.Calibration.UI {
                     camera.cullingMask = _roomLayerMask;
                 _laserClicker = setup.actualLeftController.GetComponentInChildren<PointerClicker>(true);
                 if (_laserClicker != null)
+                {
+                    if (_laserClicker.GetComponent<SteamVR_LaserPointer>())
+                        _laserClicker.GetComponent<SteamVR_LaserPointer>().enabled = false;
                     _laserClicker.enabled = true;
+                }
             }
             var rxpp = (RoomSettings)obj;
             var zoneManager = new ZoneManager(_laserClicker);
@@ -74,7 +78,11 @@ namespace CRI.HelloHouston.Calibration.UI {
         public override void Next()
         {
             if (_laserClicker != null)
-             _laserClicker.enabled = false;
+            {
+                if (_laserClicker.GetComponent<SteamVR_LaserPointer>())
+                    _laserClicker.GetComponent<SteamVR_LaserPointer>().enabled = false;
+                _laserClicker.enabled = false;
+            }
             base.Next();
         }
     }
