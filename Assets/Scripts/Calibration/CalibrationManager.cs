@@ -5,6 +5,7 @@ using VRCalibrationTool;
 using CRI.HelloHouston.Calibration.Data;
 using System;
 using UnityEngine.UI;
+using VRTK;
 
 namespace CRI.HelloHouston.Calibration
 {
@@ -49,10 +50,17 @@ namespace CRI.HelloHouston.Calibration
         /// </summary>
         private VirtualItem _currentVirtualItem;
         /// <summary>
-        /// The calibration controller.
+        /// The player gameobject.
         /// </summary>
         [SerializeField]
-        [Tooltip("The calibration controller.")]
+        [Tooltip("The player gameobject")]
+        private VRTK_SDKManager _player = null;
+        /// <summary>
+        /// Layer setup for the player in game.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("Layer setup for the player in game.")]
+        private LayerMask _calibrationLayerMask = new LayerMask();
         private CalibrationController _controller;
 
         /// <summary>
@@ -78,15 +86,33 @@ namespace CRI.HelloHouston.Calibration
         
         private void Reset()
         {
-            _controller = FindObjectOfType<CalibrationController>();
+            if (_player == null)
+            {
+                _player = FindObjectOfType<VRTK_SDKManager>();
+            }
         }
 
-        private void Start()
+        public void StartCalibration()
         {
             _virtualBlockPrefabs = Resources.LoadAll<VirtualBlock>("VirtualObjects/");
             _virtualRoomPrefabs = Resources.LoadAll<VirtualRoom>("VirtualObjects/");
-            if (_controller == null)
-                _controller = FindObjectOfType<CalibrationController>();
+            if (_player == null)
+                _player = FindObjectOfType<VRTK_SDKManager>();
+            VRTK_SDKSetup setup = _player.loadedSetup;
+            if (setup != null)
+            {
+                var cameras = setup.actualHeadset.GetComponentsInChildren<Camera>();
+                foreach (var camera in cameras)
+                    camera.cullingMask = _calibrationLayerMask;
+                _controller = setup.actualRightController.GetComponentInChildren<CalibrationController>(true);
+                if (_controller != null)
+                    _controller.enabled = true;
+            }
+        }
+
+        public void EndCalibration()
+        {
+            _controller.enabled = false;
         }
 
         /// <summary>
@@ -224,14 +250,14 @@ namespace CRI.HelloHouston.Calibration
             _positionTags.Clear();
         }
 
-        public void StartCalibration(VirtualItem virtualItem)
+        public void StartObjectCalibration(VirtualItem virtualItem)
         {
-            StopCalibration();
+            StopObjectCalibration();
             _currentVirtualItem = virtualItem;
             _controller.StartCalibration();
         }
 
-        public void StopCalibration()
+        public void StopObjectCalibration()
         {
             ResetPositionTags();
             _currentVirtualItem = null;
@@ -243,7 +269,7 @@ namespace CRI.HelloHouston.Calibration
         public void ResetVirtualItems()
         {
             _currentVirtualRoom.ResetAllTags();
-            StopCalibration();
+            StopObjectCalibration();
             DataManager.instance.InsertOrReplace(_currentVirtualRoom.ToRoomEntry());
         }
 

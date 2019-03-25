@@ -80,7 +80,7 @@ namespace CRI.HelloHouston.Calibration.UI
             virtualItem.onCalibratedChange += OnCalibratedChange;
             _calibrationButton.onClick.AddListener(() =>
             {
-                calibrationManager.StartCalibration(virtualItem);
+                calibrationManager.StartObjectCalibration(virtualItem);
                 _calibrationButton.GetComponentInChildren<Text>().text = calibrationManager.remainingPositionTags.Value.ToString();
                 _calibrationButton.interactable = false;
                 CalibrationManager.onUpdatePositionTag += OnUpdatePositionTag;
