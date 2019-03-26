@@ -5602,7 +5602,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &224746020043055040
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6827,6 +6827,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _elementName: 
+  _canvasElement: 1
   _startFull: {fileID: 1850184948146124}
   _panelFull: {fileID: 1763254911668026}
   _overrideLeft: {fileID: 1629631835874508}
@@ -6837,10 +6838,6 @@ MonoBehaviour:
   _diagramsSelectionRight: {fileID: 4053082315209169074}
   _slider: {fileID: 114234886123134030}
   _speed: 0.001
-  hologramTube: {fileID: 0}
-  hologramFeynman: {fileID: 0}
-  tubeScreen: {fileID: 0}
-  correctDiagram: 0
 --- !u!1 &1920043398525408
 GameObject:
   m_ObjectHideFlags: 0
@@ -7808,14 +7805,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: eb78d5681c1bb93489a97b04f6181500, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -8370,7 +8367,6 @@ MonoBehaviour:
   _tablet: {fileID: 114957955983375362}
   _blueShader: {fileID: 2100000, guid: c29f2fbadfb452a408e2d16148879d03, type: 2}
   _whiteShader: {fileID: 2100000, guid: 1c0c279b39a4f0640a19d30cb84bcd8d, type: 2}
-  _diagrams: []
 --- !u!1 &8661381423111995419
 GameObject:
   m_ObjectHideFlags: 0
