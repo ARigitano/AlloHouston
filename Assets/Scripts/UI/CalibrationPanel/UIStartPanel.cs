@@ -18,5 +18,6 @@ namespace CRI.HelloHouston.Calibration.UI
             _nextObject = obj;
             _nextButton.onClick.AddListener(Next);
         }
+
     }
 }
