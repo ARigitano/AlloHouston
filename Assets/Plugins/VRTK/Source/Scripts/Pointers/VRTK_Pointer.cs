@@ -425,7 +425,7 @@ namespace VRTK
         {
             controllerEvents = (controllerEvents == null ? GetComponentInParent<VRTK_ControllerEvents>() : controllerEvents);
             controllerReference = VRTK_ControllerReference.GetControllerReference((controllerEvents != null ? controllerEvents.gameObject : null));
-
+            Debug.Log(controllerEvents);
             if (ControllerRequired() && controllerEvents == null)
             {
                 VRTK_Logger.Warn(VRTK_Logger.GetCommonMessage(VRTK_Logger.CommonMessageKeys.REQUIRED_COMPONENT_MISSING_FROM_GAMEOBJECT, "VRTK_Pointer", "VRTK_ControllerEvents", "the Controller Alias", ". To omit this warning, set the `Activation Button` and `Selection Button` to `Undefined`"));

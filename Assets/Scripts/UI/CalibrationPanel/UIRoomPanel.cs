@@ -25,6 +25,11 @@ namespace CRI.HelloHouston.Calibration.UI {
         /// The component that will be used to click on the different zones.
         /// </summary>
         private PointerClicker _laserClicker = null;
+
+        private SteamVR_LaserPointer _laserPointer = null;
+        [SerializeField]
+        [Tooltip("The laser's layer mask for target detection.")]
+        private LayerMask _laserLayerMask = new LayerMask();
         /// <summary>
         /// Next button.
         /// </summary>
@@ -45,8 +50,10 @@ namespace CRI.HelloHouston.Calibration.UI {
                 _laserClicker = setup.actualLeftController.GetComponentInChildren<PointerClicker>(true);
                 if (_laserClicker != null)
                 {
-                    if (_laserClicker.GetComponent<SteamVR_LaserPointer>())
-                        _laserClicker.GetComponent<SteamVR_LaserPointer>().enabled = false;
+                    _laserPointer = _laserClicker.gameObject.AddComponent<SteamVR_LaserPointer>();
+                    _laserClicker.gameObject.AddComponent<ViveInputs>();
+                    _laserPointer.layerMask = _laserLayerMask;
+                    _laserPointer.color = Color.cyan;
                     _laserClicker.enabled = true;
                 }
             }
@@ -77,11 +84,12 @@ namespace CRI.HelloHouston.Calibration.UI {
 
         public override void Next()
         {
-            if (_laserClicker != null)
+            if (_laserClicker != null && _laserPointer != null)
             {
-                if (_laserClicker.GetComponent<SteamVR_LaserPointer>())
-                    _laserClicker.GetComponent<SteamVR_LaserPointer>().enabled = false;
-                _laserClicker.enabled = false;
+                Destroy(_laserPointer.holder);
+                Destroy(_laserPointer.pointer);
+                Destroy(_laserPointer);
+                _laserPointer.enabled = false;
             }
             base.Next();
         }
