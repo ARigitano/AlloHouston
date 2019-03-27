@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -21,7 +22,7 @@ namespace CRI.HelloHouston.WindowTemplate
         [Tooltip("The delay between two animations. This delay will be added to the animator's initial delay value.")]
         protected float _postHideIntervalDelay;
 
-        public bool hidden { get; protected set; }
+        public bool visible { get; protected set; }
 
         protected virtual IEnumerator HideAnimation(Action action)
         {
@@ -29,10 +30,10 @@ namespace CRI.HelloHouston.WindowTemplate
             {
                 AnimationElement animator = _animators[(_animators.Length - 1) - i];
                 float delay = _overrideDelay ? _postHideIntervalDelay : animator.postHideDelay + _postHideIntervalDelay;
-                animator.StartHideAnimation();
+                animator.Hide();
                 yield return new WaitForSeconds(delay);
             }
-            hidden = true;
+            visible = false;
             if (action != null)
                 action();
             gameObject.SetActive(false);
@@ -40,12 +41,12 @@ namespace CRI.HelloHouston.WindowTemplate
 
         protected virtual IEnumerator ShowAnimation(Action action)
         {
-            hidden = false;
+            visible = true;
             for (int i = 0; i < _animators.Length; i++)
             {
                 AnimationElement animator = _animators[i];
                 float delay = _overrideDelay ? _postShowIntervalDelay : animator.postShowDelay + _postShowIntervalDelay;
-                animator.StartShowAnimation();
+                animator.Show();
                 yield return new WaitForSeconds(delay);
             }
             if (action != null)
@@ -83,6 +84,22 @@ namespace CRI.HelloHouston.WindowTemplate
                 StopAllCoroutines();
                 action();
             }
+        }
+    }
+
+    [CustomEditor(typeof(Window), true)]
+    public class WindowEditor : Editor
+    {
+        public override void OnInspectorGUI()
+        {
+            DrawDefaultInspector();
+
+            var window = (Window)target;
+
+            if (!window.visible && GUILayout.Button("Show"))
+                window.ShowWindow();
+            if (window.visible && GUILayout.Button("Hide"))
+                window.HideWindow();
         }
     }
 }

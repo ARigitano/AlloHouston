@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 namespace CRI.HelloHouston.WindowTemplate
@@ -9,12 +10,12 @@ namespace CRI.HelloHouston.WindowTemplate
     {
         private Animator _animator;
 
-        public override void StartShowAnimation()
+        protected override void StartShowAnimation()
         { 
             GetComponent<Animator>().SetBool("Show", true);
         }
 
-        public override void StartHideAnimation()
+        protected override void StartHideAnimation()
         {
             GetComponent<Animator>().SetBool("Show", false);
         }

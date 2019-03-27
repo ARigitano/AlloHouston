@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using UnityEditor;
+using UnityEngine;
 
 namespace CRI.HelloHouston.WindowTemplate
 {
@@ -28,7 +29,37 @@ namespace CRI.HelloHouston.WindowTemplate
                 return _postHideDelay;
             }
         }
-        public abstract void StartShowAnimation();
-        public abstract void StartHideAnimation();
+        [HideInInspector]
+        public bool visible = false;
+
+        protected abstract void StartShowAnimation();
+        protected abstract void StartHideAnimation();
+
+        public void Show()
+        {
+            visible = true;
+            StartShowAnimation();
+        }
+
+        public void Hide()
+        {
+            visible = false;
+            StartHideAnimation();
+        }
+    }
+
+    [CustomEditor(typeof(AnimationElement), true)]
+    public class AnimationElementEditor : Editor
+    {
+        public override void OnInspectorGUI()
+        {
+            DrawDefaultInspector();
+
+            var animationElement = (AnimationElement)target;
+            if (!animationElement.visible && GUILayout.Button("Show"))
+                animationElement.Show();
+            if (animationElement.visible && GUILayout.Button("Hide"))
+                animationElement.Hide();
+        }
     }
 }

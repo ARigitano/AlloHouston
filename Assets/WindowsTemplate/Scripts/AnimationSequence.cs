@@ -24,7 +24,7 @@ namespace CRI.HelloHouston.WindowTemplate
             {
                 AnimationElement animator = _animators[(_animators.Length - 1) - i];
                 float delay = _overrideDelay ? _postHideIntervalDelay : animator.postHideDelay + _postHideIntervalDelay;
-                animator.StartHideAnimation();
+                animator.Hide();
                 yield return new WaitForSeconds(delay);
             }
         }
@@ -36,17 +36,17 @@ namespace CRI.HelloHouston.WindowTemplate
             {
                 AnimationElement animator = _animators[i];
                 float delay = _overrideDelay ? _postShowIntervalDelay : animator.postShowDelay + _postShowIntervalDelay;
-                animator.StartShowAnimation();
+                animator.Show();
                 yield return new WaitForSeconds(delay);
             }
         }
 
-        public override void StartShowAnimation()
+        protected override void StartShowAnimation()
         {
             StartCoroutine(ShowAnimation());
         }
 
-        public override void StartHideAnimation()
+        protected override void StartHideAnimation()
         {
             StartCoroutine(HideAnimation());
         }

@@ -46,7 +46,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         private void ActivatePanel(Window newPanel)
         {
             // We stop the previous panel animation if it didn't finish yet.
-            if (_previousPanel != null && !_previousPanel.hidden)
+            if (_previousPanel != null && _previousPanel.visible)
             {
                 _previousPanel.StopAllCoroutines();
                 _previousPanel.gameObject.SetActive(false);

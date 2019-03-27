@@ -239,7 +239,7 @@ GameObject:
   - component: {fileID: 3410742542128118679}
   - component: {fileID: 1167940426800393376}
   - component: {fileID: 7761642468945091740}
-  - component: {fileID: 982573746372638054}
+  - component: {fileID: 7913896817826435917}
   m_Layer: 0
   m_Name: Button
   m_TagString: Untagged
@@ -339,7 +339,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &982573746372638054
+--- !u!114 &7913896817826435917
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -348,8 +348,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 7510399086172621051}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b3b1cb2f050e1dc49988892d3a8c0c4c, type: 3}
+  m_Script: {fileID: 11500000, guid: e02a04ab7177475499d0641211cb948c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _postShowDelay: 0.5
   _postHideDelay: 0.25
+  visible: 0
+  _button: {fileID: 1167940426800393376}
+  _pressedTime: 0.1
