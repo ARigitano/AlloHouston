@@ -12,7 +12,7 @@ namespace CRI.HelloHouston.Experience.MAIA
     /// </summary>
     public class MAIATabletScreen : XPElement
     {
-        private MAIAManager _manager;
+        private MAIAManager _maiaManager;
         private MAIATopScreen _topScreen;
         private MAIAHologramTube _hologramTube;
         private MAIAHologramFeynman _hologramFeynman;
@@ -62,7 +62,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                 _isTouched = true;
                 if (selectedDiagram != null)
                 {
-                    bool correctDiagram = (selectedDiagram == _manager.selectedReaction.diagramImage);
+                    bool correctDiagram = (selectedDiagram == _maiaManager.selectedReaction.diagramImage);
                     _topScreen.OnReactionSelected(correctDiagram);
                 }
                 StartCoroutine(WaitButton());
@@ -200,7 +200,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void ParticleRightCombination()
         {
-            _topScreen.manager.StartAnalysisAnimation();
+            _topScreen.maiaManager.StartAnalysisAnimation();
             _particlesLeft.SetActive(false);
         }
 
@@ -217,7 +217,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         public void AdvancedManualOverride()
         {
             _advanceOverride.SetActive(false);
-            _topScreen.manager.StartReactionIdentification();
+            _topScreen.maiaManager.StartReactionIdentification();
         }
 
         public void StartReactionIdentification()
@@ -238,10 +238,10 @@ namespace CRI.HelloHouston.Experience.MAIA
             {
                 _isTouched = true;
                 //Checks if the combination entered has the right number of particles.
-                if (_enteredParticles.Count == _manager.generatedParticles.Count)
+                if (_enteredParticles.Count == _maiaManager.generatedParticles.Count)
                 {
                     var l1 = _enteredParticles.OrderBy(particle => particle.symbol).ThenBy(particle => particle.negative).ToArray();
-                    var l2 = _manager.generatedParticles.OrderBy(particle => particle.symbol).ThenBy(particle => particle.negative).ToArray();
+                    var l2 = _maiaManager.generatedParticles.OrderBy(particle => particle.symbol).ThenBy(particle => particle.negative).ToArray();
                     bool symbols = true;
                     bool charges = true;
                     for (int i = 0; i < l1.Count(); i++)
@@ -282,8 +282,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                     ParticleSendErrorMessage(ParticlesIdentification.ErrorType.WrongNumberParticles);
                 }
                 StartCoroutine(WaitButton());
-            }
-            
+            }       
         }
 
         /// Adds a particle to the combination.
@@ -291,7 +290,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <param name="particleButton">The particle to add.</param>
         public void EnteringParticle(Particle particle)
         {
-            if (!_isTouched && _enteredParticles.Count < _manager.generatedParticles.Count)
+            if (!_isTouched && _enteredParticles.Count < _maiaManager.generatedParticles.Count)
             {
                 _isTouched = true;
                 _enteredParticles.Add(particle);
@@ -308,9 +307,9 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             if (!_isTouched)
             {
-                Debug.Log(character);
+                manager.logController.AddLog("Digit entered:" + character, manager.xpContext, Log.LogType.Input);
                 _isTouched = true;
-                string realPassword = _manager.settings.password;
+                string realPassword = _maiaManager.settings.password;
                 _enteredPassword += character.ToString();
                 bool interactable = _manualOverrideAccessScreen.CheckPasswordInput(_enteredPassword);
                 if (_enteredPassword.Length == realPassword.Length || !interactable)
@@ -352,18 +351,22 @@ namespace CRI.HelloHouston.Experience.MAIA
 
         private void Init(MAIAManager manager)
         {
-            _manager = manager;
-            Debug.Log(manager);
-            _topScreen = manager.topScreen;
-            _particleIdentificationScreen = _topScreen.particleIdentificationScreen;
-            _manualOverrideAccessScreen = _topScreen.manualOverrideAccessScreen;
-            _hologramTube = manager.hologramTube;
+            _maiaManager = manager;
         }
 
-        public override void OnActivation(XPManager manager)
+        public override void OnInit(XPManager manager, int randomSeed)
         {
-            base.OnActivation(manager);
+            base.OnInit(manager, randomSeed);
             Init((MAIAManager)manager);
+        }
+
+        public override void OnActivation()
+        {
+            base.OnActivation();
+            _topScreen = _maiaManager.topScreen;
+            _particleIdentificationScreen = _topScreen.particleIdentificationScreen;
+            _manualOverrideAccessScreen = _topScreen.manualOverrideAccessScreen;
+            _hologramTube = _maiaManager.hologramTube;
         }
     }
 }

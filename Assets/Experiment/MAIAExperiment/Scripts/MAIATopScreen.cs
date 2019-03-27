@@ -14,7 +14,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// The synchronizer of the experiment.
         /// </summary>
-        public MAIAManager manager { get; private set; }
+        public MAIAManager maiaManager { get; private set; }
         /// <summary>
         /// Script for the Exile Loading screen.
         /// </summary>
@@ -75,7 +75,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         [HideInInspector]
         public string particleErrorString;
 
-        public void ParticleGrid(List<Particle> reactionExits)
+        public void CreateParticleGrid(List<Particle> reactionExits)
         {
             _particlesIdentification.CreateParticleGrid(reactionExits);
         }
@@ -113,7 +113,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                 _currentPanel.SetActive(false);
             _currentPanel = _particlesIdentification.gameObject;
             _particlesIdentification.gameObject.SetActive(true);
-            _particlesIdentification.CreateParticleGrid(manager.generatedParticles);
+            _particlesIdentification.CreateParticleGrid(maiaManager.generatedParticles);
         }
 
         /// <summary>
@@ -156,40 +156,12 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void InitPasswordInput()
         {
-            _manualOverrideAccess.InitPasswordInput(manager.settings.password);
+            _manualOverrideAccess.InitPasswordInput(maiaManager.settings.password);
         }
 
         public void Init(MAIAManager synchronizer)
         {
-            manager = synchronizer;
-        }
-
-        //TO DO
-        /// <summary>
-        /// Effect when the experiment is correctly resolved.
-        /// </summary>
-        public override void OnSuccess()
-        {
-            Victory();
-        }
-
-        //TO DO
-        /// <summary>
-        /// Effect when the experiment is failed.
-        /// </summary>
-        public override void OnFailure()
-        {
-            Debug.Log(name + "Failed");
-        }
-
-        /// <summary>
-        /// Effect when the experiment is activated the first time.
-        /// </summary>
-        public override void OnActivation(XPManager manager)
-        {
-            Debug.Log(name + "Activated");
-            Init((MAIAManager)manager);
-            StartManualOverride();
+            maiaManager = synchronizer;
         }
 
         public void Access(bool isGranted)
@@ -201,21 +173,28 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             _reactionsIdentification.ReactionSelected(correctDiagram);
         }
-
+        
         /// <summary>
-        /// Effect when the experiment is paused.
+        /// Effect when the experiment is correctly resolved.
         /// </summary>
-        public override void OnHide()
+        public override void OnSuccess()
         {
-            Debug.Log(name + "Paused");
+            Victory();
+        }
+
+        public override void OnInit(XPManager manager, int randomSeed)
+        {
+            base.OnInit(manager, randomSeed);
+            Init((MAIAManager)manager);
         }
 
         /// <summary>
-        /// Effect when the experiment is unpaused.
+        /// Effect when the experiment is activated the first time.
         /// </summary>
         public override void OnShow()
         {
-            Debug.Log(name + "Unpaused");
+            base.OnActivation();
+            StartManualOverride();
         }
     }
 }

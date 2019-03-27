@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using System.Linq;
+using CRI.HelloHouston.Translation;
 
 namespace CRI.HelloHouston.Experience.MAIA
 {
@@ -83,8 +84,9 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <param name="error">The error to be displayed on the popup depending on the player's mistake.</param>
         public void DisplayErrorMessage(ErrorType errorType)
         {
+            ILangManager manager = GetComponentInParent<XPElement>().manager;
             _errorParticles.SetActive(true);
-            _errorParticles.GetComponentInChildren<Text>().text = _errorMessages.First(x => x.errorType == errorType).errorMessage;
+            _errorParticles.GetComponentInChildren<TranslatedText>().InitTranslatedText(manager, _errorMessages.First(x => x.errorType == errorType).errorMessage);
             StartCoroutine(_maiaTopScreen.WaitGeneric(_errorPopupDuration, () =>
             {
                 _errorParticles.SetActive(false);
@@ -109,7 +111,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             StartCoroutine(_maiaTopScreen.WaitGeneric(_successPopupDuration, () =>
             {
                 _successParticles.SetActive(false);
-                _maiaTopScreen.manager.StartAnalysisAnimation();
+                _maiaTopScreen.maiaManager.StartAnalysisAnimation();
             }));
         }
 
@@ -119,6 +121,11 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <param name="particles">The particles detected.</param>
         public void CreateParticleGrid(List<Particle> particles)
         {
+            if (!_nbParticlesDetected.GetComponent<XPTranslatedText>().initialized)
+            {
+                ILangManager manager = GetComponentInParent<XPElement>().manager;
+                _nbParticlesDetected.GetComponent<XPTranslatedText>().Init(manager);
+            }
             _particleTextMessage = _nbParticlesDetected.text;
             _gridParticles = new GridCell[particles.Count];
             for (int i = 0; i < particles.Count; i++)
@@ -126,7 +133,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                 var gridCell = Instantiate(_gridCellPrefab, _particlesGrid);
                 _gridParticles[i] = gridCell;
             }
-            FillNbParticlesDetected(_maiaTopScreen.manager.generatedParticles.Count);
+            FillNbParticlesDetected(_maiaTopScreen.maiaManager.generatedParticles.Count);
         }
 
         /// <summary>
@@ -150,7 +157,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         public void UpdateParticles(List<Particle> enteredParticles)
         {
             DisplayParticles(enteredParticles);
-            FillNbParticlesDetected(_maiaTopScreen.manager.generatedParticles.Count - enteredParticles.Count);
+            FillNbParticlesDetected(_maiaTopScreen.maiaManager.generatedParticles.Count - enteredParticles.Count);
         }
     }
 }

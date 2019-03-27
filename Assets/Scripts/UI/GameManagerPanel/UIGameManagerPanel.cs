@@ -76,7 +76,12 @@ namespace CRI.HelloHouston.Experience.UI
         private void Init(RoomXPPair rxpp)
         {
             GameManager gameManager = GameManager.instance;
-            XPManager[] synchronizers = gameManager.Init(rxpp.xpContexts, rxpp.vroom);
+            XPManager[] synchronizers;
+            Debug.Log(rxpp.seed);
+            if (rxpp.seed <= 0)
+                synchronizers = gameManager.InitGame(rxpp.xpContexts, rxpp.vroom);
+            else
+                synchronizers = gameManager.InitGame(rxpp.xpContexts, rxpp.vroom, rxpp.seed);
             if (_player != null)
                 _player.SetActive(true);
             if (_calibrationPlayer != null)

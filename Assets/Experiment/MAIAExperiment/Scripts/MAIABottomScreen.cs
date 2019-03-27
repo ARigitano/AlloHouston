@@ -29,7 +29,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// The synchronizer of the experiment.
         /// </summary>
-        public MAIAManager manager { get; private set; }
+        public MAIAManager maiaManager { get; private set; }
         /// <summary>
         /// Contains all the possible Entrytype-sprite associations.
         /// </summary>
@@ -47,7 +47,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             foreach(EntriesSprite entrySprite in interactionDiagrams)
             {
-                if(manager.selectedReaction.entries == entrySprite.type)
+                if(maiaManager.selectedReaction.entries == entrySprite.type)
                 {
                     screen.sprite = entrySprite.sprite;
                     break;
@@ -57,18 +57,18 @@ namespace CRI.HelloHouston.Experience.MAIA
 
         private void Init(MAIAManager synchronizer)
         {
-            manager = synchronizer;
+            maiaManager = synchronizer;
         }
 
-        public override void OnShow()
+        public override void OnInit(XPManager manager, int randomSeed)
         {
-            
-        }
-
-        public override void OnActivation(XPManager manager)
-        {
+            base.OnInit(manager, randomSeed);
             Init((MAIAManager)manager);
-            base.OnActivation(manager);
+        }
+
+        public override void OnActivation()
+        {
+            base.OnActivation();
             DisplayInteraction();
         }
     }

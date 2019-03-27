@@ -38,7 +38,7 @@ namespace CRI.HelloHouston.Experience
         /// All the settings of this particular experience.
         /// </summary>
         [Tooltip("All the settings of this particular experience.")]
-        public XPSettings xpSettings;
+        public XPContextSettings xpSettings;
 
         /// <summary>
         /// An empty object with the XpSynchronizer inhreting script of the experiment.
@@ -160,10 +160,10 @@ namespace CRI.HelloHouston.Experience
         /// Initializes and returns the synchronizer.
         /// </summary>
         /// <returns></returns>
-        public XPManager InitSynchronizer(LogExperienceController logExperienceController, VirtualZone[] zones)
+        public XPManager InitManager(LogExperienceController logExperienceController, VirtualZone[] zones, int randomSeed)
         {
             XPManager res = GameObject.Instantiate(_xpManagerPrefab);
-            res.Init(this, zones, logExperienceController, XPState.Visible);
+            res.Init(this, zones, logExperienceController, randomSeed, XPState.Visible);
             //TODO: Remove this line when then XP selection is complete.
             res.Activate();
             res.Show((VirtualWallTopZone)zones.First(x => x.zoneType == ZoneType.WallTop));
