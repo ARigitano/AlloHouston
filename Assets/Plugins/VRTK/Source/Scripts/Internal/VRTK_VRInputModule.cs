@@ -204,6 +204,8 @@
         {
             pointer.pointerEventData.eligibleForClick = (forceClick ? true : pointer.ValidClick(true));
 
+            if (pointer.pointerEventData.eligibleForClick)
+                Debug.DrawRay(pointer.GetOriginPosition(), pointer.GetOriginForward(), Color.red, 30.0f, false);
             if (IsEligibleClick(pointer, results))
             {
                 pointer.pointerEventData.eligibleForClick = false;
@@ -269,7 +271,7 @@
 
         protected virtual void Drag(VRTK_UIPointer pointer, List<RaycastResult> results)
         {
-            pointer.pointerEventData.dragging = pointer.IsSelectionButtonPressed() && pointer.pointerEventData.delta != Vector2.zero;
+            pointer.pointerEventData.dragging = pointer.ValidClick(false) && pointer.pointerEventData.delta != Vector2.zero;
 
             if (pointer.pointerEventData.pointerDrag)
             {
