@@ -47,7 +47,7 @@ namespace CRI.HelloHouston.WindowTemplate
             StartHideAnimation();
         }
     }
-
+#if UNITY_EDITOR
     [CustomEditor(typeof(AnimationElement), true)]
     public class AnimationElementEditor : Editor
     {
@@ -62,4 +62,5 @@ namespace CRI.HelloHouston.WindowTemplate
                 animationElement.Hide();
         }
     }
+#endif
 }

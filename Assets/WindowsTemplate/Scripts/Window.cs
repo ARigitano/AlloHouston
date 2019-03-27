@@ -86,7 +86,7 @@ namespace CRI.HelloHouston.WindowTemplate
             }
         }
     }
-
+#if UNITY_EDITOR
     [CustomEditor(typeof(Window), true)]
     public class WindowEditor : Editor
     {
@@ -102,4 +102,5 @@ namespace CRI.HelloHouston.WindowTemplate
                 window.HideWindow();
         }
     }
+#endif
 }
