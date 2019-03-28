@@ -491,18 +491,6 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 45085750424814690, guid: 248aaa0ad766ad04289ce7254eb528ac, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 248aaa0ad766ad04289ce7254eb528ac, type: 3}
---- !u!114 &259710212 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 114313592111661692, guid: 248aaa0ad766ad04289ce7254eb528ac,
-    type: 3}
-  m_PrefabInstance: {fileID: 259710211}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 259710219}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3cbe6300fa5040046a52ebfdeb59dbe6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &259710213 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1457627546981934, guid: 248aaa0ad766ad04289ce7254eb528ac,
@@ -648,8 +636,7 @@ PrefabInstance:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 114383344010369226, guid: 07650fdeb7154d046a067b8388423438, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 07650fdeb7154d046a067b8388423438, type: 3}
 --- !u!1 &802655697
 GameObject:
@@ -1250,6 +1237,8 @@ GameObject:
   - component: {fileID: 1753084663}
   - component: {fileID: 1753084662}
   - component: {fileID: 1753084668}
+  - component: {fileID: 1753084672}
+  - component: {fileID: 1753084670}
   - component: {fileID: 1753084669}
   m_Layer: 0
   m_Name: LeftController
@@ -1328,7 +1317,7 @@ MonoBehaviour:
   selectOnPress: 0
   selectionDelay: 0
   selectAfterHoverDuration: 0
-  interactWithObjects: 0
+  interactWithObjects: 1
   grabToPointerTip: 0
   attachedTo: {fileID: 0}
   controllerEvents: {fileID: 0}
@@ -1476,6 +1465,35 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &1753084670
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1753084660}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65eb64f0f2fd6d64faddbcf5d7d3bdbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  useButton: 3
+  controllerEvents: {fileID: 0}
+  interactTouch: {fileID: 1753084672}
+  interactGrab: {fileID: 0}
+--- !u!114 &1753084672
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1753084660}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64e104da36bd3b04b90c6ae969ac66dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  customColliderContainer: {fileID: 0}
 --- !u!21 &1989720053
 Material:
   serializedVersion: 6
@@ -2212,7 +2230,9 @@ GameObject:
   - component: {fileID: 4285209813068631981}
   - component: {fileID: 4285209813068631988}
   - component: {fileID: 4285209813068631976}
+  - component: {fileID: 4285209813068631985}
   - component: {fileID: 4285209813068631982}
+  - component: {fileID: 4285209813068631984}
   - component: {fileID: 4285209813068631983}
   m_Layer: 0
   m_Name: RightController
@@ -2269,6 +2289,35 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &4285209813068631984
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4285209813068631980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65eb64f0f2fd6d64faddbcf5d7d3bdbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  useButton: 3
+  controllerEvents: {fileID: 0}
+  interactTouch: {fileID: 1753084672}
+  interactGrab: {fileID: 0}
+--- !u!114 &4285209813068631985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4285209813068631980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64e104da36bd3b04b90c6ae969ac66dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  customColliderContainer: {fileID: 0}
 --- !u!114 &4285209813068631988
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2292,7 +2341,7 @@ MonoBehaviour:
   selectOnPress: 0
   selectionDelay: 0
   selectAfterHoverDuration: 0
-  interactWithObjects: 0
+  interactWithObjects: 1
   grabToPointerTip: 0
   attachedTo: {fileID: 0}
   controllerEvents: {fileID: 0}
@@ -3956,7 +4005,7 @@ PrefabInstance:
     - target: {fileID: 4869723415036972948, guid: 14e37f0a6a54bc543a991588f724f7d3,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.0000038146973
+      value: 0.000034332275
       objectReference: {fileID: 0}
     - target: {fileID: 4869572388667348580, guid: 14e37f0a6a54bc543a991588f724f7d3,
         type: 3}
@@ -3987,7 +4036,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _laserClicker
       value: 
-      objectReference: {fileID: 259710212}
+      objectReference: {fileID: 0}
     - target: {fileID: 4689040626833314113, guid: 14e37f0a6a54bc543a991588f724f7d3,
         type: 3}
       propertyPath: _player

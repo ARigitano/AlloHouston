@@ -3,16 +3,19 @@ using CRI.HelloHouston.Experience;
 using CRI.HelloHouston.Experience.UI;
 using System.Linq;
 using UnityEngine;
+using VRTK;
 
 namespace CRI.HelloHouston.Calibration.UI
 {
     internal class ZoneManager
     {
-        public UIZone _currentSelectedUIZone;
+        private UIZone _currentSelectedUIZone;
+        private GameObject _leftController;
+        private GameObject _rightController;
 
-        public void Select(object sender, IPointerClickable clickable)
+        public void Select(object sender, ObjectInteractEventArgs e)
         {
-            UIZone zone = clickable as UIZone;
+            UIZone zone = e.target.GetComponent<UIZone>();
             if (zone != null)
             {
                 if (!_currentSelectedUIZone)
@@ -27,12 +30,19 @@ namespace CRI.HelloHouston.Calibration.UI
                     zone.Place(_currentSelectedUIZone.xpZone, _currentSelectedUIZone.xpContext);
                     _currentSelectedUIZone.Place(xpZone, xpContext);
                     zone.Unselect();
-                    Unselect();
+                    Unselect(sender, e);
                 }
             }
         }
 
-        public void Unselect()
+        public void Unselect(object sender, ControllerInteractionEventArgs e)
+        {
+            if (_currentSelectedUIZone != null)
+                _currentSelectedUIZone.Unselect();
+            _currentSelectedUIZone = null;
+        }
+
+        public void Unselect(object sender, ObjectInteractEventArgs e)
         {
             if (_currentSelectedUIZone != null)
                 _currentSelectedUIZone.Unselect();
@@ -64,13 +74,58 @@ namespace CRI.HelloHouston.Calibration.UI
             }
         }
 
-        public ZoneManager(PointerClicker laserClicker)
+        public ZoneManager(GameObject rightController, GameObject leftController)
         {
-            if (laserClicker != null)
+            _rightController = rightController;
+            _leftController = leftController;
+            VRTK_InteractUse leftInteractUse = null;
+            VRTK_InteractUse rightInteractUse = null;
+            VRTK_ControllerEvents leftControllerEvents = null;
+            VRTK_ControllerEvents rightControllerEvents = null;
+            if (_rightController != null)
             {
-                laserClicker.onGripClicked += Unselect;
-                laserClicker.onHangleTriggerClicked += Select;
+                rightInteractUse = _rightController.GetComponentInChildren<VRTK_InteractUse>();
+                rightControllerEvents = _rightController.GetComponentInChildren<VRTK_ControllerEvents>();
             }
+            if (_leftController != null)
+            {
+                leftInteractUse = _leftController.GetComponentInChildren<VRTK_InteractUse>();
+                leftControllerEvents = _leftController.GetComponentInChildren<VRTK_ControllerEvents>();
+            }
+            if (leftInteractUse != null)
+                leftInteractUse.ControllerUseInteractableObject += Select;
+            if (rightInteractUse != null)
+                rightInteractUse.ControllerUseInteractableObject += Select;
+            if (leftControllerEvents != null)
+                leftControllerEvents.GripReleased += Unselect;
+            if (rightControllerEvents != null)
+                rightControllerEvents.GripReleased += Unselect;
+        }
+
+        ~ZoneManager()
+        {
+            VRTK_InteractUse leftInteractUse = null;
+            VRTK_InteractUse rightInteractUse = null;
+            VRTK_ControllerEvents leftControllerEvents = null;
+            VRTK_ControllerEvents rightControllerEvents = null;
+            if (_rightController != null)
+            {
+                rightInteractUse = _rightController.GetComponentInChildren<VRTK_InteractUse>();
+                rightControllerEvents = _rightController.GetComponentInChildren<VRTK_ControllerEvents>();
+            }
+            if (_leftController != null)
+            {
+                leftInteractUse = _leftController.GetComponentInChildren<VRTK_InteractUse>();
+                leftControllerEvents = _leftController.GetComponentInChildren<VRTK_ControllerEvents>();
+            }
+            if (leftInteractUse != null)
+                leftInteractUse.ControllerUseInteractableObject -= Select;
+            if (rightInteractUse != null)
+                rightInteractUse.ControllerUseInteractableObject -= Select;
+            if (leftControllerEvents != null)
+                leftControllerEvents.GripReleased -= Unselect;
+            if (rightControllerEvents != null)
+                rightControllerEvents.GripReleased -= Unselect;
         }
     }
 }

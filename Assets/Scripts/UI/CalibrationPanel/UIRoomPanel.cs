@@ -42,23 +42,18 @@ namespace CRI.HelloHouston.Calibration.UI {
             if (_player == null)
                 _player = FindObjectOfType<VRTK_SDKManager>();
             VRTK_SDKSetup setup = _player.loadedSetup;
+            GameObject leftController = null;
+            GameObject rightController = null;
             if (setup != null)
             {
                 var cameras = setup.actualHeadset.GetComponentsInChildren<Camera>();
                 foreach (var camera in cameras)
                     camera.cullingMask = _roomLayerMask;
-                _laserClicker = setup.actualLeftController.GetComponentInChildren<PointerClicker>(true);
-                if (_laserClicker != null)
-                {
-                    _laserPointer = _laserClicker.gameObject.AddComponent<SteamVR_LaserPointer>();
-                    _laserClicker.gameObject.AddComponent<ViveInputs>();
-                    _laserPointer.layerMask = _laserLayerMask;
-                    _laserPointer.color = Color.cyan;
-                    _laserClicker.enabled = true;
-                }
+                leftController = setup.actualLeftController;
+                rightController = setup.actualRightController;
             }
             var rxpp = (RoomSettings)obj;
-            var zoneManager = new ZoneManager(_laserClicker);
+            var zoneManager = new ZoneManager(leftController, rightController);
             VirtualRoom vroom = rxpp.vroom;
             XPContext[] xpContexts = rxpp.xpContexts;
             VirtualZone[] zones = vroom.GetZones();
