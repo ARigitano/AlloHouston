@@ -1250,6 +1250,7 @@ GameObject:
   - component: {fileID: 1753084663}
   - component: {fileID: 1753084662}
   - component: {fileID: 1753084668}
+  - component: {fileID: 1753084669}
   m_Layer: 0
   m_Name: LeftController
   m_TagString: Untagged
@@ -1458,6 +1459,21 @@ MonoBehaviour:
   createRigidBodyWhenNotTouching: 0
   controllerAttachPoint: {fileID: 0}
   controllerEvents: {fileID: 0}
+  interactTouch: {fileID: 0}
+--- !u!114 &1753084669
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1753084660}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eda201177cd508f49849386d157bdd39, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colliderRadius: 0.2
+  customColliderContainer: {fileID: 0}
   interactTouch: {fileID: 0}
 --- !u!21 &1989720053
 Material:
@@ -2196,6 +2212,7 @@ GameObject:
   - component: {fileID: 4285209813068631988}
   - component: {fileID: 4285209813068631976}
   - component: {fileID: 4285209813068631982}
+  - component: {fileID: 4285209813068631983}
   m_Layer: 0
   m_Name: RightController
   m_TagString: Untagged
@@ -2234,6 +2251,21 @@ MonoBehaviour:
   createRigidBodyWhenNotTouching: 0
   controllerAttachPoint: {fileID: 0}
   controllerEvents: {fileID: 0}
+  interactTouch: {fileID: 0}
+--- !u!114 &4285209813068631983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4285209813068631980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eda201177cd508f49849386d157bdd39, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colliderRadius: 0.2
+  customColliderContainer: {fileID: 0}
   interactTouch: {fileID: 0}
 --- !u!114 &4285209813068631988
 MonoBehaviour:
@@ -3992,7 +4024,7 @@ PrefabInstance:
     - target: {fileID: 4870388810341985832, guid: 14e37f0a6a54bc543a991588f724f7d3,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.00002670288
+      value: 0.0000038146973
       objectReference: {fileID: 0}
     - target: {fileID: 4870347211914376592, guid: 14e37f0a6a54bc543a991588f724f7d3,
         type: 3}
@@ -4087,7 +4119,7 @@ PrefabInstance:
     - target: {fileID: 4869612396180324113, guid: 14e37f0a6a54bc543a991588f724f7d3,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.000007541163
+      value: 0.000022922908
       objectReference: {fileID: 0}
     - target: {fileID: 4869612396180324113, guid: 14e37f0a6a54bc543a991588f724f7d3,
         type: 3}
@@ -4232,7 +4264,7 @@ PrefabInstance:
     - target: {fileID: 4869743438526909191, guid: 14e37f0a6a54bc543a991588f724f7d3,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -152.35004
+      value: -152.35002
       objectReference: {fileID: 0}
     - target: {fileID: 4650773023918448781, guid: 14e37f0a6a54bc543a991588f724f7d3,
         type: 3}
