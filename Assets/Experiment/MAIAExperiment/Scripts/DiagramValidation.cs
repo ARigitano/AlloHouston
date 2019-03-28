@@ -46,9 +46,9 @@ namespace CRI.HelloHouston.Experience.MAIA
             _snapDropZone.ObjectUnsnappedFromDropZone += ObjectUnsnappedFromDropZone;
         }
 
-        private void ObjectUnsnappedFromDropZone(object sender, SnapDropZoneEventArgs e)
+        private void ObjectSnappedToDropZone(object sender, SnapDropZoneEventArgs e)
         {
-            if (e.snappedObject.tag == "Feynmanbox")
+            if (e.snappedObject.tag == "Feynmanbox" )
             {
                 MAIAHologramDiagram feynmanBox = e.snappedObject.GetComponent<MAIAHologramDiagram>();
                 _diagrams.Add(feynmanBox);
@@ -56,7 +56,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             }
         }
 
-        private void ObjectSnappedToDropZone(object sender, SnapDropZoneEventArgs e)
+        private void ObjectUnsnappedFromDropZone(object sender, SnapDropZoneEventArgs e)
         {
             if (e.snappedObject.tag == "Feynmanbox")
             {
