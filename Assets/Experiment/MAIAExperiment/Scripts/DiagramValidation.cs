@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using VRTK;
 
 namespace CRI.HelloHouston.Experience.MAIA
 {
@@ -24,10 +25,51 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         [SerializeField]
         private Material _whiteShader = null;
+        [SerializeField]
+        [Tooltip("The snap drop zone attached to this diagram validation.")]
+        private VRTK_SnapDropZone _snapDropZone = null;
         /// <summary>
         /// List of all the diagrams currently in the docking zone.
         /// </summary>
         private List<MAIAHologramDiagram> _diagrams = new List<MAIAHologramDiagram>();
+
+        private void Reset()
+        {
+            _snapDropZone = GetComponentInChildren<VRTK_SnapDropZone>();
+        }
+
+        private void Start()
+        {
+            if (_snapDropZone == null)
+                _snapDropZone = GetComponentInChildren<VRTK_SnapDropZone>();
+            _snapDropZone.ObjectSnappedToDropZone += ObjectSnappedToDropZone;
+            _snapDropZone.ObjectUnsnappedFromDropZone += ObjectUnsnappedFromDropZone;
+        }
+
+        private void ObjectUnsnappedFromDropZone(object sender, SnapDropZoneEventArgs e)
+        {
+            if (e.snappedObject.tag == "Feynmanbox")
+            {
+                MAIAHologramDiagram feynmanBox = e.snappedObject.GetComponent<MAIAHologramDiagram>();
+                _diagrams.Add(feynmanBox);
+                ChangeChosenDiagram(feynmanBox);
+            }
+        }
+
+        private void ObjectSnappedToDropZone(object sender, SnapDropZoneEventArgs e)
+        {
+            if (e.snappedObject.tag == "Feynmanbox")
+            {
+                MAIAHologramDiagram feynmanBox = e.snappedObject.GetComponent<MAIAHologramDiagram>();
+                _diagrams.Remove(feynmanBox);
+                feynmanBox.screenRenderer.material = _blueShader;
+                feynmanBox.displayLine = true;
+                if (_diagrams.Count != 0)
+                {
+                    ChangeChosenDiagram(_diagrams[0]);
+                }
+            }
+        }
 
         /// <summary>
         /// Determines which holographic diagram is counted by the docking zone.
@@ -39,31 +81,6 @@ namespace CRI.HelloHouston.Experience.MAIA
             feynmanBox.displayLine = false;
             Texture diagram = feynmanBox.contentRenderer.material.mainTexture;
             _reactionPanel.selectedDiagram = diagram;
-        }
-
-        void OnTriggerEnter(Collider other)
-        {
-            if (other.tag == "Feynmanbox")
-            {
-                MAIAHologramDiagram feynmanBox = other.GetComponent<MAIAHologramDiagram>();
-                _diagrams.Add(feynmanBox);
-                ChangeChosenDiagram(feynmanBox);
-            }
-        }
-
-        private void OnTriggerExit(Collider other)
-        {
-            if (other.tag == "Feynmanbox")
-            {
-                MAIAHologramDiagram feynmanBox = other.GetComponent<MAIAHologramDiagram>();
-                _diagrams.Remove(feynmanBox);
-                feynmanBox.screenRenderer.material = _blueShader;
-                feynmanBox.displayLine = true;
-                if (_diagrams.Count != 0)
-                {
-                    ChangeChosenDiagram(_diagrams[0]);
-                }
-            }
         }
     }
 }

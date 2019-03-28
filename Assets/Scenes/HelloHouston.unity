@@ -1249,6 +1249,7 @@ GameObject:
   - component: {fileID: 1753084664}
   - component: {fileID: 1753084663}
   - component: {fileID: 1753084662}
+  - component: {fileID: 1753084668}
   m_Layer: 0
   m_Name: LeftController
   m_TagString: Untagged
@@ -1439,6 +1440,25 @@ MonoBehaviour:
   gripSenseAxisChanged: 0
   gripSensePressed: 0
   controllerVisible: 1
+--- !u!114 &1753084668
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1753084660}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 947b27445602ed640b885db7e667dfc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grabButton: 3
+  grabPrecognition: 0
+  throwMultiplier: 1
+  createRigidBodyWhenNotTouching: 0
+  controllerAttachPoint: {fileID: 0}
+  controllerEvents: {fileID: 0}
+  interactTouch: {fileID: 0}
 --- !u!21 &1989720053
 Material:
   serializedVersion: 6
@@ -2175,6 +2195,7 @@ GameObject:
   - component: {fileID: 4285209813068631981}
   - component: {fileID: 4285209813068631988}
   - component: {fileID: 4285209813068631976}
+  - component: {fileID: 4285209813068631982}
   m_Layer: 0
   m_Name: RightController
   m_TagString: Untagged
@@ -2195,6 +2216,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   togglePointerOnHit: 0
+--- !u!114 &4285209813068631982
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4285209813068631980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 947b27445602ed640b885db7e667dfc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grabButton: 3
+  grabPrecognition: 0
+  throwMultiplier: 1
+  createRigidBodyWhenNotTouching: 0
+  controllerAttachPoint: {fileID: 0}
+  controllerEvents: {fileID: 0}
+  interactTouch: {fileID: 0}
 --- !u!114 &4285209813068631988
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3882,7 +3922,7 @@ PrefabInstance:
     - target: {fileID: 4869723415036972948, guid: 14e37f0a6a54bc543a991588f724f7d3,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000034332275
+      value: 0.0000038146973
       objectReference: {fileID: 0}
     - target: {fileID: 4869572388667348580, guid: 14e37f0a6a54bc543a991588f724f7d3,
         type: 3}
@@ -3952,7 +3992,7 @@ PrefabInstance:
     - target: {fileID: 4870388810341985832, guid: 14e37f0a6a54bc543a991588f724f7d3,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.0000038146973
+      value: -0.00002670288
       objectReference: {fileID: 0}
     - target: {fileID: 4870347211914376592, guid: 14e37f0a6a54bc543a991588f724f7d3,
         type: 3}
@@ -4007,7 +4047,7 @@ PrefabInstance:
     - target: {fileID: 4870167980425575783, guid: 14e37f0a6a54bc543a991588f724f7d3,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.0000071676486
+      value: -0.000008090202
       objectReference: {fileID: 0}
     - target: {fileID: 4869640550043717287, guid: 14e37f0a6a54bc543a991588f724f7d3,
         type: 3}
@@ -4047,7 +4087,7 @@ PrefabInstance:
     - target: {fileID: 4869612396180324113, guid: 14e37f0a6a54bc543a991588f724f7d3,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000030689665
+      value: -0.000007541163
       objectReference: {fileID: 0}
     - target: {fileID: 4869612396180324113, guid: 14e37f0a6a54bc543a991588f724f7d3,
         type: 3}
