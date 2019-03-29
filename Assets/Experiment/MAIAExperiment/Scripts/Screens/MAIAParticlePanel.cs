@@ -8,6 +8,11 @@ namespace CRI.HelloHouston.Experience.MAIA
 {
     public class MAIAParticlePanel : Window
     {
+        private struct ParticleCount
+        {
+            public string particleSymbol;
+            public int count;
+        }
         [Header("Particle Panel Attributes")]
         [SerializeField]
         [Tooltip("The main tablet script.")]
@@ -48,15 +53,14 @@ namespace CRI.HelloHouston.Experience.MAIA
             //Checks if the combination entered has the right number of particles.
             if (count == _manager.generatedParticles.Count)
             {
-                var l1 = _particleSliders.Select(x => x.particle).OrderBy(particle => particle.symbol).ThenBy(particle => particle.negative).ToArray();
-                var l2 = _manager.generatedParticles.OrderBy(particle => particle.symbol).ThenBy(particle => particle.negative).ToArray();
+                var l1 = _particleSliders.Select(slider => new ParticleCount() { particleSymbol = slider.particle.symbol, count = (int)slider.currentValue }).ToArray();
+                var l2 = _manager.generatedParticles.GroupBy(particle => particle.symbol).Select(group => new ParticleCount() { particleSymbol = group.Key, count = group.Count() }).ToArray();
                 bool symbols = true;
                 for (int i = 0; i < l1.Count(); i++)
                 {
-                    if (l1[i].symbol != l2[i].symbol)
+                    if (l2.First(x => x.particleSymbol == l1[i].particleSymbol).count != l1[i].count)
                     {
                         symbols = false;
-                        Debug.Log(l1[i].symbol + " !=" + l2[i].symbol);
                         break;
                     }
                 }
