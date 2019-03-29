@@ -12,6 +12,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         public enum ErrorType
         {
             WrongNumberCharges,
+            WrongCharges,
             WrongParticles,
             WrongNumberParticles,
         }
