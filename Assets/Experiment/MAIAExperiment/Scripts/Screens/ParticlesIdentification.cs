@@ -229,7 +229,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             _chargeGridCellDictionary = new Dictionary<Particle, ParticleGridCell>();
             _chargeValues = new Dictionary<MAIA.Particle, int>();
-            foreach (var particleGroup in _maiaTopScreen.maiaManager.settings.allParticles.Where(particle => particle.line).OrderBy(particle => particle.symbol).ThenBy(particle => !particle.negative).GroupBy(particle => particle))
+            foreach (var particleGroup in _maiaTopScreen.maiaManager.settings.allParticles.Where(particle => particle.line).OrderBy(particle => particle.symbol).ThenBy(particle => particle.negative).GroupBy(particle => particle))
             {
                 var particleGridCell = Instantiate(_particleGridCellPrefab, _chargeGridTransform);
                 particleGridCell.Init(particleGroup.Key);
