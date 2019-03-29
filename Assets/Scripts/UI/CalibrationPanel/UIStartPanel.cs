@@ -23,6 +23,7 @@ namespace CRI.HelloHouston.Calibration.UI
         {
             _nextObject = obj;
             _nextButton.onClick.AddListener(Next);
+            //Camera.main.cullingMask &= ~(1 << LayerMask.NameToLayer("Default"));
         }
 
         public override void Next()
