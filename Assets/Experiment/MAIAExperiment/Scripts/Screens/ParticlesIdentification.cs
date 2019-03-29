@@ -168,7 +168,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         private void FillNbChargesDetected()
         {
             int guessed = _chargeValues.Sum(x => x.Value);
-            int total = _maiaTopScreen.maiaManager.generatedParticles.Count;
+            int total = _maiaTopScreen.maiaManager.generatedParticles.Count(x => x.line);
             _nbChargesDetected.text = _particleDetectedTextMessage.Replace("[p]", total.ToString());
             _nbChargesGuessed.text = _particleGuessedTextMessage.Replace("[p]", (guessed != total ? string.Format("<color=red>{0}</color>", guessed) : guessed.ToString()));
         }
@@ -248,6 +248,8 @@ namespace CRI.HelloHouston.Experience.MAIA
                 _particleGridCellDictionary[group.Key].SetText(group.Value.ToString());
                 if (group.Value == 0)
                     _particleGridCellDictionary[group.Key].Disable();
+                else
+                    _particleGridCellDictionary[group.Key].Enable();
             }
         }
 
@@ -259,6 +261,8 @@ namespace CRI.HelloHouston.Experience.MAIA
                 _chargeGridCellDictionary[group.Key].SetText(group.Value.ToString());
                 if (group.Value == 0)
                     _chargeGridCellDictionary[group.Key].Disable();
+                else
+                    _particleGridCellDictionary[group.Key].Enable();
             }
         }
 
