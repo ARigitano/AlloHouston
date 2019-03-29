@@ -159,6 +159,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             topScreen = maiaManager.topScreen;
             _passwordPanel.Init(maiaManager.logController, maiaManager.xpContext, topScreen.manualOverrideAccessScreen, maiaManager.settings.password);
             _particlesPanel.Init(maiaManager, topScreen.particleIdentificationScreen);
+            _particleChargesPanel.Init(maiaManager, topScreen.particleIdentificationScreen);
             _reactionPanel.Init(topScreen, maiaManager);
             _hologramTube = maiaManager.hologramTube;
             ActivatePanel(_moPanel);
