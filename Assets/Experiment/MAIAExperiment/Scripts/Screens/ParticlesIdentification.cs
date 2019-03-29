@@ -128,7 +128,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             int guessed = _particleValues.Sum(x => x.Value);
             int total = _maiaTopScreen.maiaManager.generatedParticles.Count;
             _nbParticlesDetected.text = _particleDetectedTextMessage.Replace("[p]", total.ToString());
-            _nbParticlesGuessed.text = _particleGuessedTextMessage.Replace("[p]", guessed.ToString());
+            _nbParticlesGuessed.text = _particleGuessedTextMessage.Replace("[p]", (guessed != total ? string.Format("<color=red>{0}</color>", guessed) : guessed.ToString()));
         }
 
         /// <summary>
