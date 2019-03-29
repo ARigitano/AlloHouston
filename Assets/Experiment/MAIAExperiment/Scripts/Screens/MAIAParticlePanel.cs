@@ -8,28 +8,27 @@ namespace CRI.HelloHouston.Experience.MAIA
 {
     public class MAIAParticlePanel : Window
     {
-        /// <summary>
-        /// The particles entered by the player.
-        /// </summary>
-        private List<Particle> _enteredParticles = new List<Particle>();
+        [Header("Particle Panel Attributes")]
         [SerializeField]
         [Tooltip("The main tablet script.")]
         private MAIATabletScreen _tablet = null;
+        [SerializeField]
+        [Tooltip("An array of particle sliders used to represent the number of particles.")]
+        private MAIAParticleSlider[] _particleSliders;
         private ParticlesIdentification _piScreen;
         private MAIAManager _manager;
 
         private void OnDisable()
         {
-            ClearParticles();
+            foreach (var particleSlider in _particleSliders)
+            {
+                particleSlider.slider.value = 0;
+            }
         }
 
-        /// <summary>
-        /// Clears the particles combination entered.
-        /// </summary>
-        public void ClearParticles()
+        private void OnParticleValueChanged(object sender, ParticleEventArgs e)
         {
-            _enteredParticles.Clear();
-            _piScreen.UpdateParticles(_enteredParticles);
+            _piScreen.UpdateParticles(e);
         }
 
         /// <summary>
@@ -39,42 +38,19 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             _piScreen.DisplayErrorMessage(particleErrorType);
         }
-
-        /// <summary>
-        /// Deletes the last entered particle.
-        /// </summary>
-        public void DeleteParticle()
-        {
-            if (_enteredParticles.Count > 0)
-                _enteredParticles.RemoveAt(_enteredParticles.Count - 1);
-            _piScreen.UpdateParticles(_enteredParticles);
-        }
-
-        /// Adds a particle to the combination.
-        /// </summary>
-        /// <param name="particleButton">The particle to add.</param>
-        public void AddParticle(Particle particle)
-        {
-            if (_enteredParticles.Count < _manager.generatedParticles.Count)
-            {
-                _manager.logController.AddLogInput("Particle input: " + particle.particleName, _manager.xpContext);
-                _enteredParticles.Add(particle);
-                _piScreen.UpdateParticles(_enteredParticles);
-            }
-        }
-
+        
         /// <summary>
         /// Submits the particles combination entered.
         /// </summary>
         public void SubmitParticles()
         {
+            int count = _particleSliders.Sum(x => x.currentValue);
             //Checks if the combination entered has the right number of particles.
-            if (_enteredParticles.Count == _manager.generatedParticles.Count)
+            if (count == _manager.generatedParticles.Count)
             {
-                var l1 = _enteredParticles.OrderBy(particle => particle.symbol).ThenBy(particle => particle.negative).ToArray();
+                var l1 = _particleSliders.Select(x => x.particle).OrderBy(particle => particle.symbol).ThenBy(particle => particle.negative).ToArray();
                 var l2 = _manager.generatedParticles.OrderBy(particle => particle.symbol).ThenBy(particle => particle.negative).ToArray();
                 bool symbols = true;
-                bool charges = true;
                 for (int i = 0; i < l1.Count(); i++)
                 {
                     if (l1[i].symbol != l2[i].symbol)
@@ -83,23 +59,11 @@ namespace CRI.HelloHouston.Experience.MAIA
                         Debug.Log(l1[i].symbol + " !=" + l2[i].symbol);
                         break;
                     }
-                    if (l1[i].negative != l2[i].negative && !l1[i].particleName.ToLower().Contains("neutrino"))
-                        charges = false;
                 }
                 // Checks if the right symbols have been entered.
                 if (symbols)
                 {
-                    //Check if the right symbols + charges have been entered. We ignore the neutrino particle in this process.
-                    if (charges)
-                    {
-                        //The right combination of particles have been entered.
-                        _tablet.OnRightParticleCombination();
-                    }
-                    else
-                    {
-                        //A wrong combination of charges have been entered.
-                        ParticleSendErrorMessage(ParticlesIdentification.ErrorType.WrongNumberCharges);
-                    }
+                    _tablet.OnRightParticleCombination();
                 }
                 else
                 {
@@ -118,6 +82,11 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             _manager = manager;
             _piScreen = piScreen;
+            foreach (var particleSlider in _particleSliders)
+            {
+                particleSlider.Init(manager.generatedParticles.Count);
+                particleSlider.onValueChanged += OnParticleValueChanged;
+            }
         }
     }
 }

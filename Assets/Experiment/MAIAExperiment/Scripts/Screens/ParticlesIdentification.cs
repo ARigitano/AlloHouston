@@ -34,26 +34,16 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// Message to  be displayed for the number of particles.
         /// </summary>
-        private string _particleTextMessage = "";
-        /// <summary>
-        /// Grid that displays the cases for the detected particles to enter.
-        /// </summary>
-        [SerializeField]
-        private Transform _particlesGrid = null;
-        /// <summary>
-        /// Prefab of a case for the particle grid.
-        /// </summary>
-        [SerializeField]
-        private GridCell _gridCellPrefab = null;
-        /// <summary>
-        /// All the cases for the detected particles.
-        /// </summary>
-        private GridCell[] _gridParticles;
+        private string _particleDetectedTextMessage = "";
+
+        private string _particleGuessedTextMessage = "";
         /// <summary>
         /// The total number of particles detected.
         /// </summary>
         [SerializeField]
         private Text _nbParticlesDetected = null;
+        [SerializeField]
+        private Text _nbParticlesGuessed = null;
         /// <summary>
         /// Popup that displays the wrong identification of the detected particles.
         /// </summary>
@@ -81,6 +71,23 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         [SerializeField]
         private ErrorMessage[] _errorMessages = null;
+        /// <summary>
+        /// Particle grid cell prefab.
+        /// </summary>
+        [SerializeField]
+        private ParticleGridCell _particleGridCellPrefab = null;
+        /// <summary>
+        /// Particle grid cell dictionary.
+        /// </summary>
+        private Dictionary<Particle, ParticleGridCell> _particleGridCellDictionary;
+
+        private Dictionary<Particle, int> _particleValues;
+        /// <summary>
+        /// Particle grid transform.
+        /// </summary>
+        [SerializeField]
+        private Transform _particleGridTransform = null;
+
 
         private int _currentCount;
 
@@ -92,8 +99,9 @@ namespace CRI.HelloHouston.Experience.MAIA
 
         private void OnLangChange(LangApp lang)
         {
-            _particleTextMessage = _langManager.textManager.GetText(_nbParticlesDetected.GetComponent<TranslatedText>().textKey);
-            FillNbParticlesDetected(_currentCount);
+            _particleDetectedTextMessage = _langManager.textManager.GetText(_nbParticlesDetected.GetComponent<TranslatedText>().textKey);
+            _particleGuessedTextMessage = _langManager.textManager.GetText(_nbParticlesGuessed.GetComponent<TranslatedText>().textKey);
+            FillNbParticlesDetected();
         }
 
         /// <summary>
@@ -115,10 +123,12 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// Fills the number of particles that have been detected on the reaction summary window.
         /// </summary>
         /// <param name="particles">The number of particles that have been detected.</param>
-        private void FillNbParticlesDetected(int count)
+        private void FillNbParticlesDetected()
         {
-            _currentCount = count;
-            _nbParticlesDetected.text = _particleTextMessage.Replace("[p]", count.ToString());
+            int guessed = _particleValues.Sum(x => x.Value);
+            int total = _maiaTopScreen.maiaManager.generatedParticles.Count;
+            _nbParticlesDetected.text = _particleDetectedTextMessage.Replace("[p]", total.ToString());
+            _nbParticlesGuessed.text = _particleGuessedTextMessage.Replace("[p]", guessed.ToString());
         }
 
         /// <summary>
@@ -140,44 +150,48 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <param name="particles">The particles detected.</param>
         public void CreateParticleGrid(List<Particle> particles)
         {
-            if (!_nbParticlesDetected.GetComponent<XPTranslatedText>().initialized)
+            if (_particleGridCellDictionary == null || _particleGridCellDictionary.Count == 0)
             {
                 _langManager = GetComponentInParent<XPElement>().manager;
                 _nbParticlesDetected.GetComponent<XPTranslatedText>().Init(_langManager);
+                _nbParticlesGuessed.GetComponent<XPTranslatedText>().Init(_langManager);
                 _langManager.langManager.onLangChange += OnLangChange;
-            }
-            _particleTextMessage = _nbParticlesDetected.text;
-            _gridParticles = new GridCell[particles.Count];
-            for (int i = 0; i < particles.Count; i++)
-            {
-                var gridCell = Instantiate(_gridCellPrefab, _particlesGrid);
-                _gridParticles[i] = gridCell;
-            }
-            FillNbParticlesDetected(_maiaTopScreen.maiaManager.generatedParticles.Count);
-        }
-
-        /// <summary>
-        /// Displays the particles combination while they are being entered.
-        /// </summary>
-        /// <param name="particles">The particles combination that is being entered.</param>
-        private void DisplayParticles(List<Particle> particles)
-        {
-            for (int i = 0; i < _gridParticles.Length; i++)
-            {
-                if (i < particles.Count)
-                {
-                    _gridParticles[i].Show(true);
-                    _gridParticles[i].SetSprite(particles[i].symbolImage);
-                }
-                else
-                    _gridParticles[i].Show(false);
+                _particleDetectedTextMessage = _nbParticlesDetected.text;
+                _particleGuessedTextMessage = _nbParticlesGuessed.text;
+                InitParticleGridCellDictionary();
+                FillNbParticlesDetected();
             }
         }
 
-        public void UpdateParticles(List<Particle> enteredParticles)
+        private void InitParticleGridCellDictionary()
         {
-            DisplayParticles(enteredParticles);
-            FillNbParticlesDetected(_maiaTopScreen.maiaManager.generatedParticles.Count - enteredParticles.Count);
+            _particleGridCellDictionary = new Dictionary<Particle, ParticleGridCell>();
+            _particleValues = new Dictionary<MAIA.Particle, int>();
+            foreach (var particleGroup in _maiaTopScreen.maiaManager.settings.allParticles.Where(particle => !particle.negative).OrderBy(particle => particle.symbol).GroupBy(particle => particle))
+            {
+                var particleGridCell = Instantiate(_particleGridCellPrefab, _particleGridTransform);
+                particleGridCell.Init(particleGroup.Key);
+                particleGridCell.SetText("0");
+                _particleGridCellDictionary.Add(particleGroup.Key, particleGridCell);
+                _particleValues.Add(particleGroup.Key, 0);
+            }
+            UpdateParticles(_particleValues);
+        }
+
+        private void UpdateParticles(Dictionary<Particle, int> dictionary)
+        {
+            for (int i = 0; i < dictionary.Count; i++)
+            {
+                var group = dictionary.ElementAt(i);
+                _particleGridCellDictionary[group.Key].SetText(group.Value.ToString());
+            }
+        }
+
+        public void UpdateParticles(ParticleEventArgs e)
+        {
+            _particleValues[e.particle] = (int)e.value;
+            UpdateParticles(_particleValues);
+            FillNbParticlesDetected();
         }
     }
 }
