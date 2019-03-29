@@ -262,7 +262,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                 if (group.Value == 0)
                     _chargeGridCellDictionary[group.Key].Disable();
                 else
-                    _particleGridCellDictionary[group.Key].Enable();
+                    _chargeGridCellDictionary[group.Key].Enable();
             }
         }
 
