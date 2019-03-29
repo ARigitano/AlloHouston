@@ -80,13 +80,13 @@ namespace CRI.HelloHouston.Experience.MAIA
                 else
                 {
                     //A wrong combination of symbols have been entered.
-                    ParticleSendErrorMessage(ParticlesIdentification.ErrorType.WrongParticles);
+                    ParticleSendErrorMessage(ParticlesIdentification.ErrorType.WrongCharges);
                 }
             }
             else
             {
                 //A combination of particles with a wrong length has been entered.
-                ParticleSendErrorMessage(ParticlesIdentification.ErrorType.WrongNumberParticles);
+                ParticleSendErrorMessage(ParticlesIdentification.ErrorType.WrongNumberCharges);
             }
         }
 

@@ -169,8 +169,8 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             int guessed = _chargeValues.Sum(x => x.Value);
             int total = _maiaTopScreen.maiaManager.generatedParticles.Count;
-            _nbParticlesDetected.text = _particleDetectedTextMessage.Replace("[p]", total.ToString());
-            _nbParticlesGuessed.text = _particleGuessedTextMessage.Replace("[p]", (guessed != total ? string.Format("<color=red>{0}</color>", guessed) : guessed.ToString()));
+            _nbChargesDetected.text = _particleDetectedTextMessage.Replace("[p]", total.ToString());
+            _nbChargesGuessed.text = _particleGuessedTextMessage.Replace("[p]", (guessed != total ? string.Format("<color=red>{0}</color>", guessed) : guessed.ToString()));
         }
         /// <summary>
         /// Displays a popup if the player selected the right Feynman diagram.
