@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// The XPManager for the tutorial experiment.
+/// </summary>
 namespace CRI.HelloHouston.Experience.Tutorial
 {
     public class TutorialManager : XPManager
@@ -28,6 +31,9 @@ namespace CRI.HelloHouston.Experience.Tutorial
         public TutorialSettings settings { get; private set; }
         private Camera _player;
 
+        /// <summary>
+        /// Intro video that explains the universe of the game.
+        /// </summary>
         private void IntroVideo()
         {
             //disables every layers in camera
@@ -39,6 +45,9 @@ namespace CRI.HelloHouston.Experience.Tutorial
             //fades out
         }
 
+        /// <summary>
+        /// Initialization of the holocube.
+        /// </summary>
         private void ActivatingHolocube()
         {
             //REQUIRES HOLOCUBE
@@ -48,6 +57,9 @@ namespace CRI.HelloHouston.Experience.Tutorial
             //sets next step
         }
 
+        /// <summary>
+        /// Initialization of the communication screen.
+        /// </summary>
         private void ActivationCommunicationScreen()
         {
             //REQUIRES HOLOCUBE
@@ -59,6 +71,9 @@ namespace CRI.HelloHouston.Experience.Tutorial
             //sets next step
         }
 
+        /// <summary>
+        /// Launched when first button of the tablet has been pressed.
+        /// </summary>
         private void MaintenanceStarted()
         {
             //MODIF TABLET
@@ -66,6 +81,9 @@ namespace CRI.HelloHouston.Experience.Tutorial
             //sets next step
         }
 
+        /// <summary>
+        /// Player has to remove the irregularities a first time with an easy level.
+        /// </summary>
         private void Maintenance()
         {
             //REQUIRES HOLOCUBE
@@ -74,6 +92,9 @@ namespace CRI.HelloHouston.Experience.Tutorial
             //sets next step
         }
 
+        /// <summary>
+        /// Player has to remove the irregularities a second time with an impossible level.
+        /// </summary>
         private void MaintenanceVirus()
         {
             //REQUIRES HOLOCUBE
@@ -83,6 +104,9 @@ namespace CRI.HelloHouston.Experience.Tutorial
             //sets next step
         }
 
+        /// <summary>
+        /// Fails the maintenance and launches the game phase.
+        /// </summary>
         private void EndMaintenance()
         {
             //launched if first or second steps of maintenance have been failed

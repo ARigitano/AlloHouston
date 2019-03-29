@@ -2,14 +2,30 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// The hologram for the tutorial experiment.
+/// </summary>
 namespace CRI.HelloHouston.Experience.Tutorial
 {
     public class TutorialHologram : XPHologramElement
     {
         //private List<GameObject> _irregularities = new List<GameObject>();
-        private int _nbIrregukarities;
+        /// <summary>
+        /// Number of irregularities inside the core.
+        /// </summary>
+        private int _nbIrregularities;
+        /// <summary>
+        /// Text that displays the number of irregularities remaining inside the core.
+        /// </summary>
         [SerializeField]
-        private TextMesh _uiNbIrregularities, _uiTimer;
+        private TextMesh _uiNbIrregularities,
+        /// <summary>
+        /// Text that displays the time remaining before failure.
+        /// </summary>  
+                        _uiTimer;
+        /// <summary>
+        /// Timer until failure.
+        /// </summary>
         [SerializeField]
         private float _timer;
 
@@ -18,16 +34,20 @@ namespace CRI.HelloHouston.Experience.Tutorial
         {
             foreach(GameObject irregularity in GameObject.FindGameObjectsWithTag("Irregularity"))
             {
-                _nbIrregukarities++;
+                _nbIrregularities++;
                 //_irregularities.Add(irregularity);
             }
 
             //_nbIrregukarities = _irregularities.Count;
-            _uiNbIrregularities.text = _nbIrregukarities.ToString();
+            _uiNbIrregularities.text = _nbIrregularities.ToString();
 
             StartCoroutine("CountDown");
         }
 
+        /// <summary>
+        /// CountDown until failure.
+        /// </summary>
+        /// <returns>Wait for seconds.</returns>
         IEnumerator CountDown()
         {
             while(_timer > 0f)
@@ -40,12 +60,15 @@ namespace CRI.HelloHouston.Experience.Tutorial
             _uiNbIrregularities.text = "Fail";
         }
 
+        /// <summary>
+        /// Update the state of the core each time an irregularity is removed.
+        /// </summary>
         public void UpdateNbIrregularities()
         {
-            _nbIrregukarities--;
-            _uiNbIrregularities.text = _nbIrregukarities.ToString();
+            _nbIrregularities--;
+            _uiNbIrregularities.text = _nbIrregularities.ToString();
 
-            if(_nbIrregukarities == 0)
+            if(_nbIrregularities == 0)
             {
                 _uiNbIrregularities.text = "winrar";
             }

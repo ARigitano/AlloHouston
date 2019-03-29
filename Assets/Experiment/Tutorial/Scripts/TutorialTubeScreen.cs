@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 
+/// </summary>
 namespace CRI.HelloHouston.Experience.Tutorial
 {
     public class TutorialTubeScreen : XPElement

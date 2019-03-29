@@ -2,10 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// An irregularity inside of the core hologram for the tutorial.
+/// </summary>
 namespace CRI.HelloHouston.Experience.Tutorial
 {
     public class Irregularity : MonoBehaviour
     {
+        /// <summary>
+        /// The hologram for the tutorial experiment.
+        /// </summary>
         [SerializeField]
         private TutorialHologram _hologram;
 
