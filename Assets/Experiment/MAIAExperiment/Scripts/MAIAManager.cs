@@ -163,6 +163,15 @@ namespace CRI.HelloHouston.Experience.MAIA
 
         public void OnPISuccess()
         {
+            stepManager.SkipToStep("CI");
+            topScreen.StartCI();
+            tabletScreen.StartCI();
+            hologramFeynman.gameObject.SetActive(false);
+            hologramTube.gameObject.SetActive(true);
+        }
+
+        public void OnCISuccess()
+        {
             stepManager.SkipToStep("AMO");
             topScreen.StartAnalysisAnimation();
             tabletScreen.HideAllPanels();

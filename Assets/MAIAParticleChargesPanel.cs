@@ -1,16 +1,15 @@
-﻿using CRI.HelloHouston.WindowTemplate;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using UnityEngine;
+using CRI.HelloHouston.WindowTemplate;
+using System.Collections.Generic;
 
 namespace CRI.HelloHouston.Experience.MAIA
 {
-    public class MAIAParticlePanel : Window
+    public class MAIAParticleChargesPanel : Window
     {
         private struct ParticleCount
         {
-            public string particleSymbol;
+            public Particle particle;
             public int count;
         }
         [Header("Particle Panel Attributes")]
@@ -22,6 +21,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         private MAIAParticleSlider[] _particleSliders = null;
         private ParticlesIdentification _piScreen;
         private MAIAManager _manager;
+        private Dictionary<string, int> _particleSymbolCount;
 
         private void OnDisable()
         {
@@ -33,7 +33,15 @@ namespace CRI.HelloHouston.Experience.MAIA
 
         private void OnParticleValueChanged(object sender, ParticleEventArgs e)
         {
-            _piScreen.UpdateParticles(e);
+            var sliders = _particleSliders.Where(slider => slider.particle.symbol == e.particle.symbol).ToArray();
+            int sum = sliders.Sum(slider => slider.currentValue);
+            // We have more combined charges than possible
+            if (sum > _particleSymbolCount[e.particle.symbol])
+            {
+                // We take the other slider and substract the difference
+                sliders.First(slider => (object)slider != sender).slider.value -= (sum - _particleSymbolCount[e.particle.symbol]);
+            }
+            _piScreen.UpdateParticleCharges(e);
         }
 
         /// <summary>
@@ -43,7 +51,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             _piScreen.DisplayErrorMessage(particleErrorType);
         }
-        
+
         /// <summary>
         /// Submits the particles combination entered.
         /// </summary>
@@ -53,19 +61,19 @@ namespace CRI.HelloHouston.Experience.MAIA
             //Checks if the combination entered has the right number of particles.
             if (count == _manager.generatedParticles.Count)
             {
-                var l1 = _particleSliders.Select(slider => new ParticleCount() { particleSymbol = slider.particle.symbol, count = (int)slider.currentValue }).ToArray();
-                var l2 = _manager.generatedParticles.GroupBy(particle => particle.symbol).Select(group => new ParticleCount() { particleSymbol = group.Key, count = group.Count() }).ToArray();
-                bool symbols = true;
+                var l1 = _particleSliders.Select(slider => new ParticleCount() { particle = slider.particle, count = (int)slider.currentValue }).ToArray();
+                var l2 = _manager.generatedParticles.GroupBy(particle => particle).Select(group => new ParticleCount() { particle = group.Key, count = group.Count() }).ToArray();
+                bool charges = true;
                 for (int i = 0; i < l1.Count(); i++)
                 {
-                    if (l2.First(x => x.particleSymbol == l1[i].particleSymbol).count != l1[i].count)
+                    if (l2.First(x => x.particle == l1[i].particle).count != l1[i].count)
                     {
-                        symbols = false;
+                        charges = false;
                         break;
                     }
                 }
                 // Checks if the right symbols have been entered.
-                if (symbols)
+                if (charges)
                 {
                     _tablet.OnRightParticleCombination();
                 }
@@ -91,6 +99,12 @@ namespace CRI.HelloHouston.Experience.MAIA
                 particleSlider.Init(manager.generatedParticles.Count);
                 particleSlider.onValueChanged += OnParticleValueChanged;
             }
+            _particleSymbolCount = new Dictionary<string, int>();
+            foreach (var group in _manager.generatedParticles.GroupBy(particle => particle.symbol))
+            {
+                _particleSymbolCount.Add(group.Key, group.Count());
+            }
         }
     }
 }
+

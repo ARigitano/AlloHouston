@@ -38,12 +38,29 @@ namespace CRI.HelloHouston.Experience.MAIA
 
         private string _particleGuessedTextMessage = "";
         /// <summary>
+        /// Message to  be displayed for the number of particles.
+        /// </summary>
+        private string _chargesDetectedTextMessage = "";
+
+        private string _chargesGuessedTextMessage = "";
+        /// <summary>
         /// The total number of particles detected.
         /// </summary>
         [SerializeField]
         private Text _nbParticlesDetected = null;
         [SerializeField]
         private Text _nbParticlesGuessed = null;
+        /// <summary>
+        /// The total number of particles detected.
+        /// </summary>
+        [SerializeField]
+        private Text _nbChargesDetected = null;
+        [SerializeField]
+        private Text _nbChargesGuessed = null;
+        [SerializeField]
+        private GameObject _particlePanel;
+        [SerializeField]
+        private GameObject _chargePanel;
         /// <summary>
         /// Popup that displays the wrong identification of the detected particles.
         /// </summary>
@@ -54,6 +71,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         [SerializeField]
         private GameObject _successParticles = null;
+
         /// <summary>
         /// Error popup duration.
         /// </summary>
@@ -80,14 +98,25 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// Particle grid cell dictionary.
         /// </summary>
         private Dictionary<Particle, ParticleGridCell> _particleGridCellDictionary;
+        /// <summary>
+        /// Particle grid cell dictionary.
+        /// </summary>
+        private Dictionary<Particle, ParticleGridCell> _chargeGridCellDictionary;
 
         private Dictionary<Particle, int> _particleValues;
+
+        private Dictionary<Particle, int> _chargeValues;
+        
         /// <summary>
         /// Particle grid transform.
         /// </summary>
         [SerializeField]
         private Transform _particleGridTransform = null;
-
+        /// <summary>
+        /// Particle charges transform.
+        /// </summary>
+        [SerializeField]
+        private Transform _chargeGridTransform = null;
 
         private int _currentCount;
 
@@ -131,6 +160,17 @@ namespace CRI.HelloHouston.Experience.MAIA
             _nbParticlesGuessed.text = _particleGuessedTextMessage.Replace("[p]", (guessed != total ? string.Format("<color=red>{0}</color>", guessed) : guessed.ToString()));
         }
 
+        /// <summdwary>
+        /// Fills the number of particles that have been detected on the reaction summary window.
+        /// </summary>
+        /// <param name="particles">The number of particles that have been detected.</param>
+        private void FillNbChargesDetected()
+        {
+            int guessed = _chargeValues.Sum(x => x.Value);
+            int total = _maiaTopScreen.maiaManager.generatedParticles.Count;
+            _nbParticlesDetected.text = _particleDetectedTextMessage.Replace("[p]", total.ToString());
+            _nbParticlesGuessed.text = _particleGuessedTextMessage.Replace("[p]", (guessed != total ? string.Format("<color=red>{0}</color>", guessed) : guessed.ToString()));
+        }
         /// <summary>
         /// Displays a popup if the player selected the right Feynman diagram.
         /// </summary>
@@ -155,11 +195,17 @@ namespace CRI.HelloHouston.Experience.MAIA
                 _langManager = GetComponentInParent<XPElement>().manager;
                 _nbParticlesDetected.GetComponent<XPTranslatedText>().Init(_langManager);
                 _nbParticlesGuessed.GetComponent<XPTranslatedText>().Init(_langManager);
+                _nbChargesDetected.GetComponent<XPTranslatedText>().Init(_langManager);
+                _nbChargesGuessed.GetComponent<XPTranslatedText>().Init(_langManager);
                 _langManager.langManager.onLangChange += OnLangChange;
                 _particleDetectedTextMessage = _nbParticlesDetected.text;
                 _particleGuessedTextMessage = _nbParticlesGuessed.text;
+                _chargesDetectedTextMessage = _nbChargesDetected.text;
+                _chargesGuessedTextMessage = _nbChargesGuessed.text;
                 InitParticleGridCellDictionary();
+                InitParticleChargesGridCellDictionary();
                 FillNbParticlesDetected();
+                FillNbChargesDetected();
             }
         }
 
@@ -178,13 +224,60 @@ namespace CRI.HelloHouston.Experience.MAIA
             UpdateParticles(_particleValues);
         }
 
+        private void InitParticleChargesGridCellDictionary()
+        {
+            _chargeGridCellDictionary = new Dictionary<Particle, ParticleGridCell>();
+            _chargeValues = new Dictionary<MAIA.Particle, int>();
+            foreach (var particleGroup in _maiaTopScreen.maiaManager.settings.allParticles.Where(particle => particle.line).OrderBy(particle => particle.symbol).GroupBy(particle => particle))
+            {
+                var particleGridCell = Instantiate(_particleGridCellPrefab, _chargeGridTransform);
+                particleGridCell.Init(particleGroup.Key);
+                particleGridCell.SetText("0");
+                _chargeGridCellDictionary.Add(particleGroup.Key, particleGridCell);
+                _chargeValues.Add(particleGroup.Key, 0);
+            }
+            UpdateParticleCharges(_chargeValues);
+        }
+
         private void UpdateParticles(Dictionary<Particle, int> dictionary)
         {
             for (int i = 0; i < dictionary.Count; i++)
             {
                 var group = dictionary.ElementAt(i);
                 _particleGridCellDictionary[group.Key].SetText(group.Value.ToString());
+                if (group.Value == 0)
+                    _particleGridCellDictionary[group.Key].Disable();
             }
+        }
+
+        private void UpdateParticleCharges(Dictionary<Particle, int> dictionary)
+        {
+            for (int i = 0; i < dictionary.Count; i++)
+            {
+                var group = dictionary.ElementAt(i);
+                _chargeGridCellDictionary[group.Key].SetText(group.Value.ToString());
+                if (group.Value == 0)
+                    _chargeGridCellDictionary[group.Key].Disable();
+            }
+        }
+
+        public void DisplayParticlePanel()
+        {
+            _particlePanel.SetActive(true);
+            _chargePanel.SetActive(false);
+        }
+
+        public void DisplayChargePanel()
+        {
+            _particlePanel.SetActive(false);
+            _chargePanel.SetActive(true);
+        }
+
+        public void UpdateParticleCharges(ParticleEventArgs e)
+        {
+            _chargeValues[e.particle] = (int)e.value;
+            UpdateParticleCharges(_chargeValues);
+            FillNbChargesDetected();
         }
 
         public void UpdateParticles(ParticleEventArgs e)

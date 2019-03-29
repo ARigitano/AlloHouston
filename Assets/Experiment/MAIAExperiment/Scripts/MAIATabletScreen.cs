@@ -26,6 +26,9 @@ namespace CRI.HelloHouston.Experience.MAIA
         [Tooltip("The particles panel.")]
         private MAIAParticlePanel _particlesPanel = null;
         [SerializeField]
+        [Tooltip("The particle charges.")]
+        private MAIAParticleChargesPanel _particleChargesPanel = null;
+        [SerializeField]
         [Tooltip("The advanced manual override panel.")]
         private Window _amoPanel = null;
         [SerializeField]
@@ -114,6 +117,14 @@ namespace CRI.HelloHouston.Experience.MAIA
         public void StartPI()
         {
             ActivatePanel(_particlesPanel);
+        }
+
+        /// <summary>
+        /// Displays the particle charge panel.
+        /// </summary>
+        public void StartCI()
+        {
+            ActivatePanel(_particleChargesPanel);
         }
 
         /// <summary>

@@ -108,6 +108,13 @@ namespace CRI.HelloHouston.Experience.MAIA
         public void StartPI()
         {
             ActivatePanel(_particlesIdentification.gameObject);
+            _particlesIdentification.DisplayParticlePanel();
+        }
+
+        public void StartCI()
+        {
+            ActivatePanel(_particlesIdentification.gameObject);
+            _particlesIdentification.DisplayChargePanel();
         }
 
         /// <summary>

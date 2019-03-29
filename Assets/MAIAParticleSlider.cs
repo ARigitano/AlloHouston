@@ -1,5 +1,4 @@
-﻿using CRI.HelloHouston.Experience.MAIA;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace CRI.HelloHouston.Experience.MAIA
