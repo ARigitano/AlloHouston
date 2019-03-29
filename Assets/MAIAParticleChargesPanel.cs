@@ -94,15 +94,15 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             _manager = manager;
             _piScreen = piScreen;
-            foreach (var particleSlider in _particleSliders)
-            {
-                particleSlider.Init(manager.generatedParticles.Count);
-                particleSlider.onValueChanged += OnParticleValueChanged;
-            }
             _particleSymbolCount = new Dictionary<string, int>();
             foreach (var group in _manager.generatedParticles.GroupBy(particle => particle.symbol))
             {
                 _particleSymbolCount.Add(group.Key, group.Count());
+            }
+            foreach (var particleSlider in _particleSliders)
+            {
+                particleSlider.Init(_particleSymbolCount[particleSlider.particle.symbol]);
+                particleSlider.onValueChanged += OnParticleValueChanged;
             }
         }
     }
