@@ -89,7 +89,11 @@ namespace CRI.HelloHouston.Experience.MAIA
         public void OnRightParticleCombination()
         {
             topScreen.maiaManager.OnPISuccess();
-            ActivatePanel(null);
+        }
+
+        public void OnRightChargeCombination()
+        {
+            topScreen.maiaManager.OnCISuccess();
         }
 
         public void OnAMOClick()

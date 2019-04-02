@@ -56,10 +56,11 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// Submits the particles combination entered.
         /// </summary>
         public void SubmitParticles()
+
         {
             int count = _particleSliders.Sum(x => x.currentValue);
-            //Checks if the combination entered has the right number of particles.
-            if (count == _manager.generatedParticles.Count)
+            // The only particles we're interested in for the charges check are the particles with lines.
+            if (count == _manager.generatedParticles.Count(particle => particle.line))
             {
                 var l1 = _particleSliders.Select(slider => new ParticleCount() { particle = slider.particle, count = (int)slider.currentValue }).ToArray();
                 var l2 = _manager.generatedParticles.GroupBy(particle => particle).Select(group => new ParticleCount() { particle = group.Key, count = group.Count() }).ToArray();
@@ -75,7 +76,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                 // Checks if the right symbols have been entered.
                 if (charges)
                 {
-                    _tablet.OnRightParticleCombination();
+                    _tablet.OnRightChargeCombination();
                 }
                 else
                 {
