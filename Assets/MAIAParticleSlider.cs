@@ -47,7 +47,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             slider = GetComponent<Slider>();
             slider.minValue = 0;
-            slider.maxValue = maxSliderValue;
+            slider.maxValue = maxSliderValue + 0.9f;
             slider.value = 0;
             slider.onValueChanged.AddListener(OnValueChanged);
         }

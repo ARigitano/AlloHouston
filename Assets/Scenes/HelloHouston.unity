@@ -1240,6 +1240,8 @@ GameObject:
   - component: {fileID: 1753084672}
   - component: {fileID: 1753084670}
   - component: {fileID: 1753084669}
+  - component: {fileID: 1753084671}
+  - component: {fileID: 1753084673}
   m_Layer: 0
   m_Name: LeftController
   m_TagString: Untagged
@@ -1481,6 +1483,20 @@ MonoBehaviour:
   controllerEvents: {fileID: 0}
   interactTouch: {fileID: 1753084672}
   interactGrab: {fileID: 0}
+--- !u!114 &1753084671
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1753084660}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 610ab4815646ed142b50cfab9043f85f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  highlightBodyOnlyOnCollision: 0
+  pulseTriggerHighlightColor: 1
 --- !u!114 &1753084672
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1494,6 +1510,54 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   customColliderContainer: {fileID: 0}
+--- !u!114 &1753084673
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1753084660}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fd667fed7ffd7e4da0e0b4f64cd0f06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  transitionDuration: 0
+  highlightController: {r: 0, g: 0, b: 0, a: 0}
+  highlightBody: {r: 0, g: 0, b: 0, a: 0}
+  highlightTrigger: {r: 0, g: 0, b: 0, a: 0}
+  highlightGrip: {r: 0, g: 0, b: 0, a: 0}
+  highlightTouchpad: {r: 0, g: 0, b: 0, a: 0}
+  highlightTouchpadTwo: {r: 0, g: 0, b: 0, a: 0}
+  highlightButtonOne: {r: 0, g: 0, b: 0, a: 0}
+  highlightButtonTwo: {r: 0, g: 0, b: 0, a: 0}
+  highlightSystemMenu: {r: 0, g: 0, b: 0, a: 0}
+  highlightStartMenu: {r: 0, g: 0, b: 0, a: 0}
+  modelElementPaths:
+    bodyModelPath: 
+    triggerModelPath: 
+    leftGripModelPath: 
+    rightGripModelPath: 
+    touchpadModelPath: 
+    touchpadTwoModelPath: 
+    buttonOneModelPath: 
+    buttonTwoModelPath: 
+    systemMenuModelPath: 
+    startMenuModelPath: 
+  elementHighlighterOverrides:
+    body: {fileID: 0}
+    trigger: {fileID: 0}
+    gripLeft: {fileID: 0}
+    gripRight: {fileID: 0}
+    touchpad: {fileID: 0}
+    touchpadTwo: {fileID: 0}
+    buttonOne: {fileID: 0}
+    buttonTwo: {fileID: 0}
+    systemMenu: {fileID: 0}
+    startMenu: {fileID: 0}
+  controllerAlias: {fileID: 0}
+  modelContainer: {fileID: 0}
+  controllerHighlighter: {fileID: 0}
 --- !u!21 &1989720053
 Material:
   serializedVersion: 6
@@ -2234,6 +2298,8 @@ GameObject:
   - component: {fileID: 4285209813068631982}
   - component: {fileID: 4285209813068631984}
   - component: {fileID: 4285209813068631983}
+  - component: {fileID: 4285209813068631986}
+  - component: {fileID: 4285209813068631987}
   m_Layer: 0
   m_Name: RightController
   m_TagString: Untagged
@@ -2318,6 +2384,68 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   customColliderContainer: {fileID: 0}
+--- !u!114 &4285209813068631986
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4285209813068631980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 610ab4815646ed142b50cfab9043f85f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  highlightBodyOnlyOnCollision: 0
+  pulseTriggerHighlightColor: 1
+--- !u!114 &4285209813068631987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4285209813068631980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fd667fed7ffd7e4da0e0b4f64cd0f06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  transitionDuration: 0
+  highlightController: {r: 0, g: 0, b: 0, a: 0}
+  highlightBody: {r: 0, g: 0, b: 0, a: 0}
+  highlightTrigger: {r: 0, g: 0, b: 0, a: 0}
+  highlightGrip: {r: 0, g: 0, b: 0, a: 0}
+  highlightTouchpad: {r: 0, g: 0, b: 0, a: 0}
+  highlightTouchpadTwo: {r: 0, g: 0, b: 0, a: 0}
+  highlightButtonOne: {r: 0, g: 0, b: 0, a: 0}
+  highlightButtonTwo: {r: 0, g: 0, b: 0, a: 0}
+  highlightSystemMenu: {r: 0, g: 0, b: 0, a: 0}
+  highlightStartMenu: {r: 0, g: 0, b: 0, a: 0}
+  modelElementPaths:
+    bodyModelPath: 
+    triggerModelPath: 
+    leftGripModelPath: 
+    rightGripModelPath: 
+    touchpadModelPath: 
+    touchpadTwoModelPath: 
+    buttonOneModelPath: 
+    buttonTwoModelPath: 
+    systemMenuModelPath: 
+    startMenuModelPath: 
+  elementHighlighterOverrides:
+    body: {fileID: 0}
+    trigger: {fileID: 0}
+    gripLeft: {fileID: 0}
+    gripRight: {fileID: 0}
+    touchpad: {fileID: 0}
+    touchpadTwo: {fileID: 0}
+    buttonOne: {fileID: 0}
+    buttonTwo: {fileID: 0}
+    systemMenu: {fileID: 0}
+    startMenu: {fileID: 0}
+  controllerAlias: {fileID: 0}
+  modelContainer: {fileID: 0}
+  controllerHighlighter: {fileID: 0}
 --- !u!114 &4285209813068631988
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4075,7 +4203,7 @@ PrefabInstance:
     - target: {fileID: 4870388810341985832, guid: 14e37f0a6a54bc543a991588f724f7d3,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.000030517578
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4870347211914376592, guid: 14e37f0a6a54bc543a991588f724f7d3,
         type: 3}

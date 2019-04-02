@@ -26,7 +26,7 @@ namespace CRI.HelloHouston.WindowTemplate
 
         private void OnValueChanged(float value)
         {
-            _text.text = value.ToString();
+            _text.text = ((int)value).ToString();
         }
     }
 }
