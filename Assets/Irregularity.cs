@@ -14,6 +14,9 @@ namespace CRI.HelloHouston.Experience.Tutorial
         /// </summary>
         [SerializeField]
         private TutorialHologram _hologram;
+        private bool _isOut = false;
+        [SerializeField]
+        private Material _safeMaterial, _failMaterial;
 
         // Start is called before the first frame update
         void Start()
@@ -32,12 +35,18 @@ namespace CRI.HelloHouston.Experience.Tutorial
             _hologram.UpdateNbIrregularities();
         }
 
+        public void OutOfBound()
+        {
+            if(_isOut) 
+                Destroy(gameObject, 1f);
+        }
+
         private void OnTriggerExit(Collider other)
         {
             if (other.tag == "Core")
             {
-                gameObject.GetComponent<MeshRenderer>().enabled = true; 
-                Destroy(gameObject, 3f);
+                gameObject.GetComponent<MeshRenderer>().enabled = true;
+                _isOut = true;
             }
         }
     }

@@ -28,6 +28,7 @@ namespace CRI.HelloHouston.Experience.Tutorial
         /// </summary>
         [SerializeField]
         private float _timer;
+        private bool win = false;
 
         // Start is called before the first frame update
         void Start()
@@ -52,12 +53,15 @@ namespace CRI.HelloHouston.Experience.Tutorial
         {
             while(_timer > 0f)
             {
+                if (win)
+                    break;
                 yield return new WaitForSeconds(1f);
                 _timer--;
                 _uiTimer.text = _timer.ToString();
             }
 
-            _uiNbIrregularities.text = "Fail";
+            if(!win)
+                _uiNbIrregularities.text = "Fail";
         }
 
         /// <summary>
@@ -71,6 +75,7 @@ namespace CRI.HelloHouston.Experience.Tutorial
             if(_nbIrregularities == 0)
             {
                 _uiNbIrregularities.text = "winrar";
+                win = true;
             }
         }
 
