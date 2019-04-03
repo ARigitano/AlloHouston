@@ -19,13 +19,15 @@ namespace CRI.HelloHouston.Experience.Tutorial
         /// </summary>
         [SerializeField]
         private float _timer;
+        public GameObject[] attaches;
         [SerializeField]
-        private Transform[] _attaches;
+        private GameObject _virus;
 
         // Start is called before the first frame update
         void Start()
         {
             StartCoroutine("CountDown");
+            attaches = GameObject.FindGameObjectsWithTag("CoreAttach");
         }
 
         /// <summary>
@@ -34,11 +36,19 @@ namespace CRI.HelloHouston.Experience.Tutorial
         /// <returns>Wait for seconds.</returns>
         IEnumerator CountDown()
         {
+            float virusCountDown = 0f;
             while (_timer > 0f)
             {
                 yield return new WaitForSeconds(1f);
                 _timer--;
                 _uiTimer.text = _timer.ToString();
+                virusCountDown++;
+                if (virusCountDown == 10f)
+                {
+                    virusCountDown = 5f;
+                    //GameObject virus = (GameObject)Instantiate(_virus, gameObject.transform.position, gameObject.transform.rotation);
+                    //virus.transform.localScale = gameObject.transform.localScale;
+                }
             }
             _uiTimer.text = "Fail";
         }
