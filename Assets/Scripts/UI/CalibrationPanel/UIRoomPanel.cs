@@ -53,7 +53,7 @@ namespace CRI.HelloHouston.Calibration.UI {
                 rightController = setup.actualRightController;
             }
             var rxpp = (RoomSettings)obj;
-            var zoneManager = new ZoneManager(leftController, rightController);
+            var zoneManager = new ZoneManager(rightController, leftController);
             VirtualRoom vroom = rxpp.vroom;
             XPContext[] xpContexts = rxpp.xpContexts;
             VirtualZone[] zones = vroom.GetZones();

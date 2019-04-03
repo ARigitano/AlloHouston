@@ -15,6 +15,7 @@ namespace CRI.HelloHouston.Calibration.UI
 
         public void Select(object sender, ObjectInteractEventArgs e)
         {
+            Debug.Log("Select");
             UIZone zone = e.target.GetComponent<UIZone>();
             if (zone != null)
             {
@@ -56,7 +57,7 @@ namespace CRI.HelloHouston.Calibration.UI
 
         public void DistributeZones(VirtualZone[] virtualZones, ContextZone[] contextZones)
         {
-            virtualZones.Shuffle();
+            virtualZones = virtualZones.Shuffle().ToArray();
             foreach (VirtualZone virtualZone in virtualZones)
             {
                 var ui = virtualZone.GetComponent<UIZone>();
@@ -65,7 +66,6 @@ namespace CRI.HelloHouston.Calibration.UI
             }
             foreach (ContextZone contextZone in contextZones)
             {
-                Debug.Log(contextZone.xpZone);
                 VirtualZone zone = virtualZones.FirstOrDefault(x => x.zoneType == contextZone.xpZone.zoneType && x.xpZone == null);
                 if (zone != null && zone.GetComponent<UIZone>() != null)
                     zone.GetComponent<UIZone>().Place(contextZone.xpZone, contextZone.xpContext);

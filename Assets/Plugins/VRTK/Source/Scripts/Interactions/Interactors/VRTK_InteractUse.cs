@@ -321,6 +321,7 @@ namespace VRTK
 
         protected virtual void UseInteractedObject(GameObject touchedObject)
         {
+            Debug.Log(string.Format("Using Object [{0}] IsObjectUsable [{1}] interactTouch [{2}]", usingObject, IsObjectUsable(touchedObject), interactTouch));
             if ((usingObject == null || usingObject != touchedObject) && IsObjectUsable(touchedObject) && interactTouch != null)
             {
                 usingObject = touchedObject;
