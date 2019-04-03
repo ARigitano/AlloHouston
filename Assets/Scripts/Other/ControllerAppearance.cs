@@ -11,13 +11,16 @@ public class ControllerAppearance : MonoBehaviour
     private VRTK_ControllerHighlighter highligher;
     private VRTK_ControllerEvents events;
     private VRTK_InteractGrab interactGrab;
+    private VRTK_UIPointer uipointer;
     private Color highlightColor = Color.yellow;
+    private Color clickColor = Color.red;
     private Color pulseColor = Color.black;
     private Color currentPulseColor;
     private float highlightTimer = 0.5f;
-    private float pulseTimer = 0.25f;
+    private float pulseTimer = 0.5f;
     private float dimOpacity = 0.8f;
     private float defaultOpacity = 1f;
+    private float clickTimer = 0.1f;
     private bool highlighted;
 
     private void OnEnable()
@@ -31,6 +34,7 @@ public class ControllerAppearance : MonoBehaviour
         events = GetComponent<VRTK_ControllerEvents>();
         highligher = GetComponent<VRTK_ControllerHighlighter>();
         interactGrab = GetComponent<VRTK_InteractGrab>();
+        uipointer = GetComponent<VRTK_UIPointer>();
         currentPulseColor = pulseColor;
         highlighted = false;
 
@@ -41,6 +45,9 @@ public class ControllerAppearance : MonoBehaviour
         events.StartMenuPressed += DoStartMenuPressed;
         events.GripPressed += DoGripPressed;
         events.TouchpadPressed += DoTouchpadPressed;
+        uipointer.UIPointerElementEnter += DoUIPointerElementEnter;
+        uipointer.UIPointerElementExit += DoUIPointerElementExit;
+        uipointer.UIPointerElementClick += DoUIPointerElementClick;
     }
 
     private void OnDisable()
@@ -51,12 +58,23 @@ public class ControllerAppearance : MonoBehaviour
         events.StartMenuPressed -= DoStartMenuPressed;
         events.GripPressed -= DoGripPressed;
         events.TouchpadPressed -= DoTouchpadPressed;
+        uipointer.UIPointerElementEnter -= DoUIPointerElementEnter;
+        uipointer.UIPointerElementExit -= DoUIPointerElementExit;
+        uipointer.UIPointerElementClick -= DoUIPointerElementClick;
     }
 
     private void PulseTrigger()
     {
         highligher.HighlightElement(SDK_BaseController.ControllerElements.Trigger, currentPulseColor, pulseTimer);
         currentPulseColor = (currentPulseColor == pulseColor ? highlightColor : pulseColor);
+    }
+
+    private void RestoreHighlight()
+    {
+        if (highlighted)
+            highligher.HighlightElement(SDK_BaseController.ControllerElements.Body, highlightColor, highlightTimer);
+        else
+            highligher.UnhighlightElement(SDK_BaseController.ControllerElements.Body);
     }
 
     private void DoTriggerPressed(object sender, ControllerInteractionEventArgs e)
@@ -66,38 +84,69 @@ public class ControllerAppearance : MonoBehaviour
         {
             CancelInvoke("PulseTrigger");
         }
-        VRTK_ObjectAppearance.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), 1.0f);
+        VRTK_ObjectAppearance.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), defaultOpacity);
     }
 
     private void DoButtonOnePressed(object sender, ControllerInteractionEventArgs e)
     {
         highligher.UnhighlightElement(SDK_BaseController.ControllerElements.ButtonOne);
-        VRTK_ObjectAppearance.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), 1.0f);
+        VRTK_ObjectAppearance.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), defaultOpacity);
     }
 
     private void DoButtonTwoPressed(object sender, ControllerInteractionEventArgs e)
     {
         highligher.UnhighlightElement(SDK_BaseController.ControllerElements.ButtonTwo);
-        VRTK_ObjectAppearance.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), 1.0f);
+        VRTK_ObjectAppearance.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), defaultOpacity);
     }
 
     private void DoStartMenuPressed(object sender, ControllerInteractionEventArgs e)
     {
         highligher.UnhighlightElement(SDK_BaseController.ControllerElements.StartMenu);
-        VRTK_ObjectAppearance.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), 1.0f);
+        VRTK_ObjectAppearance.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), defaultOpacity);
     }
 
     private void DoGripPressed(object sender, ControllerInteractionEventArgs e)
     {
         highligher.UnhighlightElement(SDK_BaseController.ControllerElements.GripLeft);
         highligher.UnhighlightElement(SDK_BaseController.ControllerElements.GripRight);
-        VRTK_ObjectAppearance.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), 1.0f);
+        VRTK_ObjectAppearance.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), defaultOpacity);
     }
 
     private void DoTouchpadPressed(object sender, ControllerInteractionEventArgs e)
     {
         highligher.UnhighlightElement(SDK_BaseController.ControllerElements.Touchpad);
-        VRTK_ObjectAppearance.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), 1.0f);
+        VRTK_ObjectAppearance.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), defaultOpacity);
+    }
+
+    private void DoUIPointerElementExit(object sender, UIPointerEventArgs e)
+    {
+        highligher.UnhighlightElement(SDK_BaseController.ControllerElements.Body);
+        highlighted = false;
+    }
+
+    private void DoUIPointerElementEnter(object sender, UIPointerEventArgs e)
+    {
+        highligher.HighlightElement(SDK_BaseController.ControllerElements.Body, highlightColor);
+        highlighted = true;
+    }
+
+    private void DoUIPointerElementClick(object sender, UIPointerEventArgs e)
+    {
+        highligher.HighlightElement(SDK_BaseController.ControllerElements.Body, clickColor);
+        Invoke("RestoreHighlight", clickTimer);
+    }
+
+    private void DoUIPointerElementDragStart(object sender, UIPointerEventArgs e)
+    {
+        Debug.Log("DragStart");
+        highligher.HighlightElement(SDK_BaseController.ControllerElements.Body, clickColor);
+    }
+
+    private void DoUIPointerElementDragEnd(object sender, UIPointerEventArgs e)
+    {
+        Debug.Log("DragEnd");
+        highligher.UnhighlightElement(SDK_BaseController.ControllerElements.Body);
+        RestoreHighlight();
     }
 
     private void OnTriggerEnter(Collider collider)
@@ -113,6 +162,7 @@ public class ControllerAppearance : MonoBehaviour
             if (interactable != null && interactable.isGrabbable && !events.IsButtonPressed(interactGrab.grabButton))
             {
                 HighlightButton(interactGrab.grabButton, highlightColor, highlightTimer);
+                highligher.HighlightElement(SDK_BaseController.ControllerElements.Body, highlightColor, highlightTimer);
                 VRTK_ObjectAppearance.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), dimOpacity);
                 highlighted = true;
             }
@@ -127,7 +177,8 @@ public class ControllerAppearance : MonoBehaviour
             if (interactable != null && interactable.isGrabbable)
             {
                 UnhighlightButton(interactGrab.grabButton);
-                VRTK_ObjectAppearance.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), 1.0f);
+                highligher.UnhighlightElement(SDK_BaseController.ControllerElements.Body);
+                VRTK_ObjectAppearance.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), defaultOpacity);
                 highlighted = false;
             }
         }

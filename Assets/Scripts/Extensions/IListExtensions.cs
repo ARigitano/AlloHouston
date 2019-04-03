@@ -19,12 +19,10 @@ namespace CRI.HelloHouston
         public static IList<T> Shuffle<T>(this IList<T> ts, Random rand)
         {
             IList<T> list = ts.ToList();
-            var count = ts.Count;
-            var last = count - 1;
-            for (var i = 0; i < last; ++i)
+            for (int i = (ts.Count - 1); i > 1; i--)
             {
-                var r = rand.Next(i, count);
-                var tmp = list[i];
+                int r = rand.Next(i + 1);
+                T tmp = list[i];
                 list[i] = list[r];
                 list[r] = tmp;
             }
