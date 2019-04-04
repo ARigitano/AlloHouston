@@ -1,1 +1,2 @@
-# AlloHouston
+# ExileToHome
+Collaborative mixed reality game.
