@@ -11,6 +11,8 @@ public class ControllerAppearance : MonoBehaviour
     private VRTK_ControllerHighlighter highligher;
     private VRTK_ControllerEvents events;
     private VRTK_InteractGrab interactGrab;
+    private VRTK_InteractUse interactUse;
+    private VRTK_InteractTouch interactTouch;
     private VRTK_UIPointer uipointer;
     private Color highlightColor = Color.yellow;
     private Color clickColor = Color.red;
@@ -34,6 +36,8 @@ public class ControllerAppearance : MonoBehaviour
         events = GetComponent<VRTK_ControllerEvents>();
         highligher = GetComponent<VRTK_ControllerHighlighter>();
         interactGrab = GetComponent<VRTK_InteractGrab>();
+        interactTouch = GetComponent<VRTK_InteractTouch>();
+        interactUse = GetComponent<VRTK_InteractUse>();
         uipointer = GetComponent<VRTK_UIPointer>();
         currentPulseColor = pulseColor;
         highlighted = false;
@@ -45,6 +49,7 @@ public class ControllerAppearance : MonoBehaviour
         events.StartMenuPressed += DoStartMenuPressed;
         events.GripPressed += DoGripPressed;
         events.TouchpadPressed += DoTouchpadPressed;
+        events.TouchpadReleased += DoTouchPadReleased;
         uipointer.UIPointerElementEnter += DoUIPointerElementEnter;
         uipointer.UIPointerElementExit += DoUIPointerElementExit;
         uipointer.UIPointerElementClick += DoUIPointerElementClick;
@@ -118,6 +123,11 @@ public class ControllerAppearance : MonoBehaviour
         VRTK_ObjectAppearance.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), defaultOpacity);
     }
 
+    private void DoTouchPadReleased(object sender, ControllerInteractionEventArgs e)
+    {
+        highligher.UnhighlightElement(SDK_BaseController.ControllerElements.Body);
+    }
+
     private void DoUIPointerElementExit(object sender, UIPointerEventArgs e)
     {
         highligher.UnhighlightElement(SDK_BaseController.ControllerElements.Body);
@@ -159,9 +169,12 @@ public class ControllerAppearance : MonoBehaviour
         if (!VRTK_PlayerObject.IsPlayerObject(collider.gameObject) && !highlighted)
         {
             VRTK_InteractableObject interactable = collider.gameObject.GetComponentInParent<VRTK_InteractableObject>();
-            if (interactable != null && interactable.isGrabbable && !events.IsButtonPressed(interactGrab.grabButton))
+            if (interactable != null)
             {
-                HighlightButton(interactGrab.grabButton, highlightColor, highlightTimer);
+                if (interactable.isGrabbable && !events.IsButtonPressed(interactGrab.grabButton))
+                    HighlightButton(interactGrab.grabButton, highlightColor, highlightTimer);
+                if (interactable.isUsable && !events.IsButtonPressed(interactUse.useButton))
+                    HighlightButton(interactUse.useButton, highlightColor, highlightTimer);
                 highligher.HighlightElement(SDK_BaseController.ControllerElements.Body, highlightColor, highlightTimer);
                 VRTK_ObjectAppearance.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), dimOpacity);
                 highlighted = true;
@@ -174,9 +187,12 @@ public class ControllerAppearance : MonoBehaviour
         if (!VRTK_PlayerObject.IsPlayerObject(collider.gameObject))
         {
             VRTK_InteractableObject interactable = collider.gameObject.GetComponentInParent<VRTK_InteractableObject>();
-            if (interactable != null && interactable.isGrabbable)
+            if (interactable != null)
             {
-                UnhighlightButton(interactGrab.grabButton);
+                if (interactable.isGrabbable)
+                    UnhighlightButton(interactGrab.grabButton);
+                if (interactable.isUsable)
+                    UnhighlightButton(interactUse.useButton);
                 highligher.UnhighlightElement(SDK_BaseController.ControllerElements.Body);
                 VRTK_ObjectAppearance.SetOpacity(VRTK_DeviceFinder.GetModelAliasController(events.gameObject), defaultOpacity);
                 highlighted = false;
@@ -225,6 +241,7 @@ public class ControllerAppearance : MonoBehaviour
                 highligher.HighlightElement(SDK_BaseController.ControllerElements.Trigger, highlightColor, highlightTimer);
                 if (pulseTriggerHighlightColor)
                 {
+                    CancelInvoke("PulseTrigger");
                     InvokeRepeating("PulseTrigger", pulseTimer, pulseTimer);
                 }
                 break;
