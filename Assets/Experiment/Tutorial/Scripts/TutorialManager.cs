@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Video;
 
 /// <summary>
 /// The XPManager for the tutorial experiment.
@@ -30,6 +31,14 @@ namespace CRI.HelloHouston.Experience.Tutorial
         /// </summary>
         public TutorialSettings settings { get; private set; }
         private Camera _player;
+        [SerializeField]
+        private VideoPlayer _introVideo;
+        private bool _cubeInitializable = false;
+        private bool _comInitializable = false;
+        private bool _maintenanceLaunchable = false;
+        private bool _maintenanceStartable = false;
+        private bool _firstMaintenance = false;
+        private bool _isEnd = false;
 
         /// <summary>
         /// Intro video that explains the universe of the game.
@@ -39,10 +48,16 @@ namespace CRI.HelloHouston.Experience.Tutorial
             //disables every layers in camera
             //instantiates screen
             //plays intro video
+            _introVideo.loopPointReached += EndReached;
+        }
+
+        void EndReached(UnityEngine.Video.VideoPlayer vp)
+        {
             //when video ends fade in black post processing 
             //destroys screen
             //makes layers visible again
             //fades out
+            _cubeInitializable = true;
         }
 
         /// <summary>
@@ -55,6 +70,7 @@ namespace CRI.HelloHouston.Experience.Tutorial
             //launches initialization of holocube
             //checks if holocube has been initialized
             //sets next step
+            _comInitializable = true;
         }
 
         /// <summary>
@@ -69,6 +85,7 @@ namespace CRI.HelloHouston.Experience.Tutorial
             //checks if communication screen is initiaized
             //checks if maintenance tubex has been loaded
             //sets next step
+            _maintenanceLaunchable = true;
         }
 
         /// <summary>
@@ -79,6 +96,7 @@ namespace CRI.HelloHouston.Experience.Tutorial
             //MODIF TABLET
             //launched if the "launch now" button of the tablet has been pressed
             //sets next step
+            _maintenanceStartable = true;
         }
 
         /// <summary>
@@ -90,6 +108,7 @@ namespace CRI.HelloHouston.Experience.Tutorial
             //MODIF HOLOGRAM
             //launched if maintenance hologram has been cleared from irregularities or not during timer
             //sets next step
+            _firstMaintenance = true;
         }
 
         /// <summary>
@@ -102,6 +121,7 @@ namespace CRI.HelloHouston.Experience.Tutorial
             //launched when first step of maintenance has been completed
             //checks end of timer
             //sets next step
+            _isEnd = true;
         }
 
         /// <summary>

@@ -18,6 +18,7 @@ namespace CRI.HelloHouston.Experience.Tutorial
         private bool _isOut = false;
         [SerializeField]
         private Material _safeMaterial, _failMaterial;
+        
 
         // Start is called before the first frame update
         void Start()
@@ -37,13 +38,13 @@ namespace CRI.HelloHouston.Experience.Tutorial
 
         private void OnDestroy()
         {
-            _hologram.UpdateNbIrregularities();
+                _hologram.UpdateNbIrregularities();
         }
 
         public void OutOfBound()
         {
             if(_isOut) 
-                Destroy(gameObject, 1f);
+                Destroy(gameObject);
         }
 
         private void OnTriggerExit(Collider other)

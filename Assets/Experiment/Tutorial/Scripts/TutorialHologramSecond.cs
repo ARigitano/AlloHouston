@@ -19,7 +19,7 @@ namespace CRI.HelloHouston.Experience.Tutorial
         /// </summary>
         [SerializeField]
         private float _timer;
-        public GameObject[] attaches;
+        public List<GameObject> attaches = new List<GameObject>();
         [SerializeField]
         private GameObject _virus;
 
@@ -27,7 +27,14 @@ namespace CRI.HelloHouston.Experience.Tutorial
         void Start()
         {
             StartCoroutine("CountDown");
-            attaches = GameObject.FindGameObjectsWithTag("CoreAttach");
+            GameObject[] attachesArray = GameObject.FindGameObjectsWithTag("CoreAttach");
+
+            foreach(GameObject attach in attachesArray)
+            {
+                attaches.Add(attach);
+            }
+
+            
         }
 
         /// <summary>
