@@ -4,6 +4,7 @@ namespace CRI.HelloHouston.Experience.Actions
 {
     public abstract class GeneralAction: ScriptableObject
     {
+        [Header("General Action Parameters")]
         /// <summary>
         /// Icon of the game action.
         /// </summary>

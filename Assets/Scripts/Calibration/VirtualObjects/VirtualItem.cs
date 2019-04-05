@@ -4,12 +4,18 @@ using VRCalibrationTool;
 
 namespace CRI.HelloHouston.Calibration
 {
+    public struct VirtualItemEventArgs
+    {
+        public DateTime updateTime;
+        public bool calibrated;
+    }
+
+    public delegate void VirtualItemEventHandler(object sender, VirtualItemEventArgs e);
+
     public abstract class VirtualItem : VirtualObject
     {
-        public delegate void DateEvent(DateTime date);
-        public delegate void BoolEvent(bool b);
-        public event DateEvent onDateChange;
-        public event BoolEvent onCalibratedChange;
+        public event VirtualItemEventHandler onDateChange;
+        public event VirtualItemEventHandler onCalibratedChange;
         public enum VirtualItemType
         {
             Block,
@@ -32,7 +38,7 @@ namespace CRI.HelloHouston.Calibration
             {
                 _lastUpdate = value;
                 if (onDateChange != null)
-                    onDateChange(value);
+                    onDateChange(this, new VirtualItemEventArgs() { updateTime = value });
             }
         }
         /// <summary>
@@ -49,7 +55,7 @@ namespace CRI.HelloHouston.Calibration
             {
                 _calibrated = value;
                 if (onCalibratedChange != null)
-                    onCalibratedChange(value);
+                    onCalibratedChange(this, new VirtualItemEventArgs() { calibrated = value });
                 gameObject.SetActive(_calibrated);
             }
         }

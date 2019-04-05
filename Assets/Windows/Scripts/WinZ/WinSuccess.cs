@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class WinSuccess : Window
+public class WinSuccess : LegacyWindow
 {
     public Text txtTitle;
     public Text txtMessage;

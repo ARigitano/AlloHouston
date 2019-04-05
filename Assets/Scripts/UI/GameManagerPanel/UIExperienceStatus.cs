@@ -70,6 +70,8 @@ namespace CRI.HelloHouston.Experience.UI
         [SerializeField]
         [Tooltip("Color of the text of the button that wasn't selected by the user.")]
         private Color _unselectedButtonColor = Color.white;
+        private Color _failButtonColor;
+        private Color _successButtonColor;
         /// <summary>
         /// Prefab of a popup.
         /// </summary>
@@ -97,6 +99,12 @@ namespace CRI.HelloHouston.Experience.UI
 
         private XPManager _xpManager;
 
+        private void OnDisable()
+        {
+            if (_xpManager != null)
+                _xpManager.onStateChange -= OnStateChange;
+        }
+
         public void Init(GameManager gameManager, XPManager xpManager)
         {
             TextManager textManager = GameManager.instance.textManager;
@@ -113,7 +121,11 @@ namespace CRI.HelloHouston.Experience.UI
                     LaunchAction();
             });
             _failButton.onClick.AddListener(() => CreatePopup(textManager.GetText(_failPopupTextKey), FailAction));
+            if (_failButton.GetComponentInChildren<Text>())
+                _failButtonColor = _failButton.GetComponentInChildren<Text>().color;
             _successButton.onClick.AddListener(() => CreatePopup(textManager.GetText(_successPopupTextKey), SuccessAction));
+            if (_successButton.GetComponentInChildren<Text>())
+                _successButtonColor = _successButton.GetComponentInChildren<Text>().color;
             if (!xpManager.active)
             {
                 _launchButton.GetComponent<CanvasGroup>().Show();
@@ -127,7 +139,12 @@ namespace CRI.HelloHouston.Experience.UI
                 _successButton.GetComponent<CanvasGroup>().Show();
             }
             SetState(xpManager.state);
-            xpManager.onStateChange += SetState;
+            xpManager.onStateChange += OnStateChange;
+        }
+
+        private void OnStateChange(object sender, XPManagerEventArgs e)
+        {
+            SetState(e.currentState);
         }
 
         private void CreatePopup(string popupText, UnityAction action)
@@ -178,6 +195,12 @@ namespace CRI.HelloHouston.Experience.UI
             }
             else if (_xpManager.active)
             {
+                _successButton.interactable = true;
+                _failButton.interactable = true;
+                if (_successButton.GetComponentInChildren<Text>())
+                    _successButton.GetComponentInChildren<Text>().color = _successButtonColor;
+                if (_failButton.GetComponentInChildren<Text>())
+                    _failButton.GetComponentInChildren<Text>().color = _failButtonColor;
                 _inProgress.Show();
                 _finished.Hide();
                 _inactive.Hide();

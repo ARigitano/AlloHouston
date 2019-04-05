@@ -80,17 +80,12 @@ namespace CRI.HelloHouston.Calibration.UI
             virtualItem.onCalibratedChange += OnCalibratedChange;
             _calibrationButton.onClick.AddListener(() =>
             {
-                calibrationManager.StartCalibration(virtualItem);
+                calibrationManager.StartObjectCalibration(virtualItem);
                 _calibrationButton.GetComponentInChildren<Text>().text = calibrationManager.remainingPositionTags.Value.ToString();
                 _calibrationButton.interactable = false;
                 CalibrationManager.onUpdatePositionTag += OnUpdatePositionTag;
             }
             );
-        }
-
-        private void OnUpdatePositionTag(int positionTagCount, int? remainingPositionTags)
-        {
-            _calibrationButton.GetComponentInChildren<Text>().text = remainingPositionTags != null ? remainingPositionTags.ToString() : "";
         }
 
         /// <summary>
@@ -117,17 +112,22 @@ namespace CRI.HelloHouston.Calibration.UI
             Init((VirtualItem)virtualBlock, calibrationManager);
         }
 
-        private void OnDateChange(System.DateTime date)
+        private void OnDateChange(object sender, VirtualItemEventArgs e)
         {
-            _dateText.text = date.ToString();
+            _dateText.text = e.updateTime.ToString();
         }
 
-        private void OnCalibratedChange(bool validation)
+        private void OnCalibratedChange(object sender, VirtualItemEventArgs e)
         {
-            _calibrationValidationButton.SetValidation(validation);
+            _calibrationValidationButton.SetValidation(e.calibrated);
         }
 
-        private void OnCalibrationEnd()
+        private void OnUpdatePositionTag(object sender, CalibrationPositionEventArgs e)
+        {
+            _calibrationButton.GetComponentInChildren<Text>().text = e.remainingPositionTags != null ? e.remainingPositionTags.ToString() : "";
+        }
+
+        private void OnCalibrationEnd(object sender, CalibrationEventArgs e)
         {
             _calibrationButton.interactable = true;
             _calibrationButton.GetComponentInChildren<MainTranslatedText>().InitTranslatedText(GameManager.instance, _calibrationText);

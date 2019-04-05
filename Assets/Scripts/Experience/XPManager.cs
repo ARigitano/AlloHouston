@@ -18,24 +18,21 @@ namespace CRI.HelloHouston.Experience
         Failure,
     }
 
+    public struct XPManagerEventArgs
+    {
+        public XPManager manager;
+        public XPState currentState;
+    }
+
+
+    public delegate void XPManagerEventHandler(object sender, XPManagerEventArgs e);
+
     /// <summary>
     /// The XPManager is responsible for the communication of every prefabs of one particular experiment among themselves as well as with the Gamecontroller.
     /// </summary>
     [System.Serializable]
     public abstract class XPManager : MonoBehaviour, ILangManager
     {
-        protected struct Step
-        {
-            public int value;
-            public Action action;
-
-            public Step(int value, Action action)
-            {
-                this.value = value;
-                this.action = action;
-            }
-        }
-
         [System.Serializable]
         public struct ElementInfo
         {
@@ -50,13 +47,9 @@ namespace CRI.HelloHouston.Experience
                 this.virtualZone = virtualZone;
             }
         }
-        public delegate void XPStateEvent(XPState state);
-        public delegate void XPStepEvent(int step);
-        public delegate void XPManagerEvent(XPManager synchronizer);
-        public XPStateEvent onStateChange;
-        public XPStepEvent onStepChange;
-        public static XPManagerEvent onActivation;
-        public static XPManagerEvent onEnd;
+        public event XPManagerEventHandler onStateChange;
+        public static event XPManagerEventHandler onActivation;
+        public static event XPManagerEventHandler onEnd;
         /// <summary>
         /// The xp context.
         /// </summary>
@@ -79,26 +72,6 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         public XPState state { get; protected set; }
 
-        private int _currentStep;
-        /// <summary>
-        /// The current step of the experiment. The value should be lower than the max number of step in the context settings.
-        /// </summary>
-        public int currentStep
-        {
-            get
-            {
-                if (_currentStep > xpContext.xpSettings.steps)
-                    _currentStep = xpContext.xpSettings.steps;
-                return _currentStep;
-            }
-            protected set
-            {
-                _currentStep = value > xpContext.xpSettings.steps ? xpContext.xpSettings.steps : value;
-                if (onStepChange != null)
-                    onStepChange(_currentStep);
-            }
-        }
-
         public LogExperienceController logController { get; protected set; }
 
         public ExperienceActionController actionController { get; protected set; }
@@ -112,9 +85,23 @@ namespace CRI.HelloHouston.Experience
             }
         }
 
+        [SerializeField]
+        [Tooltip("The step manager.")]
+        protected XPStepManager _stepManager;
+
+        public XPStepManager stepManager
+        {
+            get
+            {
+                return _stepManager;
+            }
+        }
+
         public int randomSeed { get; private set; }
 
         protected XPState _stateOnActivation;
+
+        protected XPState _previousState;
 
         public bool active
         {
@@ -158,14 +145,15 @@ namespace CRI.HelloHouston.Experience
         public void ResetExperiment()
         {
             PreReset();
-            var previousState = state;
+            _previousState = state;
             state = XPState.Visible;
-            if (onStateChange != null && previousState != state)
-                onStateChange(state);
+            stepManager.SkipToStep(0);
+            if (onStateChange != null && _previousState != state)
+                onStateChange(this, new XPManagerEventArgs() { manager = this, currentState = state });
             logController.AddLog("Reset", xpContext, Log.LogType.Automatic);
             foreach (var element in elements)
             {
-                element.xpElement.OnReset ();
+                element.xpElement.OnReset();
             }
             PostReset();
         }
@@ -177,11 +165,12 @@ namespace CRI.HelloHouston.Experience
         public void Success()
         {
             PreSuccess();
-            XPState state = XPState.Success;
+            _previousState = state;
+            state = XPState.Success;
             if (onStateChange != null)
-                onStateChange(state);
+                onStateChange(this, new XPManagerEventArgs() { manager = this, currentState = state });
             if (onEnd != null)
-                onEnd(this);
+                onEnd(this, new XPManagerEventArgs() { manager = this, currentState = state });
             logController.AddLog("Success", xpContext, Log.LogType.Automatic);
             foreach (var element in elements)
             {
@@ -206,11 +195,12 @@ namespace CRI.HelloHouston.Experience
         public void Fail()
         {
             PreFail();
+            _previousState = state;
             state = XPState.Failure;
             if (onStateChange != null)
-                onStateChange(state);
+                onStateChange(this, new XPManagerEventArgs() { manager = this, currentState = state });
             if (onEnd != null)
-                onEnd(this);
+                onEnd(this, new XPManagerEventArgs() { manager = this, currentState = state });
             logController.AddLog("Failure", xpContext, Log.LogType.Automatic);
             foreach (var element in elements)
             {
@@ -234,11 +224,12 @@ namespace CRI.HelloHouston.Experience
         public void Activate()
         {
             PreActivate();
+            _previousState = state;
             state = _stateOnActivation;
             if (onStateChange != null)
-                onStateChange(state);
+                onStateChange(this, new XPManagerEventArgs() { manager = this, currentState = state });
             if (onActivation != null)
-                onActivation(this);
+                onActivation(this, new XPManagerEventArgs() { manager = this, currentState = state });
             logController.AddLog("Activation", xpContext, Log.LogType.Automatic);
             foreach (var element in elements)
             {
@@ -263,10 +254,11 @@ namespace CRI.HelloHouston.Experience
         {
             PreHide();
             if (this.wallTopZone != null)
-                wallTopZone.CleanAll();
+                CleanZone(wallTopZone);
+            _previousState = state;
             state = XPState.Hidden;
             if (onStateChange != null)
-                onStateChange(state);
+                onStateChange(this, new XPManagerEventArgs() { manager = this, currentState = state });
             logController.AddLog("Hide", xpContext, Log.LogType.Automatic);
             foreach (var element in elements)
             {
@@ -289,16 +281,18 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         public void Show(VirtualWallTopZone wallTopZone)
         {
-            PreShow(wallTopZone, elements.ToArray());
             this.wallTopZone = wallTopZone;
             wallTopZone.Place(xpContext.xpWallTopZone, xpContext);
+            InitZone(wallTopZone);
+            PreShow(wallTopZone, elements.ToArray());
+            _previousState = state;
             state = XPState.Visible;
             if (onStateChange != null)
-                onStateChange(state);
+                onStateChange(this, new XPManagerEventArgs() { manager = this, currentState = state });
             logController.AddLog("Show", xpContext, Log.LogType.Automatic);
             foreach (var element in elements)
             {
-                element.xpElement.OnShow();
+                element.xpElement.OnShow(stepManager.sumValue);
             }
             PostShow(wallTopZone, elements.ToArray());
         }
@@ -312,14 +306,24 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         protected virtual void PostShow(VirtualWallTopZone wallTopZone, ElementInfo[] info) { }
 
+        protected virtual void CleanZone(VirtualZone zone)
+        {
+            IEnumerable<XPElement> res = zone.CleanAll().ToList();
+            elements.RemoveAll(x => res.Contains(x.xpElement));
+        }
+
         protected virtual ElementInfo[] InitZone(VirtualZone zone)
         {
             var res = zone.InitAll(this).Select(xpElement => new ElementInfo(xpElement, xpElement.virtualElement, zone));
+            foreach (var element in res)
+            {
+                element.xpElement.OnInit(this, randomSeed);
+            }
             elements.AddRange(res);
             return res.ToArray();
         }
 
-        protected virtual ElementInfo[] InitZones(VirtualZone[] zones)
+        protected virtual ElementInfo[] InitZones(IEnumerable<VirtualZone> zones)
         {
             var res = zones.SelectMany(zone => InitZone(zone));
             return res.ToArray();
@@ -330,6 +334,7 @@ namespace CRI.HelloHouston.Experience
             PreInit(xpContext, logController, randomSeed, stateOnActivation);
             this.xpContext = xpContext;
             this.randomSeed = randomSeed;
+            _previousState = state;
             state = XPState.Inactive;
             _stateOnActivation = stateOnActivation;
             actionController = new ExperienceActionController(this);
@@ -337,9 +342,7 @@ namespace CRI.HelloHouston.Experience
             this.logController = logController;
             if (logController != null)
                 logController.AddLog("Ready", xpContext, Log.LogType.Automatic);
-            ElementInfo[] zoneInfo = InitZones(zones);
-            foreach (var element in elements)
-                element.xpElement.OnInit(this, randomSeed);
+            ElementInfo[] zoneInfo = InitZones(zones.Where(zone => !zone.switchableZone));
             PostInit(xpContext, zoneInfo, logController, randomSeed, stateOnActivation);
         }
 
@@ -351,19 +354,80 @@ namespace CRI.HelloHouston.Experience
         /// Called after the initialization.
         /// </summary>
         protected virtual void PostInit(XPContext xpContext, ElementInfo[] info, LogExperienceController logController, int randomSeed, XPState stateOnActivation) { }
-        /// <summary>
-        /// Advance the steps by a set number (default = 1).
-        /// </summary>
-        /// <param name="step">The number of steps to advance to.</param>
-        public virtual void AdvanceStep(int step = 1)
+
+        public virtual void SkipToNextStep()
         {
-            currentStep += step;
+            if (stepManager.currentStepIndex < stepManager.stepActions.Length - 1)
+            {
+                SkipToStep(stepManager.currentStepIndex + 1);
+            }
+            else
+            {
+                logController.AddLogError(string.Format("Can't skip to next step."), xpContext);
+            }
         }
 
-        public virtual void SkipToStep(int step)
+        public virtual void SkipToPreviousStep()
         {
-            logController.AddLog(string.Format("Skip to step {0}", step), xpContext, Log.LogType.Automatic);
-            currentStep = step;
+            if (stepManager.currentStepIndex > 0)
+            {
+                SkipToStep(stepManager.currentStepIndex - 1);
+            }
+            else
+            {
+                logController.AddLogError(string.Format("Can't skip to previous step."), xpContext);
+            }
+        }
+
+        public virtual void RestartStep()
+        {
+            SkipToStep(stepManager.currentStepIndex);
+        }
+        
+        public virtual void SkipToStep(int stepValue)
+        {
+            if (stepManager.SkipToStep(stepValue))
+            {
+                logController.AddLogAutomatic(string.Format("Skip to step {0}", stepValue), xpContext);
+                XPStepManager.StepAction stepAction = stepManager.currentStep;
+                if (stepAction != null && stepAction.action != null)
+                    stepAction.action.Invoke();
+                if ((state == XPState.Success || state == XPState.Failure) && stepManager.sumValue < stepManager.maxStepValue)
+                {
+                    var tmp = state;
+                    state = _previousState;
+                    _previousState = tmp;
+                    if (onStateChange != null)
+                        onStateChange(this, new XPManagerEventArgs() { manager = this, currentState = state });
+                }
+            }
+            else
+            {
+                logController.AddLogError(string.Format("Skip to step unsuccessful for step {0}", stepValue), xpContext);
+            }
+        }
+
+        public virtual void SkipToStep(string stepName)
+        {
+            if (stepManager.SkipToStep(stepName))
+            {
+                logController.AddLogAutomatic(string.Format("Skip to step {0}", stepName), xpContext);
+                XPStepManager.StepAction stepAction = stepManager.currentStep;
+                if (stepAction != null && stepAction.action != null)
+                    stepAction.action.Invoke();
+                if ((state == XPState.Success || state == XPState.Failure) && stepManager.sumValue < stepManager.maxStepValue)
+                {
+                    var tmp = state;
+                    state = _previousState;
+                    _previousState = tmp;
+                    if (onStateChange != null)
+                        onStateChange(this, new XPManagerEventArgs() { manager = this, currentState = state });
+                }
+            }
+            else
+            {
+                logController.AddLogError(string.Format("Skip to step unsuccessful for step {0}", stepName), xpContext);
+            }
         }
 
         public virtual void PlaySound(PlayableSound sound)

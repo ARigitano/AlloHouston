@@ -1,9 +1,7 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using System;
-using System.Linq;
+using CRI.HelloHouston.WindowTemplate;
 
 namespace CRI.HelloHouston.Experience.MAIA
 {
@@ -20,7 +18,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         [Header("MAIATabletScreen Attributes")]
         [SerializeField]
         [Tooltip("The manual override panel.")]
-        private GameObject _moPanel = null;
+        private Window _moPanel = null;
         [SerializeField]
         [Tooltip("The password identification panel.")]
         private MAIAPasswordPanel _passwordPanel = null;
@@ -28,35 +26,43 @@ namespace CRI.HelloHouston.Experience.MAIA
         [Tooltip("The particles panel.")]
         private MAIAParticlePanel _particlesPanel = null;
         [SerializeField]
+        [Tooltip("The particle charges.")]
+        private MAIAParticleChargesPanel _particleChargesPanel = null;
+        [SerializeField]
         [Tooltip("The advanced manual override panel.")]
-        private GameObject _amoPanel = null;
+        private Window _amoPanel = null;
         [SerializeField]
         [Tooltip("The diagrams panel.")]
         private MAIAReactionPanel _reactionPanel = null;
         /// <summary>
         /// The panel currently being displayed.
         /// </summary>
-        private GameObject _currentPanel;
+        private Window _currentPanel;
 
-        public void Victory()
+        private Window _previousPanel;
+
+        public void StartVictory()
         {
             ActivatePanel(null);
         }
 
-        /// <summary>
-        /// Called by the synchronizer to skip directly to the Feynman diagrams step.
-        /// </summary>
-        public void SkipToSecondPart()
+        private void ActivatePanel(Window newPanel)
         {
-            HideAllPanels();
-        }
-
-        private void ActivatePanel(GameObject newPanel)
-        {
-            if (_currentPanel != null)
-                _currentPanel.gameObject.SetActive(false);
-            if (newPanel != null)
-                newPanel.gameObject.SetActive(true);
+            // We stop the previous panel animation if it didn't finish yet.
+            if (_previousPanel != null && _previousPanel.visible)
+            {
+                _previousPanel.StopAllCoroutines();
+                _previousPanel.gameObject.SetActive(false);
+            }
+            if (_currentPanel == newPanel)
+                return;
+            else if (_currentPanel != null && newPanel != null)
+                _currentPanel.HideWindow(newPanel.ShowWindow);
+            else if (_currentPanel != null && newPanel == null)
+                _currentPanel.HideWindow();
+            else if (newPanel != null)
+                newPanel.ShowWindow();
+            _previousPanel = _currentPanel;
             _currentPanel = newPanel;
         }
 
@@ -83,7 +89,11 @@ namespace CRI.HelloHouston.Experience.MAIA
         public void OnRightParticleCombination()
         {
             topScreen.maiaManager.OnPISuccess();
-            ActivatePanel(null);
+        }
+
+        public void OnRightChargeCombination()
+        {
+            topScreen.maiaManager.OnCISuccess();
         }
 
         public void OnAMOClick()
@@ -102,7 +112,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void StartRI()
         {
-            ActivatePanel(_reactionPanel.gameObject);
+            ActivatePanel(_reactionPanel);
         }
 
         /// <summary>
@@ -110,7 +120,15 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void StartPI()
         {
-            ActivatePanel(_particlesPanel.gameObject);
+            ActivatePanel(_particlesPanel);
+        }
+
+        /// <summary>
+        /// Displays the particle charge panel.
+        /// </summary>
+        public void StartCI()
+        {
+            ActivatePanel(_particleChargesPanel);
         }
 
         /// <summary>
@@ -121,16 +139,17 @@ namespace CRI.HelloHouston.Experience.MAIA
             ActivatePanel(_moPanel);
         }
 
+        public void StartPassword()
+        {
+            ActivatePanel(_passwordPanel);
+        }
+
         /// <summary>
         /// Displays password panel adter override button has been clicked.
         /// </summary>
-        public void OnOverrideButtonClicked()
+        public void OnMOClick()
         {
             maiaManager.OnMOSuccess();
-            StartCoroutine(WaitGeneric(0.2f, () =>
-            {
-                ActivatePanel(_passwordPanel.gameObject);
-            }));
         }
         
         public override void OnInit(XPManager manager, int randomSeed)
@@ -139,14 +158,15 @@ namespace CRI.HelloHouston.Experience.MAIA
             this.maiaManager = (MAIAManager)manager;
         }
 
-        public override void OnActivation()
+        public override void OnShow(int step)
         {
             topScreen = maiaManager.topScreen;
-            _passwordPanel.Init(topScreen.manualOverrideAccessScreen, this.maiaManager.settings.password);
+            _passwordPanel.Init(maiaManager.logController, maiaManager.xpContext, topScreen.manualOverrideAccessScreen, maiaManager.settings.password);
             _particlesPanel.Init(maiaManager, topScreen.particleIdentificationScreen);
+            _particleChargesPanel.Init(maiaManager, topScreen.particleIdentificationScreen);
             _reactionPanel.Init(topScreen, maiaManager);
             _hologramTube = maiaManager.hologramTube;
-            _currentPanel = _moPanel;
+            ActivatePanel(_moPanel);
         }
     }
 }

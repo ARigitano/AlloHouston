@@ -95,7 +95,7 @@ namespace CRI.HelloHouston.Translation
         /// Called whenever the OnLangChange event of the TextManager is triggered. Sets the text to its current lang value.
         /// </summary>
         /// <param name="lang"></param>
-        private void OnLangChange(LangApp lang)
+        private void OnLangChange(object sender, LangManagerEventArgs e)
         {
             SetText();
         }

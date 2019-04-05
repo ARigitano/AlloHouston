@@ -5,18 +5,28 @@ using VRCalibrationTool;
 using CRI.HelloHouston.Calibration.Data;
 using System;
 using UnityEngine.UI;
+using VRTK;
 
 namespace CRI.HelloHouston.Calibration
 {
+    public struct CalibrationPositionEventArgs
+    {
+        public int positinTagCount;
+        public int? remainingPositionTags;
+    }
+
+    public struct CalibrationEventArgs { }
+
+    public delegate void CalibrationPositionEventHandler(object sender, CalibrationPositionEventArgs e);
+
+    public delegate void CalibrationEventHandler(object sender, CalibrationEventArgs e);
     /// <summary>
     /// Manages the use of the Vive controllers during the calibratiion process
     /// </summary>
 	public class CalibrationManager : MonoBehaviour
     {
-        public delegate void CalibrationEvent();
-        public delegate void PositionTagEvent(int positionTagCount, int? remainingPositionTags);
-        public static event CalibrationEvent onCalibrationEnd;
-        public static event PositionTagEvent onUpdatePositionTag;
+        public static event CalibrationEventHandler onCalibrationEnd;
+        public static event CalibrationPositionEventHandler onUpdatePositionTag;
         /// <summary>
         /// Prefab of a position tag
         /// </summary>
@@ -49,10 +59,17 @@ namespace CRI.HelloHouston.Calibration
         /// </summary>
         private VirtualItem _currentVirtualItem;
         /// <summary>
-        /// The calibration controller.
+        /// The player gameobject.
         /// </summary>
         [SerializeField]
-        [Tooltip("The calibration controller.")]
+        [Tooltip("The player gameobject")]
+        private VRTK_SDKManager _player = null;
+        /// <summary>
+        /// Layer setup for the player in game.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("Layer setup for the player in game.")]
+        private LayerMask _calibrationLayerMask = new LayerMask();
         private CalibrationController _controller;
 
         /// <summary>
@@ -78,15 +95,33 @@ namespace CRI.HelloHouston.Calibration
         
         private void Reset()
         {
-            _controller = FindObjectOfType<CalibrationController>();
+            if (_player == null)
+            {
+                _player = FindObjectOfType<VRTK_SDKManager>();
+            }
         }
 
-        private void Start()
+        public void StartCalibration()
         {
             _virtualBlockPrefabs = Resources.LoadAll<VirtualBlock>("VirtualObjects/");
             _virtualRoomPrefabs = Resources.LoadAll<VirtualRoom>("VirtualObjects/");
-            if (_controller == null)
-                _controller = FindObjectOfType<CalibrationController>();
+            if (_player == null)
+                _player = FindObjectOfType<VRTK_SDKManager>();
+            VRTK_SDKSetup setup = _player.loadedSetup;
+            if (setup != null)
+            {
+                var cameras = setup.actualHeadset.GetComponentsInChildren<Camera>();
+                foreach (var camera in cameras)
+                    camera.cullingMask = _calibrationLayerMask;
+                _controller = setup.actualRightController.GetComponentInChildren<CalibrationController>(true);
+                if (_controller != null)
+                    _controller.enabled = true;
+            }
+        }
+
+        public void EndCalibration()
+        {
+            _controller.enabled = false;
         }
 
         /// <summary>
@@ -101,7 +136,7 @@ namespace CRI.HelloHouston.Calibration
             positionTag.GetComponent<Renderer>().material.color = new Color(count * 0.2f, count * 0.2f, count * 0.2f, 0.6f);
             _positionTags.Add(positionTag);
             if (onUpdatePositionTag != null)
-                onUpdatePositionTag(_positionTags.Count, remainingPositionTags);
+                onUpdatePositionTag(this, new CalibrationPositionEventArgs() { positinTagCount = _positionTags.Count, remainingPositionTags = remainingPositionTags });
         }
 
         /// <summary>
@@ -200,7 +235,7 @@ namespace CRI.HelloHouston.Calibration
                 _positionTags[i].index = i;
             }
             if (onUpdatePositionTag != null)
-                onUpdatePositionTag(_positionTags.Count, remainingPositionTags);
+                onUpdatePositionTag(this, new CalibrationPositionEventArgs() { positinTagCount = _positionTags.Count, remainingPositionTags = remainingPositionTags });
         }
 
         /// <summary>
@@ -224,26 +259,26 @@ namespace CRI.HelloHouston.Calibration
             _positionTags.Clear();
         }
 
-        public void StartCalibration(VirtualItem virtualItem)
+        public void StartObjectCalibration(VirtualItem virtualItem)
         {
-            StopCalibration();
+            StopObjectCalibration();
             _currentVirtualItem = virtualItem;
             _controller.StartCalibration();
         }
 
-        public void StopCalibration()
+        public void StopObjectCalibration()
         {
             ResetPositionTags();
             _currentVirtualItem = null;
             _controller.StopCalibration();
             if (onCalibrationEnd != null)
-                onCalibrationEnd();
+                onCalibrationEnd(this, new CalibrationEventArgs());
         }
 
         public void ResetVirtualItems()
         {
             _currentVirtualRoom.ResetAllTags();
-            StopCalibration();
+            StopObjectCalibration();
             DataManager.instance.InsertOrReplace(_currentVirtualRoom.ToRoomEntry());
         }
 

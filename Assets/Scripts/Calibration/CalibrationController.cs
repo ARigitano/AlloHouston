@@ -96,7 +96,7 @@ namespace CRI.HelloHouston.Calibration
                         {
                             Debug.Log("Stop");
                             _calibrationManager.CalibrateCurrentVirtualItem();
-                            _calibrationManager.StopCalibration();
+                            _calibrationManager.StopObjectCalibration();
                         }
                     }
                     else if (_pointer.incorrectPoint != null && Time.time - _lastCreation > _cooldownTime)
