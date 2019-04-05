@@ -11,19 +11,19 @@ namespace CRI.HelloHouston.GameElements
         private Transform _fillGroup = null;
         [SerializeField]
         [Tooltip("Prefab of the fill items.")]
-        private CanvasGroup _fillItemPrefab = null;
+        private GameObject _fillItemPrefab = null;
         [SerializeField]
         [Tooltip("Text of the experiment name.")]
         private Text _xpNameText = null;
 
         [SerializeField]
         [Tooltip("The alpha value of the fill when it's activated.")]
-        private float _alphaFilledValue = 1.0f;
+        private Color _colorFilled = Color.white;
         [SerializeField]
         [Tooltip("The alpha value of the fill when it's not activated.")]
-        private float _alphaEmptyValue = 0.1f;
+        private Color _colorEmpty = Color.black;
 
-        private CanvasGroup[] _fillItems;
+        private Image[] _fillItems;
         /// <summary>
         /// The manager associated with the tube.
         /// </summary>
@@ -46,10 +46,10 @@ namespace CRI.HelloHouston.GameElements
             int steps = xpManager.xpContext.xpSettings.steps;
             _xpManager = xpManager;
             _xpManager.onStepChange += OnStepChange;
-            _fillItems = new CanvasGroup[steps];
+            _fillItems = new Image[steps];
             _xpNameText.text = xpManager.xpContext.xpGroup.experimentName;
             for (int i = 0; i < steps; i++)
-                _fillItems[i] = Instantiate(_fillItemPrefab, _fillGroup);
+                _fillItems[i] = Instantiate(_fillItemPrefab, _fillGroup).GetComponentInChildren<Image>();
             OnStepChange(_xpManager.currentStep);
         }
 
@@ -58,7 +58,7 @@ namespace CRI.HelloHouston.GameElements
             int maxSteps = _fillItems.Length;
             for (int i = 0; i < _fillItems.Length; i++)
             {
-                _fillItems[i].alpha = i >= (maxSteps - step) ? _alphaFilledValue : _alphaEmptyValue;
+                _fillItems[i].color = i >= (maxSteps - step) ? _colorFilled : _colorEmpty;
             }
         }
     }
