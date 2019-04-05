@@ -19,9 +19,11 @@ namespace CRI.HelloHouston.Experience.Tutorial
         /// </summary>
         [SerializeField]
         private float _timer;
-        public List<GameObject> attaches = new List<GameObject>();
+        public List<Transform> attaches = new List<Transform>();
+        public Transform[] freeAttaches;
         [SerializeField]
         private GameObject _virus;
+        public int nbViruses = 0;
 
         // Start is called before the first frame update
         void Start()
@@ -29,10 +31,12 @@ namespace CRI.HelloHouston.Experience.Tutorial
             StartCoroutine("CountDown");
             GameObject[] attachesArray = GameObject.FindGameObjectsWithTag("CoreAttach");
 
-            foreach(GameObject attach in attachesArray)
+            foreach (GameObject attach in attachesArray)
             {
-                attaches.Add(attach);
+                attaches.Add(attach.transform);
             }
+
+            freeAttaches = new Transform[attaches.Count];
 
             
         }

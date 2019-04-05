@@ -12,26 +12,68 @@ namespace CRI.HelloHouston.Experience.Tutorial
         private float _speed = 2f;
         [SerializeField]
         private GameObject _virus;
+        private bool isAttach = true;
+        [SerializeField]
+        private int _id;
 
         // Start is called before the first frame update
         void Start()
         {
-            //transform.localscale = Vector3.one
             _core = GameObject.FindGameObjectWithTag("Core").GetComponent<TutorialHologramSecond>();
-            _returnPoint = _core.attaches[Random.Range(0, _core.attaches.Count)].transform;
-            //gameObject.transform.parent = _returnPoint.transform;
-        }
-
-        public void ReturnToCore()
-        {
-            /*gameObject.transform.parent = null;
+            _core.nbViruses++;
+            _id = _core.nbViruses;
             do
             {
                 _returnPoint = _core.attaches[Random.Range(0, _core.attaches.Count)].transform;
-            } while (_returnPoint.transform.childCount != 0);*/
+                isAttach = true;
+
+                for(int i = 0; i < _core.freeAttaches.Length; i++)
+                {
+                    if(_core.freeAttaches[i] == _returnPoint)
+                    {
+                        isAttach = false;
+                        break;
+                    }
+                }
+
+                if (isAttach)
+                    _core.freeAttaches[_id] = _returnPoint;
+            }
+            while
+            (
+                isAttach == false
+            );
+
+
+        }
+
+        
+
+        public void ReturnToCore()
+        {
             _returnPoint = _core.attaches[Random.Range(0, _core.attaches.Count)].transform;
             Instantiate(_virus, gameObject.transform.position, gameObject.transform.rotation);
-            //gameObject.transform.parent = _returnPoint.transform;
+            do
+            {
+                _returnPoint = _core.attaches[Random.Range(0, _core.attaches.Count)].transform;
+                isAttach = true;
+
+                for (int i = 0; i < _core.freeAttaches.Length; i++)
+                {
+                    if (_core.freeAttaches[i] == _returnPoint)
+                    {
+                        isAttach = false;
+                        break;
+                    }
+                }
+
+                if (isAttach)
+                    _core.freeAttaches[_id] = _returnPoint;
+            }
+            while
+            (
+                isAttach == false
+            );
         }
 
         // Update is called once per frame

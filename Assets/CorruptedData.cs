@@ -11,6 +11,22 @@ namespace CRI.HelloHouston.Experience.Tutorial
     // Start is called before the first frame update
     void Start()
         {
+            StartCoroutine("Division");
+        }
+
+        IEnumerator Division()
+        {
+            int _timer = 5;
+            while (_timer > 0)
+            {
+                yield return new WaitForSeconds(1f);
+                _timer--;
+                if (_timer == 0)
+                {
+                    Instantiate(_virus, gameObject.transform.position, gameObject.transform.rotation);
+                    _timer = 5;
+                }
+            }
 
         }
 
@@ -22,7 +38,7 @@ namespace CRI.HelloHouston.Experience.Tutorial
 
         private void OnDestroy()
         {
-            Instantiate(_virus, gameObject.transform.position, gameObject.transform.rotation);
+            
         }
     }
 }

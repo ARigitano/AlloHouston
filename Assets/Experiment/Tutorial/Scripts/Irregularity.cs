@@ -18,6 +18,10 @@ namespace CRI.HelloHouston.Experience.Tutorial
         private bool _isOut = false;
         [SerializeField]
         private Material _safeMaterial, _failMaterial;
+        [SerializeField]
+        private bool _isCorrupted = false;
+        [SerializeField]
+        private GameObject _virus;
         
 
         // Start is called before the first frame update
@@ -43,8 +47,19 @@ namespace CRI.HelloHouston.Experience.Tutorial
 
         public void OutOfBound()
         {
-            if(_isOut) 
-                Destroy(gameObject);
+            if (_isOut)
+            {
+                if (!_isCorrupted)
+                {
+                    Destroy(gameObject);
+                }
+                else
+                {
+                    gameObject.GetComponent<MeshRenderer>().enabled = false;
+                    _virus.SetActive(true);
+                    this.enabled = false;
+                }
+            }
         }
 
         private void OnTriggerExit(Collider other)
