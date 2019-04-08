@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Valve.VR.InteractionSystem;
+using VRTK;
+using VRTK.GrabAttachMechanics;
 
 /// <summary>
 /// An irregularity inside of the core hologram for the tutorial.
 /// </summary>
 namespace CRI.HelloHouston.Experience.Tutorial
 {
-    public class Irregularity : MonoBehaviour
+    public class Irregularity : VRTK_InteractableObject
     {
         /// <summary>
         /// The hologram for the tutorial experiment.
@@ -37,10 +39,15 @@ namespace CRI.HelloHouston.Experience.Tutorial
         // Update is called once per frame
         void Update()
         {
-
+            
         }
 
-        private void OnDestroy()
+        public override void Ungrabbed(VRTK_InteractGrab previousGrabbingObject)
+        {
+            Debug.Log("okkokokorrr");
+        }
+
+            private void OnDestroy()
         {
                 _hologram.UpdateNbIrregularities();
         }
@@ -51,7 +58,7 @@ namespace CRI.HelloHouston.Experience.Tutorial
             {
                 if (!_isCorrupted)
                 {
-                    Destroy(gameObject);
+                    Destroy(gameObject, 2f);
                 }
                 else
                 {
@@ -64,10 +71,11 @@ namespace CRI.HelloHouston.Experience.Tutorial
 
         private void OnTriggerExit(Collider other)
         {
-            if (other.tag == "Building")
+            if (other.tag == "Building" || other.tag == "Core")
             {
                 gameObject.GetComponent<MeshRenderer>().enabled = true;
                 _isOut = true;
+                OutOfBound();
             }
         }
     }

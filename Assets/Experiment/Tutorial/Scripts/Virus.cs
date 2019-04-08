@@ -19,6 +19,8 @@ namespace CRI.HelloHouston.Experience.Tutorial
         // Start is called before the first frame update
         void Start()
         {
+            
+
             _core = GameObject.FindGameObjectWithTag("Core").GetComponent<TutorialHologramSecond>();
             _core.nbViruses++;
             _id = _core.nbViruses;
@@ -83,6 +85,10 @@ namespace CRI.HelloHouston.Experience.Tutorial
             {
                 transform.position = Vector3.Lerp(transform.position, _returnPoint.position, Time.deltaTime * _speed);
             }
+
+            
         }
+
+        
     }
 }
