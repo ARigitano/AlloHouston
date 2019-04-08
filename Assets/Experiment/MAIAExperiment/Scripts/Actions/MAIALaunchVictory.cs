@@ -10,7 +10,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             MAIAManager manager = controller as MAIAManager;
             if (manager != null)
-                manager.LaunchVictory();
+                manager.OnRISuccess();
         }
     }
 }

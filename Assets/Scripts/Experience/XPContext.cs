@@ -23,7 +23,6 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         [Tooltip("The group of the experiment. The same for all difficiculties and audiences versions of the experiment.")]
         public XPGroup xpGroup;
-
         /// <summary>
         /// A description of the audience for the experiment.
         /// </summary>
@@ -164,7 +163,6 @@ namespace CRI.HelloHouston.Experience
         {
             XPManager res = GameObject.Instantiate(_xpManagerPrefab);
             res.Init(this, zones, logExperienceController, randomSeed, XPState.Visible);
-            //TODO: Remove this line when then XP selection is complete.
             res.Activate();
             res.Show((VirtualWallTopZone)zones.First(x => x.zoneType == ZoneType.WallTop));
             return res;

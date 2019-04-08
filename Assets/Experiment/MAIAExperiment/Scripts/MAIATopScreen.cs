@@ -80,40 +80,41 @@ namespace CRI.HelloHouston.Experience.MAIA
             _particlesIdentification.CreateParticleGrid(reactionExits);
         }
 
-        public void Victory()
-        {
-            _currentPanel.SetActive(false);
-            _victoryScreen.SetActive(true);
-        }
-
-        /// <summary>
-        /// Called by the synchronizer to skip directly to the Feynman diagrams step.
-        /// </summary>
-        public void SkipStepOne()
-        {
-            StartAnalysisAnimation();
-        }
-
-        /// <summary>
-        /// Tells the MAIA Overwiew panel that the start button has been pressed.
-        /// </summary>
-        public void StartManualOverride()
+        private void ActivatePanel(GameObject newPanel)
         {
             if (_currentPanel != null)
                 _currentPanel.SetActive(false);
-            _currentPanel = _manualOverrideAccess.gameObject;
-            _manualOverrideAccess.gameObject.SetActive(true);
+            newPanel.SetActive(true);
+            _currentPanel = newPanel;
+        }
+        
+        public void StartLoading()
+        {
+            ActivatePanel(_manualOverrideAccess.gameObject);
             _manualOverrideAccess.Show();
-            _currentPanel = _manualOverrideAccess.gameObject;
         }
 
-        public void StartParticleIdentification()
+        public void StartMO()
         {
-            if (_currentPanel != null)
-                _currentPanel.SetActive(false);
-            _currentPanel = _particlesIdentification.gameObject;
-            _particlesIdentification.gameObject.SetActive(true);
-            _particlesIdentification.CreateParticleGrid(maiaManager.generatedParticles);
+            ActivatePanel(_manualOverrideAccess.gameObject);
+        }
+
+        public void StartPassword()
+        {
+            ActivatePanel(_manualOverrideAccess.gameObject);
+            _manualOverrideAccess.DisplayPasswordWindow();
+        }
+
+        public void StartPI()
+        {
+            ActivatePanel(_particlesIdentification.gameObject);
+            _particlesIdentification.DisplayParticlePanel();
+        }
+
+        public void StartCI()
+        {
+            ActivatePanel(_particlesIdentification.gameObject);
+            _particlesIdentification.DisplayChargePanel();
         }
 
         /// <summary>
@@ -121,22 +122,19 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void StartAnalysisAnimation()
         {
-            if (_currentPanel != null)
-                _currentPanel.SetActive(false);
-            _analysisScreen.gameObject.SetActive(true);
-            _currentPanel = _analysisScreen.gameObject;
-            _particlesIdentification.gameObject.SetActive(false);
+            ActivatePanel(_analysisScreen.gameObject);
             _analysisScreen.StartAnalysisAnimation();
         }
 
-        public void StartReactionIdentification()
+        public void StartRI()
         {
-            if (_currentPanel != null)
-                _currentPanel.SetActive(false);
-            _analysisScreen.gameObject.SetActive(false);
-            _reactionsIdentification.gameObject.SetActive(true);
-            _currentPanel = _reactionsIdentification.gameObject;
+            ActivatePanel(_reactionsIdentification.gameObject);
             _reactionsIdentification.StartReactionIdentification();
+        }
+
+        public void StartVictory()
+        {
+            ActivatePanel(_victoryScreen.gameObject);
         }
 
         /// <summary>
@@ -149,14 +147,6 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             yield return new WaitForSeconds(time);
             action.Invoke();
-        }
-
-        /// <summary>
-        /// Displays the access screen when the manual override button is pressed.
-        /// </summary>
-        public void InitPasswordInput()
-        {
-            _manualOverrideAccess.InitPasswordInput(maiaManager.settings.password);
         }
 
         public void Init(MAIAManager synchronizer)
@@ -179,7 +169,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public override void OnSuccess()
         {
-            Victory();
+            StartVictory();
         }
 
         public override void OnInit(XPManager manager, int randomSeed)
@@ -191,10 +181,11 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// Effect when the experiment is activated the first time.
         /// </summary>
-        public override void OnShow()
+        public override void OnShow(int step)
         {
-            base.OnActivation();
-            StartManualOverride();
+            base.OnShow(step);
+            _manualOverrideAccess.InitPasswordInput(maiaManager.settings.password);
+            _particlesIdentification.CreateParticleGrid(maiaManager.generatedParticles);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.EventSystems;
+using System.Linq;
 
 namespace Valve.VR.InteractionSystem
 {
@@ -48,6 +49,49 @@ namespace Valve.VR.InteractionSystem
 			pointerEventData.selectedObject = null;
 			ExecuteEvents.Execute( gameObject, pointerEventData, ExecuteEvents.pointerExitHandler );
 		}
+
+        public void OnBeginDrag( GameObject gameObject, Hand hand)
+        {
+            PointerEventData pointerEventData = new PointerEventData(eventSystem);
+            Vector3 controllerTipPosition = hand.GetAttachmentTransform("Attach_ControllerTip").position;
+            RaycastHit[] hits = Physics.RaycastAll(controllerTipPosition, gameObject.transform.position - controllerTipPosition, Mathf.Infinity);
+            if (hits.Length > 0)
+            {
+                Debug.Log(hits);
+                Vector3 pressPosition = hits.First(x => x.collider.gameObject == gameObject).point;
+                pointerEventData.pressPosition = pressPosition;
+                pointerEventData.position = pressPosition;
+                ExecuteEvents.Execute(gameObject, pointerEventData, ExecuteEvents.beginDragHandler);
+            }
+        }
+
+        public void OnEndDrag ( GameObject gameObject, Hand hand)
+        {
+            PointerEventData pointerEventData = new PointerEventData(eventSystem);
+            Vector3 controllerTipPosition = hand.GetAttachmentTransform("Attach_ControllerTip").position;
+            RaycastHit[] hits = Physics.RaycastAll(controllerTipPosition, gameObject.transform.position - controllerTipPosition, Mathf.Infinity);
+            if (hits.Length > 0)
+            {
+                Debug.Log(hits);
+                Vector3 pressPosition = hits.First(x => x.collider.gameObject == gameObject).point;
+                pointerEventData.position = pressPosition;
+                ExecuteEvents.Execute(gameObject, pointerEventData, ExecuteEvents.endDragHandler);
+            }
+        }
+
+        public void OnDragUpdate ( GameObject gameObject, Hand hand)
+        {
+            PointerEventData pointerEventData = new PointerEventData(eventSystem);
+            Vector3 controllerTipPosition = hand.GetAttachmentTransform("Attach_ControllerTip").position;
+            RaycastHit[] hits = Physics.RaycastAll(controllerTipPosition, gameObject.transform.position - controllerTipPosition, Mathf.Infinity);
+            if (hits.Length > 0)
+            {
+                Debug.Log(hits);
+                Vector3 pressPosition = hits.First(x => x.collider.gameObject == gameObject).point;
+                pointerEventData.position = pressPosition;
+                ExecuteEvents.Execute(gameObject, pointerEventData, ExecuteEvents.dragHandler);
+            }
+        }
 
 
 		//-------------------------------------------------

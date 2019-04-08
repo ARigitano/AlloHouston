@@ -5,7 +5,6 @@ using UnityEngine.UI;
 /// <summary>
 /// Inputs linked to the Vive controller's laser
 /// </summary>
-[RequireComponent(typeof(SteamVR_LaserPointer))]
 public class ViveInputs : MonoBehaviour
 {
     private SteamVR_LaserPointer _laserPointer;

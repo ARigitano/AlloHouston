@@ -78,6 +78,18 @@ namespace CRI.HelloHouston.Experience
             }
         }
 
+        [SerializeField]
+        [Tooltip("The step manager.")]
+        protected XPStepManager _stepManager;
+
+        public XPStepManager stepManager
+        {
+            get
+            {
+                return _stepManager;
+            }
+        }
+
         public int randomSeed { get; private set; }
 
         protected XPState _stateOnActivation;
@@ -126,12 +138,13 @@ namespace CRI.HelloHouston.Experience
             PreReset();
             var previousState = state;
             state = XPState.Visible;
+            stepManager.SkipToStep(0);
             if (onStateChange != null && previousState != state)
                 onStateChange(state);
             logController.AddLog("Reset", xpContext, Log.LogType.Automatic);
             foreach (var element in elements)
             {
-                element.xpElement.OnReset ();
+                element.xpElement.OnReset();
             }
             PostReset();
         }
@@ -229,7 +242,7 @@ namespace CRI.HelloHouston.Experience
         {
             PreHide();
             if (this.wallTopZone != null)
-                wallTopZone.CleanAll();
+                CleanZone(wallTopZone);
             state = XPState.Hidden;
             if (onStateChange != null)
                 onStateChange(state);
@@ -255,16 +268,17 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         public void Show(VirtualWallTopZone wallTopZone)
         {
-            PreShow(wallTopZone, elements.ToArray());
             this.wallTopZone = wallTopZone;
             wallTopZone.Place(xpContext.xpWallTopZone, xpContext);
+            InitZone(wallTopZone);
+            PreShow(wallTopZone, elements.ToArray());
             state = XPState.Visible;
             if (onStateChange != null)
                 onStateChange(state);
             logController.AddLog("Show", xpContext, Log.LogType.Automatic);
             foreach (var element in elements)
             {
-                element.xpElement.OnShow();
+                element.xpElement.OnShow(stepManager.sumValue);
             }
             PostShow(wallTopZone, elements.ToArray());
         }
@@ -278,14 +292,24 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         protected virtual void PostShow(VirtualWallTopZone wallTopZone, ElementInfo[] info) { }
 
+        protected virtual void CleanZone(VirtualZone zone)
+        {
+            IEnumerable<XPElement> res = zone.CleanAll().ToList();
+            elements.RemoveAll(x => res.Contains(x.xpElement));
+        }
+
         protected virtual ElementInfo[] InitZone(VirtualZone zone)
         {
             var res = zone.InitAll(this).Select(xpElement => new ElementInfo(xpElement, xpElement.virtualElement, zone));
+            foreach (var element in res)
+            {
+                element.xpElement.OnInit(this, randomSeed);
+            }
             elements.AddRange(res);
             return res.ToArray();
         }
 
-        protected virtual ElementInfo[] InitZones(VirtualZone[] zones)
+        protected virtual ElementInfo[] InitZones(IEnumerable<VirtualZone> zones)
         {
             var res = zones.SelectMany(zone => InitZone(zone));
             return res.ToArray();
@@ -303,9 +327,7 @@ namespace CRI.HelloHouston.Experience
             this.logController = logController;
             if (logController != null)
                 logController.AddLog("Ready", xpContext, Log.LogType.Automatic);
-            ElementInfo[] zoneInfo = InitZones(zones);
-            foreach (var element in elements)
-                element.xpElement.OnInit(this, randomSeed);
+            ElementInfo[] zoneInfo = InitZones(zones.Where(zone => !zone.switchableZone));
             PostInit(xpContext, zoneInfo, logController, randomSeed, stateOnActivation);
         }
 
@@ -318,9 +340,63 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         protected virtual void PostInit(XPContext xpContext, ElementInfo[] info, LogExperienceController logController, int randomSeed, XPState stateOnActivation) { }
 
-        public virtual void SkipToStep(int step)
+        public virtual void SkipToNextStep()
         {
-            logController.AddLog(string.Format("Skip to step {0}", step), xpContext, Log.LogType.Automatic);
+            if (stepManager.currentStepIndex < stepManager.stepActions.Length - 1)
+            {
+                SkipToStep(stepManager.currentStepIndex + 1);
+            }
+            else
+            {
+                logController.AddLogError(string.Format("Can't skip to next step."), xpContext);
+            }
+        }
+
+        public virtual void SkipToPreviousStep()
+        {
+            if (stepManager.currentStepIndex > 0)
+            {
+                SkipToStep(stepManager.currentStepIndex - 1);
+            }
+            else
+            {
+                logController.AddLogError(string.Format("Can't skip to previous step."), xpContext);
+            }
+        }
+
+        public virtual void RestartStep()
+        {
+            SkipToStep(stepManager.currentStepIndex);
+        }
+        
+        public virtual void SkipToStep(int stepValue)
+        {
+            if (stepManager.SkipToStep(stepValue))
+            {
+                logController.AddLogAutomatic(string.Format("Skip to step {0}", stepValue), xpContext);
+                XPStepManager.StepAction stepAction = stepManager.currentStep;
+                if (stepAction != null && stepAction.action != null)
+                    stepAction.action.Invoke();
+            }
+            else
+            {
+                logController.AddLogError(string.Format("Skip to step unsuccessful for step {0}", stepValue), xpContext);
+            }
+        }
+
+        public virtual void SkipToStep(string stepName)
+        {
+            if (stepManager.SkipToStep(stepName))
+            {
+                logController.AddLogAutomatic(string.Format("Skip to step {0}", stepName), xpContext);
+                XPStepManager.StepAction stepAction = stepManager.currentStep;
+                if (stepAction != null && stepAction.action != null)
+                    stepAction.action.Invoke();
+            }
+            else
+            {
+                logController.AddLogError(string.Format("Skip to step unsuccessful for step {0}", stepName), xpContext);
+            }
         }
 
         public virtual void PlaySound(PlayableSound sound)
@@ -335,11 +411,6 @@ namespace CRI.HelloHouston.Experience
             logController.AddLog(string.Format("Play music {0}", music), xpContext, Log.LogType.Automatic);
             if (wallTopZone != null)
                 wallTopZone.leftSpeaker.PlayMusic(music);
-        }
-
-        internal void PlayableSound(AudioSource sound)
-        {
-            throw new NotImplementedException();
         }
     }
 }

@@ -70,14 +70,17 @@ namespace CRI.HelloHouston.Calibration
         }
         /// <summary>
         /// Dismiss the current element and sets its value to null.
+        /// <return>The cleaned element.</return> 
         /// </summary>
-        public virtual void Clean()
+        public virtual XPElement Clean()
         {
+            XPElement res = currentElement;
             if (currentElement != null)
             {
                 currentElement.Dismiss();
                 currentElement = null;
             }
+            return res;
         }
         /// <summary>
         /// Return the experience element stored in the virtual element.

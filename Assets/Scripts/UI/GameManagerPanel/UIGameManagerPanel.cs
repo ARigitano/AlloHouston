@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using VRTK;
 
 namespace CRI.HelloHouston.Experience.UI
 {
@@ -49,13 +50,13 @@ namespace CRI.HelloHouston.Experience.UI
         /// </summary>
         [SerializeField]
         [Tooltip("The player gameobject")]
-        private GameObject _player;
+        private VRTK_SDKManager _player = null;
         /// <summary>
-        /// The calibration player gameobject.
+        /// Layer setup for the player in game.
         /// </summary>
         [SerializeField]
-        [Tooltip("The calibration player gameobject.")]
-        private GameObject _calibrationPlayer;
+        [Tooltip("Layer setup for the player in game.")]
+        private LayerMask _gameLayerMask = new LayerMask();
 
         private void Reset()
         {
@@ -69,32 +70,36 @@ namespace CRI.HelloHouston.Experience.UI
 
         public override void Init(object obj)
         {
-            var rxpp = (RoomXPPair)obj;
+            var rxpp = (RoomSettings)obj;
             Init(rxpp);
         }
 
-        private void Init(RoomXPPair rxpp)
+        private void Init(RoomSettings rst)
         {
             GameManager gameManager = GameManager.instance;
             XPManager[] synchronizers;
-            Debug.Log(rxpp.seed);
-            if (rxpp.seed <= 0)
-                synchronizers = gameManager.InitGame(rxpp.xpContexts, rxpp.vroom);
+            Debug.Log(rst.seed);
+            if (rst.seed <= 0)
+                synchronizers = gameManager.InitGame(rst.xpContexts, rst.vroom, rst.timeEstimate);
             else
-                synchronizers = gameManager.InitGame(rxpp.xpContexts, rxpp.vroom, rxpp.seed);
-            if (_player != null)
-                _player.SetActive(true);
-            if (_calibrationPlayer != null)
-                _calibrationPlayer.SetActive(false);
-            var cameras = _player.GetComponentsInChildren<Camera>().Where(x => x.tag == "DisplayCamera").Concat(rxpp.vroom.GetComponentsInChildren<Camera>(true).Where(x => x.tag == "DisplayCamera"));
+                synchronizers = gameManager.InitGame(rst.xpContexts, rst.vroom, rst.timeEstimate, rst.seed);
+            var cameras = _player.GetComponentsInChildren<Camera>().Where(x => x.tag == "DisplayCamera").Concat(rst.vroom.GetComponentsInChildren<Camera>(true).Where(x => x.tag == "DisplayCamera"));
             _cameraDisplay.Init(cameras.ToArray());
 
+            if (_player != null && _player.loadedSetup != null)
+            {
+                var playerCameras = _player.loadedSetup.actualHeadset.GetComponentsInChildren<Camera>();
+                foreach (Camera playerCamera in playerCameras)
+                {
+                    playerCamera.cullingMask = _gameLayerMask;
+                }
+            }
             // Needs to be initialized before the start of the game.
             _logDisplay.Init(gameManager.logManager);
             _hintDisplay.Init(gameManager);
             _timerDisplay.Init(gameManager);
 
-            gameManager.StartGame(rxpp.starting);
+            gameManager.StartGame(rst.starting);
             
             //Needs to be initialized after the start of the game.
             _experienceDisplay.Init(synchronizers);

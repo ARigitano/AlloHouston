@@ -77,6 +77,24 @@ namespace CRI.HelloHouston.Experience.MAIA
 
         private bool _interactable = true;
 
+        private void OnEnable()
+        {
+            _interactable = true;
+        }
+
+        private void OnDisable()
+        {
+            for (int i = 0; _passwordSlots != null && i < _passwordSlots.Length; i++)
+                _passwordSlots[i].Show(false);
+            _passwordWindow.SetActive(false);
+            StopAllCoroutines();
+        }
+
+        public void DisplayPasswordWindow()
+        {
+            _passwordWindow.SetActive(true);
+        }
+
         public void InitPasswordInput(string password)
         {
             _realPassword = password;
@@ -85,7 +103,6 @@ namespace CRI.HelloHouston.Experience.MAIA
             _passwordSlots = new GridCell[password.Length];
             for (int i = 0; i < password.Length; i++)
                 _passwordSlots[i] = GameObject.Instantiate(_gridCellPrefab, _passwordBox);
-            _passwordWindow.SetActive(true);
         }
 
         /// <summary>
@@ -117,8 +134,9 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             _interactable = false;
             yield return new WaitForSeconds(2);
+            _interactable = true;
             _popupAccessGranted.SetActive(false);
-            _maiaTopScreen.maiaManager.StartParticleIdentification();
+            _maiaTopScreen.maiaManager.OnPasswordSuccess();
         }
 
         /// <summary>
@@ -155,14 +173,15 @@ namespace CRI.HelloHouston.Experience.MAIA
 
         private IEnumerator ShowAnimation()
         {
+            _errorMessage.SetActive(false);
+            _infoMessage.SetActive(false);
             yield return new WaitForSeconds(_waitTimeBeforeErrorMessage);
             _errorMessage.SetActive(true);
             yield return new WaitForSeconds(_waitTimeBeforeInfoMessage);
             _infoMessage.SetActive(true);
-            _maiaTopScreen.maiaManager.ActivateManualOverride();
+            _maiaTopScreen.maiaManager.OnLoadingSuccess();
         }
-
-        //TODO: remove when windows class integrated
+        
         /// <summary>
         /// Displays the manual override screen when the start button is pressed.
         /// </summary>

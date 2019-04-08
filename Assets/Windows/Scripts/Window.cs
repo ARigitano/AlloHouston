@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Window : MonoBehaviour
+public class LegacyWindow : MonoBehaviour
 {
     [Header("Parameters")]
     public Vector3 dest = new Vector3(0.0f, 0.0f, 0.0f);

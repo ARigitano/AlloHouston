@@ -214,20 +214,5 @@ namespace CRI.HelloHouston.Experience.UI
                 AddLog(log);
             }
         }
-#if UNITY_EDITOR
-        private void Update()
-        {
-            if (Input.GetKey(KeyCode.A))
-            {
-                var logOrigin = EnumExtensions.RandomEnumValue<Log.LogOrigin>();
-                var logType = EnumExtensions.RandomEnumValue<Log.LogType>();
-                string name = string.Format("{0} {1}", logType, logOrigin);
-                if (logOrigin == Log.LogOrigin.Experience)
-                    _logManager.logExperienceController.AddLog(name, null, logType);
-                else
-                    _logManager.logGeneralController.AddLog(name, null, logType);
-            }
-        }
-#endif
     }
 }
