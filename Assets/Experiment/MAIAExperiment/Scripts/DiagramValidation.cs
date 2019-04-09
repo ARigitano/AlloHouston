@@ -82,5 +82,10 @@ namespace CRI.HelloHouston.Experience.MAIA
             Texture diagram = feynmanBox.contentRenderer.material.mainTexture;
             _reactionPanel.selectedDiagram = diagram;
         }
+
+        private void OnDisable()
+        {
+            _snapDropZone.ForceUnsnap();
+        }
     }
 }
