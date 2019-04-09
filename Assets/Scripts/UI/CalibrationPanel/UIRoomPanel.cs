@@ -76,17 +76,5 @@ namespace CRI.HelloHouston.Calibration.UI {
                 Next();
             });
         }
-
-        public override void Next()
-        {
-            if (_laserClicker != null && _laserPointer != null)
-            {
-                Destroy(_laserPointer.holder);
-                Destroy(_laserPointer.pointer);
-                Destroy(_laserPointer);
-                _laserPointer.enabled = false;
-            }
-            base.Next();
-        }
     }
 }

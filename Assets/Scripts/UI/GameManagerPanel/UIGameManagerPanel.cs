@@ -79,6 +79,10 @@ namespace CRI.HelloHouston.Experience.UI
             GameManager gameManager = GameManager.instance;
             XPManager[] synchronizers;
             Debug.Log(rst.seed);
+            foreach (var zone in rst.vroom.GetZones())
+            {
+                zone.GetComponentInChildren<Collider>().enabled = false;
+            }
             if (rst.seed <= 0)
                 synchronizers = gameManager.InitGame(rst.xpContexts, rst.vroom, rst.timeEstimate);
             else
