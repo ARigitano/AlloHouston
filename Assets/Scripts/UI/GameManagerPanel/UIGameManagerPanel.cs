@@ -81,7 +81,9 @@ namespace CRI.HelloHouston.Experience.UI
             Debug.Log(rst.seed);
             foreach (var zone in rst.vroom.GetZones())
             {
-                zone.GetComponentInChildren<Collider>().enabled = false;
+                Collider col = zone.GetComponentInChildren<Collider>();
+                if (col)
+                    col.enabled = false;
             }
             if (rst.seed <= 0)
                 synchronizers = gameManager.InitGame(rst.xpContexts, rst.vroom, rst.timeEstimate);
