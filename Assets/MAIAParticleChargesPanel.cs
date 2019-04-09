@@ -63,7 +63,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             if (count == _manager.generatedParticles.Count(particle => particle.line))
             {
                 var l1 = _particleSliders.Select(slider => new ParticleCount() { particle = slider.particle, count = (int)slider.currentValue }).ToArray();
-                var l2 = _manager.generatedParticles.GroupBy(particle => particle).Select(group => new ParticleCount() { particle = group.Key, count = group.Count() }).ToArray();
+                var l2 = _manager.settings.allParticles.GroupBy(particle => particle).Select(group => new ParticleCount() { particle = group.Key, count = _manager.generatedParticles.Count(particle => particle == group.Key) }).ToArray();
                 bool charges = true;
                 for (int i = 0; i < l1.Count(); i++)
                 {

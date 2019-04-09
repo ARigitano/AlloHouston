@@ -134,6 +134,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             _chargesDetectedTextMessage = _langManager.textManager.GetText(_nbChargesDetected.GetComponent<TranslatedText>().textKey);
             _chargesGuessedTextMessage = _langManager.textManager.GetText(_nbChargesGuessed.GetComponent<TranslatedText>().textKey);
             FillNbParticlesDetected();
+            FillNbChargesDetected();
         }
 
         /// <summary>
