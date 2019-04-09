@@ -131,6 +131,8 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             _particleDetectedTextMessage = _langManager.textManager.GetText(_nbParticlesDetected.GetComponent<TranslatedText>().textKey);
             _particleGuessedTextMessage = _langManager.textManager.GetText(_nbParticlesGuessed.GetComponent<TranslatedText>().textKey);
+            _chargesDetectedTextMessage = _langManager.textManager.GetText(_nbChargesDetected.GetComponent<TranslatedText>().textKey);
+            _chargesGuessedTextMessage = _langManager.textManager.GetText(_nbChargesGuessed.GetComponent<TranslatedText>().textKey);
             FillNbParticlesDetected();
         }
 

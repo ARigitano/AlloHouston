@@ -86,9 +86,11 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             _manager = manager;
             _piScreen = piScreen;
+            var groups = manager.generatedParticles.GroupBy(particle => particle.symbol);
+            int max = groups.Max(group => group.Count());
             foreach (var particleSlider in _particleSliders)
             {
-                particleSlider.Init(manager.generatedParticles.Count);
+                particleSlider.Init(max);
                 particleSlider.onValueChanged += OnParticleValueChanged;
             }
         }
