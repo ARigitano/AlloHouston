@@ -14,14 +14,14 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// The synchronizer of the experiment.
         /// </summary>
-        public MAIAManager manager { get; private set; }
+        public MAIAManager maiaManager { get; private set; }
         /// <summary>
         /// Script for the Exile Loading screen.
         /// </summary>
         [SerializeField]
         private ExileLoading _exileLoading = null;
         /// <summary>
-        /// Script for the Exile Loading screen.
+        /// Script for the Maia Loading screen.
         /// </summary>
         [SerializeField]
         private MAIALoading _maiaLoading = null;
@@ -61,6 +61,8 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         [SerializeField]
         private MAIAReactionIdentificationScreen _reactionsIdentification = null;
+        [SerializeField]
+        private GameObject _victoryScreen = null;
         /// <summary>
         /// Stores the panel currently being displayed.
         /// </summary>
@@ -73,39 +75,46 @@ namespace CRI.HelloHouston.Experience.MAIA
         [HideInInspector]
         public string particleErrorString;
 
-        public void ParticleGrid(List<Particle> reactionExits)
+        public void CreateParticleGrid(List<Particle> reactionExits)
         {
             _particlesIdentification.CreateParticleGrid(reactionExits);
         }
 
-        /// <summary>
-        /// Called by the synchronizer to skip directly to the Feynman diagrams step.
-        /// </summary>
-        public void SkipStepOne()
-        {
-            StartAnalysisAnimation();
-        }
-
-        /// <summary>
-        /// Tells the MAIA Overwiew panel that the start button has been pressed.
-        /// </summary>
-        public void StartManualOverride()
+        private void ActivatePanel(GameObject newPanel)
         {
             if (_currentPanel != null)
                 _currentPanel.SetActive(false);
-            _currentPanel = _manualOverrideAccess.gameObject;
-            _manualOverrideAccess.gameObject.SetActive(true);
+            newPanel.SetActive(true);
+            _currentPanel = newPanel;
+        }
+        
+        public void StartLoading()
+        {
+            ActivatePanel(_manualOverrideAccess.gameObject);
             _manualOverrideAccess.Show();
-            _currentPanel = _manualOverrideAccess.gameObject;
         }
 
-        public void StartParticleIdentification()
+        public void StartMO()
         {
-            if (_currentPanel != null)
-                _currentPanel.SetActive(false);
-            _currentPanel = _particlesIdentification.gameObject;
-            _particlesIdentification.gameObject.SetActive(true);
-            _particlesIdentification.CreateParticleGrid(manager.generatedParticles);
+            ActivatePanel(_manualOverrideAccess.gameObject);
+        }
+
+        public void StartPassword()
+        {
+            ActivatePanel(_manualOverrideAccess.gameObject);
+            _manualOverrideAccess.DisplayPasswordWindow();
+        }
+
+        public void StartPI()
+        {
+            ActivatePanel(_particlesIdentification.gameObject);
+            _particlesIdentification.DisplayParticlePanel();
+        }
+
+        public void StartCI()
+        {
+            ActivatePanel(_particlesIdentification.gameObject);
+            _particlesIdentification.DisplayChargePanel();
         }
 
         /// <summary>
@@ -113,22 +122,19 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public void StartAnalysisAnimation()
         {
-            if (_currentPanel != null)
-                _currentPanel.SetActive(false);
-            _analysisScreen.gameObject.SetActive(true);
-            _currentPanel = _analysisScreen.gameObject;
-            _particlesIdentification.gameObject.SetActive(false);
+            ActivatePanel(_analysisScreen.gameObject);
             _analysisScreen.StartAnalysisAnimation();
         }
 
-        public void StartReactionIdentification()
+        public void StartRI()
         {
-            if (_currentPanel != null)
-                _currentPanel.SetActive(false);
-            _analysisScreen.gameObject.SetActive(false);
-            _reactionsIdentification.gameObject.SetActive(true);
-            _currentPanel = _reactionsIdentification.gameObject;
+            ActivatePanel(_reactionsIdentification.gameObject);
             _reactionsIdentification.StartReactionIdentification();
+        }
+
+        public void StartVictory()
+        {
+            ActivatePanel(_victoryScreen.gameObject);
         }
 
         /// <summary>
@@ -143,45 +149,9 @@ namespace CRI.HelloHouston.Experience.MAIA
             action.Invoke();
         }
 
-        /// <summary>
-        /// Displays the access screen when the manual override button is pressed.
-        /// </summary>
-        public void InitPasswordInput()
-        {
-            _manualOverrideAccess.InitPasswordInput(manager.settings.password);
-        }
-
         public void Init(MAIAManager synchronizer)
         {
-            manager = synchronizer;
-        }
-
-        //TO DO
-        /// <summary>
-        /// Effect when the experiment is correctly resolved.
-        /// </summary>
-        public override void OnSuccess()
-        {
-            Debug.Log(name + "Resolved");
-        }
-
-        //TO DO
-        /// <summary>
-        /// Effect when the experiment is failed.
-        /// </summary>
-        public override void OnFailure()
-        {
-            Debug.Log(name + "Failed");
-        }
-
-        /// <summary>
-        /// Effect when the experiment is activated the first time.
-        /// </summary>
-        public override void OnActivation(XPManager manager)
-        {
-            Debug.Log(name + "Activated");
-            Init((MAIAManager)manager);
-            StartManualOverride();
+            maiaManager = synchronizer;
         }
 
         public void Access(bool isGranted)
@@ -189,25 +159,33 @@ namespace CRI.HelloHouston.Experience.MAIA
             _manualOverrideAccess.Access(isGranted);
         }
 
-        public void ReactionSelected(bool correctDiagram)
+        public void OnReactionSelected(bool correctDiagram)
         {
             _reactionsIdentification.ReactionSelected(correctDiagram);
         }
-
+        
         /// <summary>
-        /// Effect when the experiment is paused.
+        /// Effect when the experiment is correctly resolved.
         /// </summary>
-        public override void OnHide()
+        public override void OnSuccess()
         {
-            Debug.Log(name + "Paused");
+            StartVictory();
+        }
+
+        public override void OnInit(XPManager manager, int randomSeed)
+        {
+            base.OnInit(manager, randomSeed);
+            Init((MAIAManager)manager);
         }
 
         /// <summary>
-        /// Effect when the experiment is unpaused.
+        /// Effect when the experiment is activated the first time.
         /// </summary>
-        public override void OnShow()
+        public override void OnShow(int step)
         {
-            Debug.Log(name + "Unpaused");
+            base.OnShow(step);
+            _manualOverrideAccess.InitPasswordInput(maiaManager.settings.password);
+            _particlesIdentification.CreateParticleGrid(maiaManager.generatedParticles);
         }
     }
 }

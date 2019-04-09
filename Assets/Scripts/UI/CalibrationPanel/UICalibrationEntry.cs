@@ -2,6 +2,7 @@
 using CRI.HelloHouston.Translation;
 using UnityEngine;
 using UnityEngine.UI;
+using CRI.HelloHouston.Experience;
 
 namespace CRI.HelloHouston.Calibration.UI
 {
@@ -73,13 +74,13 @@ namespace CRI.HelloHouston.Calibration.UI
         {
             this.virtualItem = virtualItem;
             _dateText.text = virtualItem.lastUpdate.ToString();
-            _calibrationButton.GetComponentInChildren<TranslatedText>().InitTranslatedText(_calibrationText);
+            _calibrationButton.GetComponentInChildren<MainTranslatedText>().InitTranslatedText(GameManager.instance, _calibrationText);
             _calibrationValidationButton.SetValidation(virtualItem.calibrated);
             virtualItem.onDateChange += OnDateChange;
             virtualItem.onCalibratedChange += OnCalibratedChange;
             _calibrationButton.onClick.AddListener(() =>
             {
-                calibrationManager.StartCalibration(virtualItem);
+                calibrationManager.StartObjectCalibration(virtualItem);
                 _calibrationButton.GetComponentInChildren<Text>().text = calibrationManager.remainingPositionTags.Value.ToString();
                 _calibrationButton.interactable = false;
                 CalibrationManager.onUpdatePositionTag += OnUpdatePositionTag;
@@ -129,7 +130,7 @@ namespace CRI.HelloHouston.Calibration.UI
         private void OnCalibrationEnd()
         {
             _calibrationButton.interactable = true;
-            _calibrationButton.GetComponentInChildren<TranslatedText>().InitTranslatedText(_calibrationText);
+            _calibrationButton.GetComponentInChildren<MainTranslatedText>().InitTranslatedText(GameManager.instance, _calibrationText);
             CalibrationManager.onUpdatePositionTag -= OnUpdatePositionTag;
         }
     }

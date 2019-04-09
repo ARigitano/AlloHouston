@@ -37,26 +37,43 @@ namespace CRI.HelloHouston.Experience.MAIA
         [SerializeField]
         private GameObject _errorPopup = null;
 
+        private bool _animationStarted = false;
+
         [SerializeField]
         private float _analysisAnimationStepDuration = 2.0f;
 
-        public void StartAnalysisAnimation()
+        private void OnDisable()
         {
-            StartCoroutine(AnalysisAnimation());
+            _animationStarted = false;
+            StopAllCoroutines();
         }
 
-        private IEnumerator AnalysisAnimation()
+        public void StartAnalysisAnimation()
         {
-            var dictionary = new Dictionary<Particle, int>();
+            if (!_animationStarted)
+                StartCoroutine(AnalysisAnimation());
+        }
+
+       private void InitParticleGridCellDictionary()
+       { 
             _particleGridCellDictionary = new Dictionary<Particle, ParticleGridCell>();
-            var otherReactions = _maiaTopScreen.manager.ongoingReactions.Where(reaction => reaction != _maiaTopScreen.manager.selectedReaction).ToArray();
-            foreach (var particleGroup in _maiaTopScreen.manager.settings.allParticles.OrderBy(particle => particle.symbol).ThenBy(particle => !particle.negative).GroupBy(particle => particle))
+            foreach (var particleGroup in _maiaTopScreen.maiaManager.settings.allParticles.OrderBy(particle => particle.symbol).ThenBy(particle => !particle.negative).GroupBy(particle => particle))
             {
                 var particleGridCell = Instantiate(_particleGridCellPrefab, _particleGridTransform);
                 particleGridCell.Init(particleGroup.Key);
                 _particleGridCellDictionary.Add(particleGroup.Key, particleGridCell);
-            }
-            foreach (var particleGroup in _maiaTopScreen.manager.generatedParticles.GroupBy(particle => particle))
+            }  
+        }
+
+        private IEnumerator AnalysisAnimation()
+        {
+            _animationStarted = true;
+            HideAllPanels();
+            if (_particleGridCellDictionary == null)
+                InitParticleGridCellDictionary();
+            var dictionary = new Dictionary<Particle, int>();
+            var otherReactions = _maiaTopScreen.maiaManager.ongoingReactions.Where(reaction => reaction != _maiaTopScreen.maiaManager.selectedReaction).ToArray();
+            foreach (var particleGroup in _maiaTopScreen.maiaManager.generatedParticles.GroupBy(particle => particle))
                 dictionary.Add(particleGroup.Key, particleGroup.Count());
             DisplayParticles(dictionary);
             for (int i = 0; i < otherReactions.Length; i++)
@@ -73,7 +90,8 @@ namespace CRI.HelloHouston.Experience.MAIA
             yield return new WaitForSeconds(_analysisAnimationStepDuration);
             _errorPopup.gameObject.SetActive(true);
             yield return new WaitForSeconds(_analysisAnimationStepDuration);
-            _maiaTopScreen.manager.StartAdvancedManualOverride();
+            _maiaTopScreen.maiaManager.OnAnalysisAnimationFinished();
+            _animationStarted = false;
         }
 
         private void DisplayParticles(Dictionary<Particle, int> dictionary)
@@ -82,7 +100,16 @@ namespace CRI.HelloHouston.Experience.MAIA
             {
                 var group = dictionary.ElementAt(i);
                 _particleGridCellDictionary[group.Key].SetText(group.Value.ToString());
+                if (group.Value == 0)
+                    _particleGridCellDictionary[group.Key].Disable();
             }
+        }
+
+        private void HideAllPanels()
+        {
+            for (int i = 0; i < _diagrams.Length; i++)
+                _diagrams[i].gameObject.SetActive(false);
+            _errorPopup.gameObject.SetActive(false);
         }
 
         private void DisplayDiagram(Texture texture, int i)

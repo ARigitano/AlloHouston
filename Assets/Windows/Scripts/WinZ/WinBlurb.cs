@@ -3,25 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class WinBlurb : Window
+public class WinBlurb : LegacyWindow
 {
-
     public Text txtMessage;
-
-    void Start()
-    {
-
-    }
-
-    void Update()
-    {
-
-    }
 
     public void SetMessage(string tmpMsg)
     {
         txtMessage.text = tmpMsg;
     }
-
-
 }

@@ -4,11 +4,25 @@ using UnityEngine;
 using System;
 using CRI.HelloHouston.Calibration;
 using CRI.HelloHouston.Audio;
+using CRI.HelloHouston.Translation;
+using UnityEngine.SceneManagement;
+using CRI.HelloHouston.Settings;
+using CRI.HelloHouston.GameElements;
 
 namespace CRI.HelloHouston.Experience
 {
-    public class GameManager : MonoBehaviour, ISource
+    public class GameManager : MonoBehaviour, ISource, ILangManager
     {
+        private static int s_randomSeed;
+
+        public static int randomSeed
+        {
+            get
+            {
+                return s_randomSeed;
+            }
+        }
+
         private static GameManager s_instance;
 
         public static GameManager instance
@@ -30,6 +44,8 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         public GameActionController gameActionController { get; private set; }
         [SerializeField]
+        private AppSettings _appSettings = null;
+        [SerializeField]
         private XPMainSettings _mainSettings = null;
         /// <summary>
         /// The Log controller.
@@ -44,9 +60,27 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         public SoundManager globalSoundManager { get; private set; }
         /// <summary>
+        /// Language manager.
+        /// </summary>
+        public LangManager langManager { get; protected set; }
+        /// <summary>
+        /// Text manager.
+        /// </summary>
+        public TextManager textManager
+        {
+            get
+            {
+                return langManager.textManager;
+            }
+        }
+        /// <summary>
         /// Experience list.
         /// </summary>
         public XPManager[] xpManagers { get; private set; }
+        /// <summary>
+        /// The communication screen.
+        /// </summary>
+        private UIComScreen _comScreen;
         /// <summary>
         /// All the available game actions.
         /// </summary>
@@ -68,13 +102,7 @@ namespace CRI.HelloHouston.Experience
             }
         }
 
-        public int xpTimeEstimate
-        {
-            get
-            {
-                return xpManagers.Sum(x => x.xpContext.xpSettings.duration);
-            }
-        }
+        public int xpTimeEstimate { get; private set; }
 
         public string sourceName
         {
@@ -84,20 +112,45 @@ namespace CRI.HelloHouston.Experience
             }
         }
 
-        public XPManager[] Init(XPContext[] xpContexts, VirtualRoom room)
+        private void Awake()
+        {
+            InitGameManager();
+        }
+
+        private void InitGameManager()
         {
             globalSoundManager = GetComponent<SoundManager>();
             gameActionController = new GameActionController(this);
             logManager = new LogManager(this);
-            _mainSettings = Resources.Load<XPMainSettings>("Settings/MainSettings");
-            xpManagers = xpContexts.Select(xpContext => xpContext.InitSynchronizer(logManager.logExperienceController, room.GetZones().Where(zone => zone.xpContext == xpContext).ToArray())).ToArray();
+            langManager = new LangManager(_appSettings.langSettings);
+        }
+
+        public XPManager[] InitGame(XPContext[] xpContexts, VirtualRoom room, int timeEstimate)
+        {
+            return InitGame(xpContexts, room, timeEstimate, UnityEngine.Random.Range(0, int.MaxValue));
+        }
+
+        public XPManager[] InitGame(XPContext[] xpContexts, VirtualRoom room, int timeEstimate, int seed)
+        {
+            s_randomSeed = seed;
+            this.xpTimeEstimate = timeEstimate;
+            xpManagers = xpContexts.Select(xpContext => xpContext.InitManager(logManager.logExperienceController, room.GetZones().Where(zone => zone.xpContext == xpContext).ToArray(), s_randomSeed)).ToArray();
             _startTime = Time.time;
+            logGeneralController.AddLog(string.Format("Random Seed: {0}", randomSeed), this, Log.LogType.Important);
+            _comScreen = room.GetComponentInChildren<UIComScreen>();
+            _comScreen.Init(this, xpManagers);
             return xpManagers;
         }
 
         public GameHint[] GetAllCurrentHints()
         {
             return _mainSettings.hints.Select(hint => new GameHint(hint, this)).Concat(xpManagers.Where(x => x.active).SelectMany(x => x.xpContext.hints)).ToArray();
+        }
+
+        public void LoadXP(XPManager manager, VirtualWallTopZone zone)
+        {
+            zone.manager.Hide();
+            manager.Show(zone);
         }
 
         public void SendHintToPlayers(string hint)

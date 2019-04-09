@@ -1,5 +1,4 @@
-﻿using CRI.HelloHouston.Experience;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -27,7 +26,8 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// The manager of the experiment.
         /// </summary>
         [Tooltip("The manager of the experiment.")]
-        private MAIAManager _manager = null;
+        private MAIAManager _maiaManager = null;
+        [Header("Particle Prefabs")]
         /// <summary>
         /// Prefab of the head of a particle line.
         /// </summary>
@@ -47,21 +47,18 @@ namespace CRI.HelloHouston.Experience.MAIA
         [Tooltip("Prefab of the spark effect of the particle generation.")]
         private MAIAHologramSparkAnimation _sparkPrefab = null;
         /// <summary>
-        /// Transform of a starting point of the spark effect.
+        /// Spline prefab.
         /// </summary>
         [SerializeField]
-        [Tooltip("Transform of a starting point of the spark effect.")]
-        private Transform _start1 = null;
-        /// <summary>
-        /// Transform of a starting point of the spark effect.
-        /// </summary>
-        [SerializeField]
-        [Tooltip("Transform of a starting point of the spark effect.")]
-        private Transform _start2= null;
+        [Tooltip("Spline prefab.")]
+        private BezierSpline _particleSplinePrefab = null;
+
+        [Header("Curve Parameters")]
         /// <summary>
         /// Number of points in the lines.
         /// </summary>
         [Tooltip("Number of points in the lines.")]
+        [SerializeField]
         private int _numberOfPoints = 20;
         /// <summary>
         /// Amplitude for the bezier curves curvature.
@@ -75,12 +72,21 @@ namespace CRI.HelloHouston.Experience.MAIA
         [SerializeField]
         [Tooltip("Amplitude for the bezier curves curvature.")]
         private float _amplitudeB = 0.15f;
-        /// <summary>
-        /// Spline prefab.
-        /// </summary>
         [SerializeField]
-        [Tooltip("Spline prefab.")]
-        private BezierSpline _particleSplinePrefab = null;
+        [Tooltip("Angle for shaping the bezier curves of the particle lines.")]
+        private float _factorMin = 0.2f;
+        [SerializeField]
+        [Tooltip("Angle for shaping the bezier curves of the particle lines.")]
+        private float _factorMax = 0.2f;
+        /// <summary>
+        /// Angle for shaping the bezier curves of the particle lines.
+        /// </summary>
+        /// 
+        private float _theta = 0f;
+        /// <summary>
+        /// Angle for shaping the bezier curves of the particle lines.
+        /// </summary>
+        private float _phi = 0f;
         /// <summary>
         /// Array of particle splines.
         /// </summary>
@@ -93,9 +99,6 @@ namespace CRI.HelloHouston.Experience.MAIA
         [SerializeField]
         [Tooltip("Array of the cylinders' mesh filters.")]
         private MeshFilter[] _cylArray = null;
-        [SerializeField]
-        [Tooltip("Angle for shaping the bezier curves of the particle lines.")]
-        private float _factor = 0.2f;
         /// <summary>
         /// Array of the cylinders' radiuses.
         /// </summary>
@@ -104,22 +107,30 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// Array of the cylinders' lengths.
         /// </summary>
         private float[] _lMaxCylArray;
-        /// <summary>
-        /// Angle for shaping the bezier curves of the particle lines.
-        /// </summary>
-        private float _theta = 0f;
-        /// <summary>
-        /// Angle for shaping the bezier curves of the particle lines.
-        /// </summary>
-        private float _phi = 0f;
 
+        [Header("Animation Starting Points")]
         /// <summary>
-        /// Activates or deactivates the hologram.
+        /// Transform of a starting point of the spark effect.
         /// </summary>
-        /// <param name="isActivated">Is the hologram activated or deactivated?</param>
-        public void ActivateHologram(bool isActivated)
+        [SerializeField]
+        [Tooltip("Transform of a starting point of the spark effect.")]
+        private Transform _start1 = null;
+        /// <summary>
+        /// Transform of a starting point of the spark effect.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("Transform of a starting point of the spark effect.")]
+        private Transform _start2 = null;
+
+        private bool _splinesDisplayed = false;
+
+        private bool _animationPlayedOnce = false;
+
+        private System.Random _rand;
+
+        private void OnDisable()
         {
-            gameObject.SetActive(isActivated);
+            _animationPlayedOnce = false;
         }
 
         /// <summary>
@@ -131,7 +142,9 @@ namespace CRI.HelloHouston.Experience.MAIA
             _particleSplineArray = new HologramSpline[particles.Count];
             for (int i = 0; i < particles.Count; i++)
             {
-                _particleSplineArray[i] = CreateSpline(particles[i], i);
+                HologramSpline particleSpline = CreateSpline(particles[i]);
+                particleSpline.spline.gameObject.name = particleSpline.particle.particleName + i;
+                _particleSplineArray[i] = particleSpline;
             }
         }
 
@@ -141,7 +154,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <param name="i">The index of the particle inside the combination.</param>
         /// <param name="particle">The particle which line is being generated.</param>
         /// <returns>The end position of the line.</returns>
-        private HologramSpline CreateSpline(Particle particle, int index)
+        private HologramSpline CreateSpline(Particle particle)
         {
             //Setting rotation angles.
             if (particle.straight)
@@ -151,8 +164,8 @@ namespace CRI.HelloHouston.Experience.MAIA
             }
             else
             {
-                _theta = Random.Range(Mathf.PI / 6f, Mathf.PI / 3f);
-                _phi = Random.Range(Mathf.PI / 4f, Mathf.PI / 3f);
+                _theta = (float)_rand.Range(Mathf.PI / 6f, Mathf.PI / 3f);
+                _phi = (float)_rand.Range(Mathf.PI / 4f, Mathf.PI / 3f);
 
                 if (particle.negative)
                 {
@@ -175,24 +188,23 @@ namespace CRI.HelloHouston.Experience.MAIA
             Vector3 vDir = Vector3.zero;
 
 
-            float factorTmp = particle.extremity ? 0.0f : _factor;
-            float lMaxFactor = lMax - factorTmp * (lMax - lMin);
-            float lMinFactor = lMin + factorTmp * (lMax - lMin);
-            float rMaxFactor = rMax - factorTmp * (rMax - rMin);
-            float rMinFactor = rMin + factorTmp * (rMax - rMin);
+            float factorTmpMin = particle.extremity ? 0.0f : _factorMin;
+            float factorTmpMax = particle.extremity ? 0.0f : _factorMax;
+            float lMaxFactor = lMax - factorTmpMax * (lMax - lMin);
+            float lMinFactor = lMin + factorTmpMin * (lMax - lMin);
+            float rMaxFactor = rMax - factorTmpMax * (rMax - rMin);
+            float rMinFactor = rMin + factorTmpMin * (rMax - rMin);
 
             bool res = false;
 
             do
             {
-                float r = particle.extremity ? rMax : Random.Range(_rMaxCylArray[0], rMaxFactor);
-                float alpha = Random.Range(0, Mathf.PI * 2f);
+                float r = particle.extremity ? rMax : (float)_rand.Range(_rMaxCylArray[0], rMaxFactor);
+                float alpha = (float)_rand.Range(0, Mathf.PI * 2f);
 
                 spline.points[3].x = r * Mathf.Cos(alpha);
-                spline.points[3].y = Random.Range(-lMaxFactor, lMaxFactor);
+                spline.points[3].y = (float)_rand.Range(-lMaxFactor, lMaxFactor);
                 spline.points[3].z = r * Mathf.Sin(alpha);
-
-                spline.gameObject.name = particle.particleName + index;
                  
                 spline.points[0] = Vector3.zero;
 
@@ -217,7 +229,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             return new HologramSpline(spline, particle, vDir);
         }
 
-        private void PopulateLine(HologramSpline hologramSpline)
+        private void DisplaySpline(HologramSpline hologramSpline)
         {
             Particle particle = hologramSpline.particle;
             BezierSpline spline = hologramSpline.spline;
@@ -225,8 +237,7 @@ namespace CRI.HelloHouston.Experience.MAIA
 
             //Displaying the lines.
             if (particle.line)
-            {
-                
+            {     
                 var line = Instantiate(_lineRendererPrefab, Vector3.zero, Quaternion.identity, spline.transform);
                 line.transform.localPosition = Vector3.zero;
                 line.transform.localRotation = Quaternion.identity;
@@ -267,22 +278,24 @@ namespace CRI.HelloHouston.Experience.MAIA
                 lineHead.transform.position = spline.GetPoint(1.0f);
                 lineHead.transform.localRotation = Quaternion.FromToRotation(lineHead.transform.up, vDir);
                 _particleHeads.Add(lineHead.GetComponent<XRLineRenderer>());
-                Debug.Log("splines2");
             }
         }
 
-        public void DisplaySplines()
+        public void DisplayAllSplines()
         {
-            
-            foreach (HologramSpline hologramSpline in _particleSplineArray)
+            if (!_splinesDisplayed)
             {
-                
-                PopulateLine(hologramSpline);
+                foreach (HologramSpline hologramSpline in _particleSplineArray)
+                {
+                    DisplaySpline(hologramSpline);
+                }
+                _splinesDisplayed = true;
             }
         }
 
         private IEnumerator Animate()
         {
+            _animationPlayedOnce = true;
             var lines = GetComponentsInChildren<MAIAHologramLineAnimation>();
             var heads = GetComponentsInChildren<MAIAHologramHeadAnimation>();
             foreach (var line in lines)
@@ -303,13 +316,16 @@ namespace CRI.HelloHouston.Experience.MAIA
 
         public void StartAnimation()
         {
-            StopAllCoroutines();
-            StartCoroutine(Animate());
+            if (_splinesDisplayed && gameObject.activeInHierarchy)
+            {
+                StopAllCoroutines();
+                StartCoroutine(Animate());
+            }
         }
 
         private void Init(MAIAManager synchronizer)
         {
-            _manager = synchronizer;
+            _maiaManager = synchronizer;
             _lMaxCylArray = new float[_cylArray.Length];
             _rMaxCylArray = new float[_cylArray.Length];
             for (int i = 0; i < _cylArray.Length; i++)
@@ -318,38 +334,24 @@ namespace CRI.HelloHouston.Experience.MAIA
                 _rMaxCylArray[i] = _cylArray[i].mesh.bounds.extents.x * _cylArray[i].transform.localScale.x;
             }
         }
-        /// <summary>
-        /// Effect when the experiment is correctly resolved.
-        /// </summary>
-        public override void OnSuccess()
+
+        public override void OnInit(XPManager manager, int randomSeed)
         {
-            Debug.Log(name + "Resolved");
-        }
-        /// <summary>
-        /// Effect when the experiment is failed.
-        /// </summary>
-        public override void OnFailure()
-        {
-            Debug.Log(name + "Failed");
-        }
-        /// <summary>
-        /// Effect when the experiment is activated the first time.
-        /// </summary>
-        public override void OnActivation(XPManager manager)
-        {
-            Debug.Log(name + "Activated");
+            base.OnInit(manager, randomSeed);
             Init((MAIAManager)manager);
-            CreateSplines(_manager.generatedParticles);
-            gameObject.SetActive(false);
+            _rand = new System.Random(randomSeed);
         }
 
         /// <summary>
-        /// Effect when the experiment is paused.
+        /// Effect when the experiment is activated the first time.
         /// </summary>
-        public override void OnShow()
+        public override void OnShow(int currentStep)
         {
-            Debug.Log(name + "Paused");
+            base.OnActivation();
+            CreateSplines(_maiaManager.generatedParticles);
+            gameObject.SetActive(false);
         }
+
         /// <summary>
         /// Effect when the experiment is unpaused.
         /// </summary>
@@ -357,6 +359,14 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             Debug.Log(name + "Unpaused");
             gameObject.SetActive(false);
+        }
+
+        public void OnVisibleStay(Camera camera)
+        {
+            if (_splinesDisplayed && !_animationPlayedOnce)
+            {
+                StartAnimation();
+            }
         }
     }
 }

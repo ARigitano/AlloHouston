@@ -1,9 +1,7 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using System;
-using System.Linq;
+using CRI.HelloHouston.WindowTemplate;
 
 namespace CRI.HelloHouston.Experience.MAIA
 {
@@ -12,146 +10,60 @@ namespace CRI.HelloHouston.Experience.MAIA
     /// </summary>
     public class MAIATabletScreen : XPElement
     {
-        private MAIAManager _manager;
-        /// <summary>
-        /// All the panels for the tablet screen.
-        /// </summary>
-        [SerializeField]
-        private GameObject _startFull, _panelFull, _overrideLeft, _passwordLeft, _particlesLeft, _advanceOverride, _diagramsSelectionLeft, _diagramsSelectionRight;
-        /// <summary>
-        /// Loading bar to display the time remaining.
-        /// </summary>
-        [SerializeField]
-        private Slider _slider = null;
-        /// <summary>
-        /// Speed of the time remaining loading bar.
-        /// </summary>
-        [SerializeField]
-        private float _speed = 0.2f;
-        /// <summary>
-        /// To check if a button have been pressed by the VR controller.
-        /// </summary>
-        private bool _isTouched = false;
-        /// <summary>
-        /// Stores the panels currently being displayed.
-        /// </summary>
-        private GameObject _currentPanelLeft, _currentPanelRight, _currentPanel;
-
+        public MAIAManager maiaManager { get; private set; }
         public MAIATopScreen topScreen { get; private set; }
-        public MAIAHologramTube hologramTube;
-        public MAIAHologramFeynman hologramFeynman;
+        private MAIAHologramTube _hologramTube;
+        private MAIAHologramFeynman _hologramFeynman;
+        private MAIATubeScreen _tubeScreen;
+        [Header("MAIATabletScreen Attributes")]
+        [SerializeField]
+        [Tooltip("The manual override panel.")]
+        private Window _moPanel = null;
+        [SerializeField]
+        [Tooltip("The password identification panel.")]
+        private MAIAPasswordPanel _passwordPanel = null;
+        [SerializeField]
+        [Tooltip("The particles panel.")]
+        private MAIAParticlePanel _particlesPanel = null;
+        [SerializeField]
+        [Tooltip("The particle charges.")]
+        private MAIAParticleChargesPanel _particleChargesPanel = null;
+        [SerializeField]
+        [Tooltip("The advanced manual override panel.")]
+        private Window _amoPanel = null;
+        [SerializeField]
+        [Tooltip("The diagrams panel.")]
+        private MAIAReactionPanel _reactionPanel = null;
+        /// <summary>
+        /// The panel currently being displayed.
+        /// </summary>
+        private Window _currentPanel;
 
-        public MAIATubeScreen tubeScreen;
-        /// <summary>
-        /// Password entered by the player.
-        /// </summary>
-        private string _enteredPassword = "";
-        /// <summary>
-        /// The particles entered by the player.
-        /// </summary>
-        [HideInInspector]
-        private List<Particle> _enteredParticles = new List<Particle>();
-        /// <summary>
-        /// Is the holographic diagram the right one?
-        /// </summary>
-        public bool correctDiagram = false;
-        /// <summary>
-        /// Is there a diagram in the docking zone?
-        /// </summary>
-        private bool _isDiagram = false;
+        private Window _previousPanel;
 
-        /// <summary>
-        /// Tests if the chosen holographic diagram is correct.
-        /// </summary>
-        /// <param name="diagram">Texture of the chosen holographic diagram.</param>
-        public void DiagramValidation(Texture diagram)
+        public void StartVictory()
         {
-            /// <summary>
-            /// Is the holographic diagram the right one?
-            /// </summary>
-            correctDiagram = false;
-            _isDiagram = true;
+            ActivatePanel(null);
+        }
 
-            if (diagram == _manager.selectedReaction.diagramImage)
+        private void ActivatePanel(Window newPanel)
+        {
+            // We stop the previous panel animation if it didn't finish yet.
+            if (_previousPanel != null && _previousPanel.visible)
             {
-                correctDiagram = true;
+                _previousPanel.StopAllCoroutines();
+                _previousPanel.gameObject.SetActive(false);
             }
-        }
-
-        /// <summary>
-        /// No diagram is detected on docking zone.
-        /// </summary>
-        public void NoDiagram()
-        {
-            _isDiagram = false;
-        }
-
-        /// <summary>
-        /// Particle identification screen.
-        /// </summary>
-        private ParticlesIdentification _particleIdentificationScreen;
-        /// <summary>
-        /// Manual override access screen.
-        /// </summary>
-        private MAIAManualOverrideAccess _manualOverrideAccessScreen;
-
-        /// <summary>
-        /// Deletes the last entered particle.
-        /// </summary>
-        public void DeleteParticle()
-        {
-            if (!_isTouched)
-            {
-                _isTouched = true;
-                if (_enteredParticles.Count > 0)
-                    _enteredParticles.RemoveAt(_enteredParticles.Count - 1);
-                _particleIdentificationScreen.UpdateParticles(_enteredParticles);
-                StartCoroutine(WaitButton());
-            }
-        }
-
-        /// <summary>
-        /// Clears the particles combination entered.
-        /// </summary>
-        public void ClearParticles()
-        {
-            _enteredParticles.Clear();
-            _particleIdentificationScreen.UpdateParticles(_enteredParticles);
-        }
-
-        /// <summary>
-        /// Called by the synchronizer to skip directly to the Feynman diagrams step.
-        /// </summary>
-        public void SkipStepOne()
-        {
-            if (_currentPanel != null)
-                _currentPanel.SetActive(false);
-
-            _overrideLeft.SetActive(false);
-
-            if (_currentPanelLeft != null)
-            {
-                _currentPanelLeft.SetActive(false);
-            }
-
-            if (_currentPanelRight != null)
-                _currentPanelRight.SetActive(false);
-
-            _panelFull.SetActive(true);
-            StartAnalysisAnimation();
-        }
-
-        /// <summary>
-        /// Activates the manual override panel.
-        /// </summary>
-        public void ManualOverride()
-        {
-            _overrideLeft.SetActive(true);
-        }
-
-        private void Start()
-        {
-            _currentPanel = _startFull;
+            if (_currentPanel == newPanel)
+                return;
+            else if (_currentPanel != null && newPanel != null)
+                _currentPanel.HideWindow(newPanel.ShowWindow);
+            else if (_currentPanel != null && newPanel == null)
+                _currentPanel.HideWindow();
+            else if (newPanel != null)
+                newPanel.ShowWindow();
+            _previousPanel = _currentPanel;
+            _currentPanel = newPanel;
         }
 
         /// <summary>
@@ -166,221 +78,95 @@ namespace CRI.HelloHouston.Experience.MAIA
             action.Invoke();
         }
 
-        /// <summary>
-        /// Activates the reaction selection panels.
-        /// </summary>
-        public void OverrideSecond()
+        public void HideAllPanels()
         {
-            _diagramsSelectionLeft.SetActive(true);
-            _diagramsSelectionRight.SetActive(true);
-            _currentPanelLeft = _diagramsSelectionLeft;
-            _currentPanelRight = _diagramsSelectionRight;
-        }
-
-        /// <summary>
-        /// Sends an error message to the top screen.
-        /// </summary>
-        public void ParticleSendErrorMessage(ParticlesIdentification.ErrorType particleErrorType)
-        {
-            _particleIdentificationScreen.DisplayErrorMessage(particleErrorType);
-        }
-        
-        IEnumerator WaitButton()
-        {
-            yield return new WaitForSeconds(0.5f);
-            _isTouched = false;
-        }
-
-        //TODO:redistribute
-        /// <summary>
-        /// Fake delay that can never be attained.
-        /// </summary>
-        /// <returns>null</returns>
-        IEnumerator FakeLoading()
-        {
-            float i = 0f;
-            while (_slider.value <= 0.75f)
-            {
-                i += Time.deltaTime * _speed;
-                _slider.value = Mathf.Sqrt(i);
-                yield return null;
-            }
+            ActivatePanel(null);
         }
 
         /// <summary>
         /// Tells every screen that the right combination of particles has been entered.
         /// </summary>
-        public void ParticleRightCombination()
+        public void OnRightParticleCombination()
         {
-            topScreen.manager.StartAnalysisAnimation();
-            _particlesLeft.SetActive(false);
+            topScreen.maiaManager.OnPISuccess();
         }
 
-        public void StartAnalysisAnimation()
+        public void OnRightChargeCombination()
         {
-            _particlesLeft.SetActive(false);
+            topScreen.maiaManager.OnCISuccess();
         }
 
-        public void StartAdvancedManualOverride()
+        public void OnAMOClick()
         {
-            _advanceOverride.SetActive(true);
+            ActivatePanel(null);
+            topScreen.maiaManager.OnAMOSuccess();
         }
 
-        public void AdvancedManualOverride()
+        public void StartAMO()
         {
-            _advanceOverride.SetActive(false);
-            topScreen.manager.StartReactionIdentification();
-        }
-
-        public void StartReactionIdentification()
-        {
-            _advanceOverride.SetActive(false);
-            _diagramsSelectionLeft.SetActive(true);
-            _diagramsSelectionRight.SetActive(true);
-            _currentPanelLeft = _diagramsSelectionLeft;
-            _currentPanelRight = _diagramsSelectionRight;
+            ActivatePanel(_amoPanel);
         }
 
         /// <summary>
-        /// Submits the particles combination entered.
+        /// Displays the particle reaction panel.
         /// </summary>
-        public void SubmitParticles()
+        public void StartRI()
         {
-            //Checks if the combination entered has the right number of particles.
-            if (_enteredParticles.Count == _manager.generatedParticles.Count)
-            {
-                var l1 = _enteredParticles.OrderBy(particle => particle.symbol).ThenBy(particle => particle.negative).ToArray();
-                var l2 = _manager.generatedParticles.OrderBy(particle => particle.symbol).ThenBy(particle => particle.negative).ToArray();
-                bool symbols = true;
-                bool charges = true;
-                for (int i = 0; i < l1.Count(); i++)
-                {
-                    if (l1[i].symbol != l2[i].symbol)
-                    {
-                        symbols = false;
-                        Debug.Log(l1[i].symbol + " !=" + l2[i].symbol);
-                        break;
-                    }
-                    if (l1[i].negative != l2[i].negative && !l1[i].particleName.ToLower().Contains("neutrino"))
-                        charges = false;
-                }
-                // Checks if the right symbols have been entered.
-                if (symbols)
-                {
-                    //Check if the right symbols + charges have been entered. We ignore the neutrino particle in this process.
-                    if (charges)
-                    {
-                        //The right combination of particles have been entered.
-                        ParticleRightCombination();
-                    }
-                    else
-                    {
-                        //A wrong combination of charges have been entered.
-                        ParticleSendErrorMessage(ParticlesIdentification.ErrorType.WrongNumberCharges);
-                    }
-                }
-                else
-                {
-                    //A wrong combination of symbols have been entered.
-                    ParticleSendErrorMessage(ParticlesIdentification.ErrorType.WrongParticles);
-                }
-            }
-            else
-            {
-                //A combination of particles with a wrong length has been entered.
-                ParticleSendErrorMessage(ParticlesIdentification.ErrorType.WrongNumberParticles);
-            }
+            ActivatePanel(_reactionPanel);
         }
 
         /// <summary>
-        /// Tells the main screen that a reaction has been selected.
+        /// Displays particle selection panel.
         /// </summary>
-        public void SelectReaction()
+        public void StartPI()
         {
-            if (_isDiagram)
-            {
-                topScreen.ReactionSelected(correctDiagram);
-            }
-            //topScreen.ReactionSelected(_manager.selectedReaction, tubeScreen.diagramSelected);
-        }
-
-        /// Adds a particle to the combination.
-        /// </summary>
-        /// <param name="particleButton">The particle to add.</param>
-        public void EnteringParticle(Particle particle)
-        {
-            if (!_isTouched && _enteredParticles.Count < _manager.generatedParticles.Count)
-            {
-                _isTouched = true;
-                _enteredParticles.Add(particle);
-                _particleIdentificationScreen.UpdateParticles(_enteredParticles);
-                StartCoroutine(WaitButton());
-            }
+            ActivatePanel(_particlesPanel);
         }
 
         /// <summary>
-        /// Adds a number to the password.
+        /// Displays the particle charge panel.
         /// </summary>
-        /// <param name="character">The character to add.</param>
-        public void EnteringDigit(string character)
+        public void StartCI()
         {
-            if (!_isTouched)
-            {
-                Debug.Log(character);
-                _isTouched = true;
-                string realPassword = _manager.settings.password;
-                _enteredPassword += character.ToString();
-                bool interactable = _manualOverrideAccessScreen.CheckPasswordInput(_enteredPassword);
-                if (_enteredPassword.Length == realPassword.Length || !interactable)
-                    _enteredPassword = "";
-                StartCoroutine(WaitButton());
-            }
-        }
-        /// <summary>
-        /// Displays particle selection panel after the correct password have been entered.
-        /// </summary>
-        public void StartParticleIdentification()
-        {
-            _passwordLeft.SetActive(false);
-            _particlesLeft.SetActive(true);
-            _currentPanelLeft = _particlesLeft;
+            ActivatePanel(_particleChargesPanel);
         }
 
         /// <summary>
-        /// Displays start panel after the splash screen has finished loading.
+        /// Activates the manual override panel.
         /// </summary>
-        public void WaitingConfirmation()
+        public void StartMO()
         {
-            _startFull.SetActive(true);
-            _currentPanel = _startFull;
+            ActivatePanel(_moPanel);
         }
+
+        public void StartPassword()
+        {
+            ActivatePanel(_passwordPanel);
+        }
+
         /// <summary>
         /// Displays password panel adter override button has been clicked.
         /// </summary>
-        public void OverrideButtonClicked()
+        public void OnMOClick()
         {
-            topScreen.InitPasswordInput();
-            StartCoroutine(WaitGeneric(0.2f, () =>
-            {
-                _passwordLeft.SetActive(true);
-                _currentPanelLeft = _passwordLeft;
-                _overrideLeft.SetActive(false);
-            }));
+            maiaManager.OnMOSuccess();
+        }
+        
+        public override void OnInit(XPManager manager, int randomSeed)
+        {
+            base.OnInit(manager, randomSeed);
+            this.maiaManager = (MAIAManager)manager;
         }
 
-        private void Init(MAIAManager manager)
+        public override void OnShow(int step)
         {
-            _manager = manager;
-            Debug.Log(manager);
-            topScreen = manager.topScreen;
-            _particleIdentificationScreen = topScreen.particleIdentificationScreen;
-            _manualOverrideAccessScreen = topScreen.manualOverrideAccessScreen;
-        }
-
-        public override void OnActivation(XPManager manager)
-        {
-            base.OnActivation(manager);
-            Init((MAIAManager)manager);
+            topScreen = maiaManager.topScreen;
+            _passwordPanel.Init(maiaManager.logController, maiaManager.xpContext, topScreen.manualOverrideAccessScreen, maiaManager.settings.password);
+            _particlesPanel.Init(maiaManager, topScreen.particleIdentificationScreen);
+            _particleChargesPanel.Init(maiaManager, topScreen.particleIdentificationScreen);
+            _reactionPanel.Init(topScreen, maiaManager);
+            _hologramTube = maiaManager.hologramTube;
+            ActivatePanel(_moPanel);
         }
     }
 }

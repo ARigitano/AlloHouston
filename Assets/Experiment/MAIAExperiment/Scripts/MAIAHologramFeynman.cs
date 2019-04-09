@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace CRI.HelloHouston.Experience.MAIA
@@ -9,52 +10,96 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// The synchronizer of the experiment.
         /// </summary>
-        public MAIAManager manager { get; private set; }
+        public MAIAManager maiaManager { get; private set; }
         /// <summary>
         /// The objects containing the Feynman diagrams.
         /// </summary>
-        public GameObject[] feynmanBoxes;
+        [SerializeField]
+        private MAIAHologramDiagram[] _feynmanBoxes = null;
         /// <summary>
-        /// Name of the Feynman digram chosen by the player.
+        /// The line manager.
         /// </summary>
-        public string feynmanBoxName;
+        [SerializeField]
+        [Tooltip("The line manager.")]
+        private MAIAHologramLineManager _lineManager;
 
-        // Start is called before the first frame update
-        void Start()
+        private Vector3[] _boxPositions;
+        private Quaternion[] _boxRotations;
+        /// <summary>
+        /// Random generated with the GameManager's seed.
+        /// </summary>
+        private System.Random _rand;
+
+        private void Reset()
         {
-            
+            _lineManager = GetComponentInChildren<MAIAHologramLineManager>();
         }
 
-        // Update is called once per frame
-        void Update()
+        private void OnEnable()
         {
-           
+            foreach(MAIAHologramDiagram feynmanBox in _feynmanBoxes)
+            {
+                feynmanBox.gameObject.SetActive(true);
+            }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+        private void OnDisable()
+        {
+            foreach (MAIAHologramDiagram feynmanBox in _feynmanBoxes)
+            {
+                feynmanBox.gameObject.SetActive(false);
+            }
+        }
+
         public void FillBoxesDiagrams()
         {
-            feynmanBoxes = GameObject.FindGameObjectsWithTag("Feynmanbox");
-            int i = 0;
-            foreach (Reaction reaction in manager.settings.allReactions)
+            IList<Reaction> allReactions = maiaManager.settings.allReactions.Shuffle(_rand);
+            for (int i = 0; i < allReactions.Count && i < _feynmanBoxes.Length; i++)
             {
-                MeshRenderer[] renderers = feynmanBoxes[i].GetComponentsInChildren<MeshRenderer>();
-                renderers[1].material.mainTexture = reaction.diagramImage;
-                i++;
+                _feynmanBoxes[i].contentRenderer.material.mainTexture = allReactions[i].diagramImage;
+                _feynmanBoxes[i].name = "hologram_content: " + allReactions[i].diagramImage.name;
+                _feynmanBoxes[i].displayLine = true;
+            }
+        }
+
+        public void ResetPositions()
+        {
+            for (int i = 0; i < _feynmanBoxes.Length; i++)
+            {
+                _feynmanBoxes[i].transform.position = _boxPositions[i];
+                _feynmanBoxes[i].transform.rotation = _boxRotations[i];
+                _feynmanBoxes[i].transform.SetParent(transform);
             }
         }
 
         private void Init(MAIAManager synchronizer)
         {
-            manager = synchronizer;
+            maiaManager = synchronizer;
+            _boxPositions = new Vector3[_feynmanBoxes.Length];
+            _boxRotations = new Quaternion[_feynmanBoxes.Length];
+            for (int i = 0; i < _feynmanBoxes.Length; i++)
+            {
+                _boxPositions[i] = _feynmanBoxes[i].transform.position;
+                _boxRotations[i] = _feynmanBoxes[i].transform.rotation;
+            }
+            _lineManager.Init(_feynmanBoxes);
         }
 
-        public override void OnActivation(XPManager manager)
+        public override void OnShow(int currentStep)
         {
+            FillBoxesDiagrams();
+        }
+
+        public override void OnInit(XPManager manager, int randomSeed)
+        {
+            base.OnInit(manager, randomSeed);
+            _rand = new System.Random(randomSeed);
             Init((MAIAManager)manager);
-            base.OnActivation(manager);
+        }
+
+        public override void OnActivation()
+        {
+            base.OnActivation();
             gameObject.SetActive(false);
         }
     }

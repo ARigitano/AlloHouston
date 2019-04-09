@@ -372,7 +372,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4609654375520222
 Transform:
   m_ObjectHideFlags: 0
@@ -551,6 +551,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4993085576833532}
   - component: {fileID: 114681139431253332}
+  - component: {fileID: 1120915866531385538}
+  - component: {fileID: 3665088112656205309}
+  - component: {fileID: 1427073694855238085}
   m_Layer: 0
   m_Name: MAIAHologramTube
   m_TagString: Untagged
@@ -575,6 +578,7 @@ Transform:
   - {fileID: 744187390491120669}
   - {fileID: 2033453594320576561}
   - {fileID: 6801029754301465630}
+  - {fileID: 1150709544345999288}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -591,24 +595,118 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _elementName: 
+  _canvasElement: 1
   _headPrefab: {fileID: 4744561565852097709, guid: fe325c62ec2184e419782c3bc34f63fa,
     type: 3}
   _lineRendererPrefab: {fileID: 4744561565852097683, guid: d50a6511bbdf08d4cb9969cc579a08b8,
     type: 3}
   _sparkPrefab: {fileID: 3433516500169364685, guid: 57628a8e6b0f566419dc7c193961f389,
     type: 3}
-  _start1: {fileID: 744187390491120669}
-  _start2: {fileID: 2033453594320576561}
-  _amplitudeA: 0.15
-  _amplitudeB: 0.15
   _particleSplinePrefab: {fileID: 114330974348385556, guid: f3741c479c435b84dae26c8388f02e22,
     type: 3}
+  _numberOfPoints: 20
+  _amplitudeA: 0.15
+  _amplitudeB: 0.15
+  _factorMin: 0.1
+  _factorMax: 0.45
   _cylArray:
   - {fileID: 33614257511252690}
   - {fileID: 33778873967638092}
   - {fileID: 33533058801098216}
   - {fileID: 33970273169914432}
-  _factor: 0.3
+  _start1: {fileID: 744187390491120669}
+  _start2: {fileID: 2033453594320576561}
+--- !u!114 &1120915866531385538
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1657341404690666}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73dbf5a7d782fc641a4190eb3f23dfb7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _onVisibleEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: CRI.HelloHouston.CameraTarget+CameraEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  _onVisibleStay:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 114681139431253332}
+        m_MethodName: OnVisibleStay
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: CRI.HelloHouston.CameraTarget+CameraEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  _onVisibleExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: CRI.HelloHouston.CameraTarget+CameraEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  allowedCameras: []
+  _checkOcclusion: 0
+--- !u!135 &3665088112656205309
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1657341404690666}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 1.22
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1427073694855238085
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1657341404690666}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7530eeaa128faef459301a47f43f38ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  operateAxis: 2
+  ignoreCollisionsWith: []
+  excludeColliderCheckOn: []
+  equalityFidelity: 0.001
+  hingePoint: {fileID: 1150709544345999288}
+  angleLimits:
+    minimum: -Infinity
+    maximum: Infinity
+  minMaxThresholdAngle: 1
+  restingAngle: 0
+  forceRestingAngleThreshold: 1
+  angleTarget: 0
+  isLocked: 0
+  stepValueRange:
+    minimum: 0
+    maximum: 1
+  stepSize: 0.1
+  useStepAsValue: 1
+  snapToStep: 0
+  snapForce: 10
+  precisionGrab: 1
+  detachDistance: 1
+  rotationAction: 0
+  grabbedFriction: 1
+  releasedFriction: 1
+  onlyInteractWith: []
 --- !u!1 &1837168784898774
 GameObject:
   m_ObjectHideFlags: 0
@@ -904,6 +1002,36 @@ Transform:
   m_Father: {fileID: 4993085576833532}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6431243878961135812
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1150709544345999288}
+  m_Layer: 0
+  m_Name: HingePoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1150709544345999288
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6431243878961135812}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.0063205077, z: 0}
+  m_LocalScale: {x: 32.275, y: 32.275, z: 32.275}
+  m_Children: []
+  m_Father: {fileID: 4993085576833532}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8390347599392422529
 GameObject:
   m_ObjectHideFlags: 0
@@ -944,6 +1072,10 @@ PrefabInstance:
     - target: {fileID: 100000, guid: fc3bae5c5c483e54987dcf65a140cc26, type: 3}
       propertyPath: m_Name
       value: holo_atlas
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: fc3bae5c5c483e54987dcf65a140cc26, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 100002, guid: fc3bae5c5c483e54987dcf65a140cc26, type: 3}
       propertyPath: m_IsActive
@@ -1135,6 +1267,18 @@ PrefabInstance:
     - target: {fileID: 100000, guid: 7d5706de54b143f49a285da1805cd10b, type: 3}
       propertyPath: m_Name
       value: holo_atlas_sens
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: 7d5706de54b143f49a285da1805cd10b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100004, guid: 7d5706de54b143f49a285da1805cd10b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100006, guid: 7d5706de54b143f49a285da1805cd10b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 7d5706de54b143f49a285da1805cd10b, type: 3}
       propertyPath: m_LocalPosition.x

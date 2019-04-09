@@ -47,6 +47,8 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         [SerializeField]
         private float _analysisDuration = 3.0f;
+
+        private float _popupDuration = 4.0f;
         /// <summary>
         /// Array of text to be displayed if the reaction selected is the wrong one.
         /// </summary>
@@ -56,6 +58,8 @@ namespace CRI.HelloHouston.Experience.MAIA
 
         private int _strike = 0;
 
+        private bool _analysis = false;
+
         /// <summary>
         /// Effect if the correct Feynman diagram is selected, or a wrong one.
         /// </summary>
@@ -63,11 +67,13 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <param name="reactionSelected">The reaction selected by the player.</param>
         public void ReactionSelected(bool correctDiagram)
         {
-            StartCoroutine(ReactionSelectedAnimation(correctDiagram));
+            if (!_analysis)
+                StartCoroutine(ReactionSelectedAnimation(correctDiagram));
         }
 
         private IEnumerator ReactionSelectedAnimation(bool correctDiagram)
         {
+            _analysis = true;
             _analysisPopup.SetActive(true);
             yield return new WaitForSeconds(_analysisDuration);
             _analysisPopup.SetActive(false);
@@ -80,25 +86,33 @@ namespace CRI.HelloHouston.Experience.MAIA
                 _popupLose.GetComponentInChildren<Text>().text = _strike < _loseText.Length ? _loseText[_strike] : _loseText[_loseText.Length - 1];
                 _strike++;
                 _popupLose.SetActive(true);
-                StartCoroutine(_topScreen.WaitGeneric(2f, () =>
+                StartCoroutine(_topScreen.WaitGeneric(_popupDuration, () =>
                 {
                     _popupLose.SetActive(false);
                 }));
+            }
+            _analysis = false;
+        }
+
+        private void InitParticleGridCellDictionary()
+        {
+            _particleGridCellDictionary = new Dictionary<Particle, ParticleGridCell>();
+            foreach (var particleGroup in _topScreen.maiaManager.settings.allParticles.OrderBy(particle => particle.symbol).ThenBy(particle => !particle.negative).GroupBy(particle => particle))
+            {
+                var particleGridCell = Instantiate(_particleGridCellPrefab, _particleGridTransform);
+                particleGridCell.Init(particleGroup.Key);
+                _particleGridCellDictionary.Add(particleGroup.Key, particleGridCell);
             }
         }
 
         public void StartReactionIdentification()
         {
             var dictionary = new Dictionary<Particle, int>();
-            _particleGridCellDictionary = new Dictionary<Particle, ParticleGridCell>();
-            foreach (var particleGroup in _topScreen.manager.settings.allParticles.OrderBy(particle => particle.symbol).ThenBy(particle => !particle.negative).GroupBy(particle => particle))
-            {
+            if (_particleGridCellDictionary == null)
+                InitParticleGridCellDictionary();
+            foreach (var particleGroup in _topScreen.maiaManager.settings.allParticles.OrderBy(particle => particle.symbol).ThenBy(particle => !particle.negative).GroupBy(particle => particle))
                 dictionary.Add(particleGroup.Key, 0);
-                var particleGridCell = Instantiate(_particleGridCellPrefab, _particleGridTransform);
-                particleGridCell.Init(particleGroup.Key);
-                _particleGridCellDictionary.Add(particleGroup.Key, particleGridCell);
-            }
-            foreach (var particleGroup in _topScreen.manager.selectedReaction.exit.particles.GroupBy(particle => particle))
+            foreach (var particleGroup in _topScreen.maiaManager.selectedReaction.exit.particles.GroupBy(particle => particle))
                 dictionary[particleGroup.Key] += particleGroup.Count();
             DisplayParticles(dictionary);
         }
@@ -109,6 +123,8 @@ namespace CRI.HelloHouston.Experience.MAIA
             {
                 var group = dictionary.ElementAt(i);
                 _particleGridCellDictionary[group.Key].SetText(group.Value.ToString());
+                if (group.Value == 0)
+                    _particleGridCellDictionary[group.Key].Disable();
             }
         }
     }

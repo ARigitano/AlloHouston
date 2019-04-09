@@ -51,23 +51,36 @@ namespace CRI.HelloHouston.Calibration
         /// </summary>
         /// <param name="xpManager"></param>
         /// <returns></returns>
-        public virtual XPElement Init()
+        public virtual XPElement Init(XPManager manager)
         {
             Clean();
             currentElement = Instantiate(_elementPrefab, transform);
-            currentElement.Init(this);
+            if (!currentElement.canvasElement)
+            {
+                Vector3 localScale = currentElement.transform.localScale;
+                Vector3 lossyScale = gameObject.transform.lossyScale;
+                currentElement.transform.localScale = new Vector3(
+                    localScale.x / lossyScale.x,
+                    localScale.y / lossyScale.y,
+                    localScale.z / lossyScale.z
+                    );
+            }
+            currentElement.Init(this, manager);
             return currentElement;
         }
         /// <summary>
         /// Dismiss the current element and sets its value to null.
+        /// <return>The cleaned element.</return> 
         /// </summary>
-        public virtual void Clean()
+        public virtual XPElement Clean()
         {
+            XPElement res = currentElement;
             if (currentElement != null)
             {
                 currentElement.Dismiss();
                 currentElement = null;
             }
+            return res;
         }
         /// <summary>
         /// Return the experience element stored in the virtual element.

@@ -3,21 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class WinSuccess : Window
+public class WinSuccess : LegacyWindow
 {
-
     public Text txtTitle;
     public Text txtMessage;
-
-    void Start()
-    {
-
-    }
-
-    void Update()
-    {
-
-    }
 
     public void SetTitle(string tmpTitle)
     {
@@ -28,6 +17,4 @@ public class WinSuccess : Window
     {
         txtMessage.text = tmpMsg;
     }
-
-
 }
