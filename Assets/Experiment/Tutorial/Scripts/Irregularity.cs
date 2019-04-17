@@ -24,7 +24,15 @@ namespace CRI.HelloHouston.Experience.Tutorial
         private bool _isCorrupted = false;
         [SerializeField]
         private GameObject _virus;
-        
+
+
+        public override void OnInteractableObjectGrabbed(InteractableObjectEventArgs e)
+        {
+            Debug.Log("okokokok");
+        }
+
+
+
 
         // Start is called before the first frame update
         void Start()
@@ -39,13 +47,11 @@ namespace CRI.HelloHouston.Experience.Tutorial
         // Update is called once per frame
         void Update()
         {
-            
+           
         }
 
-        public override void Ungrabbed(VRTK_InteractGrab previousGrabbingObject)
-        {
-            Debug.Log("okkokokorrr");
-        }
+      
+
 
             private void OnDestroy()
         {

@@ -24,6 +24,7 @@ namespace CRI.HelloHouston.Experience.Tutorial
         [SerializeField]
         private GameObject _virus;
         public int nbViruses = 0;
+        public bool isBuilding = false;
 
         // Start is called before the first frame update
         void Start()
@@ -67,7 +68,11 @@ namespace CRI.HelloHouston.Experience.Tutorial
         // Update is called once per frame
         void Update()
         {
-
+            if(isBuilding)
+            {
+                Instantiate(_virus, gameObject.transform.position, gameObject.transform.rotation);
+                isBuilding = false;
+            }
         }
     }
 }

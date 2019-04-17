@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using VRTK;
+using VRTK.GrabAttachMechanics;
 
 namespace CRI.HelloHouston.Experience.Tutorial
 {
@@ -15,15 +17,27 @@ namespace CRI.HelloHouston.Experience.Tutorial
         private bool isAttach = true;
         [SerializeField]
         private int _id;
+        private bool isMoving = false;
+        private bool isFiring = false;
+        private bool isStarted = false;
+
+        IEnumerator WaitStart()
+        {
+            yield return new WaitForSeconds(2f);
+            isStarted = true;
+        }
 
         // Start is called before the first frame update
         void Start()
         {
-            
+            StartCoroutine("WaitStart");
 
             _core = GameObject.FindGameObjectWithTag("Core").GetComponent<TutorialHologramSecond>();
-            _core.nbViruses++;
             _id = _core.nbViruses;
+            _core.nbViruses++;
+            
+            if (_id > _core.attaches.Count)
+                Destroy(gameObject);
             do
             {
                 _returnPoint = _core.attaches[Random.Range(0, _core.attaches.Count)].transform;
@@ -54,7 +68,8 @@ namespace CRI.HelloHouston.Experience.Tutorial
         public void ReturnToCore()
         {
             _returnPoint = _core.attaches[Random.Range(0, _core.attaches.Count)].transform;
-            Instantiate(_virus, gameObject.transform.position, gameObject.transform.rotation);
+            /*if(_core.nbViruses < _core.attaches.Count)
+            Instantiate(_virus, gameObject.transform.position, gameObject.transform.rotation);*/
             do
             {
                 _returnPoint = _core.attaches[Random.Range(0, _core.attaches.Count)].transform;
@@ -78,12 +93,37 @@ namespace CRI.HelloHouston.Experience.Tutorial
             );
         }
 
+        IEnumerator Popping()
+        {
+            Debug.Log("more");
+            ReturnToCore();
+            isMoving = true;
+            yield return new WaitForSeconds(2f);
+            isMoving = false;
+            isFiring = false;
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            if(other.tag=="Building" && isStarted /*&& other.transform == _returnPoint*/)
+            {
+                ReturnToCore();
+            }
+        }
+
         // Update is called once per frame
         void Update()
         {
             if (_returnPoint != null && transform.position != _returnPoint.position)
             {
                 transform.position = Vector3.Lerp(transform.position, _returnPoint.position, Time.deltaTime * _speed);
+            }
+
+            if(Vector3.Distance(_returnPoint.position, transform.position) >= 0.5f && !isFiring)
+            {
+                isFiring = true;
+                //ReturnToCore();
+                isFiring = false;
             }
 
             
