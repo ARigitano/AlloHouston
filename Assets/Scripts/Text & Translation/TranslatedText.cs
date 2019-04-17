@@ -8,12 +8,20 @@ using UnityEngine.UI;
 
 namespace CRI.HelloHouston.Translation
 {
+    public struct TranslatedTextEventArgs
+    {
+        public LangApp lang;
+        public string text;
+    }
+
+    public delegate void TranslatedTextEventHandler(object sender, TranslatedTextEventArgs e);
     /// <summary>
     /// A text UI that will be translated.
     /// </summary>
     [RequireComponent(typeof(Text))]
     public abstract class TranslatedText : MonoBehaviour
     {
+        public event TranslatedTextEventHandler onLangChange;
         /// <summary>
         /// The key to the text to translate.
         /// </summary>
@@ -98,6 +106,8 @@ namespace CRI.HelloHouston.Translation
         private void OnLangChange(LangApp lang)
         {
             SetText();
+            if (onLangChange != null)
+                onLangChange(this, new TranslatedTextEventArgs() { lang = lang, text = _text.text });
         }
 
         /// <summary>

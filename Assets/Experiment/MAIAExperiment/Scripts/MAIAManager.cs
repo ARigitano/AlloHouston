@@ -120,7 +120,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <param name="particles">The particles detected.</param>
         private void DisplayParticles(List<Particle> particles)
         {
-            foreach (var particleGroup in particles.GroupBy(particle => particle.particleName))
+            foreach (var particleGroup in particles.OrderBy(particle => particle.symbol).ThenBy(particle => particle.negative).GroupBy(particle => particle.particleName))
                 logController.AddLog(string.Format("{0}: {1}", particleGroup.Key, particleGroup.Count()), xpContext, Log.LogType.Default);
         }
 

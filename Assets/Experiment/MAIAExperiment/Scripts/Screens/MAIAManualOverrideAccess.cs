@@ -55,11 +55,11 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         [SerializeField]
         [Tooltip("Grid cell prefab.")]
-        private GridCell _gridCellPrefab = null;
+        private MAIAGridCell _gridCellPrefab = null;
         /// <summary>
         /// Slots to enter the numbers for the password.
         /// </summary>
-        private GridCell[] _passwordSlots = null;
+        private MAIAGridCell[] _passwordSlots = null;
         /// <summary>
         /// Wait time until error message.
         /// </summary>
@@ -100,7 +100,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             _realPassword = password;
             for (int i = 0; _passwordSlots != null && i < _passwordSlots.Length; i++)
                 Destroy(_passwordSlots[i].gameObject);
-            _passwordSlots = new GridCell[password.Length];
+            _passwordSlots = new MAIAGridCell[password.Length];
             for (int i = 0; i < password.Length; i++)
                 _passwordSlots[i] = GameObject.Instantiate(_gridCellPrefab, _passwordBox);
         }

@@ -20,7 +20,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         [SerializeField]
         [Tooltip("An array of particle sliders used to represent the number of particles.")]
         private MAIAParticleSlider[] _particleSliders = null;
-        private ParticlesIdentification _piScreen;
+        private MAIAParticlesIdentification _piScreen;
         private MAIAManager _manager;
 
         private void OnDisable()
@@ -39,7 +39,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// Sends an error message to the top screen.
         /// </summary>
-        public void ParticleSendErrorMessage(ParticlesIdentification.ErrorType particleErrorType)
+        public void ParticleSendErrorMessage(MAIAParticlesIdentification.ErrorType particleErrorType)
         {
             _piScreen.DisplayErrorMessage(particleErrorType);
         }
@@ -72,17 +72,17 @@ namespace CRI.HelloHouston.Experience.MAIA
                 else
                 {
                     //A wrong combination of symbols have been entered.
-                    ParticleSendErrorMessage(ParticlesIdentification.ErrorType.WrongParticles);
+                    ParticleSendErrorMessage(MAIAParticlesIdentification.ErrorType.WrongParticles);
                 }
             }
             else
             {
                 //A combination of particles with a wrong length has been entered.
-                ParticleSendErrorMessage(ParticlesIdentification.ErrorType.WrongNumberParticles);
+                ParticleSendErrorMessage(MAIAParticlesIdentification.ErrorType.WrongNumberParticles);
             }
         }
 
-        public void Init(MAIAManager manager, ParticlesIdentification piScreen)
+        public void Init(MAIAManager manager, MAIAParticlesIdentification piScreen)
         {
             _manager = manager;
             _piScreen = piScreen;

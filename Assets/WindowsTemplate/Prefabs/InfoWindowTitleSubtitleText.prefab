@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 903122860826420272}
   - component: {fileID: 901545440756678870}
+  - component: {fileID: 438212736970414043}
+  - component: {fileID: 4413955285508982133}
   m_Layer: 0
   m_Name: InfoWindowTitleSubtitleText
   m_TagString: Untagged
@@ -46,6 +48,44 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1121731569303253564}
   m_CullTransparentMesh: 0
+--- !u!95 &438212736970414043
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1121731569303253564}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 2a2e30b791833a944b8beba74de4102f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &4413955285508982133
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1121731569303253564}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf350c4a49459f74299614f2230df5aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _postShowDelay: 0
+  _postHideDelay: 0
+  visible: 0
+  _animators: []
+  _overrideDelay: 0
+  _postShowIntervalDelay: 0
+  _postHideIntervalDelay: 0
 --- !u!1 &1388354591072591436
 GameObject:
   m_ObjectHideFlags: 0
@@ -199,6 +239,7 @@ GameObject:
   - component: {fileID: 2267688453310027138}
   - component: {fileID: 1249481575260202409}
   - component: {fileID: 6168694172619172988}
+  - component: {fileID: 8689194966449645442}
   m_Layer: 0
   m_Name: Text
   m_TagString: Untagged
@@ -282,6 +323,22 @@ MonoBehaviour:
   m_EffectColor: {r: 1, g: 0, b: 0, a: 0.078431375}
   m_EffectDistance: {x: 2, y: -2}
   m_UseGraphicAlpha: 1
+--- !u!114 &8689194966449645442
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1476158324035743520}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e59c86a3e642f5946b780f3216eddbb3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _postShowDelay: 0.25
+  _postHideDelay: 0.125
+  visible: 0
+  _text: {fileID: 1249481575260202409}
 --- !u!1 &2434153969182113290
 GameObject:
   m_ObjectHideFlags: 0
@@ -368,6 +425,7 @@ GameObject:
   - component: {fileID: 5141435235185656756}
   - component: {fileID: 1667437107255090734}
   - component: {fileID: 8688407979673859843}
+  - component: {fileID: 4153768085598980012}
   m_Layer: 0
   m_Name: Text
   m_TagString: Untagged
@@ -436,6 +494,22 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1.2
   m_Text: <YOUR CONTENT HERE>
+--- !u!114 &4153768085598980012
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4212597044952614136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e59c86a3e642f5946b780f3216eddbb3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _postShowDelay: 0.25
+  _postHideDelay: 0.125
+  visible: 0
+  _text: {fileID: 8688407979673859843}
 --- !u!1 &4281782583123571676
 GameObject:
   m_ObjectHideFlags: 0
@@ -504,6 +578,7 @@ GameObject:
   - component: {fileID: 5898811310284547528}
   - component: {fileID: 787797255242776481}
   - component: {fileID: 5705491714579105337}
+  - component: {fileID: 7917748941665703164}
   m_Layer: 0
   m_Name: Text
   m_TagString: Untagged
@@ -587,6 +662,22 @@ MonoBehaviour:
   m_EffectColor: {r: 1, g: 0, b: 0, a: 0.14901961}
   m_EffectDistance: {x: 2, y: -2}
   m_UseGraphicAlpha: 1
+--- !u!114 &7917748941665703164
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5092302626913437713}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e59c86a3e642f5946b780f3216eddbb3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _postShowDelay: 0.25
+  _postHideDelay: 0.125
+  visible: 0
+  _text: {fileID: 787797255242776481}
 --- !u!1 &6507698028458029974
 GameObject:
   m_ObjectHideFlags: 0
