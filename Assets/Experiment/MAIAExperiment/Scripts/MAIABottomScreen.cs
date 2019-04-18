@@ -39,7 +39,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// The screen on which the post-it should be displayed.
         /// </summary>
         [SerializeField]
-        private TranslatedImage screen;
+        private TranslatedImage screen = null;
 
         /// <summary>
         /// Displays the post-it depending on the chosen reaction for this game.

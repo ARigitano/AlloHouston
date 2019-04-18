@@ -65,6 +65,12 @@ namespace CRI.HelloHouston.Translation
         [SerializeField]
         [Tooltip("If true, the translated text will find a textmanager by itself at start.")]
         protected bool _autoInit = true;
+        /// <summary>
+        /// If true, the translated text will update automatically when the lang in the text manager changes.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("If true, the translated text will update automatically when the lang in the text manager changes.")]
+        protected bool _autoUpdate = true;
 
         protected bool _initialized = false;
         /// <summary>
@@ -105,6 +111,8 @@ namespace CRI.HelloHouston.Translation
         /// <param name="lang"></param>
         private void OnLangChange(LangApp lang)
         {
+            if (!_autoUpdate)
+                return;
             SetText();
             if (onLangChange != null)
                 onLangChange(this, new TranslatedTextEventArgs() { lang = lang, text = _text.text });
