@@ -121,17 +121,16 @@ namespace CRI.HelloHouston.Calibration.UI
             {
                 listingExperiment.CheckNext();
             });
-            _contextDropdown.options.Add(new Dropdown.OptionData() { text = textManager.GetText(_chooseTextKey) });
             foreach (var option in _contexts)
-            {
                 _contextDropdown.options.Add(new Dropdown.OptionData() { text = option.contextName });
-                _contextDropdown.onValueChanged.AddListener((int value) =>
-                {
-                    ChooseContext(_contextDropdown.options[value].text);
-                    totalPanel.SetContext(id, currentContext);
-                    listingExperiment.CheckNext();
-                });
-            }
+            _contextDropdown.onValueChanged.AddListener((int value) =>
+            {
+                ChooseContext(_contextDropdown.options[value].text);
+                totalPanel.SetContext(id, currentContext);
+                listingExperiment.CheckNext();
+            });
+            _contextDropdown.onValueChanged.Invoke(0);
+            _contextDropdown.RefreshShownValue();
         }
 
         private void LoadAllContexts(string name, string experiencePath)
