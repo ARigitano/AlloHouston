@@ -22,7 +22,8 @@ namespace VRTK
     /// `VRTK/Examples/034_Controls_InteractingWithUnityUI` uses the `VRTK_UICanvas` script on two of the canvases to show how the UI Pointer can interact with them.
     /// </example>
     [AddComponentMenu("VRTK/Scripts/UI/VRTK_UICanvas")]
-    public class VRTK_UICanvas : MonoBehaviour
+    public class 
+        VRTK_UICanvas : MonoBehaviour
     {
         [Tooltip("Determines if a UI Click action should happen when a UI Pointer game object collides with this canvas.")]
         public bool clickOnPointerCollision = false;
@@ -56,6 +57,8 @@ namespace VRTK
             VRTK_UIPointer pointerCheck = collider.GetComponentInParent<VRTK_UIPointer>();
             if (pointerCheck != null && colliderCheck != null && colliderCheck.objectType == VRTK_PlayerObject.ObjectTypes.Collider)
             {
+                if (pointerCheck.customOrigin != null)
+                    pointerCheck.customOrigin.forward = -this.transform.forward;
                 pointerCheck.collisionClick = clickOnPointerCollision;
             }
         }
@@ -65,6 +68,8 @@ namespace VRTK
             VRTK_UIPointer pointerCheck = collider.GetComponentInParent<VRTK_UIPointer>();
             if (pointerCheck != null)
             {
+                if (pointerCheck.customOrigin != null)
+                    pointerCheck.customOrigin.forward = pointerCheck.originForward;
                 pointerCheck.collisionClick = false;
             }
         }

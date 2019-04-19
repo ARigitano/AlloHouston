@@ -132,6 +132,8 @@ namespace VRTK
         public float hoverDurationTimer = 0f;
         [HideInInspector]
         public bool canClickOnHover = false;
+        [HideInInspector]
+        public Vector3 originForward;
 
         /// <summary>
         /// The GameObject of the front trigger activator of the canvas currently being activated by this pointer.
@@ -435,6 +437,8 @@ namespace VRTK
         protected virtual void Awake()
         {
             VRTK_SDKManager.AttemptAddBehaviourToToggleOnLoadedSetupChange(this);
+            if (customOrigin != null)
+                originForward = customOrigin.forward;
         }
 
         protected virtual void OnEnable()

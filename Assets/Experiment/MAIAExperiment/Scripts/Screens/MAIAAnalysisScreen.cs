@@ -21,11 +21,11 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// Particle grid cell prefab.
         /// </summary>
         [SerializeField]
-        private ParticleGridCell _particleGridCellPrefab = null;
+        private MAIAParticleGridCell _particleGridCellPrefab = null;
         /// <summary>
         /// Particle grid cell dictionary.
         /// </summary>
-        private Dictionary<Particle, ParticleGridCell> _particleGridCellDictionary;
+        private Dictionary<Particle, MAIAParticleGridCell> _particleGridCellDictionary;
         /// <summary>
         /// Particle grid transform.
         /// </summary>
@@ -56,11 +56,11 @@ namespace CRI.HelloHouston.Experience.MAIA
 
        private void InitParticleGridCellDictionary()
        { 
-            _particleGridCellDictionary = new Dictionary<Particle, ParticleGridCell>();
+            _particleGridCellDictionary = new Dictionary<Particle, MAIAParticleGridCell>();
             foreach (var particleGroup in _maiaTopScreen.maiaManager.settings.allParticles.OrderBy(particle => particle.symbol).ThenBy(particle => !particle.negative).GroupBy(particle => particle))
             {
                 var particleGridCell = Instantiate(_particleGridCellPrefab, _particleGridTransform);
-                particleGridCell.Init(particleGroup.Key);
+                particleGridCell.Init(particleGroup.Key, MAIAParticleGridCellType.FeynmanSymbol);
                 _particleGridCellDictionary.Add(particleGroup.Key, particleGridCell);
             }  
         }

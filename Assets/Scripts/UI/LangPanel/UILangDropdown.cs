@@ -38,6 +38,7 @@ namespace CRI.HelloHouston.Translation
                     langManager.ChangeLang(value);
                 });
             }
+            _langDropdown.RefreshShownValue();
         }
     }
 }

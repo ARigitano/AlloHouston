@@ -20,7 +20,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         [SerializeField]
         [Tooltip("An array of particle sliders used to represent the number of particles.")]
         private MAIAParticleSlider[] _particleSliders = null;
-        private ParticlesIdentification _piScreen;
+        private MAIAParticlesIdentification _piScreen;
         private MAIAManager _manager;
 
         private void OnDisable()
@@ -39,7 +39,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// <summary>
         /// Sends an error message to the top screen.
         /// </summary>
-        public void ParticleSendErrorMessage(ParticlesIdentification.ErrorType particleErrorType)
+        public void ParticleSendErrorMessage(MAIAParticlesIdentification.ErrorType particleErrorType)
         {
             _piScreen.DisplayErrorMessage(particleErrorType);
         }
@@ -54,7 +54,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             if (count == _manager.generatedParticles.Count)
             {
                 var l1 = _particleSliders.Select(slider => new ParticleCount() { particleSymbol = slider.particle.symbol, count = (int)slider.currentValue }).ToArray();
-                var l2 = _manager.generatedParticles.GroupBy(particle => particle.symbol).Select(group => new ParticleCount() { particleSymbol = group.Key, count = group.Count() }).ToArray();
+                var l2 = _manager.settings.allParticles.GroupBy(particle => particle.symbol).Select(group => new ParticleCount() { particleSymbol = group.Key, count = _manager.generatedParticles.Count(particle => particle.symbol == group.Key) }).ToArray();
                 bool symbols = true;
                 for (int i = 0; i < l1.Count(); i++)
                 {
@@ -72,23 +72,25 @@ namespace CRI.HelloHouston.Experience.MAIA
                 else
                 {
                     //A wrong combination of symbols have been entered.
-                    ParticleSendErrorMessage(ParticlesIdentification.ErrorType.WrongParticles);
+                    ParticleSendErrorMessage(MAIAParticlesIdentification.ErrorType.WrongParticles);
                 }
             }
             else
             {
                 //A combination of particles with a wrong length has been entered.
-                ParticleSendErrorMessage(ParticlesIdentification.ErrorType.WrongNumberParticles);
+                ParticleSendErrorMessage(MAIAParticlesIdentification.ErrorType.WrongNumberParticles);
             }
         }
 
-        public void Init(MAIAManager manager, ParticlesIdentification piScreen)
+        public void Init(MAIAManager manager, MAIAParticlesIdentification piScreen)
         {
             _manager = manager;
             _piScreen = piScreen;
+            var groups = manager.generatedParticles.GroupBy(particle => particle.symbol);
+            int max = groups.Max(group => group.Count());
             foreach (var particleSlider in _particleSliders)
             {
-                particleSlider.Init(manager.generatedParticles.Count);
+                particleSlider.Init(max);
                 particleSlider.onValueChanged += OnParticleValueChanged;
             }
         }

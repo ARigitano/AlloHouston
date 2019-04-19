@@ -42,6 +42,9 @@ public class ControllerAppearance : MonoBehaviour
         currentPulseColor = pulseColor;
         highlighted = false;
 
+        if (highligher.controllerAlias == null)
+            enabled = false;
+
         //Setup controller event listeners
         events.TriggerPressed += DoTriggerPressed;
         events.ButtonOnePressed += DoButtonOnePressed;

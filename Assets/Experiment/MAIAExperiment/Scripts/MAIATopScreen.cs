@@ -16,11 +16,6 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public MAIAManager maiaManager { get; private set; }
         /// <summary>
-        /// Script for the Exile Loading screen.
-        /// </summary>
-        [SerializeField]
-        private ExileLoading _exileLoading = null;
-        /// <summary>
         /// Script for the Maia Loading screen.
         /// </summary>
         [SerializeField]
@@ -47,9 +42,9 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// Script for the Particles Identification screen.
         /// </summary>
         [SerializeField]
-        private ParticlesIdentification _particlesIdentification = null;
+        private MAIAParticlesIdentification _particlesIdentification = null;
 
-        public ParticlesIdentification particleIdentificationScreen
+        public MAIAParticlesIdentification particleIdentificationScreen
         {
             get
             {

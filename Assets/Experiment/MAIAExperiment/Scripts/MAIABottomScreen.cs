@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CRI.HelloHouston.Translation;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,16 +14,18 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// Class to assign the value of a reaction EntryType to the sprite of a post-it.
         /// </summary>
         [Serializable]
-        public class EntriesSprite
+        public struct EntriesSprite
         {
             /// <summary>
             /// Value of a reaction EntryType.
             /// </summary>
+            [Tooltip("Value of a reaction EntryType.")]
             public EntryType type;
             /// <summary>
-            /// Sprite of a post-it to be displayed on the bottom screen.
+            /// TranslatedImageAsset of a post-it to be displayed on the bottom screen.
             /// </summary>
-            public Sprite sprite;
+            [Tooltip("TranslatedImageAsset of a post-it to be displayed on the bottom screen.")]
+            public TranslatedImageAsset translatedImage;
         }
         /// <summary>
         /// The synchronizer of the experiment.
@@ -36,21 +39,18 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// The screen on which the post-it should be displayed.
         /// </summary>
         [SerializeField]
-        private Image screen;
+        private TranslatedImage screen = null;
 
         /// <summary>
         /// Displays the post-it depending on the chosen reaction for this game.
         /// </summary>
         public void DisplayInteraction()
         {
-            Debug.Log(maiaManager);
-            Debug.Log(maiaManager.selectedReaction);
-            Debug.Log(maiaManager.selectedReaction.entries);
             foreach(EntriesSprite entrySprite in interactionDiagrams)
             {
                 if(maiaManager.selectedReaction.entries == entrySprite.type)
                 {
-                    screen.sprite = entrySprite.sprite;
+                    screen.InitTranslatedText(manager, entrySprite.translatedImage);
                     break;
                 }
             }
