@@ -16,11 +16,6 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public MAIAManager maiaManager { get; private set; }
         /// <summary>
-        /// Script for the Maia Loading screen.
-        /// </summary>
-        [SerializeField]
-        private MAIALoading _maiaLoading = null;
-        /// <summary>
         /// Analysis screen.
         /// </summary>
         [SerializeField]

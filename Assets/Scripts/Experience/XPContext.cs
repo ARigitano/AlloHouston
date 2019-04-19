@@ -162,7 +162,7 @@ namespace CRI.HelloHouston.Experience
         public XPManager InitManager(LogExperienceController logExperienceController, VirtualZone[] zones, int randomSeed)
         {
             XPManager res = GameObject.Instantiate(_xpManagerPrefab);
-            res.Init(this, zones, logExperienceController, randomSeed, XPState.Visible);
+            res.Init(this, zones, logExperienceController, randomSeed, XPVisibility.Visible);
             res.Activate();
             res.Show((VirtualWallTopZone)zones.First(x => x.zoneType == ZoneType.WallTop));
             return res;

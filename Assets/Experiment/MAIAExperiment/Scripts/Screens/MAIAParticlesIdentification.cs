@@ -59,9 +59,9 @@ namespace CRI.HelloHouston.Experience.MAIA
         [SerializeField]
         private Text _nbChargesGuessed = null;
         [SerializeField]
-        private GameObject _particlePanel;
+        private GameObject _particlePanel = null;
         [SerializeField]
-        private GameObject _chargePanel;
+        private GameObject _chargePanel = null;
         /// <summary>
         /// Popup that displays the wrong identification of the detected particles.
         /// </summary>

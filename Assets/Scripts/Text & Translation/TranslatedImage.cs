@@ -82,8 +82,9 @@ namespace CRI.HelloHouston.Translation
         /// Called whenever the OnLangChange event of the LangManager is triggered. Sets the image to its current lang value.
         /// </summary>
         /// <param name="lang"></param>
-        private void OnLangChange(LangApp lang)
+        private void OnLangChange(object sender, LangManagerEventArgs e)
         {
+            LangApp lang = e.lang;
             SetImage(_manager, lang);
             if (onLangChange != null)
             {

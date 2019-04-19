@@ -14,12 +14,6 @@ namespace CRI.HelloHouston.Experience.MAIA
         [Tooltip("Manager for this experiment.")]
         private MAIAManager _maiaManager = null;
         /// <summary>
-        /// Thumbnails for all the possible Feynman diagrams.
-        /// </summary>
-        [SerializeField]
-        [Tooltip("Thumbnails for all the possible Feynman diagrams.")]
-        private MAIACaseDiagram[] _casesDiagram = null;
-        /// <summary>
         /// Image of the current feynman diagram.
         /// </summary>
         [SerializeField]

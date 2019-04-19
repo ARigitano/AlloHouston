@@ -74,12 +74,6 @@ namespace CRI.HelloHouston.Calibration.UI
         [Tooltip("The remove button. When clicken on, the experiment will call the destroy method of the Experience Listing.")]
         private Button _removeButton = null;
         /// <summary>
-        /// The text key for the choose option of the dropdown.
-        /// </summary>
-        [SerializeField]
-        [Tooltip("The text key for the choose option of the dropdown.")]
-        private string _chooseTextKey = "";
-        /// <summary>
         /// All the possible contexts for this experiment.
         /// </summary>
         private XPContext[] _contexts;

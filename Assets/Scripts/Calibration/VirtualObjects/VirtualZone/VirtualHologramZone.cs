@@ -38,7 +38,7 @@ namespace CRI.HelloHouston.Calibration
         }
 
         [SerializeField]
-        private VirtualHologramElement _elementPrefab;
+        private VirtualHologramElement _elementPrefab = null;
 
         private void ClearHolograms()
         {

@@ -111,6 +111,7 @@ namespace CRI.HelloHouston.Translation
         /// <param name="lang"></param>
         private void OnLangChange(object sender, LangManagerEventArgs e)
         {
+            LangApp lang = e.lang;
             if (!_autoUpdate)
                 return;
             SetText();

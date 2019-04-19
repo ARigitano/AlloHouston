@@ -13,8 +13,26 @@ namespace CRI.HelloHouston.GameElements
         [Tooltip("Prefab of the fill items.")]
         private GameObject _fillItemPrefab = null;
         [SerializeField]
+        [Tooltip("The representation of the tube.")]
+        private GameObject _tube = null;
+        [SerializeField]
+        [Tooltip("The small representation of the tube.")]
+        private GameObject _smallTube = null;
+        [SerializeField]
+        [Tooltip("The secondary fill image.")]
+        private Image _secondaryFill = null;
+        [SerializeField]
+        [Tooltip("The fill of the small tube.")]
+        private Image _smallTubeFill = null;
+        [SerializeField]
+        [Tooltip("Small tube secondary fill.")]
+        private Image _smallTubeSecondaryFill = null;
+        [SerializeField]
         [Tooltip("Text of the experiment name.")]
         private Text _xpNameText = null;
+        [SerializeField]
+        [Tooltip("Text of the small experiment name.")]
+        private Text _xpSmallNameText = null;
 
         [SerializeField]
         [Tooltip("The alpha value of the fill when the experiment is a success.")]
@@ -64,6 +82,7 @@ namespace CRI.HelloHouston.GameElements
             for (int i = 0; i < steps; i++)
                 _fillItems[i] = Instantiate(_fillItemPrefab, _fillGroup).GetComponentInChildren<Image>();
             UpdateSteps(_xpManager.stepManager.sumValue, _xpManager.state);
+            UpdateTubes(_xpManager.visibility);
         }
 
         public void OnStepChange(object sender, XPStepEventArgs e)
@@ -74,12 +93,19 @@ namespace CRI.HelloHouston.GameElements
 
         private void OnStateChange(object sender, XPManagerEventArgs e)
         {
+            UpdateTubes(e.currentVisiblity);
             UpdateSteps(_xpManager.stepManager.sumValue, e.currentState);
+        }
+
+        private void UpdateTubes(XPVisibility currentState)
+        {
+            bool visible = (currentState == XPVisibility.Visible);
+            _tube.SetActive(visible);
+            _smallTube.SetActive(!visible);
         }
 
         private void UpdateSteps(int currentStepValue, XPState currentState)
         {
-            Debug.Log(currentState);
             int maxSteps = _fillItems.Length;
             for (int i = 0; i < _fillItems.Length; i++)
             {
@@ -93,6 +119,27 @@ namespace CRI.HelloHouston.GameElements
                 else
                     color = _colorProgress;
                 _fillItems[i].color = color;
+            }
+            float fillAmount = (float)currentStepValue / maxSteps;
+            _smallTubeFill.fillAmount = fillAmount;
+            _smallTubeSecondaryFill.fillAmount = fillAmount;
+            if (currentState == XPState.Failure)
+            {
+                _secondaryFill.color = _colorKO;
+                _smallTubeFill.color = _colorKO;
+                _smallTubeSecondaryFill.color = _colorKO;
+            }
+            else if (currentState == XPState.Success)
+            {
+                _secondaryFill.color = _colorOK;
+                _smallTubeFill.color = _colorOK;
+                _smallTubeSecondaryFill.color = _colorOK;
+            }
+            else
+            {
+                _secondaryFill.color = _colorProgress;
+                _smallTubeFill.color = _colorProgress;
+                _smallTubeSecondaryFill.color = _colorProgress;
             }
         }
     }

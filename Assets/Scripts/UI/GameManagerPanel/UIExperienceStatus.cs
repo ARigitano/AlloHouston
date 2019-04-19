@@ -126,7 +126,7 @@ namespace CRI.HelloHouston.Experience.UI
             _successButton.onClick.AddListener(() => CreatePopup(textManager.GetText(_successPopupTextKey), SuccessAction));
             if (_successButton.GetComponentInChildren<Text>())
                 _successButtonColor = _successButton.GetComponentInChildren<Text>().color;
-            if (!xpManager.active)
+            if (xpManager.state == XPState.Inactive)
             {
                 _launchButton.GetComponent<CanvasGroup>().Show();
                 _failButton.GetComponent<CanvasGroup>().Hide();
@@ -193,7 +193,7 @@ namespace CRI.HelloHouston.Experience.UI
                 if (_successButton.GetComponentInChildren<Text>())
                     _successButton.GetComponentInChildren<Text>().color = _unselectedButtonColor;
             }
-            else if (_xpManager.active)
+            else if (state == XPState.InProgress)
             {
                 _successButton.interactable = true;
                 _failButton.interactable = true;

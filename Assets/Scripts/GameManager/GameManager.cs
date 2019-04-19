@@ -144,7 +144,7 @@ namespace CRI.HelloHouston.Experience
 
         public GameHint[] GetAllCurrentHints()
         {
-            return _mainSettings.hints.Select(hint => new GameHint(hint, this)).Concat(xpManagers.Where(x => x.active).SelectMany(x => x.xpContext.hints)).ToArray();
+            return _mainSettings.hints.Select(hint => new GameHint(hint, this)).Concat(xpManagers.Where(x => x.state == XPState.InProgress).SelectMany(x => x.xpContext.hints)).ToArray();
         }
 
         public void LoadXP(XPManager manager, VirtualWallTopZone zone)
@@ -163,7 +163,7 @@ namespace CRI.HelloHouston.Experience
         {
             for (int i = 0; i < starting.Length; i++)
             {
-                if (starting[i] && !xpManagers[i].active)
+                if (starting[i] && xpManagers[i].state == XPState.Inactive)
                 {
                     xpManagers[i].Activate();
                 }

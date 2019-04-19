@@ -237,15 +237,15 @@ namespace CRI.HelloHouston.Experience.MAIA
                 stepManager.currentStep.action.Invoke();
         }
 
-        protected override void PreInit(XPContext xpContext, LogExperienceController logController, int randomSeed, XPState stateOnActivation)
+        protected override void PreInit(XPContext xpContext, LogExperienceController logController, int randomSeed, XPVisibility visibilityOnActivation)
         {
-            base.PreInit(xpContext, logController, randomSeed, stateOnActivation);
+            base.PreInit(xpContext, logController, randomSeed, visibilityOnActivation);
             _rand = new System.Random(randomSeed);
         }
 
-        protected override void PostInit(XPContext xpContext, ElementInfo[] info, LogExperienceController logController, int randomSeed, XPState stateOnActivation)
+        protected override void PostInit(XPContext xpContext, ElementInfo[] info, LogExperienceController logController, int randomSeed, XPVisibility visibilityOnActivation)
         {
-            base.PostInit(xpContext, info, logController, randomSeed, stateOnActivation);
+            base.PostInit(xpContext, info, logController, randomSeed, visibilityOnActivation);
             hologramTube = GetElement<MAIAHologramTube>();
             hologramFeynman = GetElement<MAIAHologramFeynman>();
             bottomScreen = GetElement<MAIABottomScreen>();
