@@ -88,6 +88,14 @@ namespace CRI.HelloHouston.Translation
         [Tooltip("The lang manager. If this field is empty, the TranslatedText component will find a suitable LangManager automatically. (recommended)")]
         protected ILangManager _manager;
 
+        public ILangManager manager
+        {
+            get
+            {
+                return _manager;
+            }
+        }
+
         private void OnEnable()
         {
             if (_manager != null)
