@@ -58,7 +58,10 @@ namespace VRTK
             if (pointerCheck != null && colliderCheck != null && colliderCheck.objectType == VRTK_PlayerObject.ObjectTypes.Collider)
             {
                 if (pointerCheck.customOrigin != null)
-                    pointerCheck.customOrigin.forward = -this.transform.forward;
+                {
+                    pointerCheck.originRotation = pointerCheck.customOrigin.localRotation;
+                    pointerCheck.customOrigin.localRotation = Quaternion.Euler(-this.transform.eulerAngles);
+                }
                 pointerCheck.collisionClick = clickOnPointerCollision;
             }
         }
@@ -69,7 +72,7 @@ namespace VRTK
             if (pointerCheck != null)
             {
                 if (pointerCheck.customOrigin != null)
-                    pointerCheck.customOrigin.forward = pointerCheck.originForward;
+                    pointerCheck.customOrigin.localRotation = pointerCheck.originRotation;
                 pointerCheck.collisionClick = false;
             }
         }

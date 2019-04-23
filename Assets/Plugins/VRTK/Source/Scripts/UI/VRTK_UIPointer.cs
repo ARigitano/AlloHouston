@@ -133,7 +133,7 @@ namespace VRTK
         [HideInInspector]
         public bool canClickOnHover = false;
         [HideInInspector]
-        public Vector3 originForward;
+        public Quaternion originRotation;
 
         /// <summary>
         /// The GameObject of the front trigger activator of the canvas currently being activated by this pointer.
@@ -438,7 +438,7 @@ namespace VRTK
         {
             VRTK_SDKManager.AttemptAddBehaviourToToggleOnLoadedSetupChange(this);
             if (customOrigin != null)
-                originForward = customOrigin.forward;
+                originRotation = customOrigin.localRotation;
         }
 
         protected virtual void OnEnable()
