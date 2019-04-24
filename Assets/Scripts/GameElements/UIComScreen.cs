@@ -18,8 +18,8 @@ namespace CRI.HelloHouston.GameElements
         [Tooltip("The transform of the tube group.")]
         public Transform _tubeGroupTransform = null;
         [SerializeField]
-        [Tooltip("Slider representing the time left.")]
-        public Slider _timeSlider;
+        [Tooltip("The progress bar object.")]
+        public ComScreenProgressBar _progressBar;
 
         private UIComTube[] _tubes;
         private GameManager _gameManager;
@@ -65,6 +65,7 @@ namespace CRI.HelloHouston.GameElements
                 manager.onVisibilityChange += OnManageerVisibilityChange;           
             }
             _langManager.langManager.onLangChange += OnLangChange;
+            _progressBar.Init(gameManager, managers);
             UpdateText();
         }
 

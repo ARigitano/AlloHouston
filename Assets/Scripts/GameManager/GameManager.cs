@@ -93,7 +93,7 @@ namespace CRI.HelloHouston.Experience
         }
         private float _startTime;
         /// <summary>
-        /// Time since the game start.
+        /// Time since the game start (in seconds).
         /// </summary>
         public float timeSinceGameStart {
             get
