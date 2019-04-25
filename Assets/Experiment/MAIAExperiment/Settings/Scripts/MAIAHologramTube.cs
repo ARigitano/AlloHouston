@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using CRI.HelloHouston.WindowTemplate;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -121,6 +122,9 @@ namespace CRI.HelloHouston.Experience.MAIA
         [SerializeField]
         [Tooltip("Transform of a starting point of the spark effect.")]
         private Transform _start2 = null;
+        [SerializeField]
+        [Tooltip("Animation of the hologram tube.")]
+        private AnimationElement _animationElement;
 
         private bool _splinesDisplayed = false;
 
@@ -323,6 +327,18 @@ namespace CRI.HelloHouston.Experience.MAIA
             }
         }
 
+        public void Show()
+        {
+            if (!_animationElement.visible)
+                _animationElement.Show();
+        }
+
+        public void Hide()
+        {
+            if (_animationElement.visible)
+                _animationElement.Hide();
+        }
+
         private void Init(MAIAManager synchronizer)
         {
             _maiaManager = synchronizer;
@@ -349,7 +365,6 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             base.OnActivation();
             CreateSplines(_maiaManager.generatedParticles);
-            gameObject.SetActive(false);
         }
 
         /// <summary>
@@ -358,7 +373,6 @@ namespace CRI.HelloHouston.Experience.MAIA
         public override void OnHide()
         {
             Debug.Log(name + "Unpaused");
-            gameObject.SetActive(false);
         }
 
         public void OnVisibleStay(Camera camera)

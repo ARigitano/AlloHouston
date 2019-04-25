@@ -140,7 +140,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             tabletScreen.StartMO();
             topScreen.StartMO();
             hologramFeynman.Hide();
-            hologramTube.gameObject.SetActive(false);
+            hologramTube.Hide();
         }
 
         public void OnMOSuccess()
@@ -149,7 +149,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             topScreen.StartPassword();
             tabletScreen.StartPassword();
             hologramFeynman.Hide();
-            hologramTube.gameObject.SetActive(false);
+            hologramTube.Hide();
         }
 
         public void OnPasswordSuccess()
@@ -158,7 +158,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             topScreen.StartPI();
             tabletScreen.StartPI();
             hologramFeynman.Hide();
-            hologramTube.gameObject.SetActive(true);
+            hologramTube.Show();
         }
 
         public void OnPISuccess()
@@ -167,7 +167,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             topScreen.StartCI();
             tabletScreen.StartCI();
             hologramFeynman.Hide();
-            hologramTube.gameObject.SetActive(true);
+            hologramTube.Show();
         }
 
         public void OnCISuccess()
@@ -176,14 +176,14 @@ namespace CRI.HelloHouston.Experience.MAIA
             topScreen.StartAnalysisAnimation();
             tabletScreen.HideAllPanels();
             hologramFeynman.Hide();
-            hologramTube.gameObject.SetActive(false);
+            hologramTube.Hide();
         }
 
         public void OnAnalysisAnimationFinished()
         {
             tabletScreen.StartAMO();
             hologramFeynman.Hide();
-            hologramTube.gameObject.SetActive(false);
+            hologramTube.Hide();
         }
 
         public void OnAMOSuccess()
@@ -192,7 +192,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             topScreen.StartRI();
             tabletScreen.StartRI();
             hologramFeynman.Show();
-            hologramTube.gameObject.SetActive(false);
+            hologramTube.Hide();
         }
 
         public void OnRISuccess()
@@ -201,7 +201,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             topScreen.StartVictory();
             tabletScreen.StartVictory();
             hologramFeynman.Show();
-            hologramTube.gameObject.SetActive(false);
+            hologramTube.Hide();
             Success();
         }
 
