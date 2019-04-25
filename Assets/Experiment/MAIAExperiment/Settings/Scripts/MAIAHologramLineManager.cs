@@ -28,6 +28,14 @@ namespace CRI.HelloHouston.Experience.MAIA
         private XRLineRenderer[] _lines;
         private Vector3[] _previousPositions;
 
+        public Transform originPoint
+        {
+            get
+            {
+                return _originPoint;
+            }
+        }
+
         public void Init(MAIAHologramDiagram[] diagrams)
         {
             _diagrams = diagrams;

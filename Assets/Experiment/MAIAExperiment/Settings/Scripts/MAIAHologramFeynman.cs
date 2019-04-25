@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using CRI.HelloHouston.WindowTemplate;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 
 namespace CRI.HelloHouston.Experience.MAIA
@@ -22,6 +24,9 @@ namespace CRI.HelloHouston.Experience.MAIA
         [SerializeField]
         [Tooltip("The line manager.")]
         private MAIAHologramLineManager _lineManager;
+        [SerializeField]
+        [Tooltip("The animation sequence component.")]
+        private AnimationSequence _animationSequence;
 
         private Vector3[] _boxPositions;
         private Quaternion[] _boxRotations;
@@ -29,6 +34,14 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// Random generated with the GameManager's seed.
         /// </summary>
         private System.Random _rand;
+
+        public bool visible
+        {
+            get
+            {
+                return _animationSequence.visible;
+            }
+        }
 
         private void Reset()
         {
@@ -58,7 +71,6 @@ namespace CRI.HelloHouston.Experience.MAIA
             {
                 _feynmanBoxes[i].contentRenderer.material.mainTexture = allReactions[i].diagramImage;
                 _feynmanBoxes[i].name = "hologram_content: " + allReactions[i].diagramImage.name;
-                _feynmanBoxes[i].displayLine = true;
             }
         }
 
@@ -81,8 +93,24 @@ namespace CRI.HelloHouston.Experience.MAIA
             {
                 _boxPositions[i] = _feynmanBoxes[i].transform.position;
                 _boxRotations[i] = _feynmanBoxes[i].transform.rotation;
+                _feynmanBoxes[i].displayLine = false;
+                _feynmanBoxes[i].center = GetComponentInChildren<MAIAHologramLineManager>().originPoint.position;
             }
             _lineManager.Init(_feynmanBoxes);
+            AnimationElement[] animations = _feynmanBoxes.Shuffle(_rand).Select(feynmanBox => feynmanBox.GetComponent<AnimationElement>()).ToArray();
+            _animationSequence.Init(animations);
+        }
+
+        public void Show(bool playIfVisible = false)
+        {
+            if (playIfVisible || !visible)
+                _animationSequence.Show();
+        }
+
+        public void Hide()
+        {
+            if (visible)
+                _animationSequence.Hide();
         }
 
         public override void OnShow(int currentStep)
@@ -100,7 +128,6 @@ namespace CRI.HelloHouston.Experience.MAIA
         public override void OnActivation()
         {
             base.OnActivation();
-            gameObject.SetActive(false);
         }
     }
 }

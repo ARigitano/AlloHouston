@@ -18,6 +18,11 @@ namespace CRI.HelloHouston.WindowTemplate
         [Tooltip("The delay between two animations. This delay will be added to the animator's initial delay value.")]
         protected float _postHideIntervalDelay;
 
+        public void Init(AnimationElement[] animators)
+        {
+            _animators = animators;
+        }
+
         protected virtual IEnumerator HideAnimation()
         {
             for (int i = 0; i < _animators.Length; i++)
@@ -31,7 +36,6 @@ namespace CRI.HelloHouston.WindowTemplate
 
         protected virtual IEnumerator ShowAnimation()
         {
-            
             for (int i = 0; i < _animators.Length; i++)
             {
                 AnimationElement animator = _animators[i];
@@ -43,11 +47,13 @@ namespace CRI.HelloHouston.WindowTemplate
 
         protected override void StartShowAnimation()
         {
+            StopAllCoroutines();
             StartCoroutine(ShowAnimation());
         }
 
         protected override void StartHideAnimation()
         {
+            StopAllCoroutines();
             StartCoroutine(HideAnimation());
         }
     }

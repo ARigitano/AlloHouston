@@ -12,8 +12,6 @@ namespace CRI.HelloHouston.Experience.MAIA
     {
         public MAIAManager maiaManager { get; private set; }
         public MAIATopScreen topScreen { get; private set; }
-        private MAIAHologramTube _hologramTube;
-        private MAIAHologramFeynman _hologramFeynman;
         private MAIATubeScreen _tubeScreen;
         [Header("MAIATabletScreen Attributes")]
         [SerializeField]
@@ -165,7 +163,6 @@ namespace CRI.HelloHouston.Experience.MAIA
             _particlesPanel.Init(maiaManager, topScreen.particleIdentificationScreen);
             _particleChargesPanel.Init(maiaManager, topScreen.particleIdentificationScreen);
             _reactionPanel.Init(topScreen, maiaManager);
-            _hologramTube = maiaManager.hologramTube;
             ActivatePanel(_moPanel);
         }
     }

@@ -79,7 +79,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             if (hologramTube.isActiveAndEnabled)
                 hologramTube.StartAnimation();
-            if (hologramFeynman.isActiveAndEnabled)
+            if (hologramFeynman.visible)
                 hologramFeynman.ResetPositions();
         }
         #endregion
@@ -139,7 +139,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             stepManager.SkipToStep("MO");
             tabletScreen.StartMO();
             topScreen.StartMO();
-            hologramFeynman.gameObject.SetActive(false);
+            hologramFeynman.Hide();
             hologramTube.gameObject.SetActive(false);
         }
 
@@ -148,7 +148,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             stepManager.SkipToStep("Password");
             topScreen.StartPassword();
             tabletScreen.StartPassword();
-            hologramFeynman.gameObject.SetActive(false);
+            hologramFeynman.Hide();
             hologramTube.gameObject.SetActive(false);
         }
 
@@ -157,7 +157,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             stepManager.SkipToStep("PI");
             topScreen.StartPI();
             tabletScreen.StartPI();
-            hologramFeynman.gameObject.SetActive(false);
+            hologramFeynman.Hide();
             hologramTube.gameObject.SetActive(true);
         }
 
@@ -166,7 +166,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             stepManager.SkipToStep("CI");
             topScreen.StartCI();
             tabletScreen.StartCI();
-            hologramFeynman.gameObject.SetActive(false);
+            hologramFeynman.Hide();
             hologramTube.gameObject.SetActive(true);
         }
 
@@ -175,14 +175,14 @@ namespace CRI.HelloHouston.Experience.MAIA
             stepManager.SkipToStep("AMO");
             topScreen.StartAnalysisAnimation();
             tabletScreen.HideAllPanels();
-            hologramFeynman.gameObject.SetActive(false);
+            hologramFeynman.Hide();
             hologramTube.gameObject.SetActive(false);
         }
 
         public void OnAnalysisAnimationFinished()
         {
             tabletScreen.StartAMO();
-            hologramFeynman.gameObject.SetActive(false);
+            hologramFeynman.Hide();
             hologramTube.gameObject.SetActive(false);
         }
 
@@ -191,7 +191,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             stepManager.SkipToStep("RI");
             topScreen.StartRI();
             tabletScreen.StartRI();
-            hologramFeynman.gameObject.SetActive(true);
+            hologramFeynman.Show();
             hologramTube.gameObject.SetActive(false);
         }
 
@@ -200,7 +200,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             stepManager.SkipToStep("Finish");
             topScreen.StartVictory();
             tabletScreen.StartVictory();
-            hologramFeynman.gameObject.SetActive(true);
+            hologramFeynman.Show();
             hologramTube.gameObject.SetActive(false);
             Success();
         }

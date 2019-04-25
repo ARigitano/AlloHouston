@@ -37,14 +37,14 @@ namespace CRI.HelloHouston.WindowTemplate
 
         public void Show()
         {
-            visible = true;
             StartShowAnimation();
+            visible = true;
         }
 
         public void Hide()
         {
-            visible = false;
             StartHideAnimation();
+            visible = false;
         }
     }
 #if UNITY_EDITOR
