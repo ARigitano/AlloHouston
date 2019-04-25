@@ -22,6 +22,9 @@ namespace CRI.HelloHouston.GameElements
         private bool init;
         private XPManager[] _managers;
         private GameManager _gameManager;
+        private float _totalDuration;
+        private int _totalManagers;
+
 
         
         private void OnEnable()
@@ -49,6 +52,10 @@ namespace CRI.HelloHouston.GameElements
             {
                 manager.onStateChange += OnManagerStateChange;
             }
+            _totalDuration = _managers.Where(manager => manager.xpContext.xpSettings != null).Sum(manager => manager.xpContext.xpSettings.duration) * 60.0f;
+            _totalManagers = _managers.Count();
+            _xpSlider.value = 0.0f;
+            _dangerSlider.value = 0.0f;
             UpdateXPSlider();
             UpdateDangerSlider();
         }
@@ -60,30 +67,30 @@ namespace CRI.HelloHouston.GameElements
 
         private void UpdateXPSlider()
         {
-            float fillAmount = _managers.Count(manager => manager.state == XPState.Success) / (float)_managers.Count();
-            float diff = (fillAmount + _dangerSlider.value) - 1.0f;
-            // If the sliders will be connected after the operation.
-            if (diff >= 0.0f)
-                fillAmount = (fillAmount - diff) + diff * _fillFactor;
-            _xpSlider.value = fillAmount;
+            float fillAmount = _managers.Count(manager => manager.state == XPState.Success) / (float)_totalManagers;
+            float diff = fillAmount - _xpSlider.value;
+
+            // If the sliders are already connected before the operation.ss
+            if (_xpSlider.value + _dangerSlider.value >= 1.0f && diff >= 0.0f)
+                diff *= _fillFactor;
+            else if (_xpSlider.value + diff + _dangerSlider.value >= 1.0f && diff >= 0.0f)
+            {
+                // We compute the value that exceed
+                float diff2 = (_xpSlider.value + _dangerSlider.value + diff) - 1.0f;
+                diff = (diff - diff2) + diff2 * _fillFactor;
+            }
+            _xpSlider.value += diff;
             if (_xpSlider.value + _dangerSlider.value >= 1.0f)
                 _dangerSlider.value = 1.0f - _xpSlider.value;
         }
 
         private void UpdateDangerSlider()
         {
-            float sum = 0.0f;
-            for (int i = 0; i < _managers.Length; i++)
-            {
-                if (_managers[i].xpContext.xpSettings != null)
-                    sum += _managers[i].xpContext.xpSettings.duration;
-            }
-            float fillAmount = Mathf.Min(_gameManager.timeSinceGameStart / (sum * 60.0f), 1.0f);
-            float diff = (fillAmount + _xpSlider.value) - 1.0f;
-            // If the sliders will be connected after the operation
-            if (diff >= 0.0f)
-                fillAmount = (fillAmount - diff) + diff * _fillFactor;
-            _dangerSlider.value = fillAmount;
+            float diff = 1.0f / _totalDuration * Time.deltaTime;
+            if (_xpSlider.value + _dangerSlider.value >= 1.0f && diff >= 0)
+                diff *= _fillFactor;
+            _dangerSlider.value += diff;
+            // the danger slider "pushes" the xp slider away.
             if (_xpSlider.value + _dangerSlider.value >= 1.0f)
                 _xpSlider.value = 1.0f - _dangerSlider.value;
         }
