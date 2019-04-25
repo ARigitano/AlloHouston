@@ -19,8 +19,11 @@ namespace CRI.HelloHouston.GameElements
         [Tooltip("The small representation of the tube.")]
         private GameObject _smallTube = null;
         [SerializeField]
-        [Tooltip("The secondary fill image.")]
-        private Image _secondaryFill = null;
+        [Tooltip("The bot fill image.")]
+        private Image _botFill = null;
+        [SerializeField]
+        [Tooltip("The top fill image.")]
+        private Image _topFill = null;
         [SerializeField]
         [Tooltip("The fill of the small tube.")]
         private Image _smallTubeFill = null;
@@ -123,21 +126,26 @@ namespace CRI.HelloHouston.GameElements
             float fillAmount = (float)currentStepValue / maxSteps;
             _smallTubeFill.fillAmount = fillAmount;
             _smallTubeSecondaryFill.fillAmount = fillAmount;
+            _botFill.enabled = (fillAmount > 0.0f);
+            _topFill.enabled = (fillAmount >= 1.0f);
             if (currentState == XPState.Failure)
             {
-                _secondaryFill.color = _colorKO;
+                _botFill.color = _colorKO;
+                _topFill.color = _colorKO;
                 _smallTubeFill.color = _colorKO;
                 _smallTubeSecondaryFill.color = _colorKO;
             }
             else if (currentState == XPState.Success)
             {
-                _secondaryFill.color = _colorOK;
+                _botFill.color = _colorOK;
+                _topFill.color = _colorOK;
                 _smallTubeFill.color = _colorOK;
                 _smallTubeSecondaryFill.color = _colorOK;
             }
             else
             {
-                _secondaryFill.color = _colorProgress;
+                _botFill.color = _colorProgress;
+                _topFill.color = _colorProgress;
                 _smallTubeFill.color = _colorProgress;
                 _smallTubeSecondaryFill.color = _colorProgress;
             }
