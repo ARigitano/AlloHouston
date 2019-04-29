@@ -9,6 +9,7 @@ namespace CRI.HelloHouston.Experience.Tutorial
 {
     public class TutorialHologram : XPHologramElement
     {
+        public TutorialManager tutorialManager { get; private set; }
         //private List<GameObject> _irregularities = new List<GameObject>();
         /// <summary>
         /// Number of irregularities inside the core.
@@ -75,7 +76,7 @@ namespace CRI.HelloHouston.Experience.Tutorial
             if(_nbIrregularities == 0)
             {
                 _uiNbIrregularities.text = "winrar";
-                win = true;
+                tutorialManager.OnIrregularitiesSuccess();
             }
         }
 
@@ -83,6 +84,23 @@ namespace CRI.HelloHouston.Experience.Tutorial
         void Update()
         {
 
+        }
+
+        public override void OnShow(int currentStep)
+        {
+            base.OnActivation();
+            gameObject.SetActive(false);
+        }
+
+        private void Init(TutorialManager synchronizer)
+        {
+            tutorialManager = synchronizer;
+        }
+
+        public override void OnInit(XPManager manager, int randomSeed)
+        {
+            base.OnInit(manager, randomSeed);
+            Init((TutorialManager)manager);
         }
     }
 }

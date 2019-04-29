@@ -25,6 +25,7 @@ namespace CRI.HelloHouston.Experience.Tutorial
         private GameObject _virus;
         public int nbViruses = 0;
         public bool isBuilding = false;
+        public Transform point1, point2;
 
         // Start is called before the first frame update
         void Start()

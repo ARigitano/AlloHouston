@@ -10,7 +10,7 @@ using VRTK.GrabAttachMechanics;
 /// </summary>
 namespace CRI.HelloHouston.Experience.Tutorial
 {
-    public class Irregularity : VRTK_InteractableObject
+    public class Irregularity : MonoBehaviour
     {
         /// <summary>
         /// The hologram for the tutorial experiment.
@@ -24,14 +24,32 @@ namespace CRI.HelloHouston.Experience.Tutorial
         private bool _isCorrupted = false;
         [SerializeField]
         private GameObject _virus;
+        [SerializeField]
+        private VRTK_InteractableObject _interact;
 
 
-        public override void OnInteractableObjectGrabbed(InteractableObjectEventArgs e)
+        private void OnEnable()
         {
-            Debug.Log("okokokok");
+            _interact.InteractableObjectGrabbed += OnGrab;
+            _interact.InteractableObjectUngrabbed += OnUngrab;
         }
 
+        private void OnDisable()
+        {
+            _interact.InteractableObjectGrabbed -= OnGrab;
+            _interact.InteractableObjectUngrabbed -= OnUngrab;
+        }
 
+        private void OnUngrab(object sender, InteractableObjectEventArgs e)
+        {
+            //e.interactingObject.GetComponen
+            Debug.Log("ungrabbed");
+        }
+
+        private void OnGrab(object sender, InteractableObjectEventArgs e)
+        {
+            Debug.Log("grabbed");
+        }
 
 
         // Start is called before the first frame update
@@ -55,7 +73,7 @@ namespace CRI.HelloHouston.Experience.Tutorial
 
             private void OnDestroy()
         {
-                _hologram.UpdateNbIrregularities();
+                //_hologram.UpdateNbIrregularities();
         }
 
         public void OutOfBound()

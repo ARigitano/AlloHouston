@@ -17,5 +17,15 @@ namespace CRI.HelloHouston.Experience.Tutorial
         {
 
         }
+
+        public void StartMaintenance()
+        {
+
+        }
+
+        public void ContinueMaintenance()
+        {
+
+        }
     }
 }

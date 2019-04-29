@@ -7,7 +7,7 @@ namespace CRI.HelloHouston.Experience
     public class HolocubeFace : MonoBehaviour
     {
 
-
+        
 
         // Start is called before the first frame update
         void Start()
