@@ -65,13 +65,8 @@ namespace CRI.HelloHouston.WindowTemplate
             StopAllCoroutines();
             StartCoroutine(ShowAnimation(action));
         }
-
-        public void HideWindow()
-        {
-            HideWindow(null);
-        }
-
-        public void HideWindow(Action action)
+        
+        public void HideWindow(Action action = null)
         {
             Debug.Log("Hide " + name);
             if (gameObject.activeInHierarchy)

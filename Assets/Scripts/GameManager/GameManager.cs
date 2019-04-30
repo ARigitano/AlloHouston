@@ -104,6 +104,8 @@ namespace CRI.HelloHouston.Experience
 
         public int xpTimeEstimate { get; private set; }
 
+        private VirtualRoom _room;
+
         public string sourceName
         {
             get
@@ -134,6 +136,7 @@ namespace CRI.HelloHouston.Experience
         {
             s_randomSeed = seed;
             this.xpTimeEstimate = timeEstimate;
+            _room = room;
             xpManagers = xpContexts.Select(xpContext => xpContext.InitManager(logManager.logExperienceController, room.GetZones().Where(zone => zone.xpContext == xpContext).ToArray(), s_randomSeed)).ToArray();
             _startTime = Time.time;
             logGeneralController.AddLog(string.Format("Random Seed: {0}", randomSeed), this, Log.LogType.Important);
@@ -147,9 +150,30 @@ namespace CRI.HelloHouston.Experience
             return _mainSettings.hints.Select(hint => new GameHint(hint, this)).Concat(xpManagers.Where(x => x.state == XPState.InProgress).SelectMany(x => x.xpContext.hints)).ToArray();
         }
 
+        /// <summary>
+        /// Loads an experience into a wall top zone.
+        /// </summary>
+        /// <param name="managerIndex">The index of the experience that will be loaded.</param>
+        /// <param name="wallTopIndex">The index of the zone that will be loaded.</param>
+        public void LoadXP(int managerIndex, int wallTopIndex)
+        {
+            VirtualZone[] zones = _room.GetZones(ZoneType.WallTop).ToArray();
+            VirtualWallTopZone zone = wallTopIndex < zones.Length ? (VirtualWallTopZone)zones[wallTopIndex] : null;
+            XPManager[] managers = xpManagers;
+            XPManager manager = managerIndex < managers.Length ? managers[managerIndex] : null;
+            if (manager != null && zone != null)
+                LoadXP(manager, zone);
+        }
+
+        /// <summary>
+        /// Loads an experience into a wall top zone.
+        /// </summary>
+        /// <param name="manager">The manager of the experience that will be loaded.</param>
+        /// <param name="zone">The wall top zone in which the experience will be loaded.</param>
         public void LoadXP(XPManager manager, VirtualWallTopZone zone)
         {
-            zone.manager.Hide();
+            if (zone.manager != null)
+                zone.manager.Hide();
             manager.Show(zone);
         }
 

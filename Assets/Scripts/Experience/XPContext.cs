@@ -128,7 +128,12 @@ namespace CRI.HelloHouston.Experience
         {
             get
             {
-                return xpSettings.availableHints.Select(x => new GameHint(x, this)).ToArray();
+                GameHint[] res;
+                if (xpSettings != null)
+                    res = xpSettings.availableHints.Select(x => new GameHint(x, this)).ToArray();
+                else
+                    res = new GameHint[0];
+                return res;
             }
         }
 

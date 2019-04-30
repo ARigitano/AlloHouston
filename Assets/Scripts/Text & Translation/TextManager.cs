@@ -18,11 +18,15 @@ namespace CRI.HelloHouston.Translation
         /// </summary>
         public LangManager langManager { get; protected set; }
 
-        public TextManager(LangManager langManager, LangSettings langSettings) : this(langManager, langSettings.langTextFiles, langSettings.commonTextFile) { }
-
-        public TextManager(LangManager langManager, TextAsset[] langTextFiles, TextAsset commonTextFile)
+        public TextManager(LangManager langManager)
         {
             this.langManager = langManager;
+        }
+
+        public TextManager(LangManager langManager, LangSettings langSettings) : this(langManager, langSettings.langTextFiles, langSettings.commonTextFile) { }
+
+        public TextManager(LangManager langManager, TextAsset[] langTextFiles, TextAsset commonTextFile) : this(langManager)
+        {
             foreach (var textAsset in langTextFiles)
             {
                 try

@@ -124,7 +124,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         private Transform _start2 = null;
         [SerializeField]
         [Tooltip("Animation of the hologram tube.")]
-        private AnimationElement _animationElement;
+        private AnimationElement _animationElement = null;
 
         private bool _splinesDisplayed = false;
 
@@ -327,16 +327,33 @@ namespace CRI.HelloHouston.Experience.MAIA
             }
         }
 
+        private void DisableObject()
+        {
+            gameObject.SetActive(false);
+        }
+
+        private void EnableObject()
+        {
+            gameObject.SetActive(true);
+        }
+
         public void Show()
         {
+            EnableObject();
             if (!_animationElement.visible)
                 _animationElement.Show();
         }
 
         public void Hide()
         {
+            StopAllCoroutines();
             if (_animationElement.visible)
+            {
                 _animationElement.Hide();
+                Invoke("DisableObject", _animationElement.postHideDelay);
+            }
+            else
+                DisableObject();
         }
 
         private void Init(MAIAManager synchronizer)

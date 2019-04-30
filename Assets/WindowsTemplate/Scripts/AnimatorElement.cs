@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -10,14 +11,19 @@ namespace CRI.HelloHouston.WindowTemplate
     {
         private Animator _animator;
 
+        private void Awake()
+        {
+            _animator = GetComponent<Animator>();
+        }
+
         protected override void StartShowAnimation()
         { 
-            GetComponent<Animator>().SetBool("Show", true);
+            _animator.SetBool("Show", true);
         }
 
         protected override void StartHideAnimation()
         {
-            GetComponent<Animator>().SetBool("Show", false);
+            _animator.SetBool("Show", false);
         }
     }
 }

@@ -111,11 +111,13 @@ namespace CRI.HelloHouston.Experience.UI
             LangManager langManager = xpManager.langManager;
             _xpManager = xpManager;
             _nameText.text = xpManager.xpContext.contextName;
-            _actionButton.Init(xpManager.xpContext.xpSettings.actions, xpManager.actionController);
+            var actions = xpManager.xpContext.xpSettings != null ? xpManager.xpContext.xpSettings.actions : new Actions.ExperienceAction[0];
+            int duration = xpManager.xpContext.xpSettings != null ? xpManager.xpContext.xpSettings.duration : 0;
+            _actionButton.Init(actions, xpManager.actionController);
             _langDropdown.InitDropdown(langManager);
             _launchButton.onClick.AddListener(() =>
             {
-                if (gameManager.xpTimeEstimate * 60 < gameManager.timeSinceGameStart + (xpManager.xpContext.xpSettings.duration * 60))
+                if (gameManager.xpTimeEstimate * 60 < gameManager.timeSinceGameStart + (duration * 60))
                     CreatePopup(textManager.GetText(_timePopupTextKey), LaunchAction);
                 else
                     LaunchAction();

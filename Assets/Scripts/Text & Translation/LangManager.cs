@@ -47,6 +47,14 @@ namespace CRI.HelloHouston.Translation
         /// </summary>
         public TextManager textManager { get; private set;}
 
+        public LangManager()
+        {
+            this.langAppAvailable = new LangApp[0];
+            this.defaultLanguage = null;
+            _currentLang = defaultLanguage;
+            this.textManager = new TextManager(this);
+        }
+
         public LangManager(LangSettings langSettings)
         {
             this.langAppAvailable = langSettings.langAppAvailable;

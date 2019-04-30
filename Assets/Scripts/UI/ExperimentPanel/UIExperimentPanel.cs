@@ -155,7 +155,7 @@ namespace CRI.HelloHouston.Calibration.UI
                 _cornerText.text = context.totalCorners.ToString();
                 _doorText.text = context.totalDoors.ToString();
                 _hologramText.text = context.totalHolograms.ToString();
-                _durationText.text = context.xpSettings.duration.ToString();
+                _durationText.text = context.xpSettings != null ? context.xpSettings.duration.ToString() : "N/A";
             }
             else
                 ResetAllText();

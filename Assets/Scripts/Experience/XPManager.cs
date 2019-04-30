@@ -37,7 +37,7 @@ namespace CRI.HelloHouston.Experience
     /// The XPManager is responsible for the communication of every prefabs of one particular experiment among themselves as well as with the Gamecontroller.
     /// </summary>
     [System.Serializable]
-    public abstract class XPManager : MonoBehaviour, ILangManager
+    public class XPManager : MonoBehaviour, ILangManager
     {
         [System.Serializable]
         public struct ElementInfo
@@ -369,7 +369,10 @@ namespace CRI.HelloHouston.Experience
             state = XPState.Inactive;
             _visibilityOnActivation = visibilityOnActivation;
             actionController = new ExperienceActionController(this);
-            langManager = new LangManager(xpContext.xpGroup.settings.langSettings);
+            if (xpContext.xpGroup.settings != null)
+                langManager = new LangManager(xpContext.xpGroup.settings.langSettings);
+            else
+                langManager = new LangManager();
             this.logController = logController;
             if (logController != null)
                 logController.AddLog("Ready", xpContext, Log.LogType.Automatic);

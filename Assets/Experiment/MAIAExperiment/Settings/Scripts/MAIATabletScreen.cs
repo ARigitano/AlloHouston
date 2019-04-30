@@ -41,11 +41,18 @@ namespace CRI.HelloHouston.Experience.MAIA
 
         public void StartVictory()
         {
-            ActivatePanel(null);
+            DeactivatePanel();
         }
 
-        private void ActivatePanel(Window newPanel)
+        private void DeactivatePanel(Action action = null)
         {
+            ActivatePanel(null, action);
+        }
+
+        private void ActivatePanel(Window newPanel, Action action = null)
+        {
+            if (newPanel != null && action == null)
+                action = newPanel.ShowWindow;
             // We stop the previous panel animation if it didn't finish yet.
             if (_previousPanel != null && _previousPanel.visible)
             {
@@ -54,10 +61,8 @@ namespace CRI.HelloHouston.Experience.MAIA
             }
             if (_currentPanel == newPanel)
                 return;
-            else if (_currentPanel != null && newPanel != null)
-                _currentPanel.HideWindow(newPanel.ShowWindow);
-            else if (_currentPanel != null && newPanel == null)
-                _currentPanel.HideWindow();
+            else if (_currentPanel != null)
+                _currentPanel.HideWindow(action);
             else if (newPanel != null)
                 newPanel.ShowWindow();
             _previousPanel = _currentPanel;
@@ -78,7 +83,7 @@ namespace CRI.HelloHouston.Experience.MAIA
 
         public void HideAllPanels()
         {
-            ActivatePanel(null);
+            DeactivatePanel();
         }
 
         /// <summary>
@@ -96,7 +101,7 @@ namespace CRI.HelloHouston.Experience.MAIA
 
         public void OnAMOClick()
         {
-            ActivatePanel(null);
+            DeactivatePanel();
             topScreen.maiaManager.OnAMOSuccess();
         }
 
@@ -163,7 +168,11 @@ namespace CRI.HelloHouston.Experience.MAIA
             _particlesPanel.Init(maiaManager, topScreen.particleIdentificationScreen);
             _particleChargesPanel.Init(maiaManager, topScreen.particleIdentificationScreen);
             _reactionPanel.Init(topScreen, maiaManager);
-            ActivatePanel(_moPanel);
+        }
+
+        public override void Dismiss()
+        {
+            DeactivatePanel(base.Dismiss);
         }
     }
 }
