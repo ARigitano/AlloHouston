@@ -57,11 +57,6 @@ namespace VRTK
             VRTK_UIPointer pointerCheck = collider.GetComponentInParent<VRTK_UIPointer>();
             if (pointerCheck != null && colliderCheck != null && colliderCheck.objectType == VRTK_PlayerObject.ObjectTypes.Collider)
             {
-                if (pointerCheck.customOrigin != null)
-                {
-                    pointerCheck.originRotation = pointerCheck.customOrigin.localRotation;
-                    pointerCheck.customOrigin.localRotation = Quaternion.Euler(-this.transform.eulerAngles);
-                }
                 pointerCheck.collisionClick = clickOnPointerCollision;
             }
         }
