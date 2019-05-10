@@ -781,6 +781,108 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selected: 0
+--- !u!1 &578495399
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 578495401}
+  - component: {fileID: 578495400}
+  m_Layer: 0
+  m_Name: Capture_video
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &578495400
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 578495399}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f452da2383e6e24991a212542347f4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _postCaptureSettings:
+    writeFastStartStreamingForMp4: 1
+  _captureKey: 0
+  _captureOnStart: 0
+  _startPaused: 0
+  _listVideoCodecsOnStart: 0
+  _isRealTime: 1
+  _persistAcrossSceneLoads: 0
+  _stopMode: 0
+  _stopFrames: 0
+  _stopSeconds: 0
+  _useMediaFoundationH264: 1
+  _videoCodecPriority:
+  - Lagarith Lossless Codec
+  - x264vfw - H.264/MPEG-4 AVC codec
+  - Xvid MPEG-4 Codec
+  _frameRate: 60
+  _timelapseScale: 1
+  _downScale: 1
+  _maxVideoSize: {x: 0, y: 0}
+  _forceVideoCodecIndex: -1
+  _flipVertically: 0
+  _supportAlpha: 0
+  _forceGpuFlush: 0
+  _useWaitForEndOfFrame: 1
+  _noAudio: 1
+  _audioCodecPriority: []
+  _forceAudioCodecIndex: -1
+  _forceAudioDeviceIndex: -1
+  _audioCapture: {fileID: 0}
+  _autoGenerateFilename: 1
+  _outputFolderType: 2
+  _outputFolderPath: C:/Users/CRI user/Desktop/record E2H
+  _autoFilenamePrefix: capture
+  _autoFilenameExtension: avi
+  _forceFilename: movie.avi
+  _imageSequenceStartFrame: 0
+  _imageSequenceZeroDigits: 6
+  _outputType: 0
+  _imageSequenceFormat: 0
+  _renderResolution: 11
+  _renderSize: {x: 1, y: 1}
+  _renderAntiAliasing: -1
+  _useMotionBlur: 0
+  _motionBlurSamples: 16
+  _motionBlurCameras: []
+  _allowVSyncDisable: 1
+  _supportTextureRecreate: 0
+  _captureMouseCursor: 0
+  _mouseCursor: {fileID: 0}
+  _minimumDiskSpaceMB: -1
+  _cubemapResolution: 2048
+  _cubemapDepth: 24
+  _supportGUI: 0
+  _supportCameraRotation: 0
+  _render180Degrees: 0
+  _stereoRendering: 0
+  _ipd: 0.064
+  _camera: {fileID: 0}
+--- !u!4 &578495401
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 578495399}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.894, y: 1.325, z: -1.806}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &634452950
 GameObject:
   m_ObjectHideFlags: 0
@@ -874,7 +976,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &655846884
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2692,7 +2794,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1217663939
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2783,6 +2885,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 100076, guid: ad09f82329a281b43ae287377dfbfdfb, type: 3}
+      propertyPath: m_Name
+      value: city_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 100076, guid: ad09f82329a281b43ae287377dfbfdfb, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100078, guid: ad09f82329a281b43ae287377dfbfdfb, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 100080, guid: ad09f82329a281b43ae287377dfbfdfb, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 100082, guid: ad09f82329a281b43ae287377dfbfdfb, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2300000, guid: ad09f82329a281b43ae287377dfbfdfb, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -2819,22 +2941,6 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 14869bb60a90d5f4abb11fb0e37fc3ac, type: 2}
-    - target: {fileID: 100076, guid: ad09f82329a281b43ae287377dfbfdfb, type: 3}
-      propertyPath: m_Name
-      value: city_01
-      objectReference: {fileID: 0}
-    - target: {fileID: 100078, guid: ad09f82329a281b43ae287377dfbfdfb, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 100080, guid: ad09f82329a281b43ae287377dfbfdfb, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 100082, guid: ad09f82329a281b43ae287377dfbfdfb, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 400076, guid: ad09f82329a281b43ae287377dfbfdfb, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.705
