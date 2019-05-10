@@ -19,13 +19,15 @@ namespace CRI.HelloHouston.Experience.Tutorial
         private TutorialHologram _hologram;
         private bool _isOut = false;
         [SerializeField]
-        private Material _safeMaterial, _failMaterial;
+        private bool _isVirus = false;
         [SerializeField]
-        private bool _isCorrupted = false;
+        private bool _isCorruptedData = false;
         [SerializeField]
         private GameObject _virus;
         [SerializeField]
         private VRTK_InteractableObject _interact;
+        private GameObject _building;
+        private bool _isResolved = false;
 
 
         private void OnEnable()
@@ -73,14 +75,15 @@ namespace CRI.HelloHouston.Experience.Tutorial
 
             private void OnDestroy()
         {
-                //_hologram.UpdateNbIrregularities();
+            //if(_hologram != null)
+            // _hologram.UpdateNbIrregularities();
         }
 
         public void OutOfBound()
         {
             if (_isOut)
             {
-                if (!_isCorrupted)
+                if (!_isVirus)
                 {
                     Destroy(gameObject, 2f);
                 }
@@ -89,18 +92,47 @@ namespace CRI.HelloHouston.Experience.Tutorial
                     gameObject.GetComponent<MeshRenderer>().enabled = false;
                     _virus.SetActive(true);
                     this.enabled = false;
+                    
                 }
+            }
+        }
+
+        private void OnTriggerStay(Collider other)
+        {
+            if (other.tag == "Building" || other.tag == "Core")
+            {
+                _building = other.gameObject;
             }
         }
 
         private void OnTriggerExit(Collider other)
         {
-            if (other.tag == "Building" || other.tag == "Core")
+            if ((other.tag == "Building" || other.tag == "Core") /*&& !_isResolved*/)
             {
+                
                 gameObject.GetComponent<MeshRenderer>().enabled = true;
                 _isOut = true;
                 OutOfBound();
-            }
+               // _isResolved = true;
+                if (_isCorruptedData && !_isVirus)
+                {
+                    other.GetComponent<MeshRenderer>().material = _hologram.materialSuccess;
+                    _hologram.UpdateNbIrregularities();
+                   // _isResolved = true;
+
+                }
+                else if(!_isVirus)
+                {
+                    other.GetComponent<MeshRenderer>().material = _hologram.materialFail;
+                   // _isResolved = true;
+                }
+
+            }/* else if (other.tag == "ViveController" && !_isCorruptedData && _building != null)
+            {
+                _building.GetComponent<MeshRenderer>().material = _hologram.materialSuccess;
+                _hologram.UpdateNbIrregularities();
+               // _isResolved = true;
+            }*/
         }
     }
 }

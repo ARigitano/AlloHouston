@@ -8,6 +8,7 @@ namespace CRI.HelloHouston.Experience.Tutorial
 {
     public class Virus : MonoBehaviour
     {
+        [SerializeField]
         private TutorialHologramSecond _core;
         private Transform _returnPoint;
         [SerializeField]
@@ -78,8 +79,8 @@ namespace CRI.HelloHouston.Experience.Tutorial
         public void ReturnToCore()
         {
             _returnPoint = _core.attaches[Random.Range(0, _core.attaches.Count)].transform;
-            if(_core.nbViruses < _core.attaches.Count)
-            Instantiate(_virus, gameObject.transform.position, gameObject.transform.rotation);
+            //if(_core.nbViruses < _core.attaches.Count)
+            //Instantiate(_virus, gameObject.transform.position, gameObject.transform.rotation);
             do
             {
                 _returnPoint = _core.attaches[Random.Range(0, _core.attaches.Count)].transform;
@@ -125,25 +126,25 @@ namespace CRI.HelloHouston.Experience.Tutorial
         // Update is called once per frame
         void Update()
         {
-            _pointsDistance = Vector3.Distance(_core.point1.position, _core.point2.position);
-            _virusDistance = Vector3.Distance(_core.point1.position, gameObject.transform.position);
+            //_pointsDistance = Vector3.Distance(_core.point1.position, _core.point2.position);
+            //_virusDistance = Vector3.Distance(_core.point1.position, gameObject.transform.position);
 
-            if (_returnPoint != null && _virusDistance >= _pointsDistance)
+           /* if (_returnPoint != null && _virusDistance >= _pointsDistance)
             {
 
-            }
+            }*/
 
             if (_returnPoint != null && transform.position != _returnPoint.position)
             {
                 transform.position = Vector3.Lerp(transform.position, _returnPoint.position, Time.deltaTime * _speed);
             }
 
-            if(Vector3.Distance(_returnPoint.position, transform.position) >= 0.5f && !isFiring)
+           /* if(Vector3.Distance(_returnPoint.position, transform.position) >= 0.5f && !isFiring)
             {
                 isFiring = true;
                 //ReturnToCore();
                 isFiring = false;
-            }
+            }*/
 
             
         }

@@ -2,12 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// The hologram for the tutorial experiment.
-/// </summary>
 namespace CRI.HelloHouston.Experience.Tutorial
 {
-    public class TutorialHologramSecond : XPHologramElement
+    public class TutorialHologramVirus : XPHologramElement
     {
         public TutorialManager tutorialManager { get; private set; }
         /// <summary>
@@ -21,18 +18,21 @@ namespace CRI.HelloHouston.Experience.Tutorial
         [SerializeField]
         private float _timer;
         public List<Transform> attaches = new List<Transform>();
-        public Transform[] freeAttaches;
         [SerializeField]
         private GameObject _virus;
-        public int nbViruses = 0;
-        public bool isBuilding = false;
-        public Transform point1, point2;
-        public Material materialSuccess, materialFail;
+        public int nbVirus = 0;
+        public int _maxVirus = 20;
+
+        public void InstantiateVirus(Transform spawning)
+        {
+            Instantiate(_virus, spawning.position, Quaternion.identity);
+        }
 
         // Start is called before the first frame update
         void Start()
         {
             StartCoroutine("CountDown");
+            StartCoroutine("CountDownVirus");
             GameObject[] attachesArray = GameObject.FindGameObjectsWithTag("CoreAttach");
 
             foreach (GameObject attach in attachesArray)
@@ -40,9 +40,24 @@ namespace CRI.HelloHouston.Experience.Tutorial
                 attaches.Add(attach.transform);
             }
 
-            freeAttaches = new Transform[attaches.Count];
+            InstantiateVirus(transform);
 
-            
+        }
+
+        IEnumerator CountDownVirus()
+        {
+            float virusCountDown = 0f;
+            while (_timer > 0f)
+            {
+                yield return new WaitForSeconds(1f);
+                virusCountDown++;
+                if (virusCountDown == 3f)
+                {
+                    InstantiateVirus(transform);
+                    virusCountDown = 0;
+                }
+            }
+
         }
 
         /// <summary>
@@ -72,11 +87,7 @@ namespace CRI.HelloHouston.Experience.Tutorial
         // Update is called once per frame
         void Update()
         {
-            if(isBuilding)
-            {
-                Instantiate(_virus, gameObject.transform.position, gameObject.transform.rotation);
-                isBuilding = false;
-            }
+
         }
 
         public override void OnShow(int currentStep)

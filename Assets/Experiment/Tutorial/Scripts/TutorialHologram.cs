@@ -30,6 +30,8 @@ namespace CRI.HelloHouston.Experience.Tutorial
         [SerializeField]
         private float _timer;
         private bool win = false;
+        public Material materialSuccess, materialFail;
+        private int _nbSuccess = 0;
 
         // Start is called before the first frame update
         void Start()
@@ -55,14 +57,20 @@ namespace CRI.HelloHouston.Experience.Tutorial
             while(_timer > 0f)
             {
                 if (win)
+                {
+                    tutorialManager.OnIrregularitiesSuccess();
                     break;
+                }
                 yield return new WaitForSeconds(1f);
                 _timer--;
                 _uiTimer.text = _timer.ToString();
             }
 
-            if(!win)
+            if (!win)
+            {
                 _uiNbIrregularities.text = "Fail";
+                tutorialManager.EndMaintenance();
+            }
         }
 
         /// <summary>
@@ -70,13 +78,15 @@ namespace CRI.HelloHouston.Experience.Tutorial
         /// </summary>
         public void UpdateNbIrregularities()
         {
-            _nbIrregularities--;
-            _uiNbIrregularities.text = _nbIrregularities.ToString();
+            //_nbIrregularities--;
+            //_uiNbIrregularities.text = _nbIrregularities.ToString();
 
-            if(_nbIrregularities == 0)
+            _nbSuccess++;
+
+            if(_nbSuccess * 2 >= _nbIrregularities)
             {
                 _uiNbIrregularities.text = "winrar";
-                tutorialManager.OnIrregularitiesSuccess();
+                win = true;
             }
         }
 

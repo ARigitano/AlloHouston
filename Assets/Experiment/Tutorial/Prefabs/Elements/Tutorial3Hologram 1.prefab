@@ -235,7 +235,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7473833150960210743
 Transform:
   m_ObjectHideFlags: 0
@@ -259,9 +259,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1264014907266254817}
-  - component: {fileID: 5495823612059881585}
+  - component: {fileID: 836468958674883779}
+  - component: {fileID: 1065170532618686430}
   m_Layer: 0
-  m_Name: Tutorial2Hologram
+  m_Name: Tutorial3Hologram 1
   m_TagString: Core
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -297,7 +298,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -90, y: -90, z: -90}
---- !u!114 &5495823612059881585
+--- !u!114 &836468958674883779
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -306,22 +307,30 @@ MonoBehaviour:
   m_GameObject: {fileID: 617749780283073885}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 87c2494687af19a4db40372a55028636, type: 3}
+  m_Script: {fileID: 11500000, guid: 398368235468aaf4889b3a9dfe8df425, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _elementName: 
   _canvasElement: 1
   _uiTimer: {fileID: 4408015757181381864}
-  _timer: 30
+  _timer: 20
   attaches: []
-  freeAttaches: []
-  _virus: {fileID: 2475495321397197440, guid: 5ce1ec053d1710c439e07fe37971756e, type: 3}
-  nbViruses: 0
-  isBuilding: 0
-  point1: {fileID: 0}
-  point2: {fileID: 0}
-  materialSuccess: {fileID: 2100000, guid: 1dad7f6cc996bc84fb14e427ef10da6a, type: 2}
-  materialFail: {fileID: 2100000, guid: 611dd058956e175469dd851c4f5d45e6, type: 2}
+  _virus: {fileID: 87910939746601183, guid: e1da305249eb04946bab8183985f91bc, type: 3}
+  nbVirus: 0
+  _maxVirus: 20
+--- !u!65 &1065170532618686430
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 617749780283073885}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.07, y: 0.07, z: 0.07}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &838260783270453236
 GameObject:
   m_ObjectHideFlags: 0
@@ -346,7 +355,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 838260783270453236}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0, z: 0.361}
+  m_LocalPosition: {x: 0.51, y: -0, z: 0.739}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1834595738613388593}
@@ -492,7 +501,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5208408319792556796
 Transform:
   m_ObjectHideFlags: 0
@@ -522,7 +531,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2567732991872761395
 Transform:
   m_ObjectHideFlags: 0
@@ -552,7 +561,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5587964126464716725
 Transform:
   m_ObjectHideFlags: 0
@@ -612,7 +621,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &115729545734209846
 Transform:
   m_ObjectHideFlags: 0
@@ -733,7 +742,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7876077202567138915
 Transform:
   m_ObjectHideFlags: 0
@@ -763,7 +772,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8590906806475643490
 Transform:
   m_ObjectHideFlags: 0
@@ -802,7 +811,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3507203471870929870}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0, z: 0.125}
+  m_LocalPosition: {x: -4.45, y: -0, z: 0.735}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1834595738613388593}
@@ -823,7 +832,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2233454417443389400
 Transform:
   m_ObjectHideFlags: 0
@@ -974,7 +983,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3820450550175889800
 Transform:
   m_ObjectHideFlags: 0
@@ -1004,7 +1013,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &9044611184066037867
 Transform:
   m_ObjectHideFlags: 0
@@ -1034,7 +1043,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8456283411570317816
 Transform:
   m_ObjectHideFlags: 0
@@ -1159,7 +1168,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1826339695029987713
 Transform:
   m_ObjectHideFlags: 0
@@ -1189,7 +1198,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2314092782779121425
 Transform:
   m_ObjectHideFlags: 0
@@ -1219,7 +1228,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &539244625501847323
 Transform:
   m_ObjectHideFlags: 0
@@ -1258,7 +1267,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6018153900036778452}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0, z: -0.127}
+  m_LocalPosition: {x: 0.49, y: -3.33, z: 0.736}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1834595738613388593}
@@ -1288,7 +1297,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6211427658179632601}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0, z: -0.376}
+  m_LocalPosition: {x: -4.42, y: -3.48, z: 0.732}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1834595738613388593}
@@ -1404,7 +1413,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5335692718345458794
 Transform:
   m_ObjectHideFlags: 0
@@ -1757,7 +1766,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1116238415396112927
 Transform:
   m_ObjectHideFlags: 0
@@ -1813,6 +1822,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: IrregularityVirus (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7360293059588967258, guid: 050b125a022c8f340af1742d20265b8f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5250738976393419215, guid: 050b125a022c8f340af1742d20265b8f,
         type: 3}
@@ -1884,16 +1898,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.09207303
       objectReference: {fileID: 0}
-    - target: {fileID: 5178517521209073795, guid: 050b125a022c8f340af1742d20265b8f,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1080655109073524044, guid: 050b125a022c8f340af1742d20265b8f,
-        type: 3}
-      propertyPath: _virus
-      value: 
-      objectReference: {fileID: 5613385007700042772}
     - target: {fileID: 6789134192425114802, guid: 050b125a022c8f340af1742d20265b8f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1919,11 +1923,21 @@ PrefabInstance:
       propertyPath: m_LocalScale.y
       value: 0.4153175
       objectReference: {fileID: 0}
+    - target: {fileID: 5178517521209073795, guid: 050b125a022c8f340af1742d20265b8f,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5404080403588792940, guid: 050b125a022c8f340af1742d20265b8f,
         type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1080655109073524044, guid: 050b125a022c8f340af1742d20265b8f,
+        type: 3}
+      propertyPath: _virus
+      value: 
+      objectReference: {fileID: 5613385007700042772}
     - target: {fileID: 6789134192425114803, guid: 050b125a022c8f340af1742d20265b8f,
         type: 3}
       propertyPath: m_IsActive
@@ -1933,7 +1947,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _core
       value: 
-      objectReference: {fileID: 5495823612059881585}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 050b125a022c8f340af1742d20265b8f, type: 3}
 --- !u!4 &6561526095801852264 stripped
@@ -1959,6 +1973,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: IrregularityVirus (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7360293059588967258, guid: 050b125a022c8f340af1742d20265b8f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5250738976393419215, guid: 050b125a022c8f340af1742d20265b8f,
         type: 3}
@@ -2030,16 +2049,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.09207303
       objectReference: {fileID: 0}
-    - target: {fileID: 5178517521209073795, guid: 050b125a022c8f340af1742d20265b8f,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1080655109073524044, guid: 050b125a022c8f340af1742d20265b8f,
-        type: 3}
-      propertyPath: _virus
-      value: 
-      objectReference: {fileID: 4912089612414228669}
     - target: {fileID: 6789134192425114802, guid: 050b125a022c8f340af1742d20265b8f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2065,11 +2074,21 @@ PrefabInstance:
       propertyPath: m_LocalScale.y
       value: 0.4153175
       objectReference: {fileID: 0}
+    - target: {fileID: 5178517521209073795, guid: 050b125a022c8f340af1742d20265b8f,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5404080403588792940, guid: 050b125a022c8f340af1742d20265b8f,
         type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1080655109073524044, guid: 050b125a022c8f340af1742d20265b8f,
+        type: 3}
+      propertyPath: _virus
+      value: 
+      objectReference: {fileID: 4912089612414228669}
     - target: {fileID: 6789134192425114803, guid: 050b125a022c8f340af1742d20265b8f,
         type: 3}
       propertyPath: m_IsActive
@@ -2079,7 +2098,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _core
       value: 
-      objectReference: {fileID: 5495823612059881585}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 050b125a022c8f340af1742d20265b8f, type: 3}
 --- !u!4 &5963533015498448321 stripped
@@ -2109,7 +2128,7 @@ PrefabInstance:
     - target: {fileID: 7360293059588967258, guid: 050b125a022c8f340af1742d20265b8f,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5250738976393419215, guid: 050b125a022c8f340af1742d20265b8f,
         type: 3}
@@ -2181,16 +2200,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.09207303
       objectReference: {fileID: 0}
-    - target: {fileID: 5178517521209073795, guid: 050b125a022c8f340af1742d20265b8f,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1080655109073524044, guid: 050b125a022c8f340af1742d20265b8f,
-        type: 3}
-      propertyPath: _virus
-      value: 
-      objectReference: {fileID: 7692809191714809454}
     - target: {fileID: 6789134192425114802, guid: 050b125a022c8f340af1742d20265b8f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2216,11 +2225,21 @@ PrefabInstance:
       propertyPath: m_LocalScale.y
       value: 0.4153175
       objectReference: {fileID: 0}
+    - target: {fileID: 5178517521209073795, guid: 050b125a022c8f340af1742d20265b8f,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5404080403588792940, guid: 050b125a022c8f340af1742d20265b8f,
         type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1080655109073524044, guid: 050b125a022c8f340af1742d20265b8f,
+        type: 3}
+      propertyPath: _virus
+      value: 
+      objectReference: {fileID: 7692809191714809454}
     - target: {fileID: 6789134192425114803, guid: 050b125a022c8f340af1742d20265b8f,
         type: 3}
       propertyPath: m_IsActive
@@ -2230,7 +2249,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _core
       value: 
-      objectReference: {fileID: 5495823612059881585}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 050b125a022c8f340af1742d20265b8f, type: 3}
 --- !u!4 &8947491271334306578 stripped
@@ -2256,6 +2275,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: IrregularityVirus (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7360293059588967258, guid: 050b125a022c8f340af1742d20265b8f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5250738976393419215, guid: 050b125a022c8f340af1742d20265b8f,
         type: 3}
@@ -2327,16 +2351,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.09207303
       objectReference: {fileID: 0}
-    - target: {fileID: 5178517521209073795, guid: 050b125a022c8f340af1742d20265b8f,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1080655109073524044, guid: 050b125a022c8f340af1742d20265b8f,
-        type: 3}
-      propertyPath: _virus
-      value: 
-      objectReference: {fileID: 7323638847499887281}
     - target: {fileID: 6789134192425114802, guid: 050b125a022c8f340af1742d20265b8f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2362,11 +2376,21 @@ PrefabInstance:
       propertyPath: m_LocalScale.y
       value: 0.4153175
       objectReference: {fileID: 0}
+    - target: {fileID: 5178517521209073795, guid: 050b125a022c8f340af1742d20265b8f,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5404080403588792940, guid: 050b125a022c8f340af1742d20265b8f,
         type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1080655109073524044, guid: 050b125a022c8f340af1742d20265b8f,
+        type: 3}
+      propertyPath: _virus
+      value: 
+      objectReference: {fileID: 7323638847499887281}
     - target: {fileID: 6789134192425114803, guid: 050b125a022c8f340af1742d20265b8f,
         type: 3}
       propertyPath: m_IsActive
@@ -2376,7 +2400,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _core
       value: 
-      objectReference: {fileID: 5495823612059881585}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 050b125a022c8f340af1742d20265b8f, type: 3}
 --- !u!4 &8307817975490291661 stripped
@@ -2402,6 +2426,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: IrregularityVirus (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7360293059588967258, guid: 050b125a022c8f340af1742d20265b8f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5250738976393419215, guid: 050b125a022c8f340af1742d20265b8f,
         type: 3}
@@ -2473,16 +2502,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.09207303
       objectReference: {fileID: 0}
-    - target: {fileID: 5178517521209073795, guid: 050b125a022c8f340af1742d20265b8f,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1080655109073524044, guid: 050b125a022c8f340af1742d20265b8f,
-        type: 3}
-      propertyPath: _virus
-      value: 
-      objectReference: {fileID: 2181662290891193405}
     - target: {fileID: 6789134192425114802, guid: 050b125a022c8f340af1742d20265b8f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2508,11 +2527,21 @@ PrefabInstance:
       propertyPath: m_LocalScale.y
       value: 0.4153175
       objectReference: {fileID: 0}
+    - target: {fileID: 5178517521209073795, guid: 050b125a022c8f340af1742d20265b8f,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5404080403588792940, guid: 050b125a022c8f340af1742d20265b8f,
         type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1080655109073524044, guid: 050b125a022c8f340af1742d20265b8f,
+        type: 3}
+      propertyPath: _virus
+      value: 
+      objectReference: {fileID: 2181662290891193405}
     - target: {fileID: 6789134192425114803, guid: 050b125a022c8f340af1742d20265b8f,
         type: 3}
       propertyPath: m_IsActive
@@ -2522,18 +2551,18 @@ PrefabInstance:
         type: 3}
       propertyPath: _core
       value: 
-      objectReference: {fileID: 5495823612059881585}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 050b125a022c8f340af1742d20265b8f, type: 3}
---- !u!4 &625811916104694081 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5250738976393419215, guid: 050b125a022c8f340af1742d20265b8f,
-    type: 3}
-  m_PrefabInstance: {fileID: 4643505716149756046}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2181662290891193405 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6789134192425114803, guid: 050b125a022c8f340af1742d20265b8f,
+    type: 3}
+  m_PrefabInstance: {fileID: 4643505716149756046}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &625811916104694081 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5250738976393419215, guid: 050b125a022c8f340af1742d20265b8f,
     type: 3}
   m_PrefabInstance: {fileID: 4643505716149756046}
   m_PrefabAsset: {fileID: 0}
@@ -2548,6 +2577,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: IrregularityVirus
+      objectReference: {fileID: 0}
+    - target: {fileID: 7360293059588967258, guid: 050b125a022c8f340af1742d20265b8f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5250738976393419215, guid: 050b125a022c8f340af1742d20265b8f,
         type: 3}
@@ -2619,16 +2653,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.09207303
       objectReference: {fileID: 0}
-    - target: {fileID: 5178517521209073795, guid: 050b125a022c8f340af1742d20265b8f,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1080655109073524044, guid: 050b125a022c8f340af1742d20265b8f,
-        type: 3}
-      propertyPath: _virus
-      value: 
-      objectReference: {fileID: 1756297214647310564}
     - target: {fileID: 6789134192425114802, guid: 050b125a022c8f340af1742d20265b8f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2654,11 +2678,21 @@ PrefabInstance:
       propertyPath: m_LocalScale.y
       value: 0.4153175
       objectReference: {fileID: 0}
+    - target: {fileID: 5178517521209073795, guid: 050b125a022c8f340af1742d20265b8f,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5404080403588792940, guid: 050b125a022c8f340af1742d20265b8f,
         type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1080655109073524044, guid: 050b125a022c8f340af1742d20265b8f,
+        type: 3}
+      propertyPath: _virus
+      value: 
+      objectReference: {fileID: 1756297214647310564}
     - target: {fileID: 6789134192425114803, guid: 050b125a022c8f340af1742d20265b8f,
         type: 3}
       propertyPath: m_IsActive
@@ -2668,7 +2702,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _core
       value: 
-      objectReference: {fileID: 5495823612059881585}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 050b125a022c8f340af1742d20265b8f, type: 3}
 --- !u!4 &1060063172305673624 stripped

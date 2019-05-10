@@ -13,6 +13,8 @@ namespace CRI.HelloHouston.Experience.Tutorial
         public TutorialManager tutorialManager { get; private set; }
         [SerializeField]
         private Window _launchPanel = null;
+        [SerializeField]
+        private Window _secondMaintenancePanel = null;
         /// <summary>
         /// The panel currently being displayed.
         /// </summary>
@@ -49,12 +51,25 @@ namespace CRI.HelloHouston.Experience.Tutorial
         public void StartLaunch()
         {
             ActivatePanel(_launchPanel);
+            Debug.Log("Launch button activated");
         }
 
-        public void StartMaintenance()
+        public void PressedLaunch()
         {
             Debug.Log("Maintenance launched");
             tutorialManager.OnLaunchSuccess();
+        }
+
+        public void StartSecondMaintenance()
+        {
+            ActivatePanel(_secondMaintenancePanel);
+            Debug.Log("Second Maintenance button activated");
+        }
+
+        public void PressedSecondMaintenance()
+        {
+            Debug.Log("Second Maintenance launched");
+            tutorialManager.MaintenanceVirus();
         }
 
         // Update is called once per frame

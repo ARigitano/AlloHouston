@@ -23,15 +23,21 @@ public class CubeDock : MonoBehaviour
         if (other.tag == "StationFace")
         {
             face = "station";
+            Debug.Log("face");
+            other.GetComponent<TextMesh>().text = "station";
 
         }
         else if (other.tag == "TubexFace")
         {
             face = "tubex";
+            Debug.Log("tubex");
+            other.GetComponent<TextMesh>().text = "tubex";
         }
         else if (other.tag == "ExperimentFace")
         {
             face = "experiment";
+            Debug.Log("experiment");
+            other.GetComponent<TextMesh>().text = "experiment";
         }
     }
 
@@ -40,6 +46,8 @@ public class CubeDock : MonoBehaviour
         if (other.tag == "StationFace" || other.tag == "TubexFace" || other.tag == "ExperimentFace")
         {
             face = "";
+            Debug.Log("none");
+            other.GetComponent<TextMesh>().text = "";
         }
         
     }
