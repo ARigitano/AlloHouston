@@ -157,8 +157,7 @@ namespace CRI.HelloHouston.Experience
         /// <param name="wallTopIndex">The index of the zone that will be loaded.</param>
         public void LoadXP(int managerIndex, int wallTopIndex)
         {
-            VirtualZone[] zones = _room.GetZones(ZoneType.WallTop).ToArray();
-            VirtualWallTopZone zone = wallTopIndex < zones.Length ? (VirtualWallTopZone)zones[wallTopIndex] : null;
+            var zone = _room.GetZones<VirtualWallTopZone>().FirstOrDefault(x => x.index == wallTopIndex);
             XPManager[] managers = xpManagers;
             XPManager manager = managerIndex < managers.Length ? managers[managerIndex] : null;
             if (manager != null && zone != null)
@@ -172,9 +171,17 @@ namespace CRI.HelloHouston.Experience
         /// <param name="zone">The wall top zone in which the experience will be loaded.</param>
         public void LoadXP(XPManager manager, VirtualWallTopZone zone)
         {
-            if (zone.manager != null)
+            logGeneralController.AddLog(string.Format("XP Loaded: {0}", manager.xpContext.contextName), this, Log.LogType.Important);
+            // No need to load the experiment if it's already there.
+            if (zone.manager == manager)
+                return;
+            // We unload the current experiment if there's one.
+            if (zone.manager != null) 
                 zone.manager.Hide();
-            manager.Show(zone);
+            var vhzone = _room.GetZones<VirtualHologramZone>().FirstOrDefault(x => x.index == zone.index && x.xpZone == null);
+            if (vhzone == null)
+                vhzone = _room.GetZones<VirtualHologramZone>().FirstOrDefault(x => x.xpZone == null);
+            manager.Show(zone, vhzone);
         }
 
         public void SendHintToPlayers(string hint)

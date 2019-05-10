@@ -1,9 +1,11 @@
-﻿using CRI.HelloHouston.Experience;
+﻿using System;
+using CRI.HelloHouston.Experience;
+using CRI.HelloHouston.GameElement;
 using UnityEngine;
 
 namespace CRI.HelloHouston.Calibration
 {
-    public class VirtualHologramZone : VirtualZone
+    public class VirtualHologramZone : VirtualZone, IHologram
     {
         public override ZoneType zoneType
         {
@@ -17,7 +19,7 @@ namespace CRI.HelloHouston.Calibration
         {
             get
             {
-                return false;
+                return true;
             }
         }
 
@@ -36,9 +38,24 @@ namespace CRI.HelloHouston.Calibration
                 return null;
             }
         }
-
+        /// <summary>
+        /// The index of the hologram zone.
+        /// </summary>
+        [HideInInspector]
+        [Tooltip("The index of the hologram zone.")]
+        public int index;
         [SerializeField]
         private VirtualHologramElement _elementPrefab = null;
+
+        public bool visible
+        {
+            get
+            {
+                return _visible;
+            }
+        }
+        private bool _visible;
+
 
         private void ClearHolograms()
         {
@@ -46,6 +63,28 @@ namespace CRI.HelloHouston.Calibration
             {
                 Destroy(virtualHologramElements[i].gameObject);
                 virtualHologramElements[i] = null;
+            }
+        }
+
+        public virtual void ShowHologram()
+        {
+            _visible = true;
+            for (int i = 0; i < virtualHologramElements.Length; i++)
+            {
+                var element = (XPHologramElement)virtualElements[i].currentElement;
+                if (element != null && element.visible)
+                    element.Show();
+            }
+        }
+
+        public virtual void HideHologram()
+        {
+            _visible = false;
+            for (int i = 0; i < virtualHologramElements.Length; i++)
+            {
+                var element = (XPHologramElement)virtualElements[i].currentElement;
+                if (element != null && element.visible)
+                    element.Hide();
             }
         }
 
@@ -62,6 +101,8 @@ namespace CRI.HelloHouston.Calibration
             {
                 VirtualHologramElement ve = Instantiate(_elementPrefab, transform);
                 ve.PlaceObject(hologramZone.elementPrefabs[i], xpContext);
+                if (ve.currentElement != null && ve.currentElement is XPHologramElement)
+                    ((XPHologramElement)ve.currentElement).hologramZone = this;
                 virtualHologramElements[i] = ve;
             }
         }

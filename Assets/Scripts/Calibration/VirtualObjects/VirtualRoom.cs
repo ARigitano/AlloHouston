@@ -53,6 +53,12 @@ namespace CRI.HelloHouston.Calibration
             if (room.points.Length >= 3)
                 Calibrate(room.points);
             this.checklist = room.checklist;
+            var wtzones = GetZones<VirtualWallTopZone>();
+            var holzones = GetZones<VirtualHologramZone>();
+            for (int i = 0; i < wtzones.Length; i++)
+                wtzones[i].index = i;
+            for (int i = 0; i < holzones.Length; i++)
+                holzones[i].index = i;
         }
 
         /// <summary>
@@ -65,6 +71,18 @@ namespace CRI.HelloHouston.Calibration
             {
                 block.transform.SetParent(set ? transform : null);
             }
+        }
+
+        /// <summary>
+        /// Get all the zones of a type.
+        /// </summary>
+        /// <typeparam name="T">A type of zone.</typeparam>
+        /// <returns>An array of zone of the selected type.</returns>
+        public T[] GetZones<T>() where T : VirtualZone
+        {
+            if (blocks == null || blocks.Length == 0)
+                return new T[0];
+            return blocks.SelectMany(x => x.GetZones<T>()).ToArray();
         }
 
         /// <summary>

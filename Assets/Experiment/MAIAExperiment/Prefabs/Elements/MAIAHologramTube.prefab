@@ -581,6 +581,7 @@ Transform:
   - {fileID: 2033453594320576561}
   - {fileID: 6801029754301465630}
   - {fileID: 1150709544345999288}
+  - {fileID: 1637856673299190182}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -598,6 +599,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _elementName: 
   _canvasElement: 1
+  hologramZone: {fileID: 0}
   _headPrefab: {fileID: 4744561565852097709, guid: fe325c62ec2184e419782c3bc34f63fa,
     type: 3}
   _lineRendererPrefab: {fileID: 4744561565852097683, guid: d50a6511bbdf08d4cb9969cc579a08b8,
@@ -618,6 +620,7 @@ MonoBehaviour:
   - {fileID: 33970273169914432}
   _start1: {fileID: 744187390491120669}
   _start2: {fileID: 2033453594320576561}
+  _particleTransform: {fileID: 1637856673299190182}
   _animationElement: {fileID: 2113146588312384261}
 --- !u!114 &1120915866531385538
 MonoBehaviour:
@@ -1038,6 +1041,36 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4993085576833532}
   m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4798381585204189917
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1637856673299190182}
+  m_Layer: 0
+  m_Name: Particles
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1637856673299190182
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4798381585204189917}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4993085576833532}
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6431243878961135812
 GameObject:

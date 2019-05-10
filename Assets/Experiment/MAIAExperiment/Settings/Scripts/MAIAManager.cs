@@ -139,8 +139,8 @@ namespace CRI.HelloHouston.Experience.MAIA
             stepManager.SkipToStep("MO");
             tabletScreen.StartMO();
             topScreen.StartMO();
-            hologramFeynman.Hide();
-            hologramTube.Hide();
+            hologramFeynman.visible = false;
+            hologramTube.visible = false;
         }
 
         public void OnMOSuccess()
@@ -148,8 +148,8 @@ namespace CRI.HelloHouston.Experience.MAIA
             stepManager.SkipToStep("Password");
             topScreen.StartPassword();
             tabletScreen.StartPassword();
-            hologramFeynman.Hide();
-            hologramTube.Hide();
+            hologramFeynman.visible = false;
+            hologramTube.visible = false;
         }
 
         public void OnPasswordSuccess()
@@ -157,8 +157,8 @@ namespace CRI.HelloHouston.Experience.MAIA
             stepManager.SkipToStep("PI");
             topScreen.StartPI();
             tabletScreen.StartPI();
-            hologramFeynman.Hide();
-            hologramTube.Show();
+            hologramFeynman.visible = false;
+            hologramTube.visible = true;
         }
 
         public void OnPISuccess()
@@ -166,8 +166,8 @@ namespace CRI.HelloHouston.Experience.MAIA
             stepManager.SkipToStep("CI");
             topScreen.StartCI();
             tabletScreen.StartCI();
-            hologramFeynman.Hide();
-            hologramTube.Show();
+            hologramFeynman.visible = false;
+            hologramTube.visible = true;
         }
 
         public void OnCISuccess()
@@ -175,15 +175,15 @@ namespace CRI.HelloHouston.Experience.MAIA
             stepManager.SkipToStep("AMO");
             topScreen.StartAnalysisAnimation();
             tabletScreen.HideAllPanels();
-            hologramFeynman.Hide();
-            hologramTube.Hide();
+            hologramFeynman.visible = false;
+            hologramTube.visible = false;
         }
 
         public void OnAnalysisAnimationFinished()
         {
             tabletScreen.StartAMO();
-            hologramFeynman.Hide();
-            hologramTube.Hide();
+            hologramFeynman.visible = false;
+            hologramTube.visible = false;
         }
 
         public void OnAMOSuccess()
@@ -191,8 +191,8 @@ namespace CRI.HelloHouston.Experience.MAIA
             stepManager.SkipToStep("RI");
             topScreen.StartRI();
             tabletScreen.StartRI();
-            hologramFeynman.Show();
-            hologramTube.Hide();
+            hologramFeynman.visible = true;
+            hologramTube.visible = false;
         }
 
         public void OnRISuccess()
@@ -200,8 +200,8 @@ namespace CRI.HelloHouston.Experience.MAIA
             stepManager.SkipToStep("Finish");
             topScreen.StartVictory();
             tabletScreen.StartVictory();
-            hologramFeynman.Show();
-            hologramTube.Hide();
+            hologramFeynman.visible = true;
+            hologramTube.visible = false;
             Success();
         }
 
@@ -220,18 +220,20 @@ namespace CRI.HelloHouston.Experience.MAIA
             tubeScreen = null;
         }
 
-        protected override void PreShow(VirtualWallTopZone wallTopZone, ElementInfo[] info)
+        protected override void PreShow(VirtualWallTopZone wallTopZone, VirtualHologramZone virtualHologramZone, ElementInfo[] info)
         {
-            base.PreShow(wallTopZone, info);
+            base.PreShow(wallTopZone, virtualHologramZone, info);
+            hologramTube = GetElement<MAIAHologramTube>();
+            hologramFeynman = GetElement<MAIAHologramFeynman>();
             tabletScreen = GetElement<MAIATabletScreen>();
             topScreen = GetElement<MAIATopScreen>();
             tubeScreen = GetElement<MAIATubeScreen>();
             topScreen.tabletScreen = tabletScreen;
         }
 
-        protected override void PostShow(VirtualWallTopZone wallTopZone, ElementInfo[] zones)
+        protected override void PostShow(VirtualWallTopZone wallTopZone, VirtualHologramZone virtualHologramZone, ElementInfo[] zones)
         {
-            base.PostShow(wallTopZone, zones);
+            base.PostShow(wallTopZone, virtualHologramZone, zones);
             hologramTube.DisplayAllSplines();
             if (stepManager.currentStep != null && stepManager.currentStep.action != null)
                 stepManager.currentStep.action.Invoke();
@@ -246,8 +248,6 @@ namespace CRI.HelloHouston.Experience.MAIA
         protected override void PostInit(XPContext xpContext, ElementInfo[] info, LogExperienceController logController, int randomSeed, XPVisibility visibilityOnActivation)
         {
             base.PostInit(xpContext, info, logController, randomSeed, visibilityOnActivation);
-            hologramTube = GetElement<MAIAHologramTube>();
-            hologramFeynman = GetElement<MAIAHologramFeynman>();
             bottomScreen = GetElement<MAIABottomScreen>();
         }
     }

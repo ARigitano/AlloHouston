@@ -93,6 +93,7 @@ GameObject:
   - component: {fileID: 4327591675314324}
   - component: {fileID: 33549897637530716}
   - component: {fileID: 23588780917196958}
+  - component: {fileID: 7490269526538402978}
   m_Layer: 0
   m_Name: Hologram
   m_TagString: Untagged
@@ -112,6 +113,7 @@ Transform:
   m_LocalScale: {x: 0.1594047, y: 0.1594049, z: 0.15940489}
   m_Children:
   - {fileID: 4644697008414800}
+  - {fileID: 27354912227181074}
   m_Father: {fileID: 4442780407217852}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -160,6 +162,18 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!114 &7490269526538402978
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1249026050504780}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b098a720bad5e04f8cc69f5863ecc6a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1635225012038954
 GameObject:
   m_ObjectHideFlags: 0
@@ -236,7 +250,7 @@ GameObject:
   - component: {fileID: 4644697008414800}
   - component: {fileID: 114086162107081450}
   m_Layer: 0
-  m_Name: HologramZone
+  m_Name: HologramZone1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -268,6 +282,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38bdf89ccc2d3b248847716772f1c6f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  index: 0
   _elementPrefab: {fileID: 114852142036114162, guid: aab33dc939f1bf64b90ee30769e662eb,
     type: 3}
 --- !u!1 &226308544680858136
@@ -825,6 +840,52 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   index: 2
   _positionTagIndexTextPrefab: {fileID: 102496181755149656, guid: dc58f9ba75537744f80457927a3f604e,
+    type: 3}
+--- !u!1 &3317548386637830926
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 27354912227181074}
+  - component: {fileID: 3331128553270762151}
+  m_Layer: 0
+  m_Name: HologramZone2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &27354912227181074
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3317548386637830926}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4327591675314324}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
+--- !u!114 &3331128553270762151
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3317548386637830926}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38bdf89ccc2d3b248847716772f1c6f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  index: 0
+  _elementPrefab: {fileID: 114852142036114162, guid: aab33dc939f1bf64b90ee30769e662eb,
     type: 3}
 --- !u!1 &3606576174739269067
 GameObject:
@@ -1583,7 +1644,7 @@ PrefabInstance:
     - target: {fileID: 2066989430134611174, guid: 011bd1f7abeed7d41b548fd9948dce14,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 175
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2066989430134611174, guid: 011bd1f7abeed7d41b548fd9948dce14,
         type: 3}
@@ -1608,6 +1669,26 @@ PrefabInstance:
     - target: {fileID: 2066989430134611174, guid: 011bd1f7abeed7d41b548fd9948dce14,
         type: 3}
       propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6508169208463995567, guid: 011bd1f7abeed7d41b548fd9948dce14,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6508169208463995567, guid: 011bd1f7abeed7d41b548fd9948dce14,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8018243881558127637, guid: 011bd1f7abeed7d41b548fd9948dce14,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8018243881558127637, guid: 011bd1f7abeed7d41b548fd9948dce14,
+        type: 3}
+      propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

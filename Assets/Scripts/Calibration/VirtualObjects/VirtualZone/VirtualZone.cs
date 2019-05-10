@@ -62,6 +62,7 @@ namespace CRI.HelloHouston.Calibration
         /// </summary>
         public virtual XPElement[] CleanAll()
         {
+            this.manager = null;
             return virtualElements.Select(x => x.Clean()).ToArray();
         }
 

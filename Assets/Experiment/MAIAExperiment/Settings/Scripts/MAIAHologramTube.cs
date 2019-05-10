@@ -1,4 +1,5 @@
 ﻿using CRI.HelloHouston.WindowTemplate;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -122,6 +123,12 @@ namespace CRI.HelloHouston.Experience.MAIA
         [SerializeField]
         [Tooltip("Transform of a starting point of the spark effect.")]
         private Transform _start2 = null;
+        /// <summary>
+        /// Transform used as a parent for the particles.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("Transform used as a parent for the particles.")]
+        private Transform _particleTransform = null;
         [SerializeField]
         [Tooltip("Animation of the hologram tube.")]
         private AnimationElement _animationElement = null;
@@ -178,7 +185,7 @@ namespace CRI.HelloHouston.Experience.MAIA
                 }
             }
             //Generating the spline.
-            var spline = Instantiate(_particleSplinePrefab, Vector3.zero, Quaternion.identity, transform);
+            var spline = Instantiate(_particleSplinePrefab, Vector3.zero, Quaternion.identity, _particleTransform);
             spline.transform.localPosition = Vector3.zero;
             spline.transform.localRotation = Quaternion.identity;
             spline.Reset();
@@ -330,21 +337,23 @@ namespace CRI.HelloHouston.Experience.MAIA
         private void DisableObject()
         {
             gameObject.SetActive(false);
+            _particleTransform.gameObject.SetActive(false);
         }
 
         private void EnableObject()
         {
             gameObject.SetActive(true);
+            _particleTransform.gameObject.SetActive(true);
         }
 
-        public void Show()
+        public override void Show()
         {
             EnableObject();
             if (!_animationElement.visible)
                 _animationElement.Show();
         }
 
-        public void Hide()
+        public override void Hide()
         {
             StopAllCoroutines();
             if (_animationElement.visible)
@@ -384,12 +393,22 @@ namespace CRI.HelloHouston.Experience.MAIA
             CreateSplines(_maiaManager.generatedParticles);
         }
 
-        /// <summary>
-        /// Effect when the experiment is unpaused.
-        /// </summary>
-        public override void OnHide()
+        public override void Dismiss()
         {
-            Debug.Log(name + "Unpaused");
+            if (isActiveAndEnabled)
+                StartCoroutine(DelayedDismiss());
+            else
+                base.Dismiss();
+        }
+
+        public IEnumerator DelayedDismiss()
+        {
+            if (_animationElement != null && _animationElement.visible)
+            {
+                _animationElement.Hide();
+                yield return new WaitForSeconds(_animationElement.postHideDelay);
+            }
+            base. Dismiss();
         }
 
         public void OnVisibleStay(Camera camera)

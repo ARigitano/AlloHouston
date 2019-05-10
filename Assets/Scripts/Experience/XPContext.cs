@@ -169,7 +169,7 @@ namespace CRI.HelloHouston.Experience
             XPManager res = GameObject.Instantiate(_xpManagerPrefab);
             res.Init(this, zones, logExperienceController, randomSeed, XPVisibility.Visible);
             res.Activate();
-            res.Show((VirtualWallTopZone)zones.First(x => x.zoneType == ZoneType.WallTop));
+            res.Show((VirtualWallTopZone)zones.First(x => x.zoneType == ZoneType.WallTop), (VirtualHologramZone)zones.First(x => x.zoneType == ZoneType.Hologram));
             return res;
         }
     }

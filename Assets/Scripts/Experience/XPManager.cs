@@ -66,6 +66,10 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         public VirtualWallTopZone wallTopZone { get; protected set; }
         /// <summary>
+        /// The hologram zone.
+        /// </summary>
+        public VirtualHologramZone hologramZone { get; protected set; }
+        /// <summary>
         /// All the contents.
         /// </summary>
         protected List<ElementInfo> elements = new List<ElementInfo>();
@@ -284,6 +288,8 @@ namespace CRI.HelloHouston.Experience
             PreHide();
             if (this.wallTopZone != null)
                 CleanZone(wallTopZone);
+            if (this.hologramZone != null)
+                CleanZone(hologramZone);
             _previousVisibility = visibility;
             visibility = XPVisibility.Hidden;
             InvokeVisibilityEvent();
@@ -307,12 +313,18 @@ namespace CRI.HelloHouston.Experience
         /// <summary>
         /// To be called to call back the experiment after it has been paused.
         /// </summary>
-        public void Show(VirtualWallTopZone wallTopZone)
+        public void Show(VirtualWallTopZone wallTopZone, VirtualHologramZone hologramZone)
         {
             this.wallTopZone = wallTopZone;
             wallTopZone.Place(xpContext.xpWallTopZone, xpContext);
             InitZone(wallTopZone);
-            PreShow(wallTopZone, elements.ToArray());
+            this.hologramZone = hologramZone;
+            if (xpContext.xpHologramZone != null && hologramZone != null)
+            {
+                hologramZone.Place(xpContext.xpHologramZone, xpContext);
+                InitZone(hologramZone);
+            }
+            PreShow(wallTopZone, hologramZone, elements.ToArray());
             _previousVisibility = visibility;
             visibility = XPVisibility.Visible;
             InvokeVisibilityEvent();
@@ -321,17 +333,17 @@ namespace CRI.HelloHouston.Experience
             {
                 element.xpElement.OnShow(stepManager.sumValue);
             }
-            PostShow(wallTopZone, elements.ToArray());
+            PostShow(wallTopZone, hologramZone, elements.ToArray());
         }
 
         /// <summary>
         /// Called before the state changes to the visible state.
         /// </summary>
-        protected virtual void PreShow(VirtualWallTopZone wallTopZone, ElementInfo[] info) { }
+        protected virtual void PreShow(VirtualWallTopZone wallTopZone, VirtualHologramZone hologramZone, ElementInfo[] info) { }
         /// <summary>
         /// Called after the state changes to the visible state.
         /// </summary>
-        protected virtual void PostShow(VirtualWallTopZone wallTopZone, ElementInfo[] info) { }
+        protected virtual void PostShow(VirtualWallTopZone wallTopZone, VirtualHologramZone hologramZone, ElementInfo[] info) { }
 
         protected virtual void CleanZone(VirtualZone zone)
         {

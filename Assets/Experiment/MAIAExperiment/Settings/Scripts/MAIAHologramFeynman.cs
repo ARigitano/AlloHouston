@@ -26,7 +26,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         private MAIAHologramLineManager _lineManager;
         [SerializeField]
         [Tooltip("The animation sequence component.")]
-        private AnimationSequence _animationSequence;
+        private AnimationSequence _animationSequence = null;
 
         private Vector3[] _boxPositions;
         private Quaternion[] _boxRotations;
@@ -34,14 +34,6 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// Random generated with the GameManager's seed.
         /// </summary>
         private System.Random _rand;
-
-        public bool visible
-        {
-            get
-            {
-                return _animationSequence.visible;
-            }
-        }
 
         private void Reset()
         {
@@ -101,21 +93,65 @@ namespace CRI.HelloHouston.Experience.MAIA
             _animationSequence.Init(animations);
         }
 
-        public void Show(bool playIfVisible = false)
+        private void DisableObject()
         {
-            if (playIfVisible || !visible)
-                _animationSequence.Show();
+            gameObject.SetActive(false);
         }
 
-        public void Hide()
+        private void EnableObject()
         {
-            if (visible)
+            gameObject.SetActive(true);
+        }
+
+        public override void Show()
+        {
+            EnableObject();
+            if (!_animationSequence.visible)
+            {
+                StopAllCoroutines();
+                StartCoroutine(DelayedShow());
+            }
+        }
+
+        public override void Hide()
+        {
+            if (_animationSequence.visible)
+            {
                 _animationSequence.Hide();
+                Invoke("DisableObject", _animationSequence.postHideDelay);
+            }
         }
 
         public override void OnShow(int currentStep)
         {
             FillBoxesDiagrams();
+        }
+
+        public override void Dismiss()
+        {
+            if (isActiveAndEnabled)
+            {
+                StopAllCoroutines();
+                StartCoroutine(DelayedDismiss());
+            }
+            else
+                base.Dismiss();
+        }
+
+        private IEnumerator DelayedDismiss()
+        {
+            if (_animationSequence.visible)
+            {
+                Hide();
+                yield return new WaitForSeconds(_animationSequence.postHideDelay);
+            }
+            base.Dismiss();
+        }
+
+        private IEnumerator DelayedShow()
+        {
+            yield return new WaitForSeconds(_animationSequence.postHideDelay / 2.0f);
+            _animationSequence.Show();
         }
 
         public override void OnInit(XPManager manager, int randomSeed)

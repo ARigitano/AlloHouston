@@ -38,7 +38,7 @@ namespace CRI.HelloHouston.Experience.MAIA
         private Transform _anchorPoint = null;
         [SerializeField]
         [Tooltip("Duration of the animation before the animator animation.")]
-        private float _preAnimationDuration;
+        private float _preAnimationDuration = 0.0f;
         /// <summary>
         /// Anchor point for the line.
         /// </summary>
