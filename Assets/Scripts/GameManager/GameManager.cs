@@ -8,6 +8,7 @@ using CRI.HelloHouston.Translation;
 using UnityEngine.SceneManagement;
 using CRI.HelloHouston.Settings;
 using CRI.HelloHouston.GameElements;
+using CRI.HelloHouston.GameElement;
 
 namespace CRI.HelloHouston.Experience
 {
@@ -105,6 +106,7 @@ namespace CRI.HelloHouston.Experience
         public int xpTimeEstimate { get; private set; }
 
         private VirtualRoom _room;
+        private RoomAnimator _roomAnimator;
 
         public string sourceName
         {
@@ -137,6 +139,7 @@ namespace CRI.HelloHouston.Experience
             s_randomSeed = seed;
             this.xpTimeEstimate = timeEstimate;
             _room = room;
+            _roomAnimator = room.GetComponent<RoomAnimator>();
             xpManagers = xpContexts.Select(xpContext => xpContext.InitManager(logManager.logExperienceController, room.GetZones().Where(zone => zone.xpContext == xpContext).ToArray(), s_randomSeed)).ToArray();
             _startTime = Time.time;
             logGeneralController.AddLog(string.Format("Random Seed: {0}", randomSeed), this, Log.LogType.Important);
@@ -151,17 +154,44 @@ namespace CRI.HelloHouston.Experience
         }
 
         /// <summary>
+        /// Unloads an xp from a wall top zone.
+        /// </summary>
+        /// <param name="wallTopIndex">The index of the wall top zone from which the experience will be unloaded.</param>
+        public void UninstallXP(int wallTopIndex)
+        {
+            var zone = _room.GetZones<VirtualWallTopZone>().FirstOrDefault(x => x.index == wallTopIndex);
+            if (zone != null)
+                UninstallXP(zone);
+        }
+
+        /// <summary>
+        /// Unloads an xp from a wall top zone.
+        /// </summary>
+        /// <param name="zone">The wall top zone from which the experience will be unloaded.</param>
+        public void UninstallXP(VirtualWallTopZone zone)
+        {
+            XPManager manager = zone.manager;
+            if (manager == null)
+                return;
+            var vhzone = _room.GetZones<VirtualHologramZone>().FirstOrDefault(x => x.index == zone.index && x.xpZone == null);
+            if (vhzone == null)
+                vhzone = _room.GetZones<VirtualHologramZone>().FirstOrDefault(x => x.xpZone == null);
+            logGeneralController.AddLog(string.Format("XP Unloaded: {0}", manager.xpContext.contextName), this, Log.LogType.Important);
+            _roomAnimator.UninstallTubex(zone.index, manager, () => { manager.Hide(); });
+        }
+
+        /// <summary>
         /// Loads an experience into a wall top zone.
         /// </summary>
         /// <param name="managerIndex">The index of the experience that will be loaded.</param>
         /// <param name="wallTopIndex">The index of the zone that will be loaded.</param>
-        public void LoadXP(int managerIndex, int wallTopIndex)
+        public void InstallXP(int managerIndex, int wallTopIndex)
         {
             var zone = _room.GetZones<VirtualWallTopZone>().FirstOrDefault(x => x.index == wallTopIndex);
             XPManager[] managers = xpManagers;
             XPManager manager = managerIndex < managers.Length ? managers[managerIndex] : null;
             if (manager != null && zone != null)
-                LoadXP(manager, zone);
+                InstallXP(manager, zone);
         }
 
         /// <summary>
@@ -169,19 +199,19 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         /// <param name="manager">The manager of the experience that will be loaded.</param>
         /// <param name="zone">The wall top zone in which the experience will be loaded.</param>
-        public void LoadXP(XPManager manager, VirtualWallTopZone zone)
+        public void InstallXP(XPManager manager, VirtualWallTopZone zone)
         {
-            logGeneralController.AddLog(string.Format("XP Loaded: {0}", manager.xpContext.contextName), this, Log.LogType.Important);
-            // No need to load the experiment if it's already there.
-            if (zone.manager == manager)
+            // No need to load the experiment if it's already there or if the manager is already loaded elsewhere.
+            if (zone.manager == manager || manager.visibility == XPVisibility.Visible)
                 return;
             // We unload the current experiment if there's one.
-            if (zone.manager != null) 
-                zone.manager.Hide();
+            if (zone.manager != null)
+                UninstallXP(zone);
             var vhzone = _room.GetZones<VirtualHologramZone>().FirstOrDefault(x => x.index == zone.index && x.xpZone == null);
             if (vhzone == null)
                 vhzone = _room.GetZones<VirtualHologramZone>().FirstOrDefault(x => x.xpZone == null);
-            manager.Show(zone, vhzone);
+            logGeneralController.AddLog(string.Format("XP Loaded: {0}", manager.xpContext.contextName), this, Log.LogType.Important);
+            _roomAnimator.InstallTubex(zone.index, manager, () => { manager.Show(zone, vhzone); });
         }
 
         public void SendHintToPlayers(string hint)

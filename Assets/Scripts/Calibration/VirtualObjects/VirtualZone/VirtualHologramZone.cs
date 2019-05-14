@@ -56,7 +56,6 @@ namespace CRI.HelloHouston.Calibration
         }
         private bool _visible;
 
-
         private void ClearHolograms()
         {
             for (int i = 0; virtualHologramElements != null && i < virtualHologramElements.Length; i++)
@@ -90,6 +89,8 @@ namespace CRI.HelloHouston.Calibration
 
         protected override void AddXPZone(XPZone xpZone, XPContext xpContext)
         {
+            if (xpZone == null)
+                return;
             var hologramZone = xpZone as XPHologramZone;
             if (!hologramZone)
                 throw new WrongZoneTypeException();

@@ -3,6 +3,9 @@ using System.Linq;
 using VRCalibrationTool;
 using CRI.HelloHouston.Experience;
 using System.Collections.Generic;
+using UnityEngine;
+using CRI.HelloHouston.GameElement;
+using System;
 
 namespace CRI.HelloHouston.Calibration
 {
@@ -35,11 +38,14 @@ namespace CRI.HelloHouston.Calibration
         /// <summary>
         /// The block of the room.
         /// </summary>
+        [Tooltip("The blocks of the room.")]
         public VirtualBlock[] blocks;
         /// <summary>
         /// Checklist for the room.
         /// </summary>
+        [Tooltip("Checklist for the room.")]
         public List<string> checklist;
+        
 
         /// <summary>
         /// Init a VirtualRoom
@@ -53,12 +59,6 @@ namespace CRI.HelloHouston.Calibration
             if (room.points.Length >= 3)
                 Calibrate(room.points);
             this.checklist = room.checklist;
-            var wtzones = GetZones<VirtualWallTopZone>();
-            var holzones = GetZones<VirtualHologramZone>();
-            for (int i = 0; i < wtzones.Length; i++)
-                wtzones[i].index = i;
-            for (int i = 0; i < holzones.Length; i++)
-                holzones[i].index = i;
         }
 
         /// <summary>

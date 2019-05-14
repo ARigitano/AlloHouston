@@ -298,6 +298,12 @@ namespace CRI.HelloHouston.Calibration
                 vroom.blocks[i] = Instantiate(GetVirtualBlockPrefab(roomEntry.blocks[i]), vroom.calibrated ? vroom.transform : null);
                 vroom.blocks[i].Init(roomEntry.blocks[i], i);
             }
+            var wtzones = vroom.GetZones<VirtualWallTopZone>();
+            var holzones = vroom.GetZones<VirtualHologramZone>();
+            for (int i = 0; i < wtzones.Length; i++)
+                wtzones[i].index = i;
+            for (int i = 0; i < holzones.Length; i++)
+                holzones[i].index = i;
             return vroom;
         }
 

@@ -78,7 +78,6 @@ namespace CRI.HelloHouston.Calibration
         /// <summary>
         /// The index of the wall top zone.
         /// </summary>
-        [HideInInspector]
         [Tooltip("The index of the wall top zone.")]
         public int index;
         /// <summary>

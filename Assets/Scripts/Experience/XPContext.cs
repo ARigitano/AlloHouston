@@ -1,4 +1,5 @@
 ﻿using CRI.HelloHouston.Calibration;
+using CRI.HelloHouston.GameElements;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,6 +39,12 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         [Tooltip("All the settings of this particular experience.")]
         public XPContextSettings xpSettings;
+
+        /// <summary>
+        /// The type of tubex for this experience.
+        /// </summary>
+        [Tooltip("The type of tubex for this experience.")]
+        public TubexType tubexType;
 
         /// <summary>
         /// An empty object with the XpSynchronizer inhreting script of the experiment.
@@ -167,9 +174,8 @@ namespace CRI.HelloHouston.Experience
         public XPManager InitManager(LogExperienceController logExperienceController, VirtualZone[] zones, int randomSeed)
         {
             XPManager res = GameObject.Instantiate(_xpManagerPrefab);
-            res.Init(this, zones, logExperienceController, randomSeed, XPVisibility.Visible);
+            res.Init(this, zones, logExperienceController, randomSeed, XPVisibility.Hidden);
             res.Activate();
-            res.Show((VirtualWallTopZone)zones.First(x => x.zoneType == ZoneType.WallTop), (VirtualHologramZone)zones.First(x => x.zoneType == ZoneType.Hologram));
             return res;
         }
     }
