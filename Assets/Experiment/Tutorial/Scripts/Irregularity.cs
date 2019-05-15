@@ -57,6 +57,7 @@ namespace CRI.HelloHouston.Experience.Tutorial
         // Start is called before the first frame update
         void Start()
         {
+            //_hologram = GameObject.FindWithTag("").GetComponent<TutorialHologram>();
             //var hands = FindObjectsOfType<Hand>();
             //ushort duration = (ushort)Random.Range(99999, 99999999);
             //Debug.Log(hands[0]);

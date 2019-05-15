@@ -43,7 +43,7 @@ namespace CRI.HelloHouston.Experience.Tutorial
             }
 
             //_nbIrregukarities = _irregularities.Count;
-            _uiNbIrregularities.text = _nbIrregularities.ToString();
+            //_uiNbIrregularities.text = _nbIrregularities.ToString();
 
             StartCoroutine("CountDown");
         }
@@ -68,7 +68,7 @@ namespace CRI.HelloHouston.Experience.Tutorial
 
             if (!win)
             {
-                _uiNbIrregularities.text = "Fail";
+                _uiTimer.text = "Fail";
                 tutorialManager.EndMaintenance();
             }
         }
@@ -85,7 +85,7 @@ namespace CRI.HelloHouston.Experience.Tutorial
 
             if(_nbSuccess * 2 >= _nbIrregularities)
             {
-                _uiNbIrregularities.text = "winrar";
+                _uiTimer.text = "winrar";
                 win = true;
             }
         }

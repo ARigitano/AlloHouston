@@ -109,7 +109,12 @@ namespace Valve.VR.InteractionSystem
 
         private void OnTriggerEnter(Collider other)
         {
-            if(other.tag == "TubeDock" && other.transform.childCount == 0)
+            if (other.tag == "ViveController")
+            {
+                isDocked = false;
+            }
+
+            if (other.tag == "TubeDock" && other.transform.childCount == 0)
             {
                 _destinationSlot = other.transform;
             }
@@ -120,10 +125,27 @@ namespace Valve.VR.InteractionSystem
                 transform.position = other.transform.position;
                 transform.rotation = other.transform.rotation;
             }
+
+            
         }
 
         private void OnTriggerExit(Collider other)
         {
+            if (other.tag == "ViveController")
+            {
+                if (_destinationSlot != null)
+                {
+                    gameObject.transform.parent = _destinationSlot;
+                    isDocked = true;
+                    _station.LoadingTube(experience, _destinationSlot.GetComponent<TubeSlot>().topZone);
+                }
+                else
+                {
+                    gameObject.transform.parent = _originalSlot;
+                    isDocked = true;
+                }
+            }
+
             if (other.tag == "TubeDock")
             {
                 _destinationSlot = null;
