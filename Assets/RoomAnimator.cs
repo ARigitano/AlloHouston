@@ -66,7 +66,7 @@ namespace CRI.HelloHouston.GameElement
                 {
                     PlierAnimator plierAnimator = _plierAnimators[index];
                     // We can't start the animation if there's already a tubex in the plier or if a tubex of the same experiment is loaded elsewhere.
-                    if (plierAnimator.manager == null && plierAnimator.tubex == null && _plierAnimators.Count(x => x.manager) == 0)
+                    if (plierAnimator.manager == null && plierAnimator.tubex == null && !_plierAnimators.Any(x => x.manager == manager))
                     {
                         GameObject tubex = Instantiate(_tubexDatabase.GetTubex(manager.xpContext.tubexType));
                         _armAnimator.SetTubex(tubex, index, plierAnimator.transform, true);
@@ -76,10 +76,10 @@ namespace CRI.HelloHouston.GameElement
                         plierAnimator.InstallTubex();
                     }
                     else
-                        Dequeue();
+                        Debug.Log("Error 1");
                 }
                 else
-                    Dequeue();
+                    Debug.Log("Error 2");
             }
             else
             {
@@ -91,7 +91,6 @@ namespace CRI.HelloHouston.GameElement
         /// Installs the tubex from the desired location. The index is the index of the plier on which the tubex is to be uninstalled.
         /// </summary>
         /// <param name="index">Index of the plier on which the tubex is to be uninstalled.</param>
-        /// 
         /// <param name="manager">Manager of the tubex that will be uninstalled.</param>
         /// <param name="actionOnInstall">Action to be called when the uninstallation is done.</param>
         public void UninstallTubex(int index, XPManager manager, Action actionOnUninstall = null)
@@ -104,7 +103,7 @@ namespace CRI.HelloHouston.GameElement
                     GameObject tubex = plierAnimator.tubex;
                     XPManager plierManager = plierAnimator.manager;
                     // We can't play the animation if the plier doesn't have the tubex.
-                    if (tubex != null && manager != null && plierManager == plierAnimator.manager)
+                    if (tubex != null && manager != null && plierManager == manager)
                     {
                         _armAnimator.SetTubex(tubex, index, plierAnimator.transform, false);
                         _armAnimator.UninstallTubex(index, actionOnUninstall);
@@ -113,15 +112,11 @@ namespace CRI.HelloHouston.GameElement
                         if (index < _plierAnimators.Length)
                             _plierAnimators[index].UninstallTubex();
                     }
-                    else
-                        Dequeue();
                 }
-                else
-                    Dequeue();
             }
             else
             {
-                _instructionQueue.Enqueue(new RoomAnimatorInstruction(false, index, null, actionOnUninstall));
+                _instructionQueue.Enqueue(new RoomAnimatorInstruction(false, index, manager, actionOnUninstall));
             }
         }
 
@@ -145,6 +140,7 @@ namespace CRI.HelloHouston.GameElement
         {
             if (_instructionQueue.Count != 0)
             {
+                Debug.Log("Dequeue");
                 RoomAnimatorInstruction instruction = _instructionQueue.Dequeue();
                 if (instruction.install)
                     InstallTubex(instruction);

@@ -202,11 +202,8 @@ namespace CRI.HelloHouston.Experience
         public void InstallXP(XPManager manager, VirtualWallTopZone zone)
         {
             // No need to load the experiment if it's already there or if the manager is already loaded elsewhere.
-            if (zone.manager == manager || manager.visibility == XPVisibility.Visible)
+            if (zone.manager != null || manager.visibility == XPVisibility.Visible)
                 return;
-            // We unload the current experiment if there's one.
-            if (zone.manager != null)
-                UninstallXP(zone);
             var vhzone = _room.GetZones<VirtualHologramZone>().FirstOrDefault(x => x.index == zone.index && x.xpZone == null);
             if (vhzone == null)
                 vhzone = _room.GetZones<VirtualHologramZone>().FirstOrDefault(x => x.xpZone == null);
