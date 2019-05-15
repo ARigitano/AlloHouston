@@ -137,6 +137,8 @@ namespace CRI.HelloHouston.GameElement
         public void OnAnimationEnd()
         {
             busy = false;
+            if (!_animator.GetBool("Install"))
+                Destroy(_tubex);
             if (onAnimationEnd != null)
                 onAnimationEnd();
         }

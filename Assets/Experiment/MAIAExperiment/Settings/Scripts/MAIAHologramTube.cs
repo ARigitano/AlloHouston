@@ -382,6 +382,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             base.OnInit(manager, randomSeed);
             Init((MAIAManager)manager);
             _rand = new System.Random(randomSeed);
+            DisableObject();
         }
 
         /// <summary>

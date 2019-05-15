@@ -159,6 +159,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             base.OnInit(manager, randomSeed);
             _rand = new System.Random(randomSeed);
             Init((MAIAManager)manager);
+            DisableObject();
         }
 
         public override void OnActivation()
