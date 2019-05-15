@@ -69,10 +69,11 @@ namespace CRI.HelloHouston.GameElement
                     if (plierAnimator.manager == null && plierAnimator.tubex == null && !_plierAnimators.Any(x => x.manager == manager))
                     {
                         GameObject tubex = Instantiate(_tubexDatabase.GetTubex(manager.xpContext.tubexType));
-                        _armAnimator.SetTubex(tubex, index, plierAnimator.transform, true);
+                        int animationIndex = UnityEngine.Random.Range(0, 2);
+                        _armAnimator.SetTubex(tubex, animationIndex, plierAnimator.transform, true);
                         plierAnimator.manager = manager;
                         plierAnimator.tubex = tubex;
-                        _armAnimator.InstallTubex(index, actionOnInstall);
+                        _armAnimator.InstallTubex(index, animationIndex, actionOnInstall);
                         plierAnimator.InstallTubex();
                     }
                     else
@@ -105,8 +106,9 @@ namespace CRI.HelloHouston.GameElement
                     // We can't play the animation if the plier doesn't have the tubex.
                     if (tubex != null && manager != null && plierManager == manager)
                     {
+                        int animationIndex = UnityEngine.Random.Range(0, 2);
                         _armAnimator.SetTubex(tubex, index, plierAnimator.transform, false);
-                        _armAnimator.UninstallTubex(index, actionOnUninstall);
+                        _armAnimator.UninstallTubex(index, animationIndex, actionOnUninstall);
                         plierAnimator.tubex = null;
                         plierAnimator.manager = null;
                         if (index < _plierAnimators.Length)

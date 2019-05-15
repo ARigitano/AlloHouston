@@ -30,13 +30,13 @@ namespace CRI.HelloHouston.GameElement
             _animator = GetComponent<Animator>();
         }
 
-        public void SetTubex(GameObject tubex, int index, Transform plierTransform, bool install)
+        public void SetTubex(GameObject tubex, int animationIndex, Transform plierTransform, bool install)
         {
             _tubex = tubex;
             if (install)
             {
-                if (index < _tubexAttachPoints.Length)
-                    _tubex.transform.SetParent(_tubexAttachPoints[index]);
+                if (animationIndex < _tubexAttachPoints.Length)
+                    _tubex.transform.SetParent(_tubexAttachPoints[animationIndex]);
                 _plierTransform = plierTransform;
                 _tubex.transform.localPosition = Vector3.zero;
                 _tubex.transform.localRotation = Quaternion.identity;
@@ -48,11 +48,12 @@ namespace CRI.HelloHouston.GameElement
         /// </summary>
         /// <param name="index">The index of the animation.</param>
         /// <param name="onInstall">Action to be triggered at the exact animation frame the tubex gets installed.</param>
-        public void InstallTubex(int index, Action onInstall = null)
+        public void InstallTubex(int index, int animationIndex, Action onInstall = null)
         {
             _animator.SetInteger("Index", index);
             _animator.SetBool("Install", true);
             _animator.SetTrigger("StartAnimation");
+            _animator.SetInteger("AnimIndex", animationIndex);
             _installAction = onInstall;
         }
 
@@ -61,11 +62,12 @@ namespace CRI.HelloHouston.GameElement
         /// </summary>
         /// <param name="index">The index of the animation.</param>
         /// <param name="onUninstall">Action to be triggered at the exact animation frame the tubex gets uninstalled.</param>
-        public void UninstallTubex(int index, Action onUninstall = null)
+        public void UninstallTubex(int index, int animationIndex, Action onUninstall = null)
         {
             _animator.SetInteger("Index", index);
             _animator.SetBool("Install", false);
             _animator.SetTrigger("StartAnimation");
+            _animator.SetInteger("AnimIndex", animationIndex);
             _uninstallAction = onUninstall;
         }
 

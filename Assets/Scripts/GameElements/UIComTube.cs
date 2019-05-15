@@ -61,6 +61,7 @@ namespace CRI.HelloHouston.GameElements
             if (_xpManager != null)
             {
                 _xpManager.stepManager.onStepChange += OnStepChange;
+                _xpManager.onVisibilityChange += OnVisibilityChange;
                 _xpManager.onStateChange += OnStateChange;
             }
         }
@@ -70,6 +71,7 @@ namespace CRI.HelloHouston.GameElements
             if (_xpManager != null)
             {
                 _xpManager.stepManager.onStepChange -= OnStepChange;
+                _xpManager.onVisibilityChange -= OnVisibilityChange;
                 _xpManager.onStateChange -= OnStateChange;
             }
         }
@@ -79,9 +81,11 @@ namespace CRI.HelloHouston.GameElements
             int steps = xpManager.stepManager.maxStepValue;
             _xpManager = xpManager;
             _xpManager.stepManager.onStepChange += OnStepChange;
+            _xpManager.onVisibilityChange += OnVisibilityChange;
             _xpManager.onStateChange += OnStateChange;
             _fillItems = new Image[steps];
             _xpNameText.text = xpManager.xpContext.xpGroup.experimentName;
+            _xpSmallNameText.text = xpManager.xpContext.xpGroup.experimentName;
             for (int i = 0; i < steps; i++)
                 _fillItems[i] = Instantiate(_fillItemPrefab, _fillGroup).GetComponentInChildren<Image>();
             UpdateSteps(_xpManager.stepManager.sumValue, _xpManager.state);
@@ -93,6 +97,11 @@ namespace CRI.HelloHouston.GameElements
             UpdateSteps(e.currentStepValue, _xpManager.state);
         }
 
+        private void OnVisibilityChange(object sender, XPManagerEventArgs e)
+        {
+            UpdateTubes(e.currentVisiblity);
+            UpdateSteps(_xpManager.stepManager.sumValue, e.currentState);
+        }
 
         private void OnStateChange(object sender, XPManagerEventArgs e)
         {
@@ -100,9 +109,10 @@ namespace CRI.HelloHouston.GameElements
             UpdateSteps(_xpManager.stepManager.sumValue, e.currentState);
         }
 
-        private void UpdateTubes(XPVisibility currentState)
+        private void UpdateTubes(XPVisibility currentVisibility)
         {
-            bool visible = (currentState == XPVisibility.Visible);
+            Debug.Log(currentVisibility);
+            bool visible = (currentVisibility == XPVisibility.Visible);
             _tube.SetActive(visible);
             _smallTube.SetActive(!visible);
         }
