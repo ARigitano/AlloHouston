@@ -32,8 +32,12 @@ namespace CRI.HelloHouston.Calibration.UI
             _nextObject = obj;
             _rmst = (RoomSettings)obj;
             _nextButton.onClick.AddListener(Next);
+
+            //Camera.main.cullingMask &= ~(1 << LayerMask.NameToLayer("Default"));
+
             RoomSettings rmst = (RoomSettings)_nextObject;
             _timeInputField.text = _rmst.timeEstimate.ToString();
+
         }
 
         public override void Next()

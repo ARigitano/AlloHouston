@@ -27,6 +27,9 @@ namespace CRI.HelloHouston.Translation
 
         public TextManager(LangManager langManager, TextAsset[] langTextFiles, TextAsset commonTextFile) : this(langManager)
         {
+            this.langManager = langManager;
+            if (langTextFiles.Length == 0)
+                return;
             foreach (var textAsset in langTextFiles)
             {
                 try
