@@ -25,21 +25,19 @@ namespace CRI.HelloHouston.GameElements
         private float _totalDuration;
         private int _totalManagers;
 
-
-        
         private void OnEnable()
         {
-            foreach (XPManager manager in _managers)
+            for (int i = 0; _managers != null && i < _managers.Length; i++)
             {
-                manager.onStateChange += OnManagerStateChange;
+                _managers[i].onStateChange += OnManagerStateChange;
             }
         }
 
         private void OnDisable()
         {
-            foreach (XPManager manager in _managers)
+            for (int i = 0; _managers != null && i < _managers.Length; i++)
             {
-                manager.onStateChange -= OnManagerStateChange;
+                _managers[i].onStateChange -= OnManagerStateChange;
             }
         }
 

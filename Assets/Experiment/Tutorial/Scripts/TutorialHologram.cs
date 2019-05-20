@@ -39,12 +39,7 @@ namespace CRI.HelloHouston.Experience.Tutorial
             foreach(GameObject irregularity in GameObject.FindGameObjectsWithTag("Irregularity"))
             {
                 _nbIrregularities++;
-                //_irregularities.Add(irregularity);
             }
-
-            //_nbIrregukarities = _irregularities.Count;
-            //_uiNbIrregularities.text = _nbIrregularities.ToString();
-
             StartCoroutine("CountDown");
         }
 
@@ -78,9 +73,6 @@ namespace CRI.HelloHouston.Experience.Tutorial
         /// </summary>
         public void UpdateNbIrregularities()
         {
-            //_nbIrregularities--;
-            //_uiNbIrregularities.text = _nbIrregularities.ToString();
-
             _nbSuccess++;
 
             if(_nbSuccess * 2 >= _nbIrregularities)
@@ -88,12 +80,6 @@ namespace CRI.HelloHouston.Experience.Tutorial
                 _uiTimer.text = "winrar";
                 win = true;
             }
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
         }
 
         public override void OnShow(int currentStep)

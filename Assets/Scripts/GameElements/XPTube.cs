@@ -3,25 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using CRI.HelloHouston.Experience.MAIA;
 using CRI.HelloHouston.Experience;
-
+using CRI.HelloHouston.GameElements;
 
 namespace Valve.VR.InteractionSystem
 {
     /// <summary>
     /// Holographic tube containing the troubled experiment.
     /// </summary>
-    public class ErrorTubeX : MonoBehaviour
+    public class XPTube : MonoBehaviour
     {
         /// <summary>
         /// Transforms of the original position and destination position for the tube to travel between.
         /// </summary>
         [SerializeField]
-        private Transform _originalSlot, _destinationSlot;
-        /// <summary>
-        /// Script for the holographic station.
-        /// </summary>
-        [SerializeField]
-        private ChangingTube _station;
+        private Transform _originalSlot;
+
+        private Transform _destinationSlot;
         /// <summary>
         /// Materials depending if tube is available or not for replacement.
         /// </summary>
@@ -30,7 +27,8 @@ namespace Valve.VR.InteractionSystem
         /// <summary>
         /// Reference to the experiment contained in the tube.
         /// </summary>
-        public XPManager experience;
+        [HideInInspector]
+        public XPManager manager;
         /// <summary>
         /// Is the tube fixed or moving?
         /// </summary>
@@ -42,14 +40,6 @@ namespace Valve.VR.InteractionSystem
         private float _speed = 2f;
         [SerializeField]
         private GameObject _statusPanel;
-       
-
-        // Start is called before the first frame update
-        void Start()
-        {
-            _station = GameObject.FindGameObjectWithTag("Station").GetComponent <ChangingTube>();
-            _station.tubes.Add(this);
-        }
 
         // Update is called once per frame
         void Update()
@@ -98,7 +88,7 @@ namespace Valve.VR.InteractionSystem
             {
                 gameObject.transform.parent = _destinationSlot;
                 isDocked = true;
-                _station.LoadingTube(experience, _destinationSlot.GetComponent<TubeSlot>().topZone);
+                _destinationSlot.GetComponent<TubeSlot>().LoadExperiment(manager);
             } 
             else
             {
@@ -113,20 +103,17 @@ namespace Valve.VR.InteractionSystem
             {
                 isDocked = false;
             }
-
             if (other.tag == "TubeDock" && other.transform.childCount == 0)
             {
-                _destinationSlot = other.transform;
+                _destinationSlot = gameObject.transform;
             }
-            else if (other.tag == "TubeBase")
+            if (other.tag == "TubeBase")
             {
                 _statusPanel.SetActive(true);
                 isDocked = false;
                 transform.position = other.transform.position;
                 transform.rotation = other.transform.rotation;
             }
-
-            
         }
 
         private void OnTriggerExit(Collider other)
@@ -137,7 +124,7 @@ namespace Valve.VR.InteractionSystem
                 {
                     gameObject.transform.parent = _destinationSlot;
                     isDocked = true;
-                    _station.LoadingTube(experience, _destinationSlot.GetComponent<TubeSlot>().topZone);
+                    _destinationSlot.GetComponent<TubeSlot>().LoadExperiment(manager);
                 }
                 else
                 {
@@ -145,9 +132,9 @@ namespace Valve.VR.InteractionSystem
                     isDocked = true;
                 }
             }
-
             if (other.tag == "TubeDock")
             {
+                _destinationSlot.GetComponent<TubeSlot>().UnloadExperiment();
                 _destinationSlot = null;
             }
             else if (other.tag == "TubeBase")

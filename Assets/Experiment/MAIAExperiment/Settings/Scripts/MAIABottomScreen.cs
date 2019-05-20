@@ -60,7 +60,6 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             Debug.Log(manager);
             maiaManager = manager;
-            Debug.Log(maiaManager);
         }
 
         public override void OnInit(XPManager manager, int randomSeed)

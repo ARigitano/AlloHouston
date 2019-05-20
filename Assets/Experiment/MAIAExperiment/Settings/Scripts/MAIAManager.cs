@@ -103,7 +103,6 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         private List<Reaction> SelectReactions()
         {
-            Debug.Log("test");
             ongoingReactions = settings.allReactions
                 .Where(reaction => reaction.fundamental)
                 .OrderBy(reaction => _rand.Next())

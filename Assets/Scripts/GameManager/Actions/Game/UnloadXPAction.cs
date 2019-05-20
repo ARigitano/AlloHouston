@@ -12,7 +12,7 @@ namespace CRI.HelloHouston.Experience.Actions
         public override void Act(GameManager controller)
         {
             if (controller != null)
-                controller.UninstallXP(wallTopIndex);
+                controller.UnloadXP(wallTopIndex);
         }
     }
 }

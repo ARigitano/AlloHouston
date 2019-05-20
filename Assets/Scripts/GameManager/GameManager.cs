@@ -107,6 +107,7 @@ namespace CRI.HelloHouston.Experience
 
         private VirtualRoom _room;
         private RoomAnimator _roomAnimator;
+        private HologramManager _hologramManager;
 
         public string sourceName
         {
@@ -140,10 +141,14 @@ namespace CRI.HelloHouston.Experience
             this.xpTimeEstimate = timeEstimate;
             _room = room;
             _roomAnimator = room.GetComponent<RoomAnimator>();
+            _hologramManager = room.GetComponentInChildren<HologramManager>(true);
+            // Managers init
             xpManagers = xpContexts.Select(xpContext => xpContext.InitManager(logManager.logExperienceController, room.GetZones().Where(zone => zone.xpContext == xpContext).ToArray(), s_randomSeed)).ToArray();
+            // Change tube init
+            _room.GetComponentInChildren<ChangeTubeHologram>(true).Init(this, xpManagers, _room.GetZones<VirtualWallTopZone>());
             _startTime = Time.time;
             logGeneralController.AddLog(string.Format("Random Seed: {0}", randomSeed), this, Log.LogType.Important);
-            _comScreen = room.GetComponentInChildren<UIComScreen>();
+            _comScreen = room.GetComponentInChildren<UIComScreen>(true);
             _comScreen.Init(this, xpManagers);
             return xpManagers;
         }
@@ -157,18 +162,18 @@ namespace CRI.HelloHouston.Experience
         /// Unloads an xp from a wall top zone.
         /// </summary>
         /// <param name="wallTopIndex">The index of the wall top zone from which the experience will be unloaded.</param>
-        public void UninstallXP(int wallTopIndex)
+        public void UnloadXP(int wallTopIndex)
         {
             var zone = _room.GetZones<VirtualWallTopZone>().FirstOrDefault(x => x.index == wallTopIndex);
             if (zone != null)
-                UninstallXP(zone);
+                UnloadXP(zone);
         }
 
         /// <summary>
         /// Unloads an xp from a wall top zone.
         /// </summary>
         /// <param name="zone">The wall top zone from which the experience will be unloaded.</param>
-        public void UninstallXP(VirtualWallTopZone zone)
+        public void UnloadXP(VirtualWallTopZone zone)
         {
             XPManager manager = zone.manager;
             if (manager == null)
@@ -185,13 +190,13 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         /// <param name="managerIndex">The index of the experience that will be loaded.</param>
         /// <param name="wallTopIndex">The index of the zone that will be loaded.</param>
-        public void InstallXP(int managerIndex, int wallTopIndex)
+        public void LoadXP(int managerIndex, int wallTopIndex)
         {
             var zone = _room.GetZones<VirtualWallTopZone>().FirstOrDefault(x => x.index == wallTopIndex);
             XPManager[] managers = xpManagers;
             XPManager manager = managerIndex < managers.Length ? managers[managerIndex] : null;
             if (manager != null && zone != null)
-                InstallXP(manager, zone);
+                LoadXP(manager, zone);
         }
 
         /// <summary>
@@ -199,7 +204,7 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         /// <param name="manager">The manager of the experience that will be loaded.</param>
         /// <param name="zone">The wall top zone in which the experience will be loaded.</param>
-        public void InstallXP(XPManager manager, VirtualWallTopZone zone)
+        public void LoadXP(XPManager manager, VirtualWallTopZone zone)
         {
             // No need to load the experiment if it's already there or if the manager is already loaded elsewhere.
             if (zone.manager != null || manager.visibility == XPVisibility.Visible)
@@ -209,6 +214,15 @@ namespace CRI.HelloHouston.Experience
                 vhzone = _room.GetZones<VirtualHologramZone>().FirstOrDefault(x => x.xpZone == null);
             logGeneralController.AddLog(string.Format("XP Loaded: {0}", manager.xpContext.contextName), this, Log.LogType.Important);
             _roomAnimator.InstallTubex(zone.index, manager, () => { manager.Show(zone, vhzone); });
+        }
+
+        /// <summary>
+        /// Swaps the current active hologram.
+        /// </summary>
+        /// <param name="index">The index of the hologram to swap to. If there's none, nothing happens.</param>
+        public void SwapHologram(int index)
+        {
+            _hologramManager.SwapHologram(index);
         }
 
         public void SendHintToPlayers(string hint)

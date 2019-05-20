@@ -111,7 +111,6 @@ namespace CRI.HelloHouston.GameElements
 
         private void UpdateTubes(XPVisibility currentVisibility)
         {
-            Debug.Log(currentVisibility);
             bool visible = (currentVisibility == XPVisibility.Visible);
             _tube.SetActive(visible);
             _smallTube.SetActive(!visible);

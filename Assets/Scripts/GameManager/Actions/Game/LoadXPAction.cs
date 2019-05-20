@@ -14,7 +14,7 @@ namespace CRI.HelloHouston.Experience.Actions
         public override void Act(GameManager controller)
         {
             if (controller != null)
-                controller.InstallXP(xpManagerIndex, wallTopIndex);
+                controller.LoadXP(xpManagerIndex, wallTopIndex);
         }
     }
 }

@@ -167,7 +167,6 @@ namespace CRI.HelloHouston.Experience
 
         private void InvokeVisibilityEvent()
         {
-            Debug.Log(string.Format("Invoke Visibility Event {0} {1} {2}", _previousVisibility, visibility, onVisibilityChange != null));
             if (onVisibilityChange != null && _previousVisibility != visibility)
             {
                 Debug.Log("Event fired");

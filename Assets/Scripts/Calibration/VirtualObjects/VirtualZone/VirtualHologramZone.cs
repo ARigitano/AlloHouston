@@ -47,14 +47,7 @@ namespace CRI.HelloHouston.Calibration
         [SerializeField]
         private VirtualHologramElement _elementPrefab = null;
 
-        public bool visible
-        {
-            get
-            {
-                return _visible;
-            }
-        }
-        private bool _visible;
+        public bool visible { get; set; }
 
         private void ClearHolograms()
         {
@@ -67,8 +60,8 @@ namespace CRI.HelloHouston.Calibration
 
         public virtual void ShowHologram()
         {
-            _visible = true;
-            for (int i = 0; i < virtualHologramElements.Length; i++)
+            visible = true;
+            for (int i = 0; virtualHologramElements != null && i < virtualHologramElements.Length; i++)
             {
                 var element = (XPHologramElement)virtualElements[i].currentElement;
                 if (element != null && element.visible)
@@ -78,8 +71,8 @@ namespace CRI.HelloHouston.Calibration
 
         public virtual void HideHologram()
         {
-            _visible = false;
-            for (int i = 0; i < virtualHologramElements.Length; i++)
+            visible = false;
+            for (int i = 0; virtualHologramElements != null && i < virtualHologramElements.Length; i++)
             {
                 var element = (XPHologramElement)virtualElements[i].currentElement;
                 if (element != null && element.visible)

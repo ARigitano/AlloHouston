@@ -2,7 +2,7 @@
 {
     internal interface IHologram
     {
-        bool visible { get; }
+        bool visible { get; set; }
         void ShowHologram();
         void HideHologram();
     }
