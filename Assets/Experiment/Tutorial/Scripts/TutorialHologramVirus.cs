@@ -4,8 +4,14 @@ using UnityEngine;
 
 namespace CRI.HelloHouston.Experience.Tutorial
 {
+    /// <summary>
+    /// The second hologram for the tutorial experiment.
+    /// </summary>
     public class TutorialHologramVirus : XPHologramElement
     {
+        /// <summary>
+        /// The manager for the experiment.
+        /// </summary>
         public TutorialManager tutorialManager { get; private set; }
         /// <summary>
         /// Text that displays the time remaining before failure.
@@ -17,12 +23,28 @@ namespace CRI.HelloHouston.Experience.Tutorial
         /// </summary>
         [SerializeField]
         private float _timer;
+        /// <summary>
+        /// List of the points toward wich the viruses can move
+        /// </summary>
         public List<Transform> attaches = new List<Transform>();
+        /// <summary>
+        /// Prefab for the virus
+        /// </summary>
         [SerializeField]
         private GameObject _virus;
+        /// <summary>
+        /// Number of viruses that have been instantiated so far
+        /// </summary>
         public int nbVirus = 0;
+        /// <summary>
+        /// Maximum number of viruses that can be instantiated
+        /// </summary>
         public int _maxVirus = 20;
 
+        /// <summary>
+        /// Instantiates one virus
+        /// </summary>
+        /// <param name="spawning"></param>
         public void InstantiateVirus(Transform spawning)
         {
             Instantiate(_virus, spawning.position, Quaternion.identity);
@@ -41,9 +63,12 @@ namespace CRI.HelloHouston.Experience.Tutorial
             }
 
             InstantiateVirus(transform);
-
         }
 
+        /// <summary>
+        /// Regularly instantiates a new virus
+        /// </summary>
+        /// <returns></returns>
         IEnumerator CountDownVirus()
         {
             float virusCountDown = 0f;
@@ -72,22 +97,9 @@ namespace CRI.HelloHouston.Experience.Tutorial
                 yield return new WaitForSeconds(1f);
                 _timer--;
                 _uiTimer.text = _timer.ToString();
-                virusCountDown++;
-                if (virusCountDown == 10f)
-                {
-                    virusCountDown = 5f;
-                    //GameObject virus = (GameObject)Instantiate(_virus, gameObject.transform.position, gameObject.transform.rotation);
-                    //virus.transform.localScale = gameObject.transform.localScale;
-                }
             }
             _uiTimer.text = "Fail";
             tutorialManager.EndMaintenance();
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
         }
 
         public override void OnShow(int currentStep)
