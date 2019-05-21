@@ -34,6 +34,13 @@ namespace CRI.HelloHouston.GameElement
         [SerializeField]
         [Tooltip("Tubex database.")]
         private TubexDatabase _tubexDatabase = null;
+        [SerializeField]
+        [Tooltip("All the lights than can be dynamically activated and deactivated.")]
+        private GameObject[] _dynamicLights;
+        [SerializeField]
+        [Tooltip("Array of items that should be enabled whenever there's an alarm.")]
+        private GameObject[] _alarmObjects;
+
 
         private Queue<RoomAnimatorInstruction> _instructionQueue = new Queue<RoomAnimatorInstruction>();
         private float _lastDequeue = Time.time;
@@ -49,6 +56,42 @@ namespace CRI.HelloHouston.GameElement
                 _armAnimator = GetComponentInChildren<ArmAnimator>();
             if (_plierAnimators == null)
                 _plierAnimators = GetComponentsInChildren<PlierAnimator>();
+        }
+
+        /// <summary>
+        /// Deactivate all the lights.
+        /// </summary>
+        public void DeactivateAllLights()
+        {
+            for (int i = 0; i < _dynamicLights.Length; i++)
+                _dynamicLights[i].SetActive(false);
+        }
+
+        /// <summary>
+        /// Activate all the lights.
+        /// </summary>
+        public void ActivateAllLights()
+        {
+            for (int i = 0; i < _dynamicLights.Length; i++)
+                _dynamicLights[i].SetActive(true);
+        }
+
+        /// <summary>
+        /// Activate the alarm.
+        /// </summary>
+        public void ActivateAlarm()
+        {
+            for (int i = 0; i < _alarmObjects.Length; i++)
+                _alarmObjects[i].SetActive(true);
+        }
+
+        /// <summary>
+        /// Deactivate the alarm.
+        /// </summary>
+        public void DeactivateAlarm()
+        {
+            for (int i = 0; i < _alarmObjects.Length; i++)
+                _alarmObjects[i].SetActive(false);
         }
 
         /// <summary>

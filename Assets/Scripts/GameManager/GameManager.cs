@@ -12,6 +12,13 @@ using CRI.HelloHouston.GameElement;
 
 namespace CRI.HelloHouston.Experience
 {
+    public enum GameState
+    {
+        Default,
+        Alarm,
+        Dark,
+    }
+
     public class GameManager : MonoBehaviour, ISource, ILangManager
     {
         private static int s_randomSeed;
@@ -79,10 +86,6 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         public XPManager[] xpManagers { get; private set; }
         /// <summary>
-        /// The communication screen.
-        /// </summary>
-        private UIComScreen _comScreen;
-        /// <summary>
         /// All the available game actions.
         /// </summary>
         public GameAction[] actions
@@ -108,6 +111,8 @@ namespace CRI.HelloHouston.Experience
         private VirtualRoom _room;
         private RoomAnimator _roomAnimator;
         private HologramManager _hologramManager;
+        private UIComScreen _comScreen;
+        private GameState _currentState;
 
         public string sourceName
         {
@@ -231,6 +236,33 @@ namespace CRI.HelloHouston.Experience
         public void HideHologram()
         {
             _hologramManager.HideHologram();
+        }
+
+        /// <summary>
+        /// Changes the state of the game.
+        /// </summary>
+        /// <param name="state"></param>
+        public void SetGameState(GameState state)
+        {
+            _currentState = state;
+            switch (state)
+            {
+                case GameState.Default:
+                    _roomAnimator.DeactivateAlarm();
+                    _roomAnimator.ActivateAllLights();
+                    _comScreen.gameObject.SetActive(true);
+                    break;
+                case GameState.Alarm:
+                    _roomAnimator.ActivateAlarm();
+                    _roomAnimator.DeactivateAllLights();
+                    _comScreen.gameObject.SetActive(false);
+                    break;
+                case GameState.Dark:
+                    _roomAnimator.DeactivateAlarm();
+                    _roomAnimator.DeactivateAllLights();
+                    _comScreen.gameObject.SetActive(false);
+                    break;
+            }
         }
 
         public void SendHintToPlayers(string hint)

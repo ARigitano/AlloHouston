@@ -6,6 +6,7 @@ namespace CRI.HelloHouston.GameElement
     {
         private IHologram[] _holograms;
         private IHologram _currentHologram;
+        private bool _activated;
 
         private void Awake()
         {
@@ -23,7 +24,7 @@ namespace CRI.HelloHouston.GameElement
         /// <param name="index">The index of the hologram to swap to. If there's none, nothing happens.</param>
         public void SwapHologram(int index)
         {
-            if (index < _holograms.Length)
+            if (index < _holograms.Length && _activated)
             {
                 if (_currentHologram != null)
                     _currentHologram.HideHologram();
@@ -39,8 +40,26 @@ namespace CRI.HelloHouston.GameElement
         /// </summary>
         public void HideHologram()
         {
-            if (_currentHologram != null)
+            if (_currentHologram != null && _currentHologram.visible)
                 _currentHologram.HideHologram();
+        }
+
+        public void ShowHologram()
+        {
+            if (_currentHologram != null && _activated && !_currentHologram.visible)
+                _currentHologram.ShowHologram();
+        }
+
+        public void Disable()
+        {
+            _activated = false;
+            HideHologram();
+        }
+
+        public void Enable()
+        {
+            _activated = true;
+            ShowHologram();
         }
     }
 }
