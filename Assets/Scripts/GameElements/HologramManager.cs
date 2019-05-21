@@ -27,10 +27,20 @@ namespace CRI.HelloHouston.GameElement
             {
                 if (_currentHologram != null)
                     _currentHologram.HideHologram();
+                if (_currentHologram == _holograms[index] && _currentHologram.visible)
+                    return;
                 _currentHologram = _holograms[index];
-                Debug.Log(_currentHologram);
                 _currentHologram.ShowHologram();
             }
+        }
+
+        /// <summary>
+        /// Hides the current hologram.
+        /// </summary>
+        public void HideHologram()
+        {
+            if (_currentHologram != null)
+                _currentHologram.HideHologram();
         }
     }
 }

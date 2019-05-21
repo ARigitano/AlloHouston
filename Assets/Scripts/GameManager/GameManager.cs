@@ -217,12 +217,20 @@ namespace CRI.HelloHouston.Experience
         }
 
         /// <summary>
-        /// Swaps the current active hologram.
+        /// Swaps the current active hologram to the indexed one.
         /// </summary>
         /// <param name="index">The index of the hologram to swap to. If there's none, nothing happens.</param>
         public void SwapHologram(int index)
         {
             _hologramManager.SwapHologram(index);
+        }
+
+        /// <summary>
+        /// Hides the current active hologram.
+        /// </summary>
+        public void HideHologram()
+        {
+            _hologramManager.HideHologram();
         }
 
         public void SendHintToPlayers(string hint)
