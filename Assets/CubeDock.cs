@@ -1,56 +1,50 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public class CubeDock : MonoBehaviour
-{
-    public string face;
-
-    // Start is called before the first frame update
-    void Start()
+namespace CRI.HelloHouston.GameElements {
+    public class CubeDock : MonoBehaviour
     {
-        
-    }
+        [SerializeField]
+        [Tooltip("The hologram manager.")]
+        private HologramManager _hologramManager = null;
+        [SerializeField]
+        [Tooltip("The communication screen.")]
+        private UIComScreen _comScreen = null;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.tag == "StationFace")
+        void OnTriggerEnter(Collider other)
         {
-            face = "station";
-            Debug.Log("face");
-            other.GetComponent<TextMesh>().text = "station";
+            var holocube = other.GetComponentInParent<Holocube>();
+            // We ignore this trigger if it's not linked in hierarchy with the holocube or if it's the holocube itself.
+            if (holocube == null || other.GetComponent<Holocube>() != null)
+                return;
+            if (holocube.stationFace.face == other)
+            {
+                _hologramManager.Enable();
+                _hologramManager.SwapHologram(holocube.stationFace.index);
+                holocube.ActivateHolocube();
+            }
+            else if (holocube.tubexFace.face == other)
+            {
+                _hologramManager.SwapHologram(holocube.tubexFace.index);
+                _comScreen.gameObject.SetActive(true);
+            }
+            else if (holocube.xpLeftFace.face == other)
+                _hologramManager.SwapHologram(holocube.xpLeftFace.index);
+            else if (holocube.xpRightFace.face == other)
+                _hologramManager.SwapHologram(holocube.xpRightFace.index);
+        }
 
-        }
-        else if (other.tag == "TubexFace")
+        void OnTriggerExit(Collider other)
         {
-            face = "tubex";
-            Debug.Log("tubex");
-            other.GetComponent<TextMesh>().text = "tubex";
-        }
-        else if (other.tag == "ExperimentFace")
-        {
-            face = "experiment";
-            Debug.Log("experiment");
-            other.GetComponent<TextMesh>().text = "experiment";
+            var holocube = other.GetComponentInParent<Holocube>();
+            if (holocube == null)
+                return;
+            var face = holocube.faces.FirstOrDefault(x => x.face == other);
+            if (face != null)
+                _hologramManager.HideHologram();
         }
     }
-
-    void OnTriggerExit(Collider other)
-    {
-        if (other.tag == "StationFace" || other.tag == "TubexFace" || other.tag == "ExperimentFace")
-        {
-            face = "";
-            Debug.Log("none");
-            other.GetComponent<TextMesh>().text = "";
-        }
-        
-    }
-
 }
 

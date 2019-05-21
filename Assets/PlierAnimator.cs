@@ -1,7 +1,7 @@
 ﻿using CRI.HelloHouston.Experience;
 using UnityEngine;
 
-namespace CRI.HelloHouston.GameElement
+namespace CRI.HelloHouston.GameElements
 {
     [RequireComponent(typeof(Animator))]
     public class PlierAnimator : MonoBehaviour

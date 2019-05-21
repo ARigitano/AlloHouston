@@ -2,39 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CRI.HelloHouston.Experience
+namespace CRI.HelloHouston.GameElements
 {
     public class HolocubeFace : MonoBehaviour
     {
+        public Collider face;
+        public int index;
+        public Sprite sprite;
 
-        
-
-        // Start is called before the first frame update
-        void Start()
+        public void Reset()
         {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
-
-        void OnTriggerEnter(Collider other)
-        {
-            if (other.tag == "HolocubeDock")
-            {
-
-            }
-        }
-
-        void OnTriggerExit(Collider other)
-        {
-            if (other.tag == "HolocubeDock")
-            {
-
-            }
+            face = GetComponentInChildren<Collider>();
+            sprite = GetComponentInChildren<Sprite>();
         }
     }
 }

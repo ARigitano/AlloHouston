@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace CRI.HelloHouston.GameElement
+namespace CRI.HelloHouston.GameElements
 {
     public class RoomAnimator : MonoBehaviour
     {

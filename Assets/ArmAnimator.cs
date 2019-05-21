@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace CRI.HelloHouston.GameElement
+namespace CRI.HelloHouston.GameElements
 {
     [RequireComponent(typeof(Animator))]
     public class ArmAnimator : MonoBehaviour

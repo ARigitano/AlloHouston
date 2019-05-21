@@ -1,6 +1,6 @@
 ﻿using System;
 using CRI.HelloHouston.Experience;
-using CRI.HelloHouston.GameElement;
+using CRI.HelloHouston.GameElements;
 using UnityEngine;
 
 namespace CRI.HelloHouston.Calibration
@@ -94,9 +94,10 @@ namespace CRI.HelloHouston.Calibration
             for (int i = 0; i < length; i++)
             {
                 VirtualHologramElement ve = Instantiate(_elementPrefab, transform);
+                ve.virtualHologramZone = this;
                 ve.PlaceObject(hologramZone.elementPrefabs[i], xpContext);
-                if (ve.currentElement != null && ve.currentElement is XPHologramElement)
-                    ((XPHologramElement)ve.currentElement).hologramZone = this;
+                if (ve.currentElement != null && ve.currentElement.GetComponent<XPHologramElement>() != null)
+                    ve.currentElement.GetComponent<XPHologramElement>().hologramZone = this;
                 virtualHologramElements[i] = ve;
             }
         }

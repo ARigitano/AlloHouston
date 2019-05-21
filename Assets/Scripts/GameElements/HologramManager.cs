@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace CRI.HelloHouston.GameElement
+namespace CRI.HelloHouston.GameElements
 {
     public class HologramManager : MonoBehaviour
     {

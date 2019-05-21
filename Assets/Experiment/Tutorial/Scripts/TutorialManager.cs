@@ -1,4 +1,5 @@
 ﻿using CRI.HelloHouston.Calibration;
+using CRI.HelloHouston.GameElements;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -67,24 +68,12 @@ namespace CRI.HelloHouston.Experience.Tutorial
             
         }
 
-        
-
         private void Update()
         {
             //Did the video stopped playing?
             if (_screenInstance != null && !_screenInstance.GetComponent<VideoPlayer>().isPlaying)
             {
                 IntroVideoStopped();
-            }
-
-            //Which face of the holocube has been docked?
-            if (_cubeInitializable && _dock.face == "station")
-            {
-                ActivatingHolocube();
-            }
-            else if (_comInitializable && _dock.face == "tubex")
-            {
-                ActivationCommunicationScreen();
             }
 
             //Has the player removed all irregularities?
@@ -114,15 +103,6 @@ namespace CRI.HelloHouston.Experience.Tutorial
             _cubeInitializable = true;
             Debug.Log("Intro video stopped");
         }
-
-        /*void EndReached(UnityEngine.Video.VideoPlayer vp)
-        {
-            //when video ends fade in black post processing 
-            //destroys screen
-            //makes layers visible again
-            //fades out
-            _cubeInitializable = true;
-        }*/
 
         /// <summary>
         /// Called when holocube is placed on station face
@@ -175,26 +155,6 @@ namespace CRI.HelloHouston.Experience.Tutorial
             topScreen.ContinueMaintenance();
             tabletScreen.StartSecondMaintenance();
         }
-
-       
-        /*private void MaintenanceStarted()
-        {
-            //MODIF TABLET
-            //launched if the "launch now" button of the tablet has been pressed
-            //sets next step
-           
-            _maintenanceStartable = true;
-        }*/
-
-  
-        /*private void Maintenance()
-        {
-            //REQUIRES HOLOCUBE
-            //MODIF HOLOGRAM
-            //launched if maintenance hologram has been cleared from irregularities or not during timer
-            //sets next step
-            _firstMaintenance = true;
-        }*/
 
         /// <summary>
         /// Player has to remove the irregularities a second time with an impossible level.

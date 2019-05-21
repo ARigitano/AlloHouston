@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 609026823357109829}
   - component: {fileID: 8966194865646122401}
   - component: {fileID: 2609747855496926629}
-  - component: {fileID: 3922976973353697522}
   m_Layer: 0
   m_Name: RedTubex
   m_TagString: TubeBase
@@ -93,26 +92,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.109838, y: -0.02, z: 0.96114796}
   m_Center: {x: 0, y: 0.04, z: 0}
---- !u!114 &3922976973353697522
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1563110579880936580}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7115bfacf0b626147967af8a9d900524, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _originalSlot: {fileID: 3949759220523159434}
-  _destinationSlot: {fileID: 0}
-  _station: {fileID: 0}
-  _available: {fileID: 2100000, guid: 874f5f108bdf5074aba43bebb7d0fb28, type: 2}
-  _notAvailable: {fileID: 2100000, guid: 5f6cfb6c3e668524da3f28d5a89eb69b, type: 2}
-  experience: {fileID: 0}
-  _speed: 2
-  _statusPanel: {fileID: 6593850276498439593}
 --- !u!1 &4941426847796374745
 GameObject:
   m_ObjectHideFlags: 0
@@ -238,9 +217,10 @@ GameObject:
   - component: {fileID: 8234221441913213163}
   - component: {fileID: 3525322857541145711}
   - component: {fileID: 6805241422850007849}
+  - component: {fileID: 7187315819569175496}
   m_Layer: 0
   m_Name: TubeXRed
-  m_TagString: Irregularity
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -453,3 +433,21 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.74236155, y: 1.9161936, z: 0.6429041}
   m_Center: {x: -0.00000017881393, y: 1, z: -0.0000002682209}
+--- !u!114 &7187315819569175496
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8524798981513146708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7115bfacf0b626147967af8a9d900524, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _originalSlot: {fileID: 3949759220523159434}
+  _available: {fileID: 2100000, guid: 874f5f108bdf5074aba43bebb7d0fb28, type: 2}
+  _notAvailable: {fileID: 2100000, guid: 5f6cfb6c3e668524da3f28d5a89eb69b, type: 2}
+  manager: {fileID: 0}
+  _speed: 2
+  _statusPanel: {fileID: 6593850276498439593}

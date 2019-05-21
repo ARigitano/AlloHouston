@@ -1,4 +1,4 @@
-﻿using CRI.HelloHouston.GameElement;
+﻿using CRI.HelloHouston.GameElements;
 using System.Collections;
 using UnityEngine;
 using Valve.VR.InteractionSystem;
@@ -31,7 +31,7 @@ namespace CRI.HelloHouston.GameElements
         private Transform[] _tubeTransforms = null;
         [SerializeField]
         [Tooltip("Prefab of the xp tube")]
-        private XPTube _xpTubePrefab = null;
+        private GameObject _xpTubePrefab = null;
         [SerializeField]
         [Tooltip("Prefab of the empty tube.")]
         private GameObject _emptyTubePrefab = null;
@@ -61,8 +61,9 @@ namespace CRI.HelloHouston.GameElements
                 if (i < managers.Length)
                 {
                     var go = Instantiate(_xpTubePrefab, shuffledTransforms[i]);
-                    go.manager = managers[i];
-                    _tubes[i] = go;
+                    var xptube = go.GetComponentInChildren<XPTube>();
+                    xptube.manager = managers[i];
+                    _tubes[i] = xptube;
                 }
                 else
                 {

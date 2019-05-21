@@ -42,12 +42,6 @@ namespace CRI.HelloHouston.Experience.Tutorial
             _currentPanel = newPanel;
         }
 
-        // Start is called before the first frame update
-        void Start()
-        {
-
-        }
-
         public void StartLaunch()
         {
             ActivatePanel(_launchPanel);
@@ -70,12 +64,6 @@ namespace CRI.HelloHouston.Experience.Tutorial
         {
             Debug.Log("Second Maintenance launched");
             tutorialManager.MaintenanceVirus();
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
         }
 
         private void Init(TutorialManager synchronizer)

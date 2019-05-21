@@ -1,11 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using CRI.HelloHouston.Experience.MAIA;
+﻿using UnityEngine;
 using CRI.HelloHouston.Experience;
-using CRI.HelloHouston.GameElements;
+using VRTK;
 
-namespace Valve.VR.InteractionSystem
+namespace CRI.HelloHouston.GameElements
 {
     /// <summary>
     /// Holographic tube containing the troubled experiment.
@@ -18,7 +15,7 @@ namespace Valve.VR.InteractionSystem
         [SerializeField]
         private Transform _originalSlot;
 
-        private Transform _destinationSlot;
+        private TubeSlot _destinationSlot;
         /// <summary>
         /// Materials depending if tube is available or not for replacement.
         /// </summary>
@@ -40,6 +37,42 @@ namespace Valve.VR.InteractionSystem
         private float _speed = 2f;
         [SerializeField]
         private GameObject _statusPanel;
+
+        private void OnEnable()
+        {
+            GetComponent<VRTK_InteractableObject>().InteractableObjectGrabbed += InteractableObjectGrabbed;
+            GetComponent<VRTK_InteractableObject>().InteractableObjectUngrabbed += InteractableObjectUngrabbed;
+        }
+
+        private void OnDisable()
+        {
+            GetComponent<VRTK_InteractableObject>().InteractableObjectGrabbed -= InteractableObjectGrabbed;
+            GetComponent<VRTK_InteractableObject>().InteractableObjectUngrabbed -= InteractableObjectUngrabbed;
+        }
+
+        private void InteractableObjectUngrabbed(object sender, InteractableObjectEventArgs e)
+        {
+            if (_destinationSlot != null)
+            {
+                isDocked = false;
+                _destinationSlot.currentTube = this;
+                gameObject.transform.SetParent(_destinationSlot.transform);
+                transform.position = _destinationSlot.transform.position;
+                transform.rotation = _destinationSlot.transform.rotation;
+                SetUnavailable();
+                _destinationSlot.GetComponentInChildren<TubeSlot>().LoadExperiment(manager, SetAvailable);
+            }
+            else
+            {
+                gameObject.transform.SetParent(_originalSlot);
+                isDocked = true;
+            }
+        }
+
+        private void InteractableObjectGrabbed(object sender, InteractableObjectEventArgs e)
+        {
+            isDocked = false;
+        }
 
         // Update is called once per frame
         void Update()
@@ -69,73 +102,33 @@ namespace Valve.VR.InteractionSystem
             gameObject.GetComponent<BoxCollider>().enabled = false;
         }
 
-        /// <summary>
-        /// The tube is hold by the hand of the player.
-        /// </summary>
-        /// <param name="hand">The hand of the player.</param>
-        private void OnAttachedToHand(Hand hand)
-        {
-            isDocked = false;
-        }
-
-        /// <summary>
-        /// The tube leaves the hand of the player.
-        /// </summary>
-        /// <param name="hand">The hand of the player.</param>
-        private void OnDetachedFromHand(Hand hand)
-        {
-            if(_destinationSlot != null)
-            {
-                gameObject.transform.parent = _destinationSlot;
-                isDocked = true;
-                _destinationSlot.GetComponent<TubeSlot>().LoadExperiment(manager);
-            } 
-            else
-            {
-                gameObject.transform.parent = _originalSlot;
-                isDocked = true;
-            }
-        }
-
         private void OnTriggerEnter(Collider other)
         {
-            if (other.tag == "ViveController")
+            if (other.tag == "TubeDock" && other.GetComponent<TubeSlot>())
             {
+                _destinationSlot = other.GetComponent<TubeSlot>();
                 isDocked = false;
-            }
-            if (other.tag == "TubeDock" && other.transform.childCount == 0)
-            {
-                _destinationSlot = gameObject.transform;
             }
             if (other.tag == "TubeBase")
             {
                 _statusPanel.SetActive(true);
                 isDocked = false;
-                transform.position = other.transform.position;
-                transform.rotation = other.transform.rotation;
             }
         }
 
         private void OnTriggerExit(Collider other)
         {
-            if (other.tag == "ViveController")
+            if (other.tag == "TubeDock" && _destinationSlot != null)
             {
-                if (_destinationSlot != null)
+                if (_destinationSlot.currentTube == this)
                 {
-                    gameObject.transform.parent = _destinationSlot;
-                    isDocked = true;
-                    _destinationSlot.GetComponent<TubeSlot>().LoadExperiment(manager);
-                }
-                else
-                {
-                    gameObject.transform.parent = _originalSlot;
+                    SetUnavailable();
+                    _destinationSlot.UnloadExperiment(SetAvailable);
+                    _destinationSlot.currentTube = null;
                     isDocked = true;
                 }
-            }
-            if (other.tag == "TubeDock")
-            {
-                _destinationSlot.GetComponent<TubeSlot>().UnloadExperiment();
                 _destinationSlot = null;
+                gameObject.transform.SetParent(_originalSlot);
             }
             else if (other.tag == "TubeBase")
             {
