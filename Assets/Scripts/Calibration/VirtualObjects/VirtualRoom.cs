@@ -3,6 +3,9 @@ using System.Linq;
 using VRCalibrationTool;
 using CRI.HelloHouston.Experience;
 using System.Collections.Generic;
+using UnityEngine;
+using CRI.HelloHouston.GameElement;
+using System;
 
 namespace CRI.HelloHouston.Calibration
 {
@@ -35,11 +38,14 @@ namespace CRI.HelloHouston.Calibration
         /// <summary>
         /// The block of the room.
         /// </summary>
+        [Tooltip("The blocks of the room.")]
         public VirtualBlock[] blocks;
         /// <summary>
         /// Checklist for the room.
         /// </summary>
+        [Tooltip("Checklist for the room.")]
         public List<string> checklist;
+        
 
         /// <summary>
         /// Init a VirtualRoom
@@ -65,6 +71,18 @@ namespace CRI.HelloHouston.Calibration
             {
                 block.transform.SetParent(set ? transform : null);
             }
+        }
+
+        /// <summary>
+        /// Get all the zones of a type.
+        /// </summary>
+        /// <typeparam name="T">A type of zone.</typeparam>
+        /// <returns>An array of zone of the selected type.</returns>
+        public T[] GetZones<T>() where T : VirtualZone
+        {
+            if (blocks == null || blocks.Length == 0)
+                return new T[0];
+            return blocks.SelectMany(x => x.GetZones<T>()).ToArray();
         }
 
         /// <summary>

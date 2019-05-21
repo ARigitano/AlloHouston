@@ -83,10 +83,16 @@ namespace CRI.HelloHouston.Experience
         }
     }
 
+    public struct LogEventArgs
+    {
+        public Log log;
+    }
+
+    public delegate void LogEventHandler(object sender, LogEventArgs e);
+
     public class LogManager
     {
-        public delegate void LogEvent(Log log);
-        public static LogEvent onLogAdded;
+        public static LogEventHandler onLogAdded;
 
         public GameManager gameManager { get; private set; }
         public LogExperienceController logExperienceController { get; private set; }
@@ -97,7 +103,7 @@ namespace CRI.HelloHouston.Experience
         private void AddLog(Log log)
         {
             _logs.Enqueue(log);
-            onLogAdded(log);
+            onLogAdded(this, new LogEventArgs() { log = log });
         }
 
         public void AddLog(string message,

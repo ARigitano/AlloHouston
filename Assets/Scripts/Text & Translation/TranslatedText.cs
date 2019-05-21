@@ -8,12 +8,20 @@ using UnityEngine.UI;
 
 namespace CRI.HelloHouston.Translation
 {
+    public struct TranslatedTextEventArgs
+    {
+        public LangApp lang;
+        public string text;
+    }
+
+    public delegate void TranslatedTextEventHandler(object sender, TranslatedTextEventArgs e);
     /// <summary>
     /// A text UI that will be translated.
     /// </summary>
     [RequireComponent(typeof(Text))]
     public abstract class TranslatedText : MonoBehaviour
     {
+        public event TranslatedTextEventHandler onLangChange;
         /// <summary>
         /// The key to the text to translate.
         /// </summary>
@@ -57,6 +65,12 @@ namespace CRI.HelloHouston.Translation
         [SerializeField]
         [Tooltip("If true, the translated text will find a textmanager by itself at start.")]
         protected bool _autoInit = true;
+        /// <summary>
+        /// If true, the translated text will update automatically when the lang in the text manager changes.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("If true, the translated text will update automatically when the lang in the text manager changes.")]
+        protected bool _autoUpdate = true;
 
         protected bool _initialized = false;
         /// <summary>
@@ -73,6 +87,14 @@ namespace CRI.HelloHouston.Translation
         [SerializeField]
         [Tooltip("The lang manager. If this field is empty, the TranslatedText component will find a suitable LangManager automatically. (recommended)")]
         protected ILangManager _manager;
+
+        public ILangManager manager
+        {
+            get
+            {
+                return _manager;
+            }
+        }
 
         private void OnEnable()
         {
@@ -95,9 +117,14 @@ namespace CRI.HelloHouston.Translation
         /// Called whenever the OnLangChange event of the TextManager is triggered. Sets the text to its current lang value.
         /// </summary>
         /// <param name="lang"></param>
-        private void OnLangChange(LangApp lang)
+        private void OnLangChange(object sender, LangManagerEventArgs e)
         {
+            LangApp lang = e.lang;
+            if (!_autoUpdate)
+                return;
             SetText();
+            if (onLangChange != null)
+                onLangChange(this, new TranslatedTextEventArgs() { lang = lang, text = _text.text });
         }
 
         /// <summary>

@@ -76,6 +76,11 @@ namespace CRI.HelloHouston.Calibration
         public VirtualElement wallTopTabletVirtualElement;
         public XPWallTopZone xpWallTopZone { get; protected set; }
         /// <summary>
+        /// The index of the wall top zone.
+        /// </summary>
+        [Tooltip("The index of the wall top zone.")]
+        public int index;
+        /// <summary>
         /// The left speaker of the wall top.
         /// </summary>
         [SerializeField]

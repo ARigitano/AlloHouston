@@ -57,11 +57,6 @@ namespace CRI.HelloHouston.Calibration.UI
             CalibrationManager.onCalibrationEnd -= OnCalibrationEnd;
         }
 
-        private void OnCalibrationEnd()
-        {
-            CheckInteractable();
-        }
-
         private void CheckInteractable()
         {
             bool interactable = true;
@@ -112,6 +107,12 @@ namespace CRI.HelloHouston.Calibration.UI
                 _calibrationEntryList.Add(blockCalEntry);
             }
         }
+
+        private void OnCalibrationEnd(object sender, CalibrationEventArgs e)
+        {
+            CheckInteractable();
+        }
+
 
         public override void Next()
         {

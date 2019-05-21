@@ -5,6 +5,14 @@ using UnityEngine.Events;
 
 namespace CRI.HelloHouston.Experience
 {
+    public struct XPStepEventArgs
+    {
+        public XPStepManager.StepAction currentStep;
+        public int currentStepValue;
+    }
+
+    public delegate void XPStepEventHandler(object sender, XPStepEventArgs e);
+
     [Serializable]
     public class XPStepManager
     {
@@ -23,8 +31,7 @@ namespace CRI.HelloHouston.Experience
             }
         }
 
-        public XPStepEvent onStepChange;
-        public delegate void XPStepEvent(StepAction currentStep, int currentStepValue);
+        public event XPStepEventHandler onStepChange;
 
         private int? _maxStepValue;
 
@@ -62,7 +69,7 @@ namespace CRI.HelloHouston.Experience
             {
                 _currentStepIndex = value;
                 if (onStepChange != null)
-                    onStepChange(currentStep, sumValue);
+                    onStepChange(this, new XPStepEventArgs() { currentStep = currentStep, currentStepValue = sumValue });
             }
         }
 

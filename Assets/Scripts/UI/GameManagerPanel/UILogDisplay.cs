@@ -122,11 +122,11 @@ namespace CRI.HelloHouston.Experience.UI
             LogManager.onLogAdded -= OnLogAdded;
         }
 
-        private void OnLogAdded(Log log)
+        private void OnLogAdded(object sender, LogEventArgs e)
         {
-            if (FilterLog(log))
+            if (FilterLog(e.log))
             {
-                AddLog(log);
+                AddLog(e.log);
             }
         }
 

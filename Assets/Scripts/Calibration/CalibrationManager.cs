@@ -9,15 +9,24 @@ using VRTK;
 
 namespace CRI.HelloHouston.Calibration
 {
+    public struct CalibrationPositionEventArgs
+    {
+        public int positinTagCount;
+        public int? remainingPositionTags;
+    }
+
+    public struct CalibrationEventArgs { }
+
+    public delegate void CalibrationPositionEventHandler(object sender, CalibrationPositionEventArgs e);
+
+    public delegate void CalibrationEventHandler(object sender, CalibrationEventArgs e);
     /// <summary>
     /// Manages the use of the Vive controllers during the calibratiion process
     /// </summary>
 	public class CalibrationManager : MonoBehaviour
     {
-        public delegate void CalibrationEvent();
-        public delegate void PositionTagEvent(int positionTagCount, int? remainingPositionTags);
-        public static event CalibrationEvent onCalibrationEnd;
-        public static event PositionTagEvent onUpdatePositionTag;
+        public static event CalibrationEventHandler onCalibrationEnd;
+        public static event CalibrationPositionEventHandler onUpdatePositionTag;
         /// <summary>
         /// Prefab of a position tag
         /// </summary>
@@ -127,7 +136,7 @@ namespace CRI.HelloHouston.Calibration
             positionTag.GetComponent<Renderer>().material.color = new Color(count * 0.2f, count * 0.2f, count * 0.2f, 0.6f);
             _positionTags.Add(positionTag);
             if (onUpdatePositionTag != null)
-                onUpdatePositionTag(_positionTags.Count, remainingPositionTags);
+                onUpdatePositionTag(this, new CalibrationPositionEventArgs() { positinTagCount = _positionTags.Count, remainingPositionTags = remainingPositionTags });
         }
 
         /// <summary>
@@ -226,7 +235,7 @@ namespace CRI.HelloHouston.Calibration
                 _positionTags[i].index = i;
             }
             if (onUpdatePositionTag != null)
-                onUpdatePositionTag(_positionTags.Count, remainingPositionTags);
+                onUpdatePositionTag(this, new CalibrationPositionEventArgs() { positinTagCount = _positionTags.Count, remainingPositionTags = remainingPositionTags });
         }
 
         /// <summary>
@@ -263,7 +272,7 @@ namespace CRI.HelloHouston.Calibration
             _currentVirtualItem = null;
             _controller.StopCalibration();
             if (onCalibrationEnd != null)
-                onCalibrationEnd();
+                onCalibrationEnd(this, new CalibrationEventArgs());
         }
 
         public void ResetVirtualItems()
@@ -289,6 +298,12 @@ namespace CRI.HelloHouston.Calibration
                 vroom.blocks[i] = Instantiate(GetVirtualBlockPrefab(roomEntry.blocks[i]), vroom.calibrated ? vroom.transform : null);
                 vroom.blocks[i].Init(roomEntry.blocks[i], i);
             }
+            var wtzones = vroom.GetZones<VirtualWallTopZone>();
+            var holzones = vroom.GetZones<VirtualHologramZone>();
+            for (int i = 0; i < wtzones.Length; i++)
+                wtzones[i].index = i;
+            for (int i = 0; i < holzones.Length; i++)
+                holzones[i].index = i;
             return vroom;
         }
 

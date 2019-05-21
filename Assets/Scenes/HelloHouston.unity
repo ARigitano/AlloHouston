@@ -281,6 +281,7 @@ MonoBehaviour:
   _isCommon: 0
   _useFont: 1
   _autoInit: 1
+  _autoUpdate: 1
 --- !u!114 &215491691
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1229,6 +1230,7 @@ MonoBehaviour:
   controllerRenderModel: {fileID: 0}
   hoverDurationTimer: 0
   canClickOnHover: 0
+  originRotation: {x: 0, y: 0, z: 0, w: 0}
   autoActivatingCanvas: {fileID: 0}
   collisionClick: 0
 --- !u!114 &682794941
@@ -1385,6 +1387,7 @@ GameObject:
   - component: {fileID: 780966836}
   - component: {fileID: 780966835}
   - component: {fileID: 780966834}
+  - component: {fileID: 780966838}
   m_Layer: 0
   m_Name: Camera
   m_TagString: MainCamera
@@ -1492,6 +1495,19 @@ Behaviour:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 780966831}
   m_Enabled: 1
+--- !u!114 &780966838
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 780966831}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff26db721962cdf4a8edcdfa9a767d2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  profile: {fileID: 11400000, guid: 258513f1ebb8ebd42993a6137e2f7d4c, type: 2}
 --- !u!1 &802655697
 GameObject:
   m_ObjectHideFlags: 0
@@ -1967,6 +1983,7 @@ MonoBehaviour:
   controllerRenderModel: {fileID: 0}
   hoverDurationTimer: 0
   canClickOnHover: 0
+  originRotation: {x: 0, y: 0, z: 0, w: 0}
   autoActivatingCanvas: {fileID: 0}
   collisionClick: 0
 --- !u!1 &1094079630
@@ -2315,6 +2332,7 @@ MonoBehaviour:
   _isCommon: 0
   _useFont: 1
   _autoInit: 1
+  _autoUpdate: 1
 --- !u!114 &1411698422
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2562,21 +2580,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1438348749}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1438348762
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1438348754}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6bca9ccf900ccc84c887d783321d27e2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _head: {fileID: 1438348752}
-  _ears: {fileID: 1438348753}
-  wireframe: 0
 --- !u!114 &1438348763
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2622,6 +2625,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _spawnPosition: {fileID: 1438348756}
+--- !u!114 &1438348769
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1438348754}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bca9ccf900ccc84c887d783321d27e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _head: {fileID: 1438348752}
+  _ears: {fileID: 1438348753}
+  wireframe: 0
 --- !u!1 &1610215377
 GameObject:
   m_ObjectHideFlags: 0
@@ -2918,7 +2936,7 @@ PrefabInstance:
     - target: {fileID: 4869723415036972948, guid: 14e37f0a6a54bc543a991588f724f7d3,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.000061035156
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4869572388667348580, guid: 14e37f0a6a54bc543a991588f724f7d3,
         type: 3}
@@ -2988,7 +3006,7 @@ PrefabInstance:
     - target: {fileID: 4870388810341985832, guid: 14e37f0a6a54bc543a991588f724f7d3,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -0.000061035156
       objectReference: {fileID: 0}
     - target: {fileID: 4870347211914376592, guid: 14e37f0a6a54bc543a991588f724f7d3,
         type: 3}
@@ -3018,7 +3036,7 @@ PrefabInstance:
     - target: {fileID: 4691748489374186147, guid: 14e37f0a6a54bc543a991588f724f7d3,
         type: 3}
       propertyPath: _gameLayerMask.m_Bits
-      value: 3639
+      value: 15927
       objectReference: {fileID: 0}
     - target: {fileID: 4869653318626093621, guid: 14e37f0a6a54bc543a991588f724f7d3,
         type: 3}
@@ -3043,7 +3061,7 @@ PrefabInstance:
     - target: {fileID: 4870167980425575783, guid: 14e37f0a6a54bc543a991588f724f7d3,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.00001005167
+      value: -0.000010501838
       objectReference: {fileID: 0}
     - target: {fileID: 4869640550043717287, guid: 14e37f0a6a54bc543a991588f724f7d3,
         type: 3}
@@ -3083,12 +3101,12 @@ PrefabInstance:
     - target: {fileID: 4869612396180324113, guid: 14e37f0a6a54bc543a991588f724f7d3,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.00009125989
+      value: -0.000025828875
       objectReference: {fileID: 0}
     - target: {fileID: 4869612396180324113, guid: 14e37f0a6a54bc543a991588f724f7d3,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0.000014254489
+      value: -0.00007523853
       objectReference: {fileID: 0}
     - target: {fileID: 4869549584643694399, guid: 14e37f0a6a54bc543a991588f724f7d3,
         type: 3}
@@ -3133,12 +3151,12 @@ PrefabInstance:
     - target: {fileID: 4869676528886000731, guid: 14e37f0a6a54bc543a991588f724f7d3,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.0000992335
+      value: -0.000018178756
       objectReference: {fileID: 0}
     - target: {fileID: 4869676528886000731, guid: 14e37f0a6a54bc543a991588f724f7d3,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.000005727321
+      value: -0.0000061894816
       objectReference: {fileID: 0}
     - target: {fileID: 4870412544282273441, guid: 14e37f0a6a54bc543a991588f724f7d3,
         type: 3}
@@ -3377,6 +3395,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 4650773024381638750, guid: 14e37f0a6a54bc543a991588f724f7d3, type: 3}
+    - {fileID: 4691983113363968933, guid: 14e37f0a6a54bc543a991588f724f7d3, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 14e37f0a6a54bc543a991588f724f7d3, type: 3}
 --- !u!224 &1694078701 stripped
 RectTransform:
@@ -3688,6 +3707,7 @@ MonoBehaviour:
   controllerRenderModel: {fileID: 0}
   hoverDurationTimer: 0
   canClickOnHover: 0
+  originRotation: {x: 0, y: 0, z: 0, w: 0}
   autoActivatingCanvas: {fileID: 0}
   collisionClick: 0
 --- !u!114 &1730459902
@@ -3900,6 +3920,7 @@ MonoBehaviour:
   _isCommon: 0
   _useFont: 1
   _autoInit: 1
+  _autoUpdate: 1
 --- !u!114 &1821745318
 MonoBehaviour:
   m_ObjectHideFlags: 0

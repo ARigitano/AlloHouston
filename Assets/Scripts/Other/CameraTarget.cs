@@ -116,5 +116,10 @@ namespace CRI.HelloHouston
         {
             CameraTargetDetection.Remove(this);
         }
+
+        private void OnDestroy()
+        {
+            CameraTargetDetection.Remove(this);
+        }
     }
 }

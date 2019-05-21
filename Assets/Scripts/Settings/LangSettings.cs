@@ -19,7 +19,7 @@ namespace CRI.HelloHouston.Settings
         /// <summary>
         /// The default language.
         /// </summary>
-        public LangApp defaultLanguage { get { return langAppAvailable[0]; } }
+        public LangApp defaultLanguage { get { return langAppAvailable.Length > 0 ? langAppAvailable[0] : null; } }
         /// <summary>
         /// All the different text files (one for each available language) of the application.
         /// </summary>
