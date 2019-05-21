@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Video;
+using CRI.HelloHouston.GameElements;
 
 namespace CRI.HelloHouston.Experience.Tutorial
 {
@@ -81,15 +82,15 @@ namespace CRI.HelloHouston.Experience.Tutorial
         /// <summary>
         /// Canvas of the communication screen
         /// </summary>
-        private Canvas _comScreenCanvas;
+        private GameObject _comScreen;
 
 
         private void Start()
         {
             _screenPosition = GameObject.FindGameObjectWithTag("IntroScreen");
             _dock = FindObjectOfType<CubeDock>();
-            _comScreenCanvas = GameObject.FindGameObjectWithTag("ComScreen").GetComponent<Canvas>();
-            _comScreenCanvas.enabled = false;
+            _comScreen = GameObject.FindObjectOfType<UIComScreen>().gameObject;
+            _comScreen.SetActive(false);
             IntroVideo();
         }
 
@@ -142,7 +143,7 @@ namespace CRI.HelloHouston.Experience.Tutorial
         /// </summary>
         private void ActivationCommunicationScreen()
         {
-            _comScreenCanvas.enabled = true;
+            _comScreen.SetActive(true);
             tabletScreen.StartLaunch();
             _maintenanceLaunchable = true;
         }

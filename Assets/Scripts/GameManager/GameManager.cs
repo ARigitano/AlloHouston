@@ -164,6 +164,22 @@ namespace CRI.HelloHouston.Experience
         }
 
         /// <summary>
+        /// Open the door.
+        /// </summary>
+        public void OpenDoor()
+        {
+            _roomAnimator.OpenDoor();
+        }
+
+        /// <summary>
+        /// Close the door.
+        /// </summary>
+        public void CloseDoor()
+        {
+            _roomAnimator.CloseDoor();
+        }
+
+        /// <summary>
         /// Unloads an xp from a wall top zone.
         /// </summary>
         /// <param name="wallTopIndex">The index of the wall top zone from which the experience will be unloaded.</param>

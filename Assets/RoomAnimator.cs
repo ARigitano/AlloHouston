@@ -40,6 +40,9 @@ namespace CRI.HelloHouston.GameElement
         [SerializeField]
         [Tooltip("Array of items that should be enabled whenever there's an alarm.")]
         private GameObject[] _alarmObjects;
+        [SerializeField]
+        [Tooltip("Animator of the door.")]
+        private Animator _doorAnimator = null;
 
 
         private Queue<RoomAnimatorInstruction> _instructionQueue = new Queue<RoomAnimatorInstruction>();
@@ -56,6 +59,22 @@ namespace CRI.HelloHouston.GameElement
                 _armAnimator = GetComponentInChildren<ArmAnimator>();
             if (_plierAnimators == null)
                 _plierAnimators = GetComponentsInChildren<PlierAnimator>();
+        }
+
+        /// <summary>
+        /// Open the door.
+        /// </summary>
+        public void OpenDoor()
+        {
+            _doorAnimator.SetBool("OpenDoor", true);
+        }
+
+        /// <summary>
+        /// Close the door.
+        /// </summary>
+        public void CloseDoor()
+        {
+            _doorAnimator.SetBool("CloseDoor", false);
         }
 
         /// <summary>
