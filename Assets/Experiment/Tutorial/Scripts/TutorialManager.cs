@@ -183,17 +183,17 @@ namespace CRI.HelloHouston.Experience.Tutorial
             Debug.Log("Maintenance failed");
         }
 
-        protected override void PreShow(VirtualWallTopZone wallTopZone, ElementInfo[] info)
+        protected override void PreShow(VirtualWallTopZone wallTopZone, VirtualHologramZone hologramZone, ElementInfo[] info)
         {
-            base.PreShow(wallTopZone, info);
+            base.PreShow(wallTopZone, hologramZone, info);
             tabletScreen = GetElement<TutorialTabletScreen>();
             topScreen = GetElement<TutorialTopScreen>();
             tubeScreen = GetElement<TutorialTubeScreen>();
         }
 
-        protected override void PostInit(XPContext xpContext, ElementInfo[] info, LogExperienceController logController, int randomSeed, XPState stateOnActivation)
+        protected override void PostInit(XPContext xpContext, ElementInfo[] info, LogExperienceController logController, int randomSeed, XPVisibility visibilityOnActivation)
         {
-            base.PostInit(xpContext, info, logController, randomSeed, stateOnActivation);
+            base.PostInit(xpContext, info, logController, randomSeed, visibilityOnActivation);
             hologram = GetElement<TutorialHologram>();
             hologramSecond = GetElement<TutorialHologramVirus>();
         }

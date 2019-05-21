@@ -58,7 +58,7 @@ namespace CRI.HelloHouston
 
         private void Update()
         {
-            _currentTargets.RemoveAll(x => !x.gameObject.activeInHierarchy);
+            _currentTargets.RemoveAll(x => x == null || !x.gameObject.activeInHierarchy);
             foreach (var target in s_targets)
             {
                 CameraTarget cameraTarget = target.GetComponent<CameraTarget>();

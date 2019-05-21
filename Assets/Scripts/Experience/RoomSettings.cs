@@ -26,7 +26,7 @@ namespace CRI.HelloHouston.Experience
             this.xpContexts = xpContexts;
             this.starting = starting;
             this.seed = seed;
-            this.timeEstimate = xpContexts.Sum(xpContext => xpContext.xpSettings.duration);
+            this.timeEstimate = xpContexts.Where(xpContext => xpContext.xpSettings != null).Sum(xpContext => xpContext.xpSettings.duration);
         }
     }
 }

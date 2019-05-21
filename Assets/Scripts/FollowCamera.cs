@@ -5,16 +5,16 @@ using UnityEngine;
 public class FollowCamera : MonoBehaviour
 {
     [SerializeField]
-    private Camera _camera;
+    private Camera _camera = null;
     [SerializeField]
-    private Transform _target;
+    private Transform _target = null;
     private float _initialRotation, _secondRotation;
     private Vector3 _initialPosition, _secondPosition;
     private bool _isMoving;
     [SerializeField]
-    private float _angle;
+    private float _angle = 0.0f;
     [SerializeField]
-    private float _distance;
+    private float _distance = 0.0f;
 
     // Start is called before the first frame update
     void Start()

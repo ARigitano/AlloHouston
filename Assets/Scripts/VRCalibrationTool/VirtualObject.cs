@@ -210,14 +210,12 @@ namespace VRCalibrationTool
         public virtual void Calibrate(Vector3[] realPositions)
         {
             bool minDistanceRealObject = PointsWithinMinimumDistance(realPositions, virtualPositionTags, minimumDistanceToRealObject);
-            Debug.Log(minDistanceRealObject);
             bool minDistancePreviousApprox = false;
             Vector3[] previousPositions = null;
 
             // This loop breaks if all points are within minimum distance. It will goes on until it hits the calibration repetition limit otherwise.
             for (int i = 0; i < calibrationRepetitionLimit && !minDistanceRealObject && !minDistancePreviousApprox; i++)
             {
-                Debug.Log("Repetition " + (i + 1));
                 CalcCalibration(realPositions);
                 if (previousPositions != null)
                     minDistancePreviousApprox = PointsWithinMinimumDistance(previousPositions, virtualPositionTags, minimumDistanceToPreviousApprox);

@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using System;
+using UnityEditor;
 using UnityEngine;
 
 namespace CRI.HelloHouston.WindowTemplate
@@ -37,14 +38,14 @@ namespace CRI.HelloHouston.WindowTemplate
 
         public void Show()
         {
-            visible = true;
             StartShowAnimation();
+            visible = true;
         }
 
         public void Hide()
         {
-            visible = false;
             StartHideAnimation();
+            visible = false;
         }
     }
 #if UNITY_EDITOR

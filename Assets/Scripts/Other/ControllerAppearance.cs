@@ -42,6 +42,9 @@ public class ControllerAppearance : MonoBehaviour
         currentPulseColor = pulseColor;
         highlighted = false;
 
+        if (highligher.controllerAlias == null)
+            enabled = false;
+
         //Setup controller event listeners
         events.TriggerPressed += DoTriggerPressed;
         events.ButtonOnePressed += DoButtonOnePressed;
@@ -66,6 +69,12 @@ public class ControllerAppearance : MonoBehaviour
         uipointer.UIPointerElementEnter -= DoUIPointerElementEnter;
         uipointer.UIPointerElementExit -= DoUIPointerElementExit;
         uipointer.UIPointerElementClick -= DoUIPointerElementClick;
+    }
+
+    private void Start()
+    {
+        if (highligher != null && highligher.controllerAlias == null && highligher.modelContainer == null)
+            enabled = false;
     }
 
     private void PulseTrigger()
@@ -166,7 +175,7 @@ public class ControllerAppearance : MonoBehaviour
 
     private void OnTriggerStay(Collider collider)
     {
-        if (!VRTK_PlayerObject.IsPlayerObject(collider.gameObject) && !highlighted)
+        if (enabled && !VRTK_PlayerObject.IsPlayerObject(collider.gameObject) && !highlighted)
         {
             VRTK_InteractableObject interactable = collider.gameObject.GetComponentInParent<VRTK_InteractableObject>();
             if (interactable != null)
@@ -184,7 +193,7 @@ public class ControllerAppearance : MonoBehaviour
 
     private void OnTriggerExit(Collider collider)
     {
-        if (!VRTK_PlayerObject.IsPlayerObject(collider.gameObject))
+        if (enabled && !VRTK_PlayerObject.IsPlayerObject(collider.gameObject))
         {
             VRTK_InteractableObject interactable = collider.gameObject.GetComponentInParent<VRTK_InteractableObject>();
             if (interactable != null)

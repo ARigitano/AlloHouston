@@ -6,10 +6,14 @@ using System.Text;
 
 namespace CRI.HelloHouston.Translation
 {
+    public struct LangManagerEventArgs
+    {
+        public LangApp lang;
+    }
+    public delegate void LangManagerEventHandler(object sender, LangManagerEventArgs e);
     public class LangManager
     {
-        public delegate void LangManagerHandler(LangApp lang);
-        public event LangManagerHandler onLangChange;
+        public event LangManagerEventHandler onLangChange;
         /// <summary>
         /// The current language of the application.
         /// </summary>
@@ -27,7 +31,7 @@ namespace CRI.HelloHouston.Translation
             {
                 _currentLang = value;
                 if (onLangChange != null)
-                    onLangChange(_currentLang);
+                    onLangChange(this, new LangManagerEventArgs() { lang = _currentLang });
             }
         }
         /// <summary>
@@ -42,6 +46,14 @@ namespace CRI.HelloHouston.Translation
         /// The text manager.
         /// </summary>
         public TextManager textManager { get; private set;}
+
+        public LangManager()
+        {
+            this.langAppAvailable = new LangApp[0];
+            this.defaultLanguage = null;
+            _currentLang = defaultLanguage;
+            this.textManager = new TextManager(this);
+        }
 
         public LangManager(LangSettings langSettings)
         {

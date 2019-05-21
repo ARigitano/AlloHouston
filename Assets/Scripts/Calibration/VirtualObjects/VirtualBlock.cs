@@ -84,6 +84,13 @@ namespace CRI.HelloHouston.Calibration
                 gameObject.SetActive(false);
         }
 
+        public T[] GetZones<T>() where T: VirtualZone
+        {
+            if (zones.Length == 0)
+                return new T[0];
+            return zones.Where(virtualZone => virtualZone is T).Select(virtualZone => (T)virtualZone).ToArray();
+        }
+
         /// <summary>
         /// Get all zones of a type.
         /// </summary>

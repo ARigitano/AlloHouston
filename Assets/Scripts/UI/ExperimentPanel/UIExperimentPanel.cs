@@ -74,12 +74,6 @@ namespace CRI.HelloHouston.Calibration.UI
         [Tooltip("The remove button. When clicken on, the experiment will call the destroy method of the Experience Listing.")]
         private Button _removeButton = null;
         /// <summary>
-        /// The text key for the choose option of the dropdown.
-        /// </summary>
-        [SerializeField]
-        [Tooltip("The text key for the choose option of the dropdown.")]
-        private string _chooseTextKey = "";
-        /// <summary>
         /// All the possible contexts for this experiment.
         /// </summary>
         private XPContext[] _contexts;
@@ -121,17 +115,16 @@ namespace CRI.HelloHouston.Calibration.UI
             {
                 listingExperiment.CheckNext();
             });
-            _contextDropdown.options.Add(new Dropdown.OptionData() { text = textManager.GetText(_chooseTextKey) });
             foreach (var option in _contexts)
-            {
                 _contextDropdown.options.Add(new Dropdown.OptionData() { text = option.contextName });
-                _contextDropdown.onValueChanged.AddListener((int value) =>
-                {
-                    ChooseContext(_contextDropdown.options[value].text);
-                    totalPanel.SetContext(id, currentContext);
-                    listingExperiment.CheckNext();
-                });
-            }
+            _contextDropdown.onValueChanged.AddListener((int value) =>
+            {
+                ChooseContext(_contextDropdown.options[value].text);
+                totalPanel.SetContext(id, currentContext);
+                listingExperiment.CheckNext();
+            });
+            _contextDropdown.onValueChanged.Invoke(0);
+            _contextDropdown.RefreshShownValue();
         }
 
         private void LoadAllContexts(string name, string experiencePath)
@@ -162,7 +155,7 @@ namespace CRI.HelloHouston.Calibration.UI
                 _cornerText.text = context.totalCorners.ToString();
                 _doorText.text = context.totalDoors.ToString();
                 _hologramText.text = context.totalHolograms.ToString();
-                _durationText.text = context.xpSettings.duration.ToString();
+                _durationText.text = context.xpSettings != null ? context.xpSettings.duration.ToString() : "N/A";
             }
             else
                 ResetAllText();

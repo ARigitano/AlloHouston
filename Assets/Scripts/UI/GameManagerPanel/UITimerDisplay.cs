@@ -47,7 +47,7 @@ namespace CRI.HelloHouston.Experience.UI
                 _langManager.onLangChange -= OnLangChange;
         }
 
-        private void OnLangChange(LangApp lang)
+        private void OnLangChange(object sender, LangManagerEventArgs e)
         {
             _estimateText = _textManager.GetText(_estimateTextKey);
         }

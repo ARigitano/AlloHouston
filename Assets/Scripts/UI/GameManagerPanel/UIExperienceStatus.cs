@@ -70,6 +70,8 @@ namespace CRI.HelloHouston.Experience.UI
         [SerializeField]
         [Tooltip("Color of the text of the button that wasn't selected by the user.")]
         private Color _unselectedButtonColor = Color.white;
+        private Color _failButtonColor;
+        private Color _successButtonColor;
         /// <summary>
         /// Prefab of a popup.
         /// </summary>
@@ -97,24 +99,36 @@ namespace CRI.HelloHouston.Experience.UI
 
         private XPManager _xpManager;
 
+        private void OnDisable()
+        {
+            if (_xpManager != null)
+                _xpManager.onStateChange -= OnStateChange;
+        }
+
         public void Init(GameManager gameManager, XPManager xpManager)
         {
             TextManager textManager = GameManager.instance.textManager;
             LangManager langManager = xpManager.langManager;
             _xpManager = xpManager;
             _nameText.text = xpManager.xpContext.contextName;
-            _actionButton.Init(xpManager.xpContext.xpSettings.actions, xpManager.actionController);
+            var actions = xpManager.xpContext.xpSettings != null ? xpManager.xpContext.xpSettings.actions : new Actions.ExperienceAction[0];
+            int duration = xpManager.xpContext.xpSettings != null ? xpManager.xpContext.xpSettings.duration : 0;
+            _actionButton.Init(actions, xpManager.actionController);
             _langDropdown.InitDropdown(langManager);
             _launchButton.onClick.AddListener(() =>
             {
-                if (gameManager.xpTimeEstimate * 60 < gameManager.timeSinceGameStart + (xpManager.xpContext.xpSettings.duration * 60))
+                if (gameManager.xpTimeEstimate * 60 < gameManager.timeSinceGameStart + (duration * 60))
                     CreatePopup(textManager.GetText(_timePopupTextKey), LaunchAction);
                 else
                     LaunchAction();
             });
             _failButton.onClick.AddListener(() => CreatePopup(textManager.GetText(_failPopupTextKey), FailAction));
+            if (_failButton.GetComponentInChildren<Text>())
+                _failButtonColor = _failButton.GetComponentInChildren<Text>().color;
             _successButton.onClick.AddListener(() => CreatePopup(textManager.GetText(_successPopupTextKey), SuccessAction));
-            if (!xpManager.active)
+            if (_successButton.GetComponentInChildren<Text>())
+                _successButtonColor = _successButton.GetComponentInChildren<Text>().color;
+            if (xpManager.state == XPState.Inactive)
             {
                 _launchButton.GetComponent<CanvasGroup>().Show();
                 _failButton.GetComponent<CanvasGroup>().Hide();
@@ -127,7 +141,12 @@ namespace CRI.HelloHouston.Experience.UI
                 _successButton.GetComponent<CanvasGroup>().Show();
             }
             SetState(xpManager.state);
-            xpManager.onStateChange += SetState;
+            xpManager.onStateChange += OnStateChange;
+        }
+
+        private void OnStateChange(object sender, XPManagerEventArgs e)
+        {
+            SetState(e.currentState);
         }
 
         private void CreatePopup(string popupText, UnityAction action)
@@ -176,8 +195,14 @@ namespace CRI.HelloHouston.Experience.UI
                 if (_successButton.GetComponentInChildren<Text>())
                     _successButton.GetComponentInChildren<Text>().color = _unselectedButtonColor;
             }
-            else if (_xpManager.active)
+            else if (state == XPState.InProgress)
             {
+                _successButton.interactable = true;
+                _failButton.interactable = true;
+                if (_successButton.GetComponentInChildren<Text>())
+                    _successButton.GetComponentInChildren<Text>().color = _successButtonColor;
+                if (_failButton.GetComponentInChildren<Text>())
+                    _failButton.GetComponentInChildren<Text>().color = _failButtonColor;
                 _inProgress.Show();
                 _finished.Hide();
                 _inactive.Hide();

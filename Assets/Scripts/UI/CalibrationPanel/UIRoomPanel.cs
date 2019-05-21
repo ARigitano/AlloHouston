@@ -22,15 +22,6 @@ namespace CRI.HelloHouston.Calibration.UI {
         [Tooltip("Layer setup for the player in game.")]
         private LayerMask _roomLayerMask = new LayerMask();
         /// <summary>
-        /// The component that will be used to click on the different zones.
-        /// </summary>
-        private PointerClicker _laserClicker = null;
-
-        private SteamVR_LaserPointer _laserPointer = null;
-        [SerializeField]
-        [Tooltip("The laser's layer mask for target detection.")]
-        private LayerMask _laserLayerMask = new LayerMask();
-        /// <summary>
         /// Next button.
         /// </summary>
         [SerializeField]
@@ -75,18 +66,6 @@ namespace CRI.HelloHouston.Calibration.UI {
                 }
                 Next();
             });
-        }
-
-        public override void Next()
-        {
-            if (_laserClicker != null && _laserPointer != null)
-            {
-                Destroy(_laserPointer.holder);
-                Destroy(_laserPointer.pointer);
-                Destroy(_laserPointer);
-                _laserPointer.enabled = false;
-            }
-            base.Next();
         }
     }
 }

@@ -45,7 +45,7 @@ namespace CRI.HelloHouston.Calibration.UI
         /// <param name="calibrationManager"></param>
         public void Init(RoomSettings rxpp)
         {
-            string[] checklist = rxpp.vroom.checklist.Concat(rxpp.xpContexts.SelectMany(x => x.xpSettings.checklist)).ToArray();
+            string[] checklist = rxpp.vroom.checklist.Concat(rxpp.xpContexts.Where(x => x.xpSettings != null).SelectMany(x => x.xpSettings.checklist)).ToArray();
             foreach (string check in checklist)
             {
                 UIChecklistEntry roomCalEntry = Instantiate(_checklistEntryPrefab, _panelTransform);

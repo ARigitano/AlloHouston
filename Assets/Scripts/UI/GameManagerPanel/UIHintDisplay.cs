@@ -30,14 +30,24 @@ namespace CRI.HelloHouston.Experience.UI
 
         private void OnEnable()
         {
-            XPManager.onActivation += RefreshDropdown;
-            XPManager.onEnd += RefreshDropdown;
+            XPManager.onActivation += OnXPManagerActivation;
+            XPManager.onEnd += OnXPManagerEnd;
+        }
+
+        private void OnXPManagerActivation(object sender, XPManagerEventArgs e)
+        {
+            RefreshDropdown(e.manager);
+        }
+
+        private void OnXPManagerEnd(object sender, XPManagerEventArgs e)
+        {
+            RefreshDropdown(e.manager);
         }
 
         private void OnDisable()
         {
-            XPManager.onActivation -= RefreshDropdown;
-            XPManager.onEnd -= RefreshDropdown;
+            XPManager.onActivation -= OnXPManagerActivation;
+            XPManager.onEnd -= OnXPManagerEnd;
         }
 
         private void Reset()
