@@ -53,8 +53,7 @@ namespace CRI.HelloHouston.Experience.Tutorial
         // Start is called before the first frame update
         void Start()
         {
-            StartCoroutine("CountDown");
-            StartCoroutine("CountDownVirus");
+            
             GameObject[] attachesArray = GameObject.FindGameObjectsWithTag("CoreAttach");
 
             foreach (GameObject attach in attachesArray)
@@ -62,7 +61,9 @@ namespace CRI.HelloHouston.Experience.Tutorial
                 attaches.Add(attach.transform);
             }
 
+            StartCoroutine("CountDown");
             InstantiateVirus(transform);
+            //StartCoroutine("CountDownVirus");
         }
 
         /// <summary>

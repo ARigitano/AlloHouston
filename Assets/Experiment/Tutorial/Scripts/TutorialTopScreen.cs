@@ -6,6 +6,7 @@ namespace CRI.HelloHouston.Experience.Tutorial
 {
     public class TutorialTopScreen : XPElement
     {
+        [SerializeField]
         private GameObject _maintenancePanel, _secondMaintenancePanel;
 
         // Start is called before the first frame update

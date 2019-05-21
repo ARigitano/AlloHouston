@@ -1,8 +1,5 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using VRTK;
-using VRTK.GrabAttachMechanics;
 
 namespace CRI.HelloHouston.Experience.Tutorial
 {
@@ -14,6 +11,7 @@ namespace CRI.HelloHouston.Experience.Tutorial
         /// <summary>
         /// Second hologram
         /// </summary>
+        [SerializeField]
         private TutorialHologramVirus _core;
         /// <summary>
         /// Speed at which the virus moves
@@ -31,7 +29,8 @@ namespace CRI.HelloHouston.Experience.Tutorial
         /// <summary>
         /// Current destination for the virus trajectory
         /// </summary>
-        public Transform _destination;
+        [SerializeField]
+        private Transform _destination;
         /// <summary>
         /// Can the virus be catched right now?
         /// </summary>
@@ -40,7 +39,9 @@ namespace CRI.HelloHouston.Experience.Tutorial
         // Start is called before the first frame update
         void Start()
         {
-            _core = GameObject.FindGameObjectWithTag("Core").GetComponent<TutorialHologramVirus>();
+            _core = GameObject.FindObjectOfType<TutorialHologramVirus>();
+
+           // FindGameObjectWithTag("Core").GetComponent
             _destination = _core.attaches[Random.Range(0, _core.attaches.Count)];
             _core.nbVirus++;
         }
