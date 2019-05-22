@@ -62,7 +62,10 @@ namespace CRI.HelloHouston.GameElements
         private void OnShown()
         {
             foreach (var tube in _tubes)
-                tube.gameObject.SetActive(true);
+            {
+                if (tube.isActive)
+                    tube.gameObject.SetActive(true);
+            }
         }
 
         private void Reset()
@@ -80,7 +83,7 @@ namespace CRI.HelloHouston.GameElements
                 {
                     var go = Instantiate(_xpTubePrefab, shuffledTransforms[i]);
                     var xptube = go.GetComponentInChildren<XPTube>();
-                    xptube.manager = managers[i];
+                    xptube.Init(managers[i]);
                     _tubes[i] = xptube;
                 }
                 else

@@ -24,8 +24,7 @@ namespace CRI.HelloHouston.GameElements
         /// <summary>
         /// Reference to the experiment contained in the tube.
         /// </summary>
-        [HideInInspector]
-        public XPManager manager;
+        public XPManager manager { get; private set; }
         /// <summary>
         /// Is the tube fixed or moving?
         /// </summary>
@@ -40,16 +39,40 @@ namespace CRI.HelloHouston.GameElements
 
         private bool _isAvailable;
 
+        public bool isActive;
+
         private void OnEnable()
         {
             GetComponent<VRTK_InteractableObject>().InteractableObjectGrabbed += InteractableObjectGrabbed;
             GetComponent<VRTK_InteractableObject>().InteractableObjectUngrabbed += InteractableObjectUngrabbed;
+            XPManager.onActivation += OnActivation;
         }
 
         private void OnDisable()
         {
             GetComponent<VRTK_InteractableObject>().InteractableObjectGrabbed -= InteractableObjectGrabbed;
             GetComponent<VRTK_InteractableObject>().InteractableObjectUngrabbed -= InteractableObjectUngrabbed;
+        }
+
+        public void Init(XPManager manager)
+        {
+            this.manager = manager;
+            if (this.manager.state == XPState.Inactive)
+            {
+                gameObject.SetActive(false);
+                isActive = false;
+            }
+            else
+                isActive = true;
+        }
+
+        private void OnActivation(object sender, XPManagerEventArgs e)
+        {
+            if (e.manager == manager)
+            {
+                gameObject.SetActive(true);
+                isActive = true;
+            }
         }
 
         private void InteractableObjectUngrabbed(object sender, InteractableObjectEventArgs e)

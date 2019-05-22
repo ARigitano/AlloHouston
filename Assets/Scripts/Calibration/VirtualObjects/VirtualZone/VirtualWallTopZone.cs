@@ -63,6 +63,8 @@ namespace CRI.HelloHouston.Calibration
                     holocubeFace.SetActive(true);
                     if (xpContext.holocubeEmissiveTexture != null && xpContext.holocubeMainTex != null)
                         holocubeFace.SetTexture(xpContext.holocubeMainTex, xpContext.holocubeEmissiveTexture);
+                    else
+                        holocubeFace.SetDefaultTexture();
                 }
                 wallTopLeftVirtualElement.PlaceObject(xpWallTopZone.elementLeftPrefab, xpContext);
                 wallTopRightVirtualElement.PlaceObject(xpWallTopZone.elementRightPrefab, xpContext);
@@ -72,6 +74,8 @@ namespace CRI.HelloHouston.Calibration
 
         public override XPElement[] CleanAll()
         {
+            if (holocubeFace != null)
+                holocubeFace.SetActive(false);
             var res = base.CleanAll();
             if (_leftSpeaker != null)
             _leftSpeaker.StopAll();

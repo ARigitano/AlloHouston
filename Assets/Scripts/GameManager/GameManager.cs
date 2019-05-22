@@ -158,8 +158,6 @@ namespace CRI.HelloHouston.Experience
                 wallTopZones[1].holocubeFace = _holocube.xpLeftFace;
             // Managers init
             xpManagers = xpContexts.Select(xpContext => xpContext.InitManager(logManager.logExperienceController, room.GetZones().Where(zone => zone.xpContext == xpContext).ToArray(), s_randomSeed)).ToArray();
-            // Change tube init
-            _room.GetComponentInChildren<ChangeTubeHologram>(true).Init(this, xpManagers, _room.GetZones<VirtualWallTopZone>());
             _startTime = Time.time;
             logGeneralController.AddLog(string.Format("Random Seed: {0}", randomSeed), this, Log.LogType.Important);
             _comScreen = room.GetComponentInChildren<UIComScreen>(true);
@@ -324,6 +322,7 @@ namespace CRI.HelloHouston.Experience
                     xpManagers[i].Activate();
                 }
             }
+            _room.GetComponentInChildren<ChangeTubeHologram>(true).Init(this, xpManagers, _room.GetZones<VirtualWallTopZone>());
         }
 
         public void TurnLightOn()

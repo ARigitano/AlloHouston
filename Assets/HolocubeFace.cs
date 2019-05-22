@@ -16,6 +16,9 @@ namespace CRI.HelloHouston.GameElements
         [ColorUsageAttribute(true, true)]
         public Color poweredDownEmissionColor;
 
+        public Texture defaultEmissiveTexture;
+        public Texture defaultMainTexture;
+
         private Material _iconMaterial;
         private Material _backgroundMaterial;
 
@@ -28,6 +31,11 @@ namespace CRI.HelloHouston.GameElements
         public void Reset()
         {
             collider = GetComponentInChildren<Collider>();
+        }
+
+        public void SetDefaultTexture()
+        {
+            SetTexture(defaultMainTexture, defaultEmissiveTexture);
         }
 
         public void SetTexture(Texture main, Texture emissive)

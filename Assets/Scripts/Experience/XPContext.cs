@@ -185,7 +185,6 @@ namespace CRI.HelloHouston.Experience
         {
             XPManager res = GameObject.Instantiate(_xpManagerPrefab);
             res.Init(this, zones, logExperienceController, randomSeed, XPVisibility.Hidden);
-            res.Activate();
             return res;
         }
     }
