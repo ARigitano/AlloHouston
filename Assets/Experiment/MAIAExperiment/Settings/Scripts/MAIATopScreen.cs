@@ -30,6 +30,9 @@ namespace CRI.HelloHouston.Experience.MAIA
         private AudioClip _accessDenied = null;
         [SerializeField]
         [Tooltip("")]
+        private AudioClip _accessGranted = null;
+        [SerializeField]
+        [Tooltip("")]
         private AudioClip _analysis = null;
         [SerializeField]
         [Tooltip("")]

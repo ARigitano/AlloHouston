@@ -51,6 +51,9 @@ namespace CRI.HelloHouston.Experience.MAIA
         [SerializeField]
         [Tooltip("")]
         private AudioClip _windowOpen = null;
+        [SerializeField]
+        [Tooltip("")]
+        private AudioClip _windowClose = null;
 
         private Window _previousPanel;
 

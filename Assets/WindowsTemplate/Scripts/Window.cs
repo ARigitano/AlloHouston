@@ -3,6 +3,8 @@ using System.Collections;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
+using CRI.HelloHouston.Experience;
+using CRI.HelloHouston.Audio;
 
 namespace CRI.HelloHouston.WindowTemplate
 {
@@ -24,6 +26,20 @@ namespace CRI.HelloHouston.WindowTemplate
 
         public bool visible { get; protected set; }
 
+        /// <summary>
+        /// The synchronizer of the experiment.
+        /// </summary>
+        public XPManager manager { get; private set; } 
+        [SerializeField]
+        private PlayableSound[] _soundOpen = null;
+        [SerializeField]
+        private PlayableSound [] _soundClose = null;
+
+        private void Start()
+        {
+            manager = gameObject.GetComponentInParent<XPElement>().manager;
+        }
+
         protected virtual IEnumerator HideAnimation(Action action)
         {
             for (int i = 0; i < _animators.Length; i++)
@@ -31,6 +47,8 @@ namespace CRI.HelloHouston.WindowTemplate
                 AnimationElement animator = _animators[(_animators.Length - 1) - i];
                 float delay = _overrideDelay ? _postHideIntervalDelay : animator.postHideDelay + _postHideIntervalDelay;
                 animator.Hide();
+                if (_soundClose[(_soundClose.Length - 1) - i] != null)
+                    manager.PlaySound(_soundClose[(_soundClose.Length - 1) - i]);
                 yield return new WaitForSeconds(delay);
             }
             visible = false;
@@ -47,6 +65,8 @@ namespace CRI.HelloHouston.WindowTemplate
                 AnimationElement animator = _animators[i];
                 float delay = _overrideDelay ? _postShowIntervalDelay : animator.postShowDelay + _postShowIntervalDelay;
                 animator.Show();
+                /*if (_soundOpen[i] != null)
+                    manager.PlaySound(_soundOpen[i]);*/
                 yield return new WaitForSeconds(delay);
             }
             if (action != null)
@@ -69,6 +89,7 @@ namespace CRI.HelloHouston.WindowTemplate
         public void HideWindow(Action action = null)
         {
             Debug.Log("Hide " + name);
+
             if (gameObject.activeInHierarchy)
             {
                 StopAllCoroutines();
