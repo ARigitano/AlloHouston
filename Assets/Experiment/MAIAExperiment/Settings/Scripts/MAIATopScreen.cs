@@ -25,6 +25,15 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         [SerializeField]
         private MAIAManualOverrideAccess _manualOverrideAccess = null;
+        [SerializeField]
+        [Tooltip("")]
+        private AudioClip _accessDenied = null;
+        [SerializeField]
+        [Tooltip("")]
+        private AudioClip _analysis = null;
+        [SerializeField]
+        [Tooltip("")]
+        private AudioClip _windowOpen = null;
 
         public MAIAManualOverrideAccess manualOverrideAccessScreen
         {

@@ -58,7 +58,6 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// </summary>
         public List<Particle> generatedParticles { get; private set; }
         private System.Random _rand;
-        public AudioClip[] uiSounds;
 
         #region GameMasterActions
 
