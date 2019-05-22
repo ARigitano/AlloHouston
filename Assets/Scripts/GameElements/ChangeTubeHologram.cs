@@ -41,10 +41,28 @@ namespace CRI.HelloHouston.GameElements
 
         public bool visible { get; set; }
 
-        IEnumerator Wait()
+        private void OnEnable()
         {
-            yield return new WaitForSeconds(3.0f);
-            LoadingFinished();
+            _animatorElement.onShown += OnShown;
+            _animatorElement.onHidden += OnHidden;
+        }
+
+        private void OnDisable()
+        {
+            _animatorElement.onShown -= OnHidden;
+            _animatorElement.onHidden -= OnHidden;
+        }
+
+        private void OnHidden()
+        {
+            foreach (var tube in _tubes)
+                tube.gameObject.SetActive(false);
+        }
+
+        private void OnShown()
+        {
+            foreach (var tube in _tubes)
+                tube.gameObject.SetActive(true);
         }
 
         private void Reset()
@@ -81,19 +99,18 @@ namespace CRI.HelloHouston.GameElements
         /// </summary>
         /// <param name="experience">The experiment beig loaded</param>
         /// <param name="topZone">Index of the wall top zone on which the experiment is loading.</param>
-        public void LoadingTube(XPManager experience, int wallTopZoneIndex)
+        public void SetUnavailable()
         {
             foreach(XPTube tube in _tubes)
             {
                 tube.SetUnavailable();
             }
-            StartCoroutine(Wait());
         }
 
         /// <summary>
         /// Called when a tube has finished loading.
         /// </summary>
-        private void LoadingFinished()
+        private void SetAvailable()
         {
             foreach (XPTube tube in _tubes)
             {
@@ -110,6 +127,8 @@ namespace CRI.HelloHouston.GameElements
         public void HideHologram()
         {
             visible = false;
+            foreach (var tube in _tubes)
+                tube.gameObject.SetActive(false);
             _animatorElement.Hide();
         }
     }

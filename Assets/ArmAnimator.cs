@@ -17,7 +17,7 @@ namespace CRI.HelloHouston.GameElements
         /// <summary>
         /// If true, the ArmAnimator is currently performing an animation.
         /// </summary>
-        public bool busy { get; private set; }
+        public bool busy { get; set; }
 
         private GameObject _tubex;
         private Animator _animator;

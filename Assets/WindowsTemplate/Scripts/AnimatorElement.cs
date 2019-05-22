@@ -10,6 +10,8 @@ namespace CRI.HelloHouston.WindowTemplate
     public class AnimatorElement : AnimationElement
     {
         private Animator _animator;
+        public event Action onShown;
+        public event Action onHidden;
 
         private void Awake()
         {
@@ -19,6 +21,18 @@ namespace CRI.HelloHouston.WindowTemplate
         protected override void StartShowAnimation()
         { 
             _animator.SetBool("Show", true);
+        }
+
+        public void OnShown()
+        {
+            if (onShown != null)
+                onShown();
+        }
+
+        public void OnHidden()
+        {
+            if (onHidden != null)
+                onHidden();
         }
 
         protected override void StartHideAnimation()

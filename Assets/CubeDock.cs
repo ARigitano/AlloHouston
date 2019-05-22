@@ -23,7 +23,7 @@ namespace CRI.HelloHouston.GameElements {
             {
                 _hologramManager.Enable();
                 _hologramManager.SwapHologram(holocube.stationFace.index);
-                holocube.ActivateHolocube();
+                holocube.ActivatedState();
             }
             else if (holocube.tubexFace.face == other)
             {

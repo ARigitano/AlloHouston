@@ -19,14 +19,20 @@ namespace CRI.HelloHouston.GameElements
             _topZone = topZone;
         }
 
-        public void LoadExperiment(XPManager manager, Action onXPLoaded)
+        public bool LoadExperiment(XPTube tube, XPManager manager, Action onXPLoaded)
         {
-            _gameManager.LoadXP(manager, _topZone, onXPLoaded);
+            bool res = _gameManager.LoadXP(manager, _topZone, onXPLoaded);
+            if (res)
+                currentTube = tube;
+            return res;
         }
 
-        public void UnloadExperiment(Action onXPUnloaded)
+        public bool UnloadExperiment(Action onXPUnloaded)
         {
-            _gameManager.UnloadXP(_topZone, onXPUnloaded);
+            bool res = _gameManager.UnloadXP(_topZone, onXPUnloaded);
+            if (res)
+                currentTube = null;
+            return res;
         }
     }
 }

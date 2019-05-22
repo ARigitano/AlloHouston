@@ -38,6 +38,8 @@ namespace CRI.HelloHouston.GameElements
         [SerializeField]
         private GameObject _statusPanel;
 
+        private bool _isAvailable;
+
         private void OnEnable()
         {
             GetComponent<VRTK_InteractableObject>().InteractableObjectGrabbed += InteractableObjectGrabbed;
@@ -52,20 +54,25 @@ namespace CRI.HelloHouston.GameElements
 
         private void InteractableObjectUngrabbed(object sender, InteractableObjectEventArgs e)
         {
-            if (_destinationSlot != null)
+            if (gameObject.activeInHierarchy)
             {
-                isDocked = false;
-                _destinationSlot.currentTube = this;
-                gameObject.transform.SetParent(_destinationSlot.transform);
-                transform.position = _destinationSlot.transform.position;
-                transform.rotation = _destinationSlot.transform.rotation;
-                SetUnavailable();
-                _destinationSlot.GetComponentInChildren<TubeSlot>().LoadExperiment(manager, SetAvailable);
-            }
-            else
-            {
-                gameObject.transform.SetParent(_originalSlot);
-                isDocked = true;
+                if (_destinationSlot != null)
+                {
+                    bool res = _destinationSlot.GetComponentInChildren<TubeSlot>().LoadExperiment(this, manager, SetAvailable);
+                    if (res)
+                    {
+                        isDocked = false;
+                        gameObject.transform.SetParent(_destinationSlot.transform);
+                        transform.position = _destinationSlot.transform.position;
+                        transform.rotation = _destinationSlot.transform.rotation;
+                        SetUnavailable();
+                    }
+                }
+                else
+                {
+                    gameObject.transform.SetParent(_originalSlot);
+                    isDocked = true;
+                }
             }
         }
 
@@ -89,6 +96,7 @@ namespace CRI.HelloHouston.GameElements
         /// </summary>
         public void SetAvailable()
         {
+            _isAvailable = true;
             gameObject.GetComponent<MeshRenderer>().material = _available;
             gameObject.GetComponent<BoxCollider>().enabled = true;
         }
@@ -98,41 +106,57 @@ namespace CRI.HelloHouston.GameElements
         /// </summary>
         public void SetUnavailable()
         {
+            _isAvailable = false;
             gameObject.GetComponent<MeshRenderer>().material = _notAvailable;
             gameObject.GetComponent<BoxCollider>().enabled = false;
         }
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.tag == "TubeDock" && other.GetComponent<TubeSlot>())
+            if (gameObject.activeInHierarchy)
             {
-                _destinationSlot = other.GetComponent<TubeSlot>();
-                isDocked = false;
-            }
-            if (other.tag == "TubeBase")
-            {
-                _statusPanel.SetActive(true);
-                isDocked = false;
+                if (other.tag == "TubeDock" && other.GetComponent<TubeSlot>())
+                {
+                    _destinationSlot = other.GetComponent<TubeSlot>();
+                    isDocked = false;
+                }
+                if (other.tag == "TubeBase")
+                {
+                    _statusPanel.SetActive(true);
+                    isDocked = false;
+                }
             }
         }
 
         private void OnTriggerExit(Collider other)
         {
-            if (other.tag == "TubeDock" && _destinationSlot != null)
+            if (gameObject.activeInHierarchy)
             {
-                if (_destinationSlot.currentTube == this)
+                if (other.tag == "TubeDock" && _destinationSlot != null)
                 {
-                    SetUnavailable();
-                    _destinationSlot.UnloadExperiment(SetAvailable);
-                    _destinationSlot.currentTube = null;
-                    isDocked = true;
+                    if (_destinationSlot.currentTube == this)
+                    {
+                        Debug.Log("Unload");
+                        bool res = _destinationSlot.UnloadExperiment(SetAvailable);
+                        if (res)
+                        {
+                            SetUnavailable();
+                            isDocked = true;
+                            _destinationSlot = null;
+                            gameObject.transform.SetParent(_originalSlot);
+                        }
+                    }
+                    else
+                    {
+                        isDocked = true;
+                        _destinationSlot = null;
+                        gameObject.transform.SetParent(_originalSlot);
+                    }
                 }
-                _destinationSlot = null;
-                gameObject.transform.SetParent(_originalSlot);
-            }
-            else if (other.tag == "TubeBase")
-            {
-                _statusPanel.SetActive(false);
+                else if (other.tag == "TubeBase")
+                {
+                    _statusPanel.SetActive(false);
+                }
             }
         }
     }
