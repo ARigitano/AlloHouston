@@ -19,20 +19,18 @@ namespace CRI.HelloHouston.GameElements {
             // We ignore this trigger if it's not linked in hierarchy with the holocube or if it's the holocube itself.
             if (holocube == null || other.GetComponent<Holocube>() != null)
                 return;
-            if (holocube.stationFace.face == other)
+            if (holocube.stationFace.collider == other)
             {
+                holocube.ActivatedState();
                 _hologramManager.Enable();
                 _hologramManager.SwapHologram(holocube.stationFace.index);
-                holocube.ActivatedState();
-            }
-            else if (holocube.tubexFace.face == other)
-            {
-                _hologramManager.SwapHologram(holocube.tubexFace.index);
                 _comScreen.gameObject.SetActive(true);
             }
-            else if (holocube.xpLeftFace.face == other)
+            else if (holocube.tubexFace.collider == other)
+                _hologramManager.SwapHologram(holocube.tubexFace.index);
+            else if (holocube.xpLeftFace.collider == other)
                 _hologramManager.SwapHologram(holocube.xpLeftFace.index);
-            else if (holocube.xpRightFace.face == other)
+            else if (holocube.xpRightFace.collider == other)
                 _hologramManager.SwapHologram(holocube.xpRightFace.index);
         }
 
@@ -41,7 +39,7 @@ namespace CRI.HelloHouston.GameElements {
             var holocube = other.GetComponentInParent<Holocube>();
             if (holocube == null)
                 return;
-            var face = holocube.faces.FirstOrDefault(x => x.face == other);
+            var face = holocube.faces.FirstOrDefault(x => x.collider == other);
             if (face != null)
                 _hologramManager.HideHologram();
         }

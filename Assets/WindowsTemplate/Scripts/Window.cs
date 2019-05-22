@@ -60,7 +60,6 @@ namespace CRI.HelloHouston.WindowTemplate
 
         public void ShowWindow(Action action)
         {
-            Debug.Log("Show " + name);
             gameObject.SetActive(true);
             StopAllCoroutines();
             StartCoroutine(ShowAnimation(action));

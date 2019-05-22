@@ -23,14 +23,18 @@ namespace CRI.HelloHouston.GameElements
 
         public void PowerDown()
         {
-            stationFace.face.enabled = false;
-            tubexFace.face.enabled = false;
-            xpLeftFace.face.enabled = false;
-            xpRightFace.face.enabled = false;
+            foreach (var face in faces)
+                face.PowerDown();
+            stationFace.collider.enabled = false;
+            tubexFace.collider.enabled = false;
+            xpLeftFace.collider.enabled = false;
+            xpRightFace.collider.enabled = false;
         }
         
         public void PowerUp()
         {
+            foreach (var face in faces)
+                face.PowerUp();
             if (_firstActivation)
                 ActivatedState();
             else
@@ -39,19 +43,17 @@ namespace CRI.HelloHouston.GameElements
 
         public void StartingState()
         {
-            stationFace.face.enabled = true;
-            tubexFace.face.enabled = false;
-            xpLeftFace.face.enabled = false;
-            xpRightFace.face.enabled = false;
+            stationFace.SetActive(true);
+            tubexFace.SetActive(false);
+            xpLeftFace.SetActive(false);
+            xpRightFace.SetActive(false);
         }
 
         public void ActivatedState()
         {
             _firstActivation = true;
-            stationFace.face.enabled = true;
-            tubexFace.face.enabled = true;
-            xpLeftFace.face.enabled = true;
-            xpRightFace.face.enabled = true;
+            stationFace.SetActive(true);
+            tubexFace.SetActive(true);
         }
     }
 }

@@ -150,6 +150,12 @@ namespace CRI.HelloHouston.Experience
             _roomAnimator = room.GetComponent<RoomAnimator>();
             _hologramManager = room.GetComponentInChildren<HologramManager>(true);
             _holocube = room.GetComponentInChildren<Holocube>(true);
+            _holocube.StartingState();
+            VirtualWallTopZone[] wallTopZones = _room.GetZones<VirtualWallTopZone>();
+            if (wallTopZones.Length > 0)
+                wallTopZones[0].holocubeFace = _holocube.xpRightFace;
+            if (wallTopZones.Length > 1)
+                wallTopZones[1].holocubeFace = _holocube.xpLeftFace;
             // Managers init
             xpManagers = xpContexts.Select(xpContext => xpContext.InitManager(logManager.logExperienceController, room.GetZones().Where(zone => zone.xpContext == xpContext).ToArray(), s_randomSeed)).ToArray();
             // Change tube init
