@@ -102,12 +102,15 @@ namespace CRI.HelloHouston.Experience.UI
             if (_player != null && _player.loadedSetup != null)
             {
                 playerCameras = _player.loadedSetup.actualHeadset.GetComponentsInChildren<Camera>();
-                foreach (Camera playerCamera in playerCameras)
+                playerCameras[0].cullingMask = _introLayerMask;
+                _screenInstance = (GameObject)Instantiate(_introScreen, playerCameras[0].transform.position + playerCameras[0].transform.forward * _distance, Quaternion.identity);
+                _screenInstance.transform.LookAt(playerCameras[1].transform.forward);
+                /*foreach (Camera playerCamera in playerCameras)
                 {
                     playerCamera.cullingMask = _introLayerMask;
                     _screenInstance = (GameObject)Instantiate(_introScreen, playerCamera.transform.position + playerCamera.transform.forward * _distance, Quaternion.identity);
                     _screenInstance.transform.LookAt(playerCamera.transform.forward);
-                }
+                }*/
             }
             // Needs to be initialized before the start of the game.
             _logDisplay.Init(gameManager.logManager);
@@ -131,11 +134,14 @@ namespace CRI.HelloHouston.Experience.UI
 
         private void IntroVideoStopped()
         {
-            foreach (Camera playerCamera in playerCameras)
+            playerCameras[0].cullingMask = _gameLayerMask;
+            Destroy(_screenInstance);
+
+            /*foreach (Camera playerCamera in playerCameras)
             {
                 playerCamera.cullingMask = _gameLayerMask;
                 Destroy(_screenInstance);
-            }
+            }*/
         }
     }
 }

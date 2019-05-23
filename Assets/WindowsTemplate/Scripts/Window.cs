@@ -47,8 +47,13 @@ namespace CRI.HelloHouston.WindowTemplate
                 AnimationElement animator = _animators[(_animators.Length - 1) - i];
                 float delay = _overrideDelay ? _postHideIntervalDelay : animator.postHideDelay + _postHideIntervalDelay;
                 animator.Hide();
-                if (_soundClose[(_soundClose.Length - 1) - i] != null)
-                    manager.PlaySound(_soundClose[(_soundClose.Length - 1) - i]);
+
+               
+                if (_soundClose != null) {
+                    int soundIndex = (_soundClose.Length - 1) - i;
+                    if (soundIndex >= 0 && soundIndex < _soundClose.Length && _soundClose[soundIndex] != null)
+                        manager.PlaySound(_soundClose[soundIndex]);
+                }
                 yield return new WaitForSeconds(delay);
             }
             visible = false;
@@ -65,8 +70,11 @@ namespace CRI.HelloHouston.WindowTemplate
                 AnimationElement animator = _animators[i];
                 float delay = _overrideDelay ? _postShowIntervalDelay : animator.postShowDelay + _postShowIntervalDelay;
                 animator.Show();
-                /*if (_soundOpen[i] != null)
-                    manager.PlaySound(_soundOpen[i]);*/
+                if (_soundOpen!= null)
+                {
+                    if (i >= 0 && i < _soundOpen.Length && _soundOpen[i] != null)
+                        manager.PlaySound(_soundOpen[i]);
+                }
                 yield return new WaitForSeconds(delay);
             }
             if (action != null)
@@ -101,6 +109,7 @@ namespace CRI.HelloHouston.WindowTemplate
                 action();
             }
         }
+
     }
 #if UNITY_EDITOR
     [CustomEditor(typeof(Window), true)]

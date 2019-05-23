@@ -41,8 +41,11 @@ namespace CRI.HelloHouston.GameElement
         [Tooltip("Array of items that should be enabled whenever there's an alarm.")]
         private GameObject[] _alarmObjects;
         [SerializeField]
-        [Tooltip("Animator of the door.")]
-        private Animator _doorAnimator = null;
+        [Tooltip("Animator of the door left.")]
+        private Animator _doorAnimatorLeft = null;
+        [SerializeField]
+        [Tooltip("Animator of the door right.")]
+        private Animator _doorAnimatorRight = null;
 
 
         private Queue<RoomAnimatorInstruction> _instructionQueue = new Queue<RoomAnimatorInstruction>();
@@ -66,7 +69,8 @@ namespace CRI.HelloHouston.GameElement
         /// </summary>
         public void OpenDoor()
         {
-            _doorAnimator.SetBool("OpenDoor", true);
+            _doorAnimatorLeft.SetBool("OpenDoor", true);
+            _doorAnimatorRight.SetBool("OpenDoor", true);
         }
 
         /// <summary>
@@ -74,7 +78,8 @@ namespace CRI.HelloHouston.GameElement
         /// </summary>
         public void CloseDoor()
         {
-            _doorAnimator.SetBool("CloseDoor", false);
+            _doorAnimatorLeft.SetBool("CloseDoor", false);
+            _doorAnimatorRight.SetBool("CloseDoor", false);
         }
 
         /// <summary>
