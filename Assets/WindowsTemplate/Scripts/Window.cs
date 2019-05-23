@@ -3,6 +3,8 @@ using System.Collections;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
+using CRI.HelloHouston.Experience;
+using CRI.HelloHouston.Audio;
 
 namespace CRI.HelloHouston.WindowTemplate
 {
@@ -23,6 +25,20 @@ namespace CRI.HelloHouston.WindowTemplate
         protected float _postHideIntervalDelay;
 
         public bool visible { get; protected set; }
+
+        /// <summary>
+        /// The synchronizer of the experiment.
+        /// </summary>
+        public XPManager manager { get; private set; } 
+        [SerializeField]
+        private PlayableSound[] _soundOpen = null;
+        [SerializeField]
+        private PlayableSound [] _soundClose = null;
+
+        private void Start()
+        {
+            manager = gameObject.GetComponentInParent<XPElement>().manager;
+        }
 
         protected virtual IEnumerator HideAnimation(Action action)
         {
@@ -60,7 +76,6 @@ namespace CRI.HelloHouston.WindowTemplate
 
         public void ShowWindow(Action action)
         {
-            Debug.Log("Show " + name);
             gameObject.SetActive(true);
             StopAllCoroutines();
             StartCoroutine(ShowAnimation(action));
@@ -69,6 +84,7 @@ namespace CRI.HelloHouston.WindowTemplate
         public void HideWindow(Action action = null)
         {
             Debug.Log("Hide " + name);
+
             if (gameObject.activeInHierarchy)
             {
                 StopAllCoroutines();
