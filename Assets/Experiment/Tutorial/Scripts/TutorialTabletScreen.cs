@@ -66,6 +66,12 @@ namespace CRI.HelloHouston.Experience.Tutorial
             tutorialManager.MaintenanceVirus();
         }
 
+        public override void OnShow(int currentStep)
+        {
+            base.OnShow(currentStep);
+            StartLaunch();
+        }
+
         private void Init(TutorialManager synchronizer)
         {
             tutorialManager = synchronizer;

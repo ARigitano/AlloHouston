@@ -66,11 +66,6 @@ namespace CRI.HelloHouston.Experience.MAIA
         {
             base.OnInit(manager, randomSeed);
             Init((MAIAManager)manager);
-        }
-
-        public override void OnActivation()
-        {
-            base.OnActivation();
             DisplayInteraction();
         }
     }
