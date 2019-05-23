@@ -62,10 +62,7 @@ namespace CRI.HelloHouston.Experience.Tutorial
             _player = GameObject.FindGameObjectWithTag("MainCamera");
             _screenPosition = GameObject.FindGameObjectWithTag("IntroScreen");
             _dock = FindObjectOfType<CubeDock>();
-            _comScreenCanvas = GameObject.FindGameObjectWithTag("ComScreen").GetComponent<Canvas>();
-            _comScreenCanvas.enabled = false;
             IntroVideo();
-            
         }
 
         private void Update()
