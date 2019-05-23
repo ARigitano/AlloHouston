@@ -79,21 +79,19 @@ namespace CRI.HelloHouston.GameElements
             _tubes = new XPTube[managers.Length];
             for (int i = 0; i < shuffledTransforms.Length; i++)
             {
-                if (i < managers.Length)
+                if (i < _tubes.Length)
                 {
+                    Transform currentTransform = shuffledTransforms[i];
+                    foreach (Transform child in currentTransform)
+                    {
+                        if (child != currentTransform)
+                            Destroy(child.gameObject);
+                    }
                     var go = Instantiate(_xpTubePrefab, shuffledTransforms[i]);
                     var xptube = go.GetComponentInChildren<XPTube>();
                     xptube.Init(managers[i]);
                     _tubes[i] = xptube;
                 }
-                else
-                {
-                    var go = Instantiate(_emptyTubePrefab, shuffledTransforms[i]);
-                }
-            }
-            for (int i = 0; i < _tubeSlots.Length; i++)
-            {
-                _tubeSlots[i].Init(gameManager, topZones[i]);
             }
         }
 

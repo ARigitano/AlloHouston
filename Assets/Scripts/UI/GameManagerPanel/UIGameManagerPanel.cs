@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEngine;
 using VRTK;
 using UnityEngine.Video;
+using CRI.HelloHouston.Calibration;
 
 namespace CRI.HelloHouston.Experience.UI
 {
@@ -65,6 +66,7 @@ namespace CRI.HelloHouston.Experience.UI
         private float _distance = 1.1f;
         private GameObject _screenInstance;
         private Camera[] playerCameras;
+        private VirtualRoom vroom;
 
         private void Reset()
         {
@@ -99,6 +101,8 @@ namespace CRI.HelloHouston.Experience.UI
             var cameras = _player.GetComponentsInChildren<Camera>().Where(x => x.tag == "DisplayCamera").Concat(rst.vroom.GetComponentsInChildren<Camera>(true).Where(x => x.tag == "DisplayCamera"));
             _cameraDisplay.Init(cameras.ToArray());
 
+            vroom = rst.vroom;
+
             if (_player != null && _player.loadedSetup != null)
             {
                 playerCameras = _player.loadedSetup.actualHeadset.GetComponentsInChildren<Camera>();
@@ -119,6 +123,8 @@ namespace CRI.HelloHouston.Experience.UI
             //Needs to be initialized after the start of the game.
             _experienceDisplay.Init(synchronizers);
             _actionDisplay.Init(gameManager.actions, gameManager.gameActionController);
+
+            vroom.gameObject.SetActive(false);
         }
 
         private void Update()
@@ -126,6 +132,7 @@ namespace CRI.HelloHouston.Experience.UI
             if (_screenInstance != null && !_screenInstance.GetComponent<VideoPlayer>().isPlaying)
             {
                 IntroVideoStopped();
+
             }
         }
 
@@ -134,8 +141,9 @@ namespace CRI.HelloHouston.Experience.UI
             foreach (Camera playerCamera in playerCameras)
             {
                 playerCamera.cullingMask = _gameLayerMask;
-                Destroy(_screenInstance);
             }
+            Destroy(_screenInstance);
+            vroom.gameObject.SetActive(true);
         }
     }
 }

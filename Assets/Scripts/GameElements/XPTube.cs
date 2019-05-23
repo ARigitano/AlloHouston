@@ -21,7 +21,7 @@ namespace CRI.HelloHouston.GameElements
         /// Materials depending if tube is available or not for replacement.
         /// </summary>
         [SerializeField]
-        private Material _available, _notAvailable;
+        private Material _available, _notAvailable, success;
         /// <summary>
         /// Reference to the experiment contained in the tube.
         /// </summary>
