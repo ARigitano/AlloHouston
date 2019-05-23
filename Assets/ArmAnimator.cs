@@ -14,6 +14,11 @@ namespace CRI.HelloHouston.GameElements
         [SerializeField]
         [Tooltip("Starting transforms of the tubex.")]
         private Transform[] _tubexAttachPoints = null;
+
+        public Transform[] tubexAttachPoints
+        {
+            get { return _tubexAttachPoints; }
+        }
         /// <summary>
         /// If true, the ArmAnimator is currently performing an animation.
         /// </summary>
@@ -77,8 +82,6 @@ namespace CRI.HelloHouston.GameElements
         /// </summary>
         public void CreateDestroyTubex()
         {
-            if (!_animator.GetBool("Install"))
-                Destroy(_tubex);
         }
 
         /// <summary>
@@ -96,7 +99,7 @@ namespace CRI.HelloHouston.GameElements
         /// </summary>
         public void OnTubexDeposit()
         {
-            Destroy(_tubex);
+            _tubex.transform.SetParent(null);
         }
 
         /// <summary>
@@ -137,8 +140,6 @@ namespace CRI.HelloHouston.GameElements
         public void OnAnimationEnd()
         {
             busy = false;
-            if (!_animator.GetBool("Install"))
-                Destroy(_tubex);
             if (onAnimationEnd != null)
                 onAnimationEnd();
         }

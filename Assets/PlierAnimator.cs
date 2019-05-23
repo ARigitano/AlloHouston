@@ -8,6 +8,7 @@ namespace CRI.HelloHouston.GameElements
     {
         public XPManager manager { get; set; }
         public GameObject tubex { get; set; }
+        public int index { get; set; }
         private Animator _animator;
 
         private void Start()

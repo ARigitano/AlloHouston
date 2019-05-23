@@ -21,7 +21,7 @@ namespace CRI.HelloHouston.GameElements
         /// Materials depending if tube is available or not for replacement.
         /// </summary>
         [SerializeField]
-        private Material _available, _notAvailable, success;
+        private Material _available, _notAvailable, success, disabled;
         /// <summary>
         /// Reference to the experiment contained in the tube.
         /// </summary>
@@ -37,6 +37,12 @@ namespace CRI.HelloHouston.GameElements
         private float _speed = 2f;
         [SerializeField]
         private GameObject _statusPanel;
+
+        [SerializeField]
+        private MeshRenderer _dockMesh;
+
+        private Collider _collider;
+        private int _index;
 
         private bool _isAvailable;
 
@@ -57,23 +63,33 @@ namespace CRI.HelloHouston.GameElements
             GetComponent<VRTK_InteractableObject>().InteractableObjectUngrabbed -= InteractableObjectUngrabbed;
         }
 
-        public void Init(XPManager manager)
+        private void Awake()
         {
+            _collider = GetComponent<Collider>();
+        }
+
+        public void Init(XPManager manager, int index)
+        {
+            _index = index;
             this.manager = manager;
             if (this.manager.state == XPState.Inactive)
             {
-                gameObject.SetActive(false);
+                gameObject.GetComponent<MeshRenderer>().material = disabled;
+                _dockMesh.material = disabled;
                 isActive = false;
             }
             else
+            {
                 isActive = true;
+            }
         }
 
         private void OnActivation(object sender, XPManagerEventArgs e)
         {
             if (e.manager == manager)
             {
-                gameObject.SetActive(true);
+                _dockMesh.material = _available;
+                gameObject.GetComponent<MeshRenderer>().material = _available;
                 isActive = true;
             }
         }
@@ -82,18 +98,18 @@ namespace CRI.HelloHouston.GameElements
         {
             if (e.manager == manager)
             {
-                gameObject.SetActive(false);
+                gameObject.GetComponent<MeshRenderer>().material = disabled;
                 isActive = false;
             }
         }
 
         private void InteractableObjectUngrabbed(object sender, InteractableObjectEventArgs e)
         {
-            if (gameObject.activeInHierarchy)
+            if (isActive && gameObject.activeInHierarchy)
             {
                 if (_destinationSlot != null)
                 {
-                    bool res = _destinationSlot.GetComponentInChildren<TubeSlot>().LoadExperiment(this, manager, SetAvailable);
+                    bool res = _destinationSlot.GetComponentInChildren<TubeSlot>().LoadExperiment(this, _index, manager, SetAvailable);
                     if (res)
                     {
                         isDocked = false;
@@ -124,6 +140,7 @@ namespace CRI.HelloHouston.GameElements
                 transform.rotation = Quaternion.Lerp(transform.rotation, transform.parent.rotation, Time.deltaTime * _speed);
                 transform.position = Vector3.Lerp(transform.position, transform.parent.position, Time.deltaTime * _speed);
             }
+            _collider.enabled = isActive;
         }
 
         /// <summary>
@@ -148,7 +165,7 @@ namespace CRI.HelloHouston.GameElements
 
         private void OnTriggerEnter(Collider other)
         {
-            if (gameObject.activeInHierarchy)
+            if (isActive && gameObject.activeInHierarchy)
             {
                 if (other.tag == "TubeDock" && other.GetComponent<TubeSlot>())
                 {
@@ -165,14 +182,14 @@ namespace CRI.HelloHouston.GameElements
 
         private void OnTriggerExit(Collider other)
         {
-            if (gameObject.activeInHierarchy)
+            if (isActive && gameObject.activeInHierarchy)
             {
                 if (other.tag == "TubeDock" && _destinationSlot != null)
                 {
                     if (_destinationSlot.currentTube == this)
                     {
                         Debug.Log("Unload");
-                        bool res = _destinationSlot.UnloadExperiment(SetAvailable);
+                        bool res = _destinationSlot.UnloadExperiment(_index, SetAvailable);
                         if (res)
                         {
                             SetUnavailable();

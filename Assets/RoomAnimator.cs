@@ -14,13 +14,15 @@ namespace CRI.HelloHouston.GameElements
             public bool install;
             public int index;
             public XPManager manager;
+            public int managerIndex;
             public Action action;
 
-            public RoomAnimatorInstruction(bool install, int index, XPManager manager, Action action)
+            public RoomAnimatorInstruction(bool install, int index, XPManager manager, int managerIndex, Action action)
             {
                 this.install = install;
                 this.index = index;
                 this.manager = manager;
+                this.managerIndex = managerIndex;
                 this.action = action;
             }
         }
@@ -47,6 +49,8 @@ namespace CRI.HelloHouston.GameElements
 
         private Queue<RoomAnimatorInstruction> _instructionQueue = new Queue<RoomAnimatorInstruction>();
         private float _lastDequeue;
+
+        private GameObject[] _tubexs;
 
         private void OnEnable()
         {
@@ -114,13 +118,27 @@ namespace CRI.HelloHouston.GameElements
                 _alarmObjects[i].SetActive(false);
         }
 
+        public void Init(XPManager[] managers)
+        {
+            _tubexs = new GameObject[managers.Length];
+            for (int i = 0; i < managers.Length; i++)
+            {
+                GameObject tubex;
+                if (i < _armAnimator.tubexAttachPoints.Length)
+                    tubex = Instantiate(_tubexDatabase.GetTubex(managers[i].xpContext.tubexType), _armAnimator.tubexAttachPoints[i].transform);
+                else
+                    tubex = Instantiate(_tubexDatabase.GetTubex(managers[i].xpContext.tubexType), _armAnimator.tubexAttachPoints[0].transform);
+                _tubexs[i] = tubex;
+            }
+        }
+
         /// <summary>
         /// Installs the tubex at the desired location. The index is the index of the plier on which the tubex is to be installed.
         /// </summary>
         /// <param name="index">Index of the plier on which the tubex is to be installed.</param>
         /// <param name="tubex">The tubex that will be installed.</param>
         /// <param name="actionOnInstall">Action to be called when the installation is done.</param>
-        public bool InstallTubex(int index, XPManager manager, Action actionOnInstall = null)
+        public bool InstallTubex(int index, XPManager manager, int managerIndex, Action actionOnInstall = null)
         {
             if (!_armAnimator.busy)
             {
@@ -131,10 +149,11 @@ namespace CRI.HelloHouston.GameElements
                     // We can't start the animation if there's already a tubex in the plier or if a tubex of the same experiment is loaded elsewhere.
                     if (plierAnimator.manager == null && plierAnimator.tubex == null && !_plierAnimators.Any(x => x.manager == manager))
                     {
-                        GameObject tubex = Instantiate(_tubexDatabase.GetTubex(manager.xpContext.tubexType));
-                        int animationIndex = UnityEngine.Random.Range(0, 2);
+                        var tubex = _tubexs[managerIndex];
+                        int animationIndex = managerIndex > 1 ? UnityEngine.Random.Range(0, 2) : managerIndex;
                         _armAnimator.SetTubex(tubex, animationIndex, plierAnimator.transform, true);
                         plierAnimator.manager = manager;
+                        plierAnimator.index = index;
                         plierAnimator.tubex = tubex;
                         _armAnimator.InstallTubex(index, animationIndex, actionOnInstall);
                         plierAnimator.InstallTubex();
@@ -148,7 +167,7 @@ namespace CRI.HelloHouston.GameElements
             }
             else
             {
-                _instructionQueue.Enqueue(new RoomAnimatorInstruction(true, index, manager, actionOnInstall));
+                _instructionQueue.Enqueue(new RoomAnimatorInstruction(true, index, manager, managerIndex, actionOnInstall));
             }
             return false;
         }
@@ -171,11 +190,12 @@ namespace CRI.HelloHouston.GameElements
                     // We can't play the animation if the plier doesn't have the tubex.
                     if (tubex != null && manager != null && plierManager == manager)
                     {
-                        int animationIndex = UnityEngine.Random.Range(0, 2);
+                        int animationIndex = plierAnimator.index > 1 ? UnityEngine.Random.Range(0, 2) : plierAnimator.index;
                         _armAnimator.SetTubex(tubex, index, plierAnimator.transform, false);
                         _armAnimator.UninstallTubex(index, animationIndex, actionOnUninstall);
                         plierAnimator.tubex = null;
                         plierAnimator.manager = null;
+                        plierAnimator.index = 0;
                         if (index < _plierAnimators.Length)
                             _plierAnimators[index].UninstallTubex();
                         return true;
@@ -184,7 +204,7 @@ namespace CRI.HelloHouston.GameElements
             }
             else
             {
-                _instructionQueue.Enqueue(new RoomAnimatorInstruction(false, index, manager, actionOnUninstall));
+                _instructionQueue.Enqueue(new RoomAnimatorInstruction(false, index, manager, 0, actionOnUninstall));
             }
             return false;
         }
@@ -194,8 +214,9 @@ namespace CRI.HelloHouston.GameElements
             _armAnimator.busy = false;
             int index = instruction.index;
             XPManager manager = instruction.manager;
+            int managerIndex = instruction.managerIndex;
             Action actionOnInstall = instruction.action;
-            InstallTubex(index, manager, actionOnInstall);
+            InstallTubex(index, manager, managerIndex, actionOnInstall);
         }
 
         private void UninstallTubex(RoomAnimatorInstruction instruction)

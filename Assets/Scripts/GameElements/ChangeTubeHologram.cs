@@ -27,6 +27,9 @@ namespace CRI.HelloHouston.GameElements
         [Tooltip("The tube slots used to load the experiments.")]
         private TubeSlot[] _tubeSlots = null;
         [SerializeField]
+        [Tooltip("The tube docks for the experiments.")]
+        private Transform[] _tubeDocks = null;
+        [SerializeField]
         [Tooltip("Transform of the empty spaces to place the tubes on.")]
         private Transform[] _tubeTransforms = null;
         [SerializeField]
@@ -77,21 +80,30 @@ namespace CRI.HelloHouston.GameElements
         {
             Transform[] shuffledTransforms = _tubeTransforms.Shuffle().ToArray();
             _tubes = new XPTube[managers.Length];
-            for (int i = 0; i < shuffledTransforms.Length; i++)
+            for (int i = 0; i < _tubeDocks.Length && i < _tubes.Length; i++)
             {
-                if (i < _tubes.Length)
+                var go = Instantiate(_xpTubePrefab, _tubeDocks[i].transform);
+                var xptube = go.GetComponentInChildren<XPTube>();
+                xptube.Init(managers[i], i);
+                _tubes[i] = xptube;
+            }
+            int remaining = _tubes.Length - _tubeDocks.Length;
+            for (int i = 0; remaining > 0 && i < remaining; i++)
+            {
+                Transform currentTransform = shuffledTransforms[i];
+                foreach (Transform child in currentTransform)
                 {
-                    Transform currentTransform = shuffledTransforms[i];
-                    foreach (Transform child in currentTransform)
-                    {
-                        if (child != currentTransform)
-                            Destroy(child.gameObject);
-                    }
-                    var go = Instantiate(_xpTubePrefab, shuffledTransforms[i]);
-                    var xptube = go.GetComponentInChildren<XPTube>();
-                    xptube.Init(managers[i]);
-                    _tubes[i] = xptube;
+                    if (child != currentTransform)
+                        Destroy(child.gameObject);
                 }
+                var go = Instantiate(_xpTubePrefab, shuffledTransforms[i]);
+                var xptube = go.GetComponentInChildren<XPTube>();
+                xptube.Init(managers[remaining + i], i);
+                _tubes[i] = xptube;
+            }
+            for (int i = 0; i < _tubeSlots.Length; i++)
+            {
+                _tubeSlots[i].Init(gameManager, topZones[i]);
             }
         }
 
@@ -122,6 +134,11 @@ namespace CRI.HelloHouston.GameElements
         public void ShowHologram()
         {
             visible = true;
+            if (_tubes != null)
+            {
+                foreach (var tube in _tubes)
+                    tube.gameObject.SetActive(true);
+            }
             _animatorElement.Show();
         }
 

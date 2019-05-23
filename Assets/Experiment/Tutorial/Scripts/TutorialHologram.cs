@@ -43,12 +43,7 @@ namespace CRI.HelloHouston.Experience.Tutorial
         // Start is called before the first frame update
         void Start()
         {
-            foreach(GameObject irregularity in GameObject.FindGameObjectsWithTag("Irregularity"))
-            {
-                _nbIrregularities++;
-            }
-
-            StartCoroutine("CountDown");
+            _nbIrregularities = GameObject.FindGameObjectsWithTag("Irregularity").Length;
         }
 
         /// <summary>
@@ -87,7 +82,21 @@ namespace CRI.HelloHouston.Experience.Tutorial
             {
                 _uiTimer.text = "winrar";
                 _win = true;
+                tutorialManager.EndMaintenance();
             }
+        }
+
+        public override void Show()
+        {
+            base.Show();
+            StopAllCoroutines();
+            StartCoroutine(CountDown());
+        }
+
+        public override void Hide()
+        {
+            base.Hide();
+            StopAllCoroutines();
         }
 
         public override void OnShow(int currentStep)
