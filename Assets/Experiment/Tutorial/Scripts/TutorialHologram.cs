@@ -93,7 +93,7 @@ namespace CRI.HelloHouston.Experience.Tutorial
         public override void OnShow(int currentStep)
         {
             base.OnActivation();
-            gameObject.SetActive(false);
+            visible = false;
         }
 
         private void Init(TutorialManager synchronizer)

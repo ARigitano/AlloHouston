@@ -10,7 +10,7 @@ namespace CRI.HelloHouston.GameElements
 
         private void Awake()
         {
-            _holograms = GetComponentsInChildren<IHologram>();
+            _holograms = GetComponentsInChildren<IHologram>(true);
             for (int i = 0; i < _holograms.Length; i++)
             {
                 _holograms[i].visible = false;

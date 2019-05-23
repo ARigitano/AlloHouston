@@ -85,33 +85,14 @@ namespace CRI.HelloHouston.Experience.Tutorial
         /// </summary>
         private GameObject _comScreen;
 
+        private GameManager _gameManager;
+
 
         private void Start()
         {
             _screenPosition = GameObject.FindGameObjectWithTag("IntroScreen");
+            _gameManager = GameObject.FindObjectOfType<GameManager>();
             _dock = FindObjectOfType<CubeDock>();
-            IntroVideo();
-        }
-
-        private void Update()
-        {
-            //Did the video stopped playing?
-            if (_screenInstance != null && !_screenInstance.GetComponent<VideoPlayer>().isPlaying)
-            {
-                IntroVideoStopped();
-            }
-            //Has the player removed all irregularities?
-            if(_maintenanceStartable)
-            {
-            }
-        }
-
-        /// <summary>
-        /// Intro video that explains the universe of the game.
-        /// </summary>
-        private void IntroVideo()
-        {
-            _screenInstance = (GameObject)Instantiate(_screenPrefab, _screenPosition.transform.position, _screenPosition.transform.rotation);
         }
 
         /// <summary>
@@ -147,7 +128,7 @@ namespace CRI.HelloHouston.Experience.Tutorial
         public void OnLaunchSuccess()
         {
             topScreen.StartMaintenance();
-            hologram.gameObject.SetActive(true);
+            hologram.visible = true;
         }
 
         /// <summary>
@@ -164,8 +145,8 @@ namespace CRI.HelloHouston.Experience.Tutorial
         /// </summary>
         public void MaintenanceVirus()
         {
-            hologram.gameObject.SetActive(false);
-            hologramSecond.gameObject.SetActive(true);
+            hologram.visible = false;
+            hologramSecond.visible = true;
             _isEnd = true;
         }
 
@@ -174,7 +155,10 @@ namespace CRI.HelloHouston.Experience.Tutorial
         /// </summary>
         public void EndMaintenance()
         {
-            Debug.Log("Maintenance failed");
+            _gameManager.UnloadXP(wallTopZone);
+            Hide();
+            Deactivate();
+            _gameManager.SetGameState(GameState.Dark);
         }
 
         protected override void PreShow(VirtualWallTopZone wallTopZone, VirtualHologramZone hologramZone, ElementInfo[] info)
@@ -183,13 +167,13 @@ namespace CRI.HelloHouston.Experience.Tutorial
             tabletScreen = GetElement<TutorialTabletScreen>();
             topScreen = GetElement<TutorialTopScreen>();
             tubeScreen = GetElement<TutorialTubeScreen>();
+            hologram = GetElement<TutorialHologram>();
+            hologramSecond = GetElement<TutorialHologramVirus>();
         }
 
         protected override void PostInit(XPContext xpContext, ElementInfo[] info, LogExperienceController logController, int randomSeed, XPVisibility visibilityOnActivation)
         {
             base.PostInit(xpContext, info, logController, randomSeed, visibilityOnActivation);
-            hologram = GetElement<TutorialHologram>();
-            hologramSecond = GetElement<TutorialHologramVirus>();
         }
     }
 }

@@ -130,8 +130,11 @@ namespace CRI.HelloHouston.GameElements
         public void HideHologram()
         {
             visible = false;
-            foreach (var tube in _tubes)
-                tube.gameObject.SetActive(false);
+            if (_tubes != null)
+            {
+                foreach (var tube in _tubes)
+                    tube.gameObject.SetActive(false);
+            }
             _animatorElement.Hide();
         }
     }

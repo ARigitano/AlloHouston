@@ -291,6 +291,8 @@ namespace CRI.HelloHouston.Experience
                         _roomAnimator.DeactivateAlarm();
                     if (_previousState == GameState.Dark)
                     {
+                        foreach (var wallTopZone in _room.GetZones<VirtualWallTopZone>())
+                            UnloadXP(wallTopZone);
                         _hologramManager.Enable();
                         _holocube.PowerUp();
                         _comScreen.gameObject.SetActive(true);

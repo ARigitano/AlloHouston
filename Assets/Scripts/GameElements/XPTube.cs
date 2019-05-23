@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using CRI.HelloHouston.Experience;
 using VRTK;
+using System;
 
 namespace CRI.HelloHouston.GameElements
 {
@@ -46,7 +47,9 @@ namespace CRI.HelloHouston.GameElements
             GetComponent<VRTK_InteractableObject>().InteractableObjectGrabbed += InteractableObjectGrabbed;
             GetComponent<VRTK_InteractableObject>().InteractableObjectUngrabbed += InteractableObjectUngrabbed;
             XPManager.onActivation += OnActivation;
+            XPManager.onDeactivation += OnDeactivation;
         }
+        
 
         private void OnDisable()
         {
@@ -72,6 +75,15 @@ namespace CRI.HelloHouston.GameElements
             {
                 gameObject.SetActive(true);
                 isActive = true;
+            }
+        }
+
+        private void OnDeactivation(object sender, XPManagerEventArgs e)
+        {
+            if (e.manager == manager)
+            {
+                gameObject.SetActive(false);
+                isActive = false;
             }
         }
 

@@ -46,7 +46,7 @@ namespace CRI.HelloHouston.GameElements
 
 
         private Queue<RoomAnimatorInstruction> _instructionQueue = new Queue<RoomAnimatorInstruction>();
-        private float _lastDequeue = Time.time;
+        private float _lastDequeue;
 
         private void OnEnable()
         {
@@ -55,6 +55,7 @@ namespace CRI.HelloHouston.GameElements
 
         private void Start()
         {
+            _lastDequeue = Time.time;
             if (_armAnimator == null)
                 _armAnimator = GetComponentInChildren<ArmAnimator>();
             if (_plierAnimators == null)
