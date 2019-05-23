@@ -5,14 +5,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Video;
+using CRI.HelloHouston.GameElements;
 
-/// <summary>
-/// The XPManager for the tutorial experiment.
-/// </summary>
 namespace CRI.HelloHouston.Experience.Tutorial
 {
-
-
+    /// <summary>
+    /// The XPManager for the tutorial experiment.
+    /// </summary>
     public class TutorialManager : XPManager
     {
         /// <summary>
@@ -28,38 +27,67 @@ namespace CRI.HelloHouston.Experience.Tutorial
         /// </summary>
         public TutorialTabletScreen tabletScreen { get; private set; }
         /// <summary>
-        /// The hologram tube of the table block.
+        /// The first hologram of the table block.
         /// </summary>
         public TutorialHologram hologram { get; private set; }
         /// <summary>
-        /// The hologram tube of the table block.
+        /// The second hologram of the table block.
         /// </summary>
         public TutorialHologramVirus hologramSecond { get; private set; }
         /// <summary>
         /// Settings of the experience.
         /// </summary>
         public TutorialSettings settings { get; private set; }
-        private GameObject _player;
+        /// <summary>
+        /// Player for the intro video
+        /// </summary>
         [SerializeField]
         private VideoPlayer _introVideo;
+        /// <summary>
+        /// Can the holocube be initialized?
+        /// </summary>
         private bool _cubeInitializable = false;
+        /// <summary>
+        /// Can the communication screen be initialized?
+        /// </summary>
         private bool _comInitializable = false;
+        /// <summary>
+        /// Can the maintenance process be launched?
+        /// </summary>
         private bool _maintenanceLaunchable = false;
+        /// <summary>
+        /// Can the maintenance process be started?
+        /// </summary>
         private bool _maintenanceStartable = false;
-        private bool _firstMaintenance = false;
+        /// <summary>
+        /// Is it the end of the tutorial?
+        /// </summary>
         private bool _isEnd = false;
+        /// <summary>
+        /// Prefab for the introduction screen
+        /// </summary>
         [SerializeField]
         private GameObject _screenPrefab;
+        /// <summary>
+        /// Instantiated introduction screen
+        /// </summary>
         private GameObject _screenInstance;
+        /// <summary>
+        /// Dock for the holocube
+        /// </summary>
         private CubeDock _dock;
-        private bool _isDestroyed = false;
+        /// <summary>
+        /// Position on which the introduction screen should be instantiated
+        /// </summary>
         private GameObject _screenPosition;
-        private Canvas _comScreenCanvas;
+        /// <summary>
+        /// Canvas of the communication screen
+        /// </summary>
+        private GameObject _comScreen;
 
 
         private void Start()
         {
-            _player = GameObject.FindGameObjectWithTag("MainCamera");
             _screenPosition = GameObject.FindGameObjectWithTag("IntroScreen");
             _dock = FindObjectOfType<CubeDock>();
             IntroVideo();
@@ -72,11 +100,9 @@ namespace CRI.HelloHouston.Experience.Tutorial
             {
                 IntroVideoStopped();
             }
-
             //Has the player removed all irregularities?
             if(_maintenanceStartable)
             {
-
             }
         }
 
@@ -85,9 +111,7 @@ namespace CRI.HelloHouston.Experience.Tutorial
         /// </summary>
         private void IntroVideo()
         {
-            //disables every layers in camera
             _screenInstance = (GameObject)Instantiate(_screenPrefab, _screenPosition.transform.position, _screenPosition.transform.rotation);
-            //_introVideo.loopPointReached += EndReached;
         }
 
         /// <summary>
@@ -96,9 +120,7 @@ namespace CRI.HelloHouston.Experience.Tutorial
         private void IntroVideoStopped()
         {
             Destroy(_screenInstance);
-
             _cubeInitializable = true;
-            Debug.Log("Intro video stopped");
         }
 
         /// <summary>
@@ -106,11 +128,6 @@ namespace CRI.HelloHouston.Experience.Tutorial
         /// </summary>
         private void ActivatingHolocube()
         {
-            //REQUIRES HOLOCUBE
-            //launched if holocube has been placed on table on station map face
-            //launches initialization of holocube
-            //checks if holocube has been initialized
-            //sets next step
             _comInitializable = true;
         }
 
@@ -119,17 +136,9 @@ namespace CRI.HelloHouston.Experience.Tutorial
         /// </summary>
         private void ActivationCommunicationScreen()
         {
-            //REQUIRES HOLOCUBE
-            //REQUIRES COMMUNICATION SCREEN
-            //launched if holocube has been placed on table on tubex selection face
-            //launches initialization of communication screen
-            //checks if communication screen is initiaized
-            //checks if maintenance tubex has been loaded
-            //sets next step
-            _comScreenCanvas.enabled = true;
+            _comScreen.SetActive(true);
             tabletScreen.StartLaunch();
             _maintenanceLaunchable = true;
-            Debug.Log("Com screen activated");
         }
 
         /// <summary>
@@ -137,10 +146,8 @@ namespace CRI.HelloHouston.Experience.Tutorial
         /// </summary>
         public void OnLaunchSuccess()
         {
-            //stepManager.SkipToStep("Maintenance");
             topScreen.StartMaintenance();
             hologram.gameObject.SetActive(true);
-            //MaintenanceStarted();
         }
 
         /// <summary>
@@ -148,7 +155,6 @@ namespace CRI.HelloHouston.Experience.Tutorial
         /// </summary>
         public void OnIrregularitiesSuccess()
         {
-            //stepManager.SkipToStep("Irregularities");
             topScreen.ContinueMaintenance();
             tabletScreen.StartSecondMaintenance();
         }
@@ -158,11 +164,6 @@ namespace CRI.HelloHouston.Experience.Tutorial
         /// </summary>
         public void MaintenanceVirus()
         {
-            //REQUIRES HOLOCUBE
-            //MODIF HOLOGRAM
-            //launched when first step of maintenance has been completed
-            //checks end of timer
-            //sets next step
             hologram.gameObject.SetActive(false);
             hologramSecond.gameObject.SetActive(true);
             _isEnd = true;
@@ -173,8 +174,6 @@ namespace CRI.HelloHouston.Experience.Tutorial
         /// </summary>
         public void EndMaintenance()
         {
-            //launched if first or second steps of maintenance have been failed
-            //produces the action leading to beginnning of game
             Debug.Log("Maintenance failed");
         }
 

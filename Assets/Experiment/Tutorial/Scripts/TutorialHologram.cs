@@ -3,34 +3,41 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// The hologram for the tutorial experiment.
+/// The first hologram for the tutorial experiment.
 /// </summary>
 namespace CRI.HelloHouston.Experience.Tutorial
 {
     public class TutorialHologram : XPHologramElement
     {
+        /// <summary>
+        /// The manager for the experiment.
+        /// </summary>
         public TutorialManager tutorialManager { get; private set; }
-        //private List<GameObject> _irregularities = new List<GameObject>();
         /// <summary>
         /// Number of irregularities inside the core.
         /// </summary>
         private int _nbIrregularities;
         /// <summary>
-        /// Text that displays the number of irregularities remaining inside the core.
-        /// </summary>
-        [SerializeField]
-        private TextMesh _uiNbIrregularities,
-        /// <summary>
         /// Text that displays the time remaining before failure.
         /// </summary>  
-                        _uiTimer;
+        [SerializeField]
+        private TextMesh _uiTimer;
         /// <summary>
-        /// Timer until failure.
+        /// Time until failure.
         /// </summary>
         [SerializeField]
         private float _timer;
-        private bool win = false;
+        /// <summary>
+        /// Is the hologram resolved?
+        /// </summary>
+        private bool _win = false;
+        /// <summary>
+        /// Materials for the buildings in case of correct or wrong irregularity removed
+        /// </summary>
         public Material materialSuccess, materialFail;
+        /// <summary>
+        /// The number of irregularities correctly removed
+        /// </summary>
         private int _nbSuccess = 0;
 
         // Start is called before the first frame update
@@ -40,6 +47,7 @@ namespace CRI.HelloHouston.Experience.Tutorial
             {
                 _nbIrregularities++;
             }
+
             StartCoroutine("CountDown");
         }
 
@@ -51,7 +59,7 @@ namespace CRI.HelloHouston.Experience.Tutorial
         {
             while(_timer > 0f)
             {
-                if (win)
+                if (_win)
                 {
                     tutorialManager.OnIrregularitiesSuccess();
                     break;
@@ -61,7 +69,7 @@ namespace CRI.HelloHouston.Experience.Tutorial
                 _uiTimer.text = _timer.ToString();
             }
 
-            if (!win)
+            if (!_win)
             {
                 _uiTimer.text = "Fail";
                 tutorialManager.EndMaintenance();
@@ -78,7 +86,7 @@ namespace CRI.HelloHouston.Experience.Tutorial
             if(_nbSuccess * 2 >= _nbIrregularities)
             {
                 _uiTimer.text = "winrar";
-                win = true;
+                _win = true;
             }
         }
 
