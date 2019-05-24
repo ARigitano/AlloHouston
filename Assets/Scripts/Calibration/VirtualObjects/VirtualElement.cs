@@ -21,6 +21,15 @@ namespace CRI.HelloHouston.Calibration
         /// Prefab of the element.
         /// </summary>
         private XPElement _elementPrefab;
+        [SerializeField]
+        [Tooltip("Transform of the canvas on which the XPElement is to  be displayed if the XPElement is a Canvas Element.")]
+        private Transform _canvasTransform;
+        /// <summary>
+        /// Transform on which the XPElement is to be displayed if the XPElement isn't a Canvas Element.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("Transform on which the XPElement is to be displayed if the XPElement isn't a Canvas Element.")]
+        private Transform _objectTransform;
         /// <summary>
         /// Instance of the element.
         /// </summary>
@@ -54,9 +63,11 @@ namespace CRI.HelloHouston.Calibration
         public virtual XPElement Init(XPManager manager)
         {
             Clean();
-            currentElement = Instantiate(_elementPrefab, transform);
-            if (!currentElement.canvasElement)
+            if (_elementPrefab.canvasElement)
+                currentElement = Instantiate(_elementPrefab, _canvasTransform);
+            else
             {
+                currentElement = Instantiate(_elementPrefab, _objectTransform);
                 Vector3 localScale = currentElement.transform.localScale;
                 Vector3 lossyScale = gameObject.transform.lossyScale;
                 currentElement.transform.localScale = new Vector3(
@@ -70,14 +81,17 @@ namespace CRI.HelloHouston.Calibration
         }
         /// <summary>
         /// Dismiss the current element and sets its value to null.
+        /// <return>The cleaned element.</return> 
         /// </summary>
-        public virtual void Clean()
+        public virtual XPElement Clean()
         {
+            XPElement res = currentElement;
             if (currentElement != null)
             {
                 currentElement.Dismiss();
                 currentElement = null;
             }
+            return res;
         }
         /// <summary>
         /// Return the experience element stored in the virtual element.

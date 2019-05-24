@@ -12,17 +12,32 @@ namespace CRI.HelloHouston.Experience
     public enum XPState
     {
         Inactive,
-        Visible,
-        Hidden,
+        InProgress,
         Success,
         Failure,
     }
+
+    public enum XPVisibility
+    {
+        Visible,
+        Hidden
+    }
+
+    public struct XPManagerEventArgs
+    {
+        public XPManager manager;
+        public XPState currentState;
+        public XPVisibility currentVisiblity;
+    }
+
+
+    public delegate void XPManagerEventHandler(object sender, XPManagerEventArgs e);
 
     /// <summary>
     /// The XPManager is responsible for the communication of every prefabs of one particular experiment among themselves as well as with the Gamecontroller.
     /// </summary>
     [System.Serializable]
-    public abstract class XPManager : MonoBehaviour, ILangManager
+    public class XPManager : MonoBehaviour, ILangManager
     {
         [System.Serializable]
         public struct ElementInfo
@@ -38,11 +53,11 @@ namespace CRI.HelloHouston.Experience
                 this.virtualZone = virtualZone;
             }
         }
-        public delegate void XPStateEvent(XPState state);
-        public delegate void XPManagerEvent(XPManager synchronizer);
-        public XPStateEvent onStateChange;
-        public static XPManagerEvent onActivation;
-        public static XPManagerEvent onEnd;
+        public event XPManagerEventHandler onStateChange;
+        public event XPManagerEventHandler onVisibilityChange;
+        public static event XPManagerEventHandler onActivation;
+        public static event XPManagerEventHandler onDeactivation;
+        public static event XPManagerEventHandler onEnd;
         /// <summary>
         /// The xp context.
         /// </summary>
@@ -51,6 +66,10 @@ namespace CRI.HelloHouston.Experience
         /// The wall top zone.
         /// </summary>
         public VirtualWallTopZone wallTopZone { get; protected set; }
+        /// <summary>
+        /// The hologram zone.
+        /// </summary>
+        public VirtualHologramZone hologramZone { get; protected set; }
         /// <summary>
         /// All the contents.
         /// </summary>
@@ -61,9 +80,13 @@ namespace CRI.HelloHouston.Experience
         [HideInInspector]
         public string error;
         /// <summary>
-        /// The state of the XPSynchronizer.
+        /// The state of the XPManager.
         /// </summary>
         public XPState state { get; protected set; }
+        /// <summary>
+        /// The visibility of the XPManager.
+        /// </summary>
+        public XPVisibility visibility { get; protected set; }
 
         public LogExperienceController logController { get; protected set; }
 
@@ -78,17 +101,26 @@ namespace CRI.HelloHouston.Experience
             }
         }
 
-        public int randomSeed { get; private set; }
+        [SerializeField]
+        [Tooltip("The step manager.")]
+        protected XPStepManager _stepManager;
 
-        protected XPState _stateOnActivation;
-
-        public bool active
+        public XPStepManager stepManager
         {
             get
             {
-                return state == XPState.Visible || state == XPState.Hidden;
+                return _stepManager;
             }
         }
+
+        public int randomSeed { get; private set; }
+
+        protected XPVisibility _visibilityOnActivation;
+
+        protected XPState _previousState;
+        protected XPVisibility _previousVisibility;
+
+        public bool visible { get; private set; }
 
         public T GetElement<T>(string name) where T : XPElement, new()
         {
@@ -121,17 +153,51 @@ namespace CRI.HelloHouston.Experience
         /// <returns></returns>
         protected virtual void PostReset() { }
 
+
+        private void InvokeStateChangeEvent()
+        {
+            if (onStateChange != null && _previousState != state)
+                onStateChange(this, new XPManagerEventArgs() { manager = this, currentState = state, currentVisiblity = visibility });
+        }
+
+        private void InvokeEndEvent()
+        {
+            if (onEnd != null && _previousState != state)
+                onEnd(this, new XPManagerEventArgs() { manager = this, currentState = state, currentVisiblity = visibility });
+        }
+
+        private void InvokeVisibilityEvent()
+        {
+            if (onVisibilityChange != null && _previousVisibility != visibility)
+            {
+                Debug.Log("Event fired");
+                onVisibilityChange(this, new XPManagerEventArgs() { manager = this, currentState = state, currentVisiblity = visibility });
+            }
+        }
+
+        private void InvokeActivationEvent()
+        {
+            if (onActivation != null && _previousState != state)
+                onActivation(this, new XPManagerEventArgs() { manager = this, currentState = state, currentVisiblity = visibility });
+        }
+
+        private void InvokeDeactivationEvent()
+        {
+            if (onDeactivation != null && _previousState != state)
+                onDeactivation(this, new XPManagerEventArgs() { manager = this, currentState = state, currentVisiblity = visibility });
+        }
+
         public void ResetExperiment()
         {
             PreReset();
-            var previousState = state;
-            state = XPState.Visible;
-            if (onStateChange != null && previousState != state)
-                onStateChange(state);
+            _previousState = state;
+            state = XPState.InProgress;
+            stepManager.SkipToStep(0);
+            InvokeStateChangeEvent();
             logController.AddLog("Reset", xpContext, Log.LogType.Automatic);
             foreach (var element in elements)
             {
-                element.xpElement.OnReset ();
+                element.xpElement.OnReset();
             }
             PostReset();
         }
@@ -143,11 +209,12 @@ namespace CRI.HelloHouston.Experience
         public void Success()
         {
             PreSuccess();
-            XPState state = XPState.Success;
-            if (onStateChange != null)
-                onStateChange(state);
-            if (onEnd != null)
-                onEnd(this);
+            _previousState = state;
+            state = XPState.Success;
+            if (onStateChange != null && _previousState != state)
+                onStateChange(this, new XPManagerEventArgs() { manager = this, currentState = state, currentVisiblity = visibility });
+            if (onEnd != null && _previousState != state)
+                onEnd(this, new XPManagerEventArgs() { manager = this, currentState = state, currentVisiblity = visibility });
             logController.AddLog("Success", xpContext, Log.LogType.Automatic);
             foreach (var element in elements)
             {
@@ -172,11 +239,10 @@ namespace CRI.HelloHouston.Experience
         public void Fail()
         {
             PreFail();
+            _previousState = state;
             state = XPState.Failure;
-            if (onStateChange != null)
-                onStateChange(state);
-            if (onEnd != null)
-                onEnd(this);
+            InvokeStateChangeEvent();
+            InvokeEndEvent();
             logController.AddLog("Failure", xpContext, Log.LogType.Automatic);
             foreach (var element in elements)
             {
@@ -200,11 +266,13 @@ namespace CRI.HelloHouston.Experience
         public void Activate()
         {
             PreActivate();
-            state = _stateOnActivation;
-            if (onStateChange != null)
-                onStateChange(state);
-            if (onActivation != null)
-                onActivation(this);
+            _previousState = state;
+            _previousVisibility = visibility;
+            state = XPState.InProgress;
+            visibility = _visibilityOnActivation;
+            InvokeStateChangeEvent();
+            InvokeActivationEvent();
+            InvokeVisibilityEvent();
             logController.AddLog("Activation", xpContext, Log.LogType.Automatic);
             foreach (var element in elements)
             {
@@ -222,6 +290,16 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         protected virtual void PostActivate() { }
 
+        public void Deactivate()
+        {
+            _previousState = state;
+            _previousVisibility = visibility;
+            state = XPState.Inactive;
+            InvokeStateChangeEvent();
+            InvokeDeactivationEvent();
+            InvokeVisibilityEvent();
+        }
+
         /// <summary>
         /// To be called to pause the experiment during the game.
         /// </summary>
@@ -229,10 +307,12 @@ namespace CRI.HelloHouston.Experience
         {
             PreHide();
             if (this.wallTopZone != null)
-                wallTopZone.CleanAll();
-            state = XPState.Hidden;
-            if (onStateChange != null)
-                onStateChange(state);
+                CleanZone(wallTopZone);
+            if (this.hologramZone != null)
+                CleanZone(hologramZone);
+            _previousVisibility = visibility;
+            visibility = XPVisibility.Hidden;
+            InvokeVisibilityEvent();
             logController.AddLog("Hide", xpContext, Log.LogType.Automatic);
             foreach (var element in elements)
             {
@@ -253,74 +333,167 @@ namespace CRI.HelloHouston.Experience
         /// <summary>
         /// To be called to call back the experiment after it has been paused.
         /// </summary>
-        public void Show(VirtualWallTopZone wallTopZone)
+        public void Show(VirtualWallTopZone wallTopZone, VirtualHologramZone hologramZone)
         {
-            PreShow(wallTopZone, elements.ToArray());
             this.wallTopZone = wallTopZone;
             wallTopZone.Place(xpContext.xpWallTopZone, xpContext);
-            state = XPState.Visible;
-            if (onStateChange != null)
-                onStateChange(state);
+            InitZone(wallTopZone);
+            this.hologramZone = hologramZone;
+            if (xpContext.xpHologramZone != null && hologramZone != null)
+            {
+                hologramZone.Place(xpContext.xpHologramZone, xpContext);
+                InitZone(hologramZone);
+            }
+            PreShow(wallTopZone, hologramZone, elements.ToArray());
+            _previousVisibility = visibility;
+            visibility = XPVisibility.Visible;
+            InvokeVisibilityEvent();
             logController.AddLog("Show", xpContext, Log.LogType.Automatic);
             foreach (var element in elements)
             {
-                element.xpElement.OnShow();
+                element.xpElement.OnShow(stepManager.sumValue);
             }
-            PostShow(wallTopZone, elements.ToArray());
+            PostShow(wallTopZone, hologramZone, elements.ToArray());
         }
 
         /// <summary>
         /// Called before the state changes to the visible state.
         /// </summary>
-        protected virtual void PreShow(VirtualWallTopZone wallTopZone, ElementInfo[] info) { }
+        protected virtual void PreShow(VirtualWallTopZone wallTopZone, VirtualHologramZone hologramZone, ElementInfo[] info) { }
         /// <summary>
         /// Called after the state changes to the visible state.
         /// </summary>
-        protected virtual void PostShow(VirtualWallTopZone wallTopZone, ElementInfo[] info) { }
+        protected virtual void PostShow(VirtualWallTopZone wallTopZone, VirtualHologramZone hologramZone, ElementInfo[] info) { }
+
+        protected virtual void CleanZone(VirtualZone zone)
+        {
+            IEnumerable<XPElement> res = zone.CleanAll().ToList();
+            elements.RemoveAll(x => res.Contains(x.xpElement));
+        }
 
         protected virtual ElementInfo[] InitZone(VirtualZone zone)
         {
             var res = zone.InitAll(this).Select(xpElement => new ElementInfo(xpElement, xpElement.virtualElement, zone));
+            foreach (var element in res)
+            {
+                element.xpElement.OnInit(this, randomSeed);
+            }
             elements.AddRange(res);
             return res.ToArray();
         }
 
-        protected virtual ElementInfo[] InitZones(VirtualZone[] zones)
+        protected virtual ElementInfo[] InitZones(IEnumerable<VirtualZone> zones)
         {
             var res = zones.SelectMany(zone => InitZone(zone));
             return res.ToArray();
         }
 
-        public void Init(XPContext xpContext, VirtualZone[] zones, LogExperienceController logController, int randomSeed, XPState stateOnActivation = XPState.Hidden)
+        public void Init(
+            XPContext xpContext, VirtualZone[] zones,
+            LogExperienceController logController, int randomSeed,
+            XPVisibility visibilityOnActivation = XPVisibility.Visible
+            )
         {
-            PreInit(xpContext, logController, randomSeed, stateOnActivation);
+            PreInit(xpContext, logController, randomSeed, visibilityOnActivation);
             this.xpContext = xpContext;
             this.randomSeed = randomSeed;
+            _previousState = state;
             state = XPState.Inactive;
-            _stateOnActivation = stateOnActivation;
+            _visibilityOnActivation = visibilityOnActivation;
             actionController = new ExperienceActionController(this);
-            langManager = new LangManager(xpContext.xpGroup.settings.langSettings);
+            if (xpContext.xpGroup.settings != null)
+                langManager = new LangManager(xpContext.xpGroup.settings.langSettings);
+            else
+                langManager = new LangManager();
             this.logController = logController;
             if (logController != null)
                 logController.AddLog("Ready", xpContext, Log.LogType.Automatic);
-            ElementInfo[] zoneInfo = InitZones(zones);
-            foreach (var element in elements)
-                element.xpElement.OnInit(this, randomSeed);
-            PostInit(xpContext, zoneInfo, logController, randomSeed, stateOnActivation);
+            ElementInfo[] zoneInfo = InitZones(zones.Where(zone => !zone.switchableZone));
+            PostInit(xpContext, zoneInfo, logController, randomSeed, visibilityOnActivation);
         }
 
         /// <summary>
         /// Called before the initialization.
         /// </summary>
-        protected virtual void PreInit(XPContext xpContext, LogExperienceController logController, int randomSeed, XPState stateOnActivation) { }
+        protected virtual void PreInit(XPContext xpContext, LogExperienceController logController, int randomSeed, XPVisibility visibilityOnActivation) { }
         /// <summary>
         /// Called after the initialization.
         /// </summary>
-        protected virtual void PostInit(XPContext xpContext, ElementInfo[] info, LogExperienceController logController, int randomSeed, XPState stateOnActivation) { }
+        protected virtual void PostInit(XPContext xpContext, ElementInfo[] info, LogExperienceController logController, int randomSeed, XPVisibility visibilityOnActivation) { }
 
-        public virtual void SkipToStep(int step)
+        public virtual void SkipToNextStep()
         {
-            logController.AddLog(string.Format("Skip to step {0}", step), xpContext, Log.LogType.Automatic);
+            if (stepManager.currentStepIndex < stepManager.stepActions.Length - 1)
+            {
+                SkipToStep(stepManager.currentStepIndex + 1);
+            }
+            else
+            {
+                logController.AddLogError(string.Format("Can't skip to next step."), xpContext);
+            }
+        }
+
+        public virtual void SkipToPreviousStep()
+        {
+            if (stepManager.currentStepIndex > 0)
+            {
+                SkipToStep(stepManager.currentStepIndex - 1);
+            }
+            else
+            {
+                logController.AddLogError(string.Format("Can't skip to previous step."), xpContext);
+            }
+        }
+
+        public virtual void RestartStep()
+        {
+            SkipToStep(stepManager.currentStepIndex);
+        }
+        
+        public virtual void SkipToStep(int stepValue)
+        {
+            if (stepManager.SkipToStep(stepValue))
+            {
+                logController.AddLogAutomatic(string.Format("Skip to step {0}", stepValue), xpContext);
+                XPStepManager.StepAction stepAction = stepManager.currentStep;
+                if (stepAction != null && stepAction.action != null)
+                    stepAction.action.Invoke();
+                if ((state == XPState.Success || state == XPState.Failure) && stepManager.sumValue < stepManager.maxStepValue)
+                {
+                    var tmp = state;
+                    state = _previousState;
+                    _previousState = tmp;
+                    if (onStateChange != null)
+                        onStateChange(this, new XPManagerEventArgs() { manager = this, currentState = state });
+                }
+            }
+            else
+            {
+                logController.AddLogError(string.Format("Skip to step unsuccessful for step {0}", stepValue), xpContext);
+            }
+        }
+
+        public virtual void SkipToStep(string stepName)
+        {
+            if (stepManager.SkipToStep(stepName))
+            {
+                logController.AddLogAutomatic(string.Format("Skip to step {0}", stepName), xpContext);
+                XPStepManager.StepAction stepAction = stepManager.currentStep;
+                if (stepAction != null && stepAction.action != null)
+                    stepAction.action.Invoke();
+                if ((state == XPState.Success || state == XPState.Failure) && stepManager.sumValue < stepManager.maxStepValue)
+                {
+                    var tmp = state;
+                    state = _previousState;
+                    _previousState = tmp;
+                    if (onStateChange != null)
+                        onStateChange(this, new XPManagerEventArgs() { manager = this, currentState = state });
+                }
+            }
+            else
+            {
+                logController.AddLogError(string.Format("Skip to step unsuccessful for step {0}", stepName), xpContext);
+            }
         }
 
         public virtual void PlaySound(PlayableSound sound)
@@ -335,11 +508,6 @@ namespace CRI.HelloHouston.Experience
             logController.AddLog(string.Format("Play music {0}", music), xpContext, Log.LogType.Automatic);
             if (wallTopZone != null)
                 wallTopZone.leftSpeaker.PlayMusic(music);
-        }
-
-        internal void PlayableSound(AudioSource sound)
-        {
-            throw new NotImplementedException();
         }
     }
 }

@@ -69,7 +69,7 @@ namespace CRI.HelloHouston.Calibration.UI
                     totalCorner += context.totalCorners;
                     totalDoor += context.totalDoors;
                     totalHologram += context.totalHolograms;
-                    totalDuration += (int)context.xpSettings.duration;
+                    totalDuration += context.xpSettings != null ? (int)context.xpSettings.duration : 0;
                 }
             }
             int roomWallTop = _virtualRoom.GetZones(ZoneType.WallTop).Length;

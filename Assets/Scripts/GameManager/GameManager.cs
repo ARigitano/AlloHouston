@@ -7,9 +7,18 @@ using CRI.HelloHouston.Audio;
 using CRI.HelloHouston.Translation;
 using UnityEngine.SceneManagement;
 using CRI.HelloHouston.Settings;
+using CRI.HelloHouston.GameElements;
+using CRI.HelloHouston.GameElements;
 
 namespace CRI.HelloHouston.Experience
 {
+    public enum GameState
+    {
+        Default,
+        Alarm,
+        Dark,
+    }
+
     public class GameManager : MonoBehaviour, ISource, ILangManager
     {
         private static int s_randomSeed;
@@ -88,7 +97,7 @@ namespace CRI.HelloHouston.Experience
         }
         private float _startTime;
         /// <summary>
-        /// Time since the game start.
+        /// Time since the game start (in seconds).
         /// </summary>
         public float timeSinceGameStart {
             get
@@ -97,13 +106,15 @@ namespace CRI.HelloHouston.Experience
             }
         }
 
-        public int xpTimeEstimate
-        {
-            get
-            {
-                return xpManagers.Sum(x => x.xpContext.xpSettings.duration);
-            }
-        }
+        public int xpTimeEstimate { get; private set; }
+
+        private VirtualRoom _room;
+        private RoomAnimator _roomAnimator;
+        private HologramManager _hologramManager;
+        private UIComScreen _comScreen;
+        private Holocube _holocube;
+        private GameState _currentState;
+        private GameState _previousState;
 
         public string sourceName
         {
@@ -126,23 +137,191 @@ namespace CRI.HelloHouston.Experience
             langManager = new LangManager(_appSettings.langSettings);
         }
 
-        public XPManager[] InitGame(XPContext[] xpContexts, VirtualRoom room)
+        public XPManager[] InitGame(XPContext[] xpContexts, VirtualRoom room, int timeEstimate)
         {
-            return InitGame(xpContexts, room, UnityEngine.Random.Range(0, int.MaxValue));
+            return InitGame(xpContexts, room, timeEstimate, UnityEngine.Random.Range(0, int.MaxValue));
         }
 
-        public XPManager[] InitGame(XPContext[] xpContexts, VirtualRoom room, int seed)
+        public XPManager[] InitGame(XPContext[] xpContexts, VirtualRoom room, int timeEstimate, int seed)
         {
             s_randomSeed = seed;
+            this.xpTimeEstimate = timeEstimate;
+            _room = room;
+            _roomAnimator = room.GetComponent<RoomAnimator>();
+            _hologramManager = room.GetComponentInChildren<HologramManager>(true);
+            _holocube = room.GetComponentInChildren<Holocube>(true);
+            _holocube.StartingState();
+            VirtualWallTopZone[] wallTopZones = _room.GetZones<VirtualWallTopZone>();
+            if (wallTopZones.Length > 0)
+                wallTopZones[0].holocubeFace = _holocube.xpRightFace;
+            if (wallTopZones.Length > 1)
+                wallTopZones[1].holocubeFace = _holocube.xpLeftFace;
+            // Managers init
             xpManagers = xpContexts.Select(xpContext => xpContext.InitManager(logManager.logExperienceController, room.GetZones().Where(zone => zone.xpContext == xpContext).ToArray(), s_randomSeed)).ToArray();
             _startTime = Time.time;
+            _roomAnimator.Init(xpManagers);
             logGeneralController.AddLog(string.Format("Random Seed: {0}", randomSeed), this, Log.LogType.Important);
+            _comScreen = room.GetComponentInChildren<UIComScreen>(true);
+            _comScreen.Init(this, xpManagers);
+            _comScreen.gameObject.SetActive(false);
             return xpManagers;
         }
 
         public GameHint[] GetAllCurrentHints()
         {
-            return _mainSettings.hints.Select(hint => new GameHint(hint, this)).Concat(xpManagers.Where(x => x.active).SelectMany(x => x.xpContext.hints)).ToArray();
+            return _mainSettings.hints.Select(hint => new GameHint(hint, this)).Concat(xpManagers.Where(x => x.state == XPState.InProgress).SelectMany(x => x.xpContext.hints)).ToArray();
+        }
+
+        /// <summary>
+        /// Open the door.
+        /// </summary>
+        public void OpenDoor()
+        {
+            _roomAnimator.OpenDoor();
+        }
+
+        /// <summary>
+        /// Close the door.
+        /// </summary>
+        public void CloseDoor()
+        {
+            _roomAnimator.CloseDoor();
+        }
+
+        /// <summary>
+        /// Unloads an xp from a wall top zone.
+        /// </summary>
+        /// <param name="wallTopIndex">The index of the wall top zone from which the experience will be unloaded.</param>
+        public bool UnloadXP(int wallTopIndex, Action onXPUnloaded = null)
+        {
+            var zone = _room.GetZones<VirtualWallTopZone>().FirstOrDefault(x => x.index == wallTopIndex);
+            if (zone != null)
+                return UnloadXP(zone, onXPUnloaded);
+            return false;
+        }
+
+        /// <summary>
+        /// Unloads an xp from a wall top zone.
+        /// </summary>
+        /// <param name="zone">The wall top zone from which the experience will be unloaded.</param>
+        public bool UnloadXP(VirtualWallTopZone zone, Action onXPUnloaded = null)
+        {
+            XPManager manager = zone.manager;
+            if (manager == null)
+                return false;
+            var vhzone = _room.GetZones<VirtualHologramZone>().FirstOrDefault(x => x.index == zone.index && x.xpZone == null);
+            if (vhzone == null)
+                vhzone = _room.GetZones<VirtualHologramZone>().FirstOrDefault(x => x.xpZone == null);
+            logGeneralController.AddLog(string.Format("XP Unloaded: {0}", manager.xpContext.contextName), this, Log.LogType.Important);
+            _roomAnimator.UninstallTubex(zone.index, manager, () => {
+                manager.Hide();
+                if (onXPUnloaded != null)
+                    onXPUnloaded.Invoke();
+            });
+            return true;
+        }
+
+        /// <summary>
+        /// Loads an experience into a wall top zone.
+        /// </summary>
+        /// <param name="managerIndex">The index of the experience that will be loaded.</param>
+        /// <param name="wallTopIndex">The index of the zone that will be loaded.</param>
+        public bool LoadXP(int managerIndex, int wallTopIndex, Action onXPLoaded = null)
+        {
+            var zone = _room.GetZones<VirtualWallTopZone>().FirstOrDefault(x => x.index == wallTopIndex);
+            if (zone != null)
+                return LoadXP(managerIndex, zone, onXPLoaded);
+            return false;
+        }
+
+        /// <summary>
+        /// Loads an experience into a wall top zone.
+        /// </summary>
+        /// <param name="manager">The manager of the experience that will be loaded.</param>
+        /// <param name="zone">The wall top zone in which the experience will be loaded.</param>
+        public bool LoadXP(int managerIndex, VirtualWallTopZone zone, Action onXPLoaded = null)
+        {
+            XPManager[] managers = xpManagers;
+            XPManager manager = managerIndex < managers.Length ? managers[managerIndex] : null;
+            // No need to load the experiment if it's already there or if the manager is already loaded elsewhere.
+            if (manager == null || zone.manager != null || manager.visibility == XPVisibility.Visible)
+                return false;
+            var vhzone = _room.GetZones<VirtualHologramZone>().FirstOrDefault(x => x.index == zone.index && x.xpZone == null);
+            if (vhzone == null)
+                vhzone = _room.GetZones<VirtualHologramZone>().FirstOrDefault(x => x.xpZone == null);
+            logGeneralController.AddLog(string.Format("XP Loaded: {0}", manager.xpContext.contextName), this, Log.LogType.Important);
+            _roomAnimator.InstallTubex(zone.index, manager, managerIndex, () => {
+                manager.Show(zone, vhzone);
+                if (onXPLoaded != null)
+                    onXPLoaded.Invoke();
+            });
+            return true;
+        }
+
+        /// <summary>
+        /// Swaps the current active hologram to the indexed one.
+        /// </summary>
+        /// <param name="index">The index of the hologram to swap to. If there's none, nothing happens.</param>
+        public void SwapHologram(int index)
+        {
+            _hologramManager.Enable();
+            _hologramManager.SwapHologram(index);
+        }
+
+        /// <summary>
+        /// Hides the current active hologram.
+        /// </summary>
+        public void HideHologram()
+        {
+            _hologramManager.HideHologram();
+        }
+
+        /// <summary>
+        /// Changes the state of the game.
+        /// </summary>
+        /// <param name="state"></param>
+        public void SetGameState(GameState state)
+        {
+            _currentState = state;
+            switch (state)
+            {
+                case GameState.Default:
+                    if (_previousState != GameState.Default)
+                        _roomAnimator.ActivateAllLights();
+                    if (_previousState == GameState.Alarm)
+                        _roomAnimator.DeactivateAlarm();
+                    if (_previousState == GameState.Dark)
+                    {
+                        _hologramManager.Enable();
+                        _holocube.PowerUp();
+                        _comScreen.gameObject.SetActive(true);
+                    }
+                    break;
+                case GameState.Alarm:
+                    if (_previousState != GameState.Alarm)
+                        _roomAnimator.ActivateAlarm();
+                    if (_previousState == GameState.Default)
+                        _roomAnimator.DeactivateAllLights();
+                    if (_previousState == GameState.Dark)
+                    {
+                        _hologramManager.Enable();
+                        _holocube.PowerUp();
+                        _comScreen.gameObject.SetActive(true);
+                    }
+                    break;
+                case GameState.Dark:
+                    if (_previousState == GameState.Alarm)
+                        _roomAnimator.DeactivateAlarm();
+                    if (_previousState != GameState.Dark)
+                    {
+                        _roomAnimator.DeactivateAllLights();
+                        _hologramManager.Disable();
+                        _holocube.PowerDown();
+                        _comScreen.gameObject.SetActive(false);
+                    }
+                    break;
+            }
+            _previousState = _currentState;
         }
 
         public void SendHintToPlayers(string hint)
@@ -155,11 +334,12 @@ namespace CRI.HelloHouston.Experience
         {
             for (int i = 0; i < starting.Length; i++)
             {
-                if (starting[i] && !xpManagers[i].active)
+                if (starting[i] && xpManagers[i].state == XPState.Inactive)
                 {
                     xpManagers[i].Activate();
                 }
             }
+            _room.GetComponentInChildren<ChangeTubeHologram>(true).Init(this, xpManagers, _room.GetZones<VirtualWallTopZone>());
         }
 
         public void TurnLightOn()

@@ -21,7 +21,7 @@ namespace CRI.HelloHouston.Experience.UI
         /// </summary>
         [SerializeField]
         [Tooltip("The icon of the message.")]
-        private Image _icon = null;
+        protected Image _icon = null;
 
         public void Init(string text)
         {
