@@ -77,10 +77,12 @@ namespace CRI.HelloHouston.GameElements
                 gameObject.GetComponent<MeshRenderer>().material = disabled;
                 _dockMesh.material = disabled;
                 isActive = false;
+                _isAvailable = false;
             }
             else
             {
                 isActive = true;
+                _isAvailable = true;
             }
         }
 
@@ -91,6 +93,7 @@ namespace CRI.HelloHouston.GameElements
                 _dockMesh.material = _available;
                 gameObject.GetComponent<MeshRenderer>().material = _available;
                 isActive = true;
+                _isAvailable = true;
             }
         }
 
@@ -100,6 +103,7 @@ namespace CRI.HelloHouston.GameElements
             {
                 gameObject.GetComponent<MeshRenderer>().material = disabled;
                 isActive = false;
+                _isAvailable = false;
             }
         }
 
@@ -140,7 +144,8 @@ namespace CRI.HelloHouston.GameElements
                 transform.rotation = Quaternion.Lerp(transform.rotation, transform.parent.rotation, Time.deltaTime * _speed);
                 transform.position = Vector3.Lerp(transform.position, transform.parent.position, Time.deltaTime * _speed);
             }
-            _collider.enabled = isActive;
+            _collider.enabled = isActive && _isAvailable;
+
         }
 
         /// <summary>
@@ -150,7 +155,6 @@ namespace CRI.HelloHouston.GameElements
         {
             _isAvailable = true;
             gameObject.GetComponent<MeshRenderer>().material = _available;
-            gameObject.GetComponent<BoxCollider>().enabled = true;
         }
 
         /// <summary>
@@ -160,7 +164,6 @@ namespace CRI.HelloHouston.GameElements
         {
             _isAvailable = false;
             gameObject.GetComponent<MeshRenderer>().material = _notAvailable;
-            gameObject.GetComponent<BoxCollider>().enabled = false;
         }
 
         private void OnTriggerEnter(Collider other)

@@ -218,6 +218,12 @@ namespace CRI.HelloHouston.Experience.MAIA
             tubeScreen = null;
         }
 
+        public void ForceFeynmanHologram()
+        {
+            hologramFeynman.visible = true;
+            hologramFeynman.Show();
+        }
+
         protected override void PreShow(VirtualWallTopZone wallTopZone, VirtualHologramZone virtualHologramZone, ElementInfo[] info)
         {
             base.PreShow(wallTopZone, virtualHologramZone, info);

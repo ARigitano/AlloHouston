@@ -134,22 +134,12 @@ namespace CRI.HelloHouston.GameElements
         public void ShowHologram()
         {
             visible = true;
-            if (_tubes != null)
-            {
-                foreach (var tube in _tubes)
-                    tube.gameObject.SetActive(true);
-            }
             _animatorElement.Show();
         }
 
         public void HideHologram()
         {
             visible = false;
-            if (_tubes != null)
-            {
-                foreach (var tube in _tubes)
-                    tube.gameObject.SetActive(false);
-            }
             _animatorElement.Hide();
         }
     }
