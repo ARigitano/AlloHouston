@@ -82,6 +82,16 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         [Tooltip("The door at the entrance of the room.")]
         public XPDoorZone xpDoorZone;
+        /// <summary>
+        /// Icon used for the holocube.
+        /// </summary>
+        [Tooltip("Emissive texture used for the holocube.")]
+        public Texture holocubeEmissiveTexture;
+        /// <summary>
+        /// Alpha texture used for the holocube.
+        /// </summary>
+        [Tooltip("Alpha texture used for the holocube.")]
+        public Texture holocubeMainTex;
         
         public int totalWallTop
         {
@@ -175,7 +185,6 @@ namespace CRI.HelloHouston.Experience
         {
             XPManager res = GameObject.Instantiate(_xpManagerPrefab);
             res.Init(this, zones, logExperienceController, randomSeed, XPVisibility.Hidden);
-            res.Activate();
             return res;
         }
     }

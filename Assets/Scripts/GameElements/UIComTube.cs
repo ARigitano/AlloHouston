@@ -89,7 +89,7 @@ namespace CRI.HelloHouston.GameElements
             for (int i = 0; i < steps; i++)
                 _fillItems[i] = Instantiate(_fillItemPrefab, _fillGroup).GetComponentInChildren<Image>();
             UpdateSteps(_xpManager.stepManager.sumValue, _xpManager.state);
-            UpdateTubes(_xpManager.visibility);
+            UpdateTubes(_xpManager.visibility, _xpManager.state);
         }
 
         public void OnStepChange(object sender, XPStepEventArgs e)
@@ -99,21 +99,21 @@ namespace CRI.HelloHouston.GameElements
 
         private void OnVisibilityChange(object sender, XPManagerEventArgs e)
         {
-            UpdateTubes(e.currentVisiblity);
+            UpdateTubes(e.currentVisiblity, e.currentState);
             UpdateSteps(_xpManager.stepManager.sumValue, e.currentState);
         }
 
         private void OnStateChange(object sender, XPManagerEventArgs e)
         {
-            UpdateTubes(e.currentVisiblity);
+            UpdateTubes(e.currentVisiblity, e.currentState);
             UpdateSteps(_xpManager.stepManager.sumValue, e.currentState);
         }
 
-        private void UpdateTubes(XPVisibility currentVisibility)
+        private void UpdateTubes(XPVisibility currentVisibility, XPState currentState)
         {
             bool visible = (currentVisibility == XPVisibility.Visible);
-            _tube.SetActive(visible);
-            _smallTube.SetActive(!visible);
+            _tube.SetActive(visible && currentState != XPState.Inactive);
+            _smallTube.SetActive(!visible && currentState != XPState.Inactive);
         }
 
         private void UpdateSteps(int currentStepValue, XPState currentState)

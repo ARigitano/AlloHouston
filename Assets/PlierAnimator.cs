@@ -1,13 +1,14 @@
 ﻿using CRI.HelloHouston.Experience;
 using UnityEngine;
 
-namespace CRI.HelloHouston.GameElement
+namespace CRI.HelloHouston.GameElements
 {
     [RequireComponent(typeof(Animator))]
     public class PlierAnimator : MonoBehaviour
     {
         public XPManager manager { get; set; }
         public GameObject tubex { get; set; }
+        public int index { get; set; }
         private Animator _animator;
 
         private void Start()

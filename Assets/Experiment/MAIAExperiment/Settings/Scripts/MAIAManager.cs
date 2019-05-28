@@ -208,7 +208,6 @@ namespace CRI.HelloHouston.Experience.MAIA
         protected override void PreActivate()
         {
             base.PreActivate();
-            GenerateParticles();
         }
 
         protected override void PostHide()
@@ -217,6 +216,12 @@ namespace CRI.HelloHouston.Experience.MAIA
             tabletScreen = null;
             topScreen = null;
             tubeScreen = null;
+        }
+
+        public void ForceFeynmanHologram()
+        {
+            hologramFeynman.visible = true;
+            hologramFeynman.Show();
         }
 
         protected override void PreShow(VirtualWallTopZone wallTopZone, VirtualHologramZone virtualHologramZone, ElementInfo[] info)
@@ -241,7 +246,10 @@ namespace CRI.HelloHouston.Experience.MAIA
         protected override void PreInit(XPContext xpContext, LogExperienceController logController, int randomSeed, XPVisibility visibilityOnActivation)
         {
             base.PreInit(xpContext, logController, randomSeed, visibilityOnActivation);
+            this.xpContext = xpContext;
+            this.logController = logController;
             _rand = new System.Random(randomSeed);
+            GenerateParticles();
         }
 
         protected override void PostInit(XPContext xpContext, ElementInfo[] info, LogExperienceController logController, int randomSeed, XPVisibility visibilityOnActivation)

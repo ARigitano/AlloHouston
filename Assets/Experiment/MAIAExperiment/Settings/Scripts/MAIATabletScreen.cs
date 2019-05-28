@@ -36,6 +36,24 @@ namespace CRI.HelloHouston.Experience.MAIA
         /// The panel currently being displayed.
         /// </summary>
         private Window _currentPanel;
+        [SerializeField]
+        [Tooltip("")]
+        private AudioClip _btnManualOverride = null;
+        [SerializeField]
+        [Tooltip("")]
+        private AudioClip _btnNumber = null;
+        [SerializeField]
+        [Tooltip("")]
+        private AudioClip _panelNumbersIn = null;
+        [SerializeField]
+        [Tooltip("")]
+        private AudioClip _panelSlidersIn = null;
+        [SerializeField]
+        [Tooltip("")]
+        private AudioClip _windowOpen = null;
+        [SerializeField]
+        [Tooltip("")]
+        private AudioClip _windowClose = null;
 
         private Window _previousPanel;
 

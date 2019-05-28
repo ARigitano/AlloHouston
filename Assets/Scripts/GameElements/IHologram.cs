@@ -1,4 +1,4 @@
-﻿namespace CRI.HelloHouston.GameElement
+﻿namespace CRI.HelloHouston.GameElements
 {
     internal interface IHologram
     {

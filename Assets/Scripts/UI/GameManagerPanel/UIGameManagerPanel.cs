@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using VRTK;
+using UnityEngine.Video;
+using CRI.HelloHouston.Calibration;
 
 namespace CRI.HelloHouston.Experience.UI
 {
@@ -57,6 +59,14 @@ namespace CRI.HelloHouston.Experience.UI
         [SerializeField]
         [Tooltip("Layer setup for the player in game.")]
         private LayerMask _gameLayerMask = new LayerMask();
+        [SerializeField]
+        private LayerMask _introLayerMask = new LayerMask();
+        [SerializeField]
+        private GameObject _introScreen;
+        private float _distance = 1.1f;
+        private GameObject _screenInstance;
+        private Camera[] playerCameras;
+        private VirtualRoom vroom;
 
         private void Reset()
         {
@@ -91,13 +101,14 @@ namespace CRI.HelloHouston.Experience.UI
             var cameras = _player.GetComponentsInChildren<Camera>().Where(x => x.tag == "DisplayCamera").Concat(rst.vroom.GetComponentsInChildren<Camera>(true).Where(x => x.tag == "DisplayCamera"));
             _cameraDisplay.Init(cameras.ToArray());
 
+            vroom = rst.vroom;
+
             if (_player != null && _player.loadedSetup != null)
             {
-                var playerCameras = _player.loadedSetup.actualHeadset.GetComponentsInChildren<Camera>();
+                playerCameras = _player.loadedSetup.actualHeadset.GetComponentsInChildren<Camera>();
+                _screenInstance = (GameObject)Instantiate(_introScreen);
                 foreach (Camera playerCamera in playerCameras)
-                {
-                    playerCamera.cullingMask = _gameLayerMask;
-                }
+                    playerCamera.cullingMask = _introLayerMask;
             }
             // Needs to be initialized before the start of the game.
             _logDisplay.Init(gameManager.logManager);
@@ -109,6 +120,26 @@ namespace CRI.HelloHouston.Experience.UI
             //Needs to be initialized after the start of the game.
             _experienceDisplay.Init(synchronizers);
             _actionDisplay.Init(gameManager.actions, gameManager.gameActionController);
+
+            vroom.gameObject.SetActive(false);
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyUp(KeyCode.Escape) || (_screenInstance != null && !_screenInstance.GetComponent<VideoPlayer>().isPlaying))
+            {
+                IntroVideoStopped();
+            }
+        }
+
+        private void IntroVideoStopped()
+        {
+            foreach (Camera playerCamera in playerCameras)
+            {
+                playerCamera.cullingMask = _gameLayerMask;
+            }
+            Destroy(_screenInstance);
+            vroom.gameObject.SetActive(true);
         }
     }
 }

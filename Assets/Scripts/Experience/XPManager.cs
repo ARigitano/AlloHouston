@@ -56,6 +56,7 @@ namespace CRI.HelloHouston.Experience
         public event XPManagerEventHandler onStateChange;
         public event XPManagerEventHandler onVisibilityChange;
         public static event XPManagerEventHandler onActivation;
+        public static event XPManagerEventHandler onDeactivation;
         public static event XPManagerEventHandler onEnd;
         /// <summary>
         /// The xp context.
@@ -180,6 +181,12 @@ namespace CRI.HelloHouston.Experience
                 onActivation(this, new XPManagerEventArgs() { manager = this, currentState = state, currentVisiblity = visibility });
         }
 
+        private void InvokeDeactivationEvent()
+        {
+            if (onDeactivation != null && _previousState != state)
+                onDeactivation(this, new XPManagerEventArgs() { manager = this, currentState = state, currentVisiblity = visibility });
+        }
+
         public void ResetExperiment()
         {
             PreReset();
@@ -282,6 +289,16 @@ namespace CRI.HelloHouston.Experience
         /// Called before the state changes to the default state on activation.
         /// </summary>
         protected virtual void PostActivate() { }
+
+        public void Deactivate()
+        {
+            _previousState = state;
+            _previousVisibility = visibility;
+            state = XPState.Inactive;
+            InvokeStateChangeEvent();
+            InvokeDeactivationEvent();
+            InvokeVisibilityEvent();
+        }
 
         /// <summary>
         /// To be called to pause the experiment during the game.

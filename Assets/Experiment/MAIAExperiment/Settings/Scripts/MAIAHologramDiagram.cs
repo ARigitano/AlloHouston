@@ -100,12 +100,14 @@ namespace CRI.HelloHouston.Experience.MAIA
         protected override void StartShowAnimation()
         {
             StopAllCoroutines();
+            this.transform.position = center;
             StartCoroutine(ShowAnimation());
         }
 
         protected override void StartHideAnimation()
         {
             StopAllCoroutines();
+            this.transform.position = _startingPosition;
             StartCoroutine(HideAnimation());
         }
     }

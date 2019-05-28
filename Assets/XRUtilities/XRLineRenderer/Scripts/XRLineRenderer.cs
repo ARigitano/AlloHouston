@@ -174,10 +174,6 @@ public class XRLineRenderer : MeshChainRenderer
         m_Positions = newPositions;
         if (NeedsReinitialize())
         {
-            if (knownSizeChange == false)
-            {
-                Debug.LogWarning("New positions does not match size of existing array.  Adjusting vertex count as well");
-            }
             Initialize();
             return;
         }

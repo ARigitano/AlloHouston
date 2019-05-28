@@ -620,6 +620,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _spawnPosition: {fileID: 640917531}
+--- !u!20 &259710232 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 20571587395622448, guid: 248aaa0ad766ad04289ce7254eb528ac,
+    type: 3}
+  m_PrefabInstance: {fileID: 259710211}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &524236029
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1054,6 +1060,7 @@ MonoBehaviour:
   _isCommon: 0
   _useFont: 1
   _autoInit: 1
+  _autoUpdate: 1
 --- !u!1 &1392300362
 GameObject:
   m_ObjectHideFlags: 0
@@ -1395,6 +1402,7 @@ MonoBehaviour:
   controllerRenderModel: {fileID: 0}
   hoverDurationTimer: 0
   canClickOnHover: 0
+  originRotation: {x: 0, y: 0, z: 0, w: 0}
   autoActivatingCanvas: {fileID: 0}
   collisionClick: 0
 --- !u!114 &1753084666
@@ -1693,6 +1701,7 @@ MonoBehaviour:
   _isCommon: 0
   _useFont: 1
   _autoInit: 1
+  _autoUpdate: 1
 --- !u!114 &1993505979
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1790,6 +1799,7 @@ MonoBehaviour:
   _isCommon: 0
   _useFont: 1
   _autoInit: 1
+  _autoUpdate: 1
 --- !u!114 &2071149468
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2088,6 +2098,7 @@ MonoBehaviour:
   controllerRenderModel: {fileID: 0}
   hoverDurationTimer: 0
   canClickOnHover: 0
+  originRotation: {x: 0, y: 0, z: 0, w: 0}
   autoActivatingCanvas: {fileID: 0}
   collisionClick: 0
 --- !u!114 &4285209811708678845
@@ -2310,6 +2321,7 @@ MonoBehaviour:
   controllerRenderModel: {fileID: 0}
   hoverDurationTimer: 0
   canClickOnHover: 0
+  originRotation: {x: 0, y: 0, z: 0, w: 0}
   autoActivatingCanvas: {fileID: 0}
   collisionClick: 0
 --- !u!114 &4285209813068631979
@@ -4184,7 +4196,7 @@ PrefabInstance:
     - target: {fileID: 4869723415036972948, guid: 14e37f0a6a54bc543a991588f724f7d3,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: 0.000030517578
       objectReference: {fileID: 0}
     - target: {fileID: 4869572388667348580, guid: 14e37f0a6a54bc543a991588f724f7d3,
         type: 3}
@@ -4286,6 +4298,17 @@ PrefabInstance:
       propertyPath: _gameLayerMask.m_Bits
       value: 1591
       objectReference: {fileID: 0}
+    - target: {fileID: 4691748489374186147, guid: 14e37f0a6a54bc543a991588f724f7d3,
+        type: 3}
+      propertyPath: _introLayerMask.m_Bits
+      value: 1024
+      objectReference: {fileID: 0}
+    - target: {fileID: 4691748489374186147, guid: 14e37f0a6a54bc543a991588f724f7d3,
+        type: 3}
+      propertyPath: _introScreen
+      value: 
+      objectReference: {fileID: 305488358536868991, guid: f089da2688effc94f8490bdbdcc5acf5,
+        type: 3}
     - target: {fileID: 4869653318626093621, guid: 14e37f0a6a54bc543a991588f724f7d3,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -4309,7 +4332,7 @@ PrefabInstance:
     - target: {fileID: 4870167980425575783, guid: 14e37f0a6a54bc543a991588f724f7d3,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.0000027027577
+      value: 0.0000022527543
       objectReference: {fileID: 0}
     - target: {fileID: 4869640550043717287, guid: 14e37f0a6a54bc543a991588f724f7d3,
         type: 3}
@@ -4349,7 +4372,7 @@ PrefabInstance:
     - target: {fileID: 4869612396180324113, guid: 14e37f0a6a54bc543a991588f724f7d3,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.0000032263988
+      value: 0.0000013431901
       objectReference: {fileID: 0}
     - target: {fileID: 4869612396180324113, guid: 14e37f0a6a54bc543a991588f724f7d3,
         type: 3}
@@ -4399,12 +4422,12 @@ PrefabInstance:
     - target: {fileID: 4869676528886000731, guid: 14e37f0a6a54bc543a991588f724f7d3,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.000024799883
+      value: 0.000035488574
       objectReference: {fileID: 0}
     - target: {fileID: 4869676528886000731, guid: 14e37f0a6a54bc543a991588f724f7d3,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.000003823234
+      value: 0.0000044899193
       objectReference: {fileID: 0}
     - target: {fileID: 4870412544282273441, guid: 14e37f0a6a54bc543a991588f724f7d3,
         type: 3}
@@ -4556,6 +4579,11 @@ PrefabInstance:
       propertyPath: _timeInputField
       value: 
       objectReference: {fileID: 191666006}
+    - target: {fileID: 4650773023505731412, guid: 14e37f0a6a54bc543a991588f724f7d3,
+        type: 3}
+      propertyPath: camera
+      value: 
+      objectReference: {fileID: 259710232}
     - target: {fileID: 4870072796732852123, guid: 14e37f0a6a54bc543a991588f724f7d3,
         type: 3}
       propertyPath: m_AnchoredPosition.x

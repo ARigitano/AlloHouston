@@ -6,17 +6,8 @@ namespace CRI.HelloHouston.Experience.Tutorial
 {
     public class TutorialTopScreen : XPElement
     {
-        // Start is called before the first frame update
-        void Start()
-        {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
+        [SerializeField]
+        private GameObject _maintenancePanel, _secondMaintenancePanel;
 
         public void StartMaintenance()
         {
@@ -25,7 +16,8 @@ namespace CRI.HelloHouston.Experience.Tutorial
 
         public void ContinueMaintenance()
         {
-
+            _maintenancePanel.SetActive(false);
+            _secondMaintenancePanel.SetActive(true);
         }
     }
 }

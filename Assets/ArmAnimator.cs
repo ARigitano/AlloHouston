@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace CRI.HelloHouston.GameElement
+namespace CRI.HelloHouston.GameElements
 {
     [RequireComponent(typeof(Animator))]
     public class ArmAnimator : MonoBehaviour
@@ -14,10 +14,15 @@ namespace CRI.HelloHouston.GameElement
         [SerializeField]
         [Tooltip("Starting transforms of the tubex.")]
         private Transform[] _tubexAttachPoints = null;
+
+        public Transform[] tubexAttachPoints
+        {
+            get { return _tubexAttachPoints; }
+        }
         /// <summary>
         /// If true, the ArmAnimator is currently performing an animation.
         /// </summary>
-        public bool busy { get; private set; }
+        public bool busy { get; set; }
 
         private GameObject _tubex;
         private Animator _animator;
@@ -77,8 +82,6 @@ namespace CRI.HelloHouston.GameElement
         /// </summary>
         public void CreateDestroyTubex()
         {
-            if (!_animator.GetBool("Install"))
-                Destroy(_tubex);
         }
 
         /// <summary>
@@ -96,7 +99,7 @@ namespace CRI.HelloHouston.GameElement
         /// </summary>
         public void OnTubexDeposit()
         {
-            Destroy(_tubex);
+            _tubex.transform.SetParent(null);
         }
 
         /// <summary>
@@ -137,8 +140,6 @@ namespace CRI.HelloHouston.GameElement
         public void OnAnimationEnd()
         {
             busy = false;
-            if (!_animator.GetBool("Install"))
-                Destroy(_tubex);
             if (onAnimationEnd != null)
                 onAnimationEnd();
         }

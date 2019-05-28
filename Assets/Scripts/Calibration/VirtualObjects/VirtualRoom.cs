@@ -4,7 +4,7 @@ using VRCalibrationTool;
 using CRI.HelloHouston.Experience;
 using System.Collections.Generic;
 using UnityEngine;
-using CRI.HelloHouston.GameElement;
+using CRI.HelloHouston.GameElements;
 using System;
 
 namespace CRI.HelloHouston.Calibration

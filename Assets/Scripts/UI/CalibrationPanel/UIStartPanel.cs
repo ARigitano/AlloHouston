@@ -24,6 +24,7 @@ namespace CRI.HelloHouston.Calibration.UI
         [SerializeField]
         [Tooltip("The time input field.")]
         private InputField _timeInputField = null;
+        
 
         private RoomSettings _rmst;
 
@@ -32,8 +33,6 @@ namespace CRI.HelloHouston.Calibration.UI
             _nextObject = obj;
             _rmst = (RoomSettings)obj;
             _nextButton.onClick.AddListener(Next);
-
-            //Camera.main.cullingMask &= ~(1 << LayerMask.NameToLayer("Default"));
 
             RoomSettings rmst = (RoomSettings)_nextObject;
             _timeInputField.text = _rmst.timeEstimate.ToString();

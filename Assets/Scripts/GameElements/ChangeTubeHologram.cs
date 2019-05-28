@@ -1,4 +1,4 @@
-﻿using CRI.HelloHouston.GameElement;
+﻿using CRI.HelloHouston.GameElements;
 using System.Collections;
 using UnityEngine;
 using Valve.VR.InteractionSystem;
@@ -27,11 +27,14 @@ namespace CRI.HelloHouston.GameElements
         [Tooltip("The tube slots used to load the experiments.")]
         private TubeSlot[] _tubeSlots = null;
         [SerializeField]
+        [Tooltip("The tube docks for the experiments.")]
+        private Transform[] _tubeDocks = null;
+        [SerializeField]
         [Tooltip("Transform of the empty spaces to place the tubes on.")]
         private Transform[] _tubeTransforms = null;
         [SerializeField]
         [Tooltip("Prefab of the xp tube")]
-        private XPTube _xpTubePrefab = null;
+        private GameObject _xpTubePrefab = null;
         [SerializeField]
         [Tooltip("Prefab of the empty tube.")]
         private GameObject _emptyTubePrefab = null;
@@ -41,10 +44,31 @@ namespace CRI.HelloHouston.GameElements
 
         public bool visible { get; set; }
 
-        IEnumerator Wait()
+        private void OnEnable()
         {
-            yield return new WaitForSeconds(3.0f);
-            LoadingFinished();
+            _animatorElement.onShown += OnShown;
+            _animatorElement.onHidden += OnHidden;
+        }
+
+        private void OnDisable()
+        {
+            _animatorElement.onShown -= OnHidden;
+            _animatorElement.onHidden -= OnHidden;
+        }
+
+        private void OnHidden()
+        {
+            foreach (var tube in _tubes)
+                tube.gameObject.SetActive(false);
+        }
+
+        private void OnShown()
+        {
+            foreach (var tube in _tubes)
+            {
+                if (tube.isActive)
+                    tube.gameObject.SetActive(true);
+            }
         }
 
         private void Reset()
@@ -56,18 +80,26 @@ namespace CRI.HelloHouston.GameElements
         {
             Transform[] shuffledTransforms = _tubeTransforms.Shuffle().ToArray();
             _tubes = new XPTube[managers.Length];
-            for (int i = 0; i < shuffledTransforms.Length; i++)
+            for (int i = 0; i < _tubeDocks.Length && i < _tubes.Length; i++)
             {
-                if (i < managers.Length)
+                var go = Instantiate(_xpTubePrefab, _tubeDocks[i].transform);
+                var xptube = go.GetComponentInChildren<XPTube>();
+                xptube.Init(managers[i], i);
+                _tubes[i] = xptube;
+            }
+            int remaining = _tubes.Length - _tubeDocks.Length;
+            for (int i = 0; remaining > 0 && i < remaining; i++)
+            {
+                Transform currentTransform = shuffledTransforms[i];
+                foreach (Transform child in currentTransform)
                 {
-                    var go = Instantiate(_xpTubePrefab, shuffledTransforms[i]);
-                    go.manager = managers[i];
-                    _tubes[i] = go;
+                    if (child != currentTransform)
+                        Destroy(child.gameObject);
                 }
-                else
-                {
-                    var go = Instantiate(_emptyTubePrefab, shuffledTransforms[i]);
-                }
+                var go = Instantiate(_xpTubePrefab, shuffledTransforms[i]);
+                var xptube = go.GetComponentInChildren<XPTube>();
+                xptube.Init(managers[remaining + i], i);
+                _tubes[i] = xptube;
             }
             for (int i = 0; i < _tubeSlots.Length; i++)
             {
@@ -80,19 +112,18 @@ namespace CRI.HelloHouston.GameElements
         /// </summary>
         /// <param name="experience">The experiment beig loaded</param>
         /// <param name="topZone">Index of the wall top zone on which the experiment is loading.</param>
-        public void LoadingTube(XPManager experience, int wallTopZoneIndex)
+        public void SetUnavailable()
         {
             foreach(XPTube tube in _tubes)
             {
                 tube.SetUnavailable();
             }
-            StartCoroutine(Wait());
         }
 
         /// <summary>
         /// Called when a tube has finished loading.
         /// </summary>
-        private void LoadingFinished()
+        private void SetAvailable()
         {
             foreach (XPTube tube in _tubes)
             {

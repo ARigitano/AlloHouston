@@ -1,5 +1,6 @@
 ﻿using CRI.HelloHouston.Audio;
 using CRI.HelloHouston.Experience;
+using CRI.HelloHouston.GameElements;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -43,6 +44,8 @@ namespace CRI.HelloHouston.Calibration
         {
             if (xpZone == null)
             {
+                if (holocubeFace != null)
+                    holocubeFace.SetActive(false);
                 this.xpWallTopZone = null;
                 wallTopLeftVirtualElement.Clean();
                 wallTopLeftVirtualElement.PlaceObject(null, null);
@@ -55,6 +58,14 @@ namespace CRI.HelloHouston.Calibration
                 if (!xpWallTopZone)
                     throw new WrongZoneTypeException();
                 this.xpWallTopZone = xpWallTopZone;
+                if (holocubeFace != null)
+                {
+                    holocubeFace.SetActive(true);
+                    if (xpContext.holocubeEmissiveTexture != null && xpContext.holocubeMainTex != null)
+                        holocubeFace.SetTexture(xpContext.holocubeMainTex, xpContext.holocubeEmissiveTexture);
+                    else
+                        holocubeFace.SetDefaultTexture();
+                }
                 wallTopLeftVirtualElement.PlaceObject(xpWallTopZone.elementLeftPrefab, xpContext);
                 wallTopRightVirtualElement.PlaceObject(xpWallTopZone.elementRightPrefab, xpContext);
                 wallTopTabletVirtualElement.PlaceObject(xpWallTopZone.elementTabletPrefab, xpContext);
@@ -63,6 +74,8 @@ namespace CRI.HelloHouston.Calibration
 
         public override XPElement[] CleanAll()
         {
+            if (holocubeFace != null)
+                holocubeFace.SetActive(false);
             var res = base.CleanAll();
             if (_leftSpeaker != null)
             _leftSpeaker.StopAll();
@@ -100,5 +113,10 @@ namespace CRI.HelloHouston.Calibration
         /// The right speaker of the wall top.
         /// </summary>
         public SoundManager rightSpeaker { get { return _rightSpeaker; } }
+        /// <summary>
+        /// The corresponding holocube face.
+        /// </summary>
+        [HideInInspector]
+        public HolocubeFace holocubeFace;
     }
 }
