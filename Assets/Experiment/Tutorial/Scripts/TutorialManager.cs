@@ -118,7 +118,7 @@ namespace CRI.HelloHouston.Experience.Tutorial
         /// </summary>
         private void IntroVideo()
         {
-            _screenInstance = (GameObject)Instantiate(_screenPrefab, _screenPosition.transform.position, _screenPosition.transform.rotation);
+            //_screenInstance = (GameObject)Instantiate(_screenPrefab, _screenPosition.transform.position, _screenPosition.transform.rotation);
         }
 
         /// <summary>
@@ -126,7 +126,7 @@ namespace CRI.HelloHouston.Experience.Tutorial
         /// </summary>
         private void IntroVideoStopped()
         {
-            Destroy(_screenInstance);
+           // Destroy(_screenInstance);
             _cubeInitializable = true;
         }
 
@@ -144,7 +144,6 @@ namespace CRI.HelloHouston.Experience.Tutorial
         private void ActivationCommunicationScreen()
         {
             _comScreen.SetActive(true);
-            tabletScreen.StartLaunch();
             _maintenanceLaunchable = true;
         }
 

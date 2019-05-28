@@ -69,6 +69,7 @@ namespace CRI.HelloHouston.GameElement
         /// </summary>
         public void OpenDoor()
         {
+            Debug.Log("Door opened");
             _doorAnimatorLeft.SetBool("OpenDoor", true);
             _doorAnimatorRight.SetBool("OpenDoor", true);
         }
@@ -78,8 +79,9 @@ namespace CRI.HelloHouston.GameElement
         /// </summary>
         public void CloseDoor()
         {
-            _doorAnimatorLeft.SetBool("CloseDoor", false);
-            _doorAnimatorRight.SetBool("CloseDoor", false);
+            Debug.Log("Door closed");
+            _doorAnimatorLeft.SetBool("OpenDoor", false);
+            _doorAnimatorRight.SetBool("OpenDoor", false);
         }
 
         /// <summary>

@@ -30,15 +30,29 @@ namespace CRI.HelloHouston.Experience.Tutorial
 
         }
 
+        /// <summary>
+        /// Called when maintenance button pressed.
+        /// </summary>
         public void StartMaintenance()
         {
-
+            _maintenancePopup.SetActive(true);
         }
 
+        /// <summary>
+        /// Called when first hologram resolved.
+        /// </summary>
         public void ContinueMaintenance()
         {
             _maintenancePanel.SetActive(false);
             _secondMaintenancePanel.SetActive(true);
+        }
+
+        /// <summary>
+        /// Called when advanced maintenance button pressed.
+        /// </summary>
+        public void AdvancedMaintenance()
+        {
+            _secondMaintenancePopup.SetActive(true);
         }
     }
 }

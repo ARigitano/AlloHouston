@@ -103,8 +103,8 @@ namespace CRI.HelloHouston.Experience.UI
             {
                 playerCameras = _player.loadedSetup.actualHeadset.GetComponentsInChildren<Camera>();
                 playerCameras[0].cullingMask = _introLayerMask;
-                _screenInstance = (GameObject)Instantiate(_introScreen, playerCameras[0].transform.position + playerCameras[0].transform.forward * _distance, Quaternion.identity);
-                _screenInstance.transform.LookAt(playerCameras[1].transform.forward);
+                _screenInstance = (GameObject)Instantiate(_introScreen, playerCameras[0].transform.position /*+ playerCameras[0].transform.forward * _distance*/, Quaternion.identity);
+                //_screenInstance.transform.LookAt(playerCameras[1].transform.forward);
                 /*foreach (Camera playerCamera in playerCameras)
                 {
                     playerCamera.cullingMask = _introLayerMask;

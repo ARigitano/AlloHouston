@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using CRI.HelloHouston.WindowTemplate;
+using System;
 
 /// <summary>
 /// The tablet screen for the tutorial experiment.
@@ -32,9 +33,15 @@ namespace CRI.HelloHouston.Experience.Tutorial
         /// The panel previously displayd
         /// </summary>
         private Window _previousPanel;
-
-        private void ActivatePanel(Window newPanel)
+        private void DeactivatePanel(Action action = null)
         {
+            ActivatePanel(null, action);
+        }
+
+        private void ActivatePanel(Window newPanel, Action action = null)
+        {
+            if (newPanel != null && action == null)
+                action = newPanel.ShowWindow;
             // We stop the previous panel animation if it didn't finish yet.
             if (_previousPanel != null && _previousPanel.visible)
             {
@@ -43,22 +50,17 @@ namespace CRI.HelloHouston.Experience.Tutorial
             }
             if (_currentPanel == newPanel)
                 return;
-            else if (_currentPanel != null && newPanel != null)
-                _currentPanel.HideWindow(newPanel.ShowWindow);
-            else if (_currentPanel != null && newPanel == null)
-                _currentPanel.HideWindow();
+            else if (_currentPanel != null)
+                _currentPanel.HideWindow(action);
             else if (newPanel != null)
                 newPanel.ShowWindow();
             _previousPanel = _currentPanel;
             _currentPanel = newPanel;
         }
 
-        /// <summary>
-        /// Displays the launch panel
-        /// </summary>
-        public void StartLaunch()
+        private void Start()
         {
-            ActivatePanel(_launchPanel);
+            ActivatePanel(_launchPanel, null);
         }
 
         /// <summary>
@@ -67,6 +69,7 @@ namespace CRI.HelloHouston.Experience.Tutorial
         public void PressedLaunch()
         {
             Debug.Log("Maintenance launched");
+            DeactivatePanel(null);
             tutorialManager.OnLaunchSuccess();
         }
 
@@ -85,6 +88,7 @@ namespace CRI.HelloHouston.Experience.Tutorial
         public void PressedSecondMaintenance()
         {
             Debug.Log("Second Maintenance launched");
+            DeactivatePanel(null);
             tutorialManager.MaintenanceVirus();
         }
 

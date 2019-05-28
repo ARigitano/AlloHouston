@@ -13,17 +13,17 @@ namespace CRI.HelloHouston.WindowTemplate
 
         private void Awake()
         {
-            //_animator = GetComponent<Animator>();
+            _animator = GetComponent<Animator>();
         }
 
         protected override void StartShowAnimation()
         { 
-            //_animator.SetBool("Show", true);
+            _animator.SetBool("Show", true);
         }
 
         protected override void StartHideAnimation()
         {
-            //_animator.SetBool("Show", false);
+            _animator.SetBool("Show", false);
         }
     }
 }

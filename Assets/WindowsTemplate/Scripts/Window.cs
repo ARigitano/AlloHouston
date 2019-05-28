@@ -37,7 +37,7 @@ namespace CRI.HelloHouston.WindowTemplate
 
         private void Start()
         {
-            manager = gameObject.GetComponentInParent<XPElement>().manager;
+            //manager = gameObject.GetComponentInParent<XPElement>().manager;
         }
 
         protected virtual IEnumerator HideAnimation(Action action)
@@ -49,11 +49,11 @@ namespace CRI.HelloHouston.WindowTemplate
                 animator.Hide();
 
                
-                if (_soundClose != null) {
+              /*  if (_soundClose != null) {
                     int soundIndex = (_soundClose.Length - 1) - i;
                     if (soundIndex >= 0 && soundIndex < _soundClose.Length && _soundClose[soundIndex] != null)
                         manager.PlaySound(_soundClose[soundIndex]);
-                }
+                }*/
                 yield return new WaitForSeconds(delay);
             }
             visible = false;
@@ -70,11 +70,11 @@ namespace CRI.HelloHouston.WindowTemplate
                 AnimationElement animator = _animators[i];
                 float delay = _overrideDelay ? _postShowIntervalDelay : animator.postShowDelay + _postShowIntervalDelay;
                 animator.Show();
-                if (_soundOpen!= null)
+               /* if (_soundOpen!= null)
                 {
                     if (i >= 0 && i < _soundOpen.Length && _soundOpen[i] != null)
                         manager.PlaySound(_soundOpen[i]);
-                }
+                }*/
                 yield return new WaitForSeconds(delay);
             }
             if (action != null)
