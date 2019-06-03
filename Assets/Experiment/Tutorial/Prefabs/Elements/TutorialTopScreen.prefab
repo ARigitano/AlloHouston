@@ -65,7 +65,7 @@ MonoBehaviour:
   _maintenancePanel: {fileID: 1828314154897938}
   _secondMaintenancePanel: {fileID: 8931270003293775413}
   _maintenancePopup: {fileID: 3353782257109172698}
-  _secondMaintenancePopup: {fileID: 8083723461321775208}
+  _secondMaintenancePopup: {fileID: 0}
 --- !u!1 &1828314154897938
 GameObject:
   m_ObjectHideFlags: 0
@@ -1006,7 +1006,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f129c5421f5a8c4bb04e570edfae8af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _textKey: MO_ERROR_TITLE
+  _textKey: MAINTENANCE_SUBTITLE
   _text: {fileID: 0}
   _isCommon: 0
   _useFont: 1
@@ -1913,7 +1913,7 @@ GameObject:
   - component: {fileID: 450854994731760002}
   - component: {fileID: 1704928616132728078}
   m_Layer: 0
-  m_Name: MaintenancePopup
+  m_Name: SecondMaintenancePopup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2075,15 +2075,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4840146835689918536}
     m_Modifications:
-    - target: {fileID: 1121731569303253564, guid: 7cbadb6a4869c3d4e848a113a7fd9a50,
+    - target: {fileID: 787797255242776481, guid: 7cbadb6a4869c3d4e848a113a7fd9a50,
         type: 3}
-      propertyPath: m_Name
-      value: MaintenanceMessage
-      objectReference: {fileID: 0}
-    - target: {fileID: 1121731569303253564, guid: 7cbadb6a4869c3d4e848a113a7fd9a50,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
+      propertyPath: m_Text
+      value: ADVANCED MAINTENANCE
       objectReference: {fileID: 0}
     - target: {fileID: 903122860826420272, guid: 7cbadb6a4869c3d4e848a113a7fd9a50,
         type: 3}
@@ -2203,6 +2198,16 @@ PrefabInstance:
     - target: {fileID: 903122860826420272, guid: 7cbadb6a4869c3d4e848a113a7fd9a50,
         type: 3}
       propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1121731569303253564, guid: 7cbadb6a4869c3d4e848a113a7fd9a50,
+        type: 3}
+      propertyPath: m_Name
+      value: MaintenanceMessage
+      objectReference: {fileID: 0}
+    - target: {fileID: 1121731569303253564, guid: 7cbadb6a4869c3d4e848a113a7fd9a50,
+        type: 3}
+      propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7244180559936295035, guid: 7cbadb6a4869c3d4e848a113a7fd9a50,
@@ -2380,11 +2385,6 @@ PrefabInstance:
       propertyPath: m_Text
       value: PLEASE LAUNCH ADVANCED MAINTENANCE.
       objectReference: {fileID: 0}
-    - target: {fileID: 787797255242776481, guid: 7cbadb6a4869c3d4e848a113a7fd9a50,
-        type: 3}
-      propertyPath: m_Text
-      value: ADVANCED MAINTENANCE
-      objectReference: {fileID: 0}
     - target: {fileID: 1249481575260202409, guid: 7cbadb6a4869c3d4e848a113a7fd9a50,
         type: 3}
       propertyPath: m_Text
@@ -2446,15 +2446,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 224520038928421868}
     m_Modifications:
-    - target: {fileID: 1121731569303253564, guid: 7cbadb6a4869c3d4e848a113a7fd9a50,
+    - target: {fileID: 787797255242776481, guid: 7cbadb6a4869c3d4e848a113a7fd9a50,
         type: 3}
-      propertyPath: m_Name
-      value: MaintenanceMessage
-      objectReference: {fileID: 0}
-    - target: {fileID: 1121731569303253564, guid: 7cbadb6a4869c3d4e848a113a7fd9a50,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
+      propertyPath: m_Text
+      value: MAINTENANCE
       objectReference: {fileID: 0}
     - target: {fileID: 903122860826420272, guid: 7cbadb6a4869c3d4e848a113a7fd9a50,
         type: 3}
@@ -2574,6 +2569,16 @@ PrefabInstance:
     - target: {fileID: 903122860826420272, guid: 7cbadb6a4869c3d4e848a113a7fd9a50,
         type: 3}
       propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1121731569303253564, guid: 7cbadb6a4869c3d4e848a113a7fd9a50,
+        type: 3}
+      propertyPath: m_Name
+      value: MaintenanceMessage
+      objectReference: {fileID: 0}
+    - target: {fileID: 1121731569303253564, guid: 7cbadb6a4869c3d4e848a113a7fd9a50,
+        type: 3}
+      propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7244180559936295035, guid: 7cbadb6a4869c3d4e848a113a7fd9a50,
@@ -2750,11 +2755,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Text
       value: PLEASE LAUNCH MANUAL MAINTENANCE.
-      objectReference: {fileID: 0}
-    - target: {fileID: 787797255242776481, guid: 7cbadb6a4869c3d4e848a113a7fd9a50,
-        type: 3}
-      propertyPath: m_Text
-      value: MAINTENANCE
       objectReference: {fileID: 0}
     - target: {fileID: 1249481575260202409, guid: 7cbadb6a4869c3d4e848a113a7fd9a50,
         type: 3}
