@@ -60,8 +60,6 @@ namespace CRI.HelloHouston.Experience.UI
         [Tooltip("Layer setup for the player in game.")]
         private LayerMask _gameLayerMask = new LayerMask();
         [SerializeField]
-        private LayerMask _introLayerMask = new LayerMask();
-        [SerializeField]
         private GameObject _introScreen;
         private float _distance = 1.1f;
         private GameObject _screenInstance;
@@ -107,8 +105,6 @@ namespace CRI.HelloHouston.Experience.UI
             {
                 playerCameras = _player.loadedSetup.actualHeadset.GetComponentsInChildren<Camera>();
                 _screenInstance = (GameObject)Instantiate(_introScreen);
-                foreach (Camera playerCamera in playerCameras)
-                    playerCamera.cullingMask = _introLayerMask;
             }
             // Needs to be initialized before the start of the game.
             _logDisplay.Init(gameManager.logManager);

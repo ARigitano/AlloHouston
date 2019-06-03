@@ -1,6 +1,7 @@
 ﻿using CRI.HelloHouston.Experience;
 using UnityEngine;
 using UnityEngine.UI;
+using VRTK;
 
 namespace CRI.HelloHouston.Calibration.UI
 {
@@ -24,7 +25,16 @@ namespace CRI.HelloHouston.Calibration.UI
         [SerializeField]
         [Tooltip("The time input field.")]
         private InputField _timeInputField = null;
-        
+        /// <summary>
+        /// The player gameobject.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("The player gameobject")]
+        private VRTK_SDKManager _player = null;
+        private Camera[] playerCameras;
+        [SerializeField]
+        private LayerMask _introLayerMask = new LayerMask();
+
 
         private RoomSettings _rmst;
 
@@ -36,6 +46,13 @@ namespace CRI.HelloHouston.Calibration.UI
 
             RoomSettings rmst = (RoomSettings)_nextObject;
             _timeInputField.text = _rmst.timeEstimate.ToString();
+
+            if (_player != null && _player.loadedSetup != null)
+            {
+                playerCameras = _player.loadedSetup.actualHeadset.GetComponentsInChildren<Camera>();
+                foreach (Camera playerCamera in playerCameras)
+                    playerCamera.cullingMask = _introLayerMask;
+            }
 
         }
 
