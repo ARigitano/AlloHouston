@@ -52,6 +52,8 @@ namespace CRI.HelloHouston.GameElements
         private AudioSource _openDoor;
         [SerializeField]
         private AudioSource _closeDoor;
+        [SerializeField]
+        private AudioSource _moveArm;
 
 
         private Queue<RoomAnimatorInstruction> _instructionQueue = new Queue<RoomAnimatorInstruction>();
@@ -170,6 +172,10 @@ namespace CRI.HelloHouston.GameElements
                         plierAnimator.manager = manager;
                         plierAnimator.index = index;
                         plierAnimator.tubex = tubex;
+
+                        if (_moveArm.clip != null)
+                            _moveArm.Play();
+
                         _armAnimator.InstallTubex(index, animationIndex, actionOnInstall);
                         plierAnimator.InstallTubex();
                         return true;
