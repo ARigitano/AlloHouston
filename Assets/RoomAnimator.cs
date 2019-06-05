@@ -48,6 +48,10 @@ namespace CRI.HelloHouston.GameElements
         [SerializeField]
         [Tooltip("Animator of the door right.")]
         private Animator _doorAnimatorRight = null;
+        [SerializeField]
+        private AudioSource _openDoor;
+        [SerializeField]
+        private AudioSource _closeDoor;
 
 
         private Queue<RoomAnimatorInstruction> _instructionQueue = new Queue<RoomAnimatorInstruction>();
@@ -74,7 +78,9 @@ namespace CRI.HelloHouston.GameElements
         /// </summary>
         public void OpenDoor()
         {
-            Debug.Log("Door opened");
+            if (_openDoor.clip != null)
+                _openDoor.Play();
+
             _doorAnimatorLeft.SetBool("OpenDoor", true);
             _doorAnimatorRight.SetBool("OpenDoor", true);
         }
@@ -84,7 +90,9 @@ namespace CRI.HelloHouston.GameElements
         /// </summary>
         public void CloseDoor()
         {
-            Debug.Log("Door closed");
+            if (_closeDoor.clip != null)
+                _closeDoor.Play();
+
             _doorAnimatorLeft.SetBool("OpenDoor", false);
             _doorAnimatorRight.SetBool("OpenDoor", false);
         }

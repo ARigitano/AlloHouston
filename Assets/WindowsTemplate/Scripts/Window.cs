@@ -47,6 +47,8 @@ namespace CRI.HelloHouston.WindowTemplate
                 AnimationElement animator = _animators[(_animators.Length - 1) - i];
                 float delay = _overrideDelay ? _postHideIntervalDelay : animator.postHideDelay + _postHideIntervalDelay;
                 animator.Hide();
+                if (animator.gameObject.GetComponent<UISounds>() != null)
+                    animator.gameObject.GetComponent<UISounds>().PlayDisappear();
                 yield return new WaitForSeconds(delay);
             }
             visible = false;
@@ -63,6 +65,8 @@ namespace CRI.HelloHouston.WindowTemplate
                 AnimationElement animator = _animators[i];
                 float delay = _overrideDelay ? _postShowIntervalDelay : animator.postShowDelay + _postShowIntervalDelay;
                 animator.Show();
+                if(animator.gameObject.GetComponent<UISounds>() != null)
+                    animator.gameObject.GetComponent<UISounds>().PlayAppear();
                 yield return new WaitForSeconds(delay);
             }
             if (action != null)

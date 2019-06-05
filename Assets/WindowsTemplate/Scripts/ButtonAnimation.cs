@@ -28,6 +28,8 @@ namespace CRI.HelloHouston.WindowTemplate
             StopAllCoroutines();
             if (_defaultSprite == null)
                 _defaultSprite = _button.image.sprite;
+            if (_button.gameObject.GetComponent<UISounds>() != null)
+                _button.gameObject.GetComponent<UISounds>().PlayPressed();
             _button.image.sprite = _button.spriteState.pressedSprite;
             StartCoroutine(Unpress());
         }
