@@ -92,7 +92,12 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         [Tooltip("Alpha texture used for the holocube.")]
         public Texture holocubeMainTex;
-        
+        /// <summary>
+        /// Sprite used for the tubex hologram.
+        /// </summary>
+        [Tooltip("Sprite used for the tubex hologram.")]
+        public Sprite tubexSprite;
+
         public int totalWallTop
         {
             get

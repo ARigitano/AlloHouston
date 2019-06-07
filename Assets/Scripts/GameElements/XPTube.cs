@@ -2,6 +2,7 @@
 using CRI.HelloHouston.Experience;
 using VRTK;
 using System;
+using UnityEngine.UI;
 
 namespace CRI.HelloHouston.GameElements
 {
@@ -37,6 +38,12 @@ namespace CRI.HelloHouston.GameElements
         private float _speed = 2f;
         [SerializeField]
         private GameObject _statusPanel;
+        [SerializeField]
+        private Text _xpNameText;
+        [SerializeField]
+        private Image _xpLogo;
+        [SerializeField]
+        private Sprite _defaultLogo;
 
         [SerializeField]
         private MeshRenderer _dockMesh;
@@ -47,6 +54,9 @@ namespace CRI.HelloHouston.GameElements
         private bool _isAvailable;
 
         public bool isActive;
+
+        [SerializeField]
+        private GameObject _ownBase;
 
         private void OnEnable()
         {
@@ -72,17 +82,24 @@ namespace CRI.HelloHouston.GameElements
         {
             _index = index;
             this.manager = manager;
+            _xpNameText.text = manager.xpContext.xpGroup.experimentName;
+            if (manager.xpContext.tubexSprite != null)
+                _xpLogo.sprite = manager.xpContext.tubexSprite;
+            else
+                _xpLogo.sprite = _defaultLogo;
             if (this.manager.state == XPState.Inactive)
             {
                 gameObject.GetComponent<MeshRenderer>().material = disabled;
                 _dockMesh.material = disabled;
                 isActive = false;
+                _statusPanel.SetActive(false);
                 _isAvailable = false;
             }
             else
             {
                 isActive = true;
                 _isAvailable = true;
+                _statusPanel.SetActive(true);
             }
         }
 
@@ -94,6 +111,7 @@ namespace CRI.HelloHouston.GameElements
                 gameObject.GetComponent<MeshRenderer>().material = _available;
                 isActive = true;
                 _isAvailable = true;
+                _statusPanel.SetActive(true);
             }
         }
 
@@ -104,6 +122,7 @@ namespace CRI.HelloHouston.GameElements
                 gameObject.GetComponent<MeshRenderer>().material = disabled;
                 isActive = false;
                 _isAvailable = false;
+                _statusPanel.SetActive(false);
             }
         }
 
@@ -177,6 +196,7 @@ namespace CRI.HelloHouston.GameElements
                 }
                 if (other.tag == "TubeBase")
                 {
+                    //transform.position = other.transform.position;
                     _statusPanel.SetActive(true);
                     isDocked = false;
                 }
@@ -208,7 +228,7 @@ namespace CRI.HelloHouston.GameElements
                         gameObject.transform.SetParent(_originalSlot);
                     }
                 }
-                else if (other.tag == "TubeBase")
+                else if (other.tag == "TubeBase" && other.gameObject == _ownBase)
                 {
                     _statusPanel.SetActive(false);
                 }
