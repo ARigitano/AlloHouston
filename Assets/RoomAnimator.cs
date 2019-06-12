@@ -54,6 +54,10 @@ namespace CRI.HelloHouston.GameElements
         private AudioSource _closeDoor;
         [SerializeField]
         private AudioSource _moveArm;
+        [SerializeField]
+        private AudioSource _arrimage;
+        [SerializeField]
+        private AudioSource _moveArmReverse;
 
 
         private Queue<RoomAnimatorInstruction> _instructionQueue = new Queue<RoomAnimatorInstruction>();
@@ -219,6 +223,9 @@ namespace CRI.HelloHouston.GameElements
                         plierAnimator.index = 0;
                         if (index < _plierAnimators.Length)
                             _plierAnimators[index].UninstallTubex();
+
+                        if (_moveArm.clip != null)
+                            _moveArmReverse.Play();
                         return true;
                     }
                 }

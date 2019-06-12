@@ -132,6 +132,8 @@ namespace CRI.HelloHouston.Experience.MAIA
         [SerializeField]
         [Tooltip("Animation of the hologram tube.")]
         private AnimationElement _animationElement = null;
+        [SerializeField]
+        private AudioSource _particleCollision;
 
         private bool _splinesDisplayed = false;
 
@@ -306,6 +308,8 @@ namespace CRI.HelloHouston.Experience.MAIA
 
         private IEnumerator Animate()
         {
+            
+
             _animationPlayedOnce = true;
             var lines = GetComponentsInChildren<MAIAHologramLineAnimation>();
             var heads = GetComponentsInChildren<MAIAHologramHeadAnimation>();
@@ -318,6 +322,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             var spark2 = Instantiate(_sparkPrefab, transform);
             spark2.Init(_start2, transform);
             yield return new WaitForSeconds(_sparkPrefab.duration);
+            _particleCollision.Play();
             foreach (var line in lines)
                 line.StartAnimation();
             yield return new WaitForSeconds(_lineRendererPrefab.GetComponent<MAIAHologramLineAnimation>().explosionDuration * 0.7f);
