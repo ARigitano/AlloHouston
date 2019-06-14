@@ -29,6 +29,7 @@ namespace CRI.HelloHouston.GameElements {
                 _disappear.Play();
         }
 
+
         void OnTriggerEnter(Collider other)
         {
             var holocube = other.GetComponentInParent<Holocube>();

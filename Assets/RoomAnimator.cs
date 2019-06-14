@@ -58,6 +58,12 @@ namespace CRI.HelloHouston.GameElements
         private AudioSource _arrimage;
         [SerializeField]
         private AudioSource _moveArmReverse;
+        [SerializeField]
+        private AudioSource _powerDown;
+        [SerializeField]
+        private AudioSource _powerUp;
+        [SerializeField]
+        private GameObject _ambientSounds;
 
 
         private Queue<RoomAnimatorInstruction> _instructionQueue = new Queue<RoomAnimatorInstruction>();
@@ -108,6 +114,10 @@ namespace CRI.HelloHouston.GameElements
         /// </summary>
         public void DeactivateAllLights()
         {
+            _powerDown.Play();
+
+            _ambientSounds.SetActive(false);
+
             for (int i = 0; i < _dynamicLights.Length; i++)
                 _dynamicLights[i].SetActive(false);
         }
@@ -117,6 +127,10 @@ namespace CRI.HelloHouston.GameElements
         /// </summary>
         public void ActivateAllLights()
         {
+            _powerUp.Play();
+
+            _ambientSounds.SetActive(true);
+
             for (int i = 0; i < _dynamicLights.Length; i++)
                 _dynamicLights[i].SetActive(true);
         }
@@ -135,6 +149,8 @@ namespace CRI.HelloHouston.GameElements
         /// </summary>
         public void DeactivateAlarm()
         {
+            
+
             for (int i = 0; i < _alarmObjects.Length; i++)
                 _alarmObjects[i].SetActive(false);
         }

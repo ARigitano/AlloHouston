@@ -87,6 +87,11 @@ namespace CRI.HelloHouston.Experience.Tutorial
 
         private GameManager _gameManager;
 
+        public override void SkipToStep(int step)
+        {
+            base.SkipToStep(step);
+        }
+
 
         private void Start()
         {
