@@ -39,6 +39,7 @@ namespace CRI.HelloHouston.Experience.Tutorial
         /// The number of irregularities correctly removed
         /// </summary>
         private int _nbSuccess = 0;
+        public bool startTimer = false;
 
         // Start is called before the first frame update
         void Start()
@@ -86,11 +87,16 @@ namespace CRI.HelloHouston.Experience.Tutorial
             }
         }
 
+        public void StartCounter()
+        {
+            StartCoroutine(CountDown());
+        }
+
         public override void Show()
         {
             base.Show();
             StopAllCoroutines();
-            StartCoroutine(CountDown());
+            
         }
 
         public override void Hide()

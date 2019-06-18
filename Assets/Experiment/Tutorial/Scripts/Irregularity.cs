@@ -46,6 +46,12 @@ namespace CRI.HelloHouston.Experience.Tutorial
                 gameObject.GetComponent<MeshRenderer>().enabled = true;
                 Destroy(gameObject, 2f);
 
+                if(!_hologram.startTimer)
+                {
+                    _hologram.StartCounter();
+                    _hologram.startTimer = true;
+                }
+
                 if (_isCorruptedData)
                 {
                     other.GetComponent<MeshRenderer>().material = _hologram.materialSuccess;
