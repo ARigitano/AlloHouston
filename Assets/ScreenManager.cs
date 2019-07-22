@@ -9,6 +9,8 @@ public class ScreenManager : MonoBehaviour
     private bool _displayed = true;
     [SerializeField]
     private Camera _camera;
+    [SerializeField]
+    private GameObject _langPanel;
 
     // Start is called before the first frame update
     void Start()
@@ -24,14 +26,14 @@ public class ScreenManager : MonoBehaviour
             if(_displayed)
             {
                 _screen.alpha = 0f;
-                //_camera.targetDisplay = 1;
+                _langPanel.SetActive(false);
                 _camera.enabled = false;
                 _displayed = false;
             }
             else
             {
                 _screen.alpha = 1f;
-                //_camera.targetDisplay = 0;
+                _langPanel.SetActive(true);
                 _camera.enabled = true;
                 _displayed = true;
             }
