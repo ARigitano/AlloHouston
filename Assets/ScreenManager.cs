@@ -26,6 +26,8 @@ public class ScreenManager : MonoBehaviour
             if(_displayed)
             {
                 _screen.alpha = 0f;
+                _screen.interactable = false;
+                _screen.blocksRaycasts = false;
                 _langPanel.SetActive(false);
                 _camera.enabled = false;
                 _displayed = false;
@@ -33,6 +35,8 @@ public class ScreenManager : MonoBehaviour
             else
             {
                 _screen.alpha = 1f;
+                _screen.interactable = true;
+                _screen.blocksRaycasts = true;
                 _langPanel.SetActive(true);
                 _camera.enabled = true;
                 _displayed = true;
