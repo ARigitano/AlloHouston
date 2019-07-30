@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CRI.HelloHouston.Translation;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -9,15 +10,29 @@ namespace CRI.HelloHouston.Experience.UI
     internal class UILogDisplay : MonoBehaviour
     {
         [Serializable]
-        internal class LogColor
+        internal class LogSettings
         {
             public Log.LogType logType;
             public Color color;
-
-            public LogColor(Log.LogType logType, Color color)
+            public string textKey;
+        
+            public LogSettings(Log.LogType logType, Color color, string textKey)
             {
                 this.logType = logType;
                 this.color = color;
+                this.textKey = textKey;
+            }
+        }
+        [Serializable]
+        internal class LogOriginSettings
+        {
+            public Log.LogOrigin logOriginType;
+            public string textKey;
+
+            public LogOriginSettings(Log.LogOrigin logOriginType, string textKey)
+            {
+                this.logOriginType = logOriginType;
+                this.textKey = textKey;
             }
         }
         /// <summary>
@@ -66,12 +81,14 @@ namespace CRI.HelloHouston.Experience.UI
         [Tooltip("Transform of the log filter panel.")]
         private Transform _logFilterPanel = null;
         [SerializeField]
-        private string _logMessage = "There's nothing in this list! Please verify your filters.";
+        private string _emptyLogTextKey = "";
 
         private LogManager _logManager;
 
         [SerializeField]
-        private LogColor[] _logColors;
+        private LogSettings[] _logSettings = null;
+        [SerializeField]
+        private LogOriginSettings[] _logOriginSettings = null;
 
         private LogFilter[] _allFilters = new LogFilter[]
         {
@@ -88,10 +105,10 @@ namespace CRI.HelloHouston.Experience.UI
         private void Reset()
         {
             var logTypes = Enum.GetValues(typeof(Log.LogType));
-            _logColors = new LogColor[logTypes.Length];
-            for (int i = 0; i < _logColors.Length; i++)
+            _logSettings = new LogSettings[logTypes.Length];
+            for (int i = 0; i < _logSettings.Length; i++)
             {
-                _logColors[i] = new LogColor((Log.LogType)logTypes.GetValue(i), Color.black);
+                _logSettings[i] = new LogSettings((Log.LogType)logTypes.GetValue(i), Color.black, "");
             }
         }
 
@@ -105,23 +122,40 @@ namespace CRI.HelloHouston.Experience.UI
             LogManager.onLogAdded -= OnLogAdded;
         }
 
-        private void OnLogAdded(Log log)
+        private void OnLogAdded(object sender, LogEventArgs e)
         {
-            if (FilterLog(log))
+            if (FilterLog(e.log))
             {
-                AddLog(log);
+                AddLog(e.log);
             }
         }
 
         public void Init(LogManager logManager)
         {
             _logManager = logManager;
+            _allFilters = InitAllFilters(_logSettings, _logOriginSettings);
             foreach (var category in _allFilters.GroupBy(x => x.logCategoryKey,
                 (key, group) => new { CategoryName = key, Filters = group.ToArray() }))
             {
                 var go = Instantiate(_categoryPrefab, _logFilterPanel);
                 go.Init(this, category.Filters, category.CategoryName);
             }
+        }
+
+        private LogFilter[] InitAllFilters(LogSettings[] logSettings, LogOriginSettings[] logOriginSettings)
+        {
+            LogFilter[] res = new LogFilter[logSettings.Length + logOriginSettings.Length];
+            for (int i = 0; i < logSettings.Length; i++)
+            {
+                var logType = logSettings[i].logType;
+                res[i] = new LogTypeFilter(logSettings[i].textKey, (logFilter) => logFilter.logType == logType);
+            }
+            for (int i = 0; i < logOriginSettings.Length; i++)
+            {
+                var originType = logOriginSettings[i].logOriginType;
+                res[i + logSettings.Length] = new LogOriginFilter(logOriginSettings[i].textKey, (logFilter) => logFilter.logOrigin == originType);
+            }
+            return res;
         }
 
         private bool FilterLog(Log log)
@@ -133,7 +167,7 @@ namespace CRI.HelloHouston.Experience.UI
 
         private void AddLog(Log log)
         {
-            var logColor = _logColors.FirstOrDefault(x => x.logType == log.logType);
+            var logColor = _logSettings.FirstOrDefault(x => x.logType == log.logType);
             if (logColor != null)
                 log.color = logColor.color;
             bool scrollToBottom = false;
@@ -170,7 +204,9 @@ namespace CRI.HelloHouston.Experience.UI
             if (logs.Length == 0)
             {
                 var go = Instantiate(_logPrefab, _logPanel);
-                go.Init(_logMessage);
+                LangManager langManager = GameManager.instance.langManager;
+                TextManager textManager = GameManager.instance.textManager;
+                go.Init(textManager.GetText(_emptyLogTextKey));
                 uiLogs.Enqueue(go);
             }
             foreach (var log in logs)
@@ -178,20 +214,5 @@ namespace CRI.HelloHouston.Experience.UI
                 AddLog(log);
             }
         }
-#if UNITY_EDITOR
-        private void Update()
-        {
-            if (Input.GetKey(KeyCode.A))
-            {
-                var logOrigin = EnumExtensions.RandomEnumValue<Log.LogOrigin>();
-                var logType = EnumExtensions.RandomEnumValue<Log.LogType>();
-                string name = string.Format("{0} {1}", logType, logOrigin);
-                if (logOrigin == Log.LogOrigin.Experience)
-                    _logManager.logExperienceController.AddLog(name, null, logType);
-                else
-                    _logManager.logGeneralController.AddLog(name, null, logType);
-            }
-        }
-#endif
     }
 }

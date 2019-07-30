@@ -22,7 +22,7 @@ public class Screen : MonoBehaviour
     [Header("Elements")]
     public Sprite background;
     //public Window win;
-    private List<Window> listWindows = new List<Window>();
+    private List<LegacyWindow> listWindows = new List<LegacyWindow>();
     internal static int height;
 
     public int currentNbWin
@@ -48,10 +48,10 @@ public class Screen : MonoBehaviour
         
     }
 
-    public Window CreateWindow(Window tmpWin, Vector2 firstPos)
+    public LegacyWindow CreateWindow(LegacyWindow tmpWin, Vector2 firstPos)
     {
         Vector3 firstWinPos = new Vector3(firstPos.x, firstPos.y, 0.0f);
-        Window window = Instantiate(tmpWin, transform.position, transform.rotation, transform);
+        LegacyWindow window = Instantiate(tmpWin, transform.position, transform.rotation, transform);
         window.transform.localPosition = firstPos;
         window.Init(firstWinPos);
         listWindows.Add(window);
@@ -128,9 +128,9 @@ public class Screen : MonoBehaviour
         return winImage;
     }
 
-    public Window CreateWinCustom(Window prefabWin)
+    public LegacyWindow CreateWinCustom(LegacyWindow prefabWin)
     {
-        Window win = CreateWindow(prefabWin, new Vector2(0.0f, 0.0f));
+        LegacyWindow win = CreateWindow(prefabWin, new Vector2(0.0f, 0.0f));
         return win;
     }
 }

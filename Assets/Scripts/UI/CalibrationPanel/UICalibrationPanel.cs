@@ -33,6 +33,12 @@ namespace CRI.HelloHouston.Calibration.UI
         [Tooltip("Reset button.")]
         private Button _resetButton = null;
         /// <summary>
+        /// The calibration manager
+        /// </summary>
+        [SerializeField]
+        [Tooltip("Calibration manager.")]
+        private CalibrationManager _calibrationManager = null;
+        /// <summary>
         /// List of calibration entries.
         /// </summary>
         private List<UICalibrationEntry> _calibrationEntryList = new List<UICalibrationEntry>();
@@ -49,11 +55,6 @@ namespace CRI.HelloHouston.Calibration.UI
         private void OnDisable()
         {
             CalibrationManager.onCalibrationEnd -= OnCalibrationEnd;
-        }
-
-        private void OnCalibrationEnd()
-        {
-            CheckInteractable();
         }
 
         private void CheckInteractable()
@@ -77,11 +78,13 @@ namespace CRI.HelloHouston.Calibration.UI
 
         public override void Init(object obj)
         {
-            var calibrationManager = FindObjectOfType<CalibrationManager>();
-            VirtualRoom vroom = calibrationManager.CreateVirtualRoom(DataManager.instance.blockDB.rooms[0]);
+            if (_calibrationManager == null)
+                _calibrationManager = FindObjectOfType<CalibrationManager>();
+            _calibrationManager.StartCalibration();
+            VirtualRoom vroom = _calibrationManager.CreateVirtualRoom(DataManager.instance.blockDB.rooms[0]);
             if (_nextButton != null)
                 _nextButton.onClick.AddListener(Next);
-            Init(vroom, calibrationManager);
+            Init(vroom, _calibrationManager);
             CheckInteractable();
         }
 
@@ -103,6 +106,18 @@ namespace CRI.HelloHouston.Calibration.UI
                 blockCalEntry.Init(vblock, calibrationManager);
                 _calibrationEntryList.Add(blockCalEntry);
             }
+        }
+
+        private void OnCalibrationEnd(object sender, CalibrationEventArgs e)
+        {
+            CheckInteractable();
+        }
+
+
+        public override void Next()
+        {
+            _calibrationManager.EndCalibration();
+            base.Next();
         }
     }
 }

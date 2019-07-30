@@ -85,6 +85,7 @@ GameObject:
   - component: {fileID: 224938136769509030}
   - component: {fileID: 222547689993450876}
   - component: {fileID: 114043781365326890}
+  - component: {fileID: 1530357673}
   m_Layer: 5
   m_Name: Title
   m_TagString: Untagged
@@ -153,6 +154,22 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Room Calibration
+--- !u!114 &1530357673
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1124617050907456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5668c5b9bf548c4e880493891b960f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _textKey: ROOMCAL_TITLE
+  _text: {fileID: 114043781365326890}
+  _isCommon: 0
+  _useFont: 1
 --- !u!1 &1165591153266744
 GameObject:
   m_ObjectHideFlags: 0
@@ -334,6 +351,7 @@ GameObject:
   - component: {fileID: 224539475665253132}
   - component: {fileID: 222545338412141766}
   - component: {fileID: 114821521850015706}
+  - component: {fileID: 1291369205}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -404,6 +422,22 @@ MonoBehaviour:
   m_Text: Point the laser on the VR controller on the zone you want to move and press
     the trigger. Then select another zone to swap the experiments between zones. You
     can use your grip to cancel your last selection.
+--- !u!114 &1291369205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1406877373024294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5668c5b9bf548c4e880493891b960f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _textKey: ROOMCAL_TUTORIAL
+  _text: {fileID: 114821521850015706}
+  _isCommon: 0
+  _useFont: 1
 --- !u!1 &1511635037775576
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,5 +1,7 @@
 ﻿using CRI.HelloHouston.Audio;
 using CRI.HelloHouston.Experience;
+using CRI.HelloHouston.GameElements;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace CRI.HelloHouston.Calibration
@@ -42,6 +44,8 @@ namespace CRI.HelloHouston.Calibration
         {
             if (xpZone == null)
             {
+                if (holocubeFace != null)
+                    holocubeFace.SetActive(false);
                 this.xpWallTopZone = null;
                 wallTopLeftVirtualElement.Clean();
                 wallTopLeftVirtualElement.PlaceObject(null, null);
@@ -54,25 +58,41 @@ namespace CRI.HelloHouston.Calibration
                 if (!xpWallTopZone)
                     throw new WrongZoneTypeException();
                 this.xpWallTopZone = xpWallTopZone;
+                if (holocubeFace != null)
+                {
+                    holocubeFace.SetActive(true);
+                    if (xpContext.holocubeEmissiveTexture != null && xpContext.holocubeMainTex != null)
+                        holocubeFace.SetTexture(xpContext.holocubeMainTex, xpContext.holocubeEmissiveTexture);
+                    else
+                        holocubeFace.SetDefaultTexture();
+                }
                 wallTopLeftVirtualElement.PlaceObject(xpWallTopZone.elementLeftPrefab, xpContext);
                 wallTopRightVirtualElement.PlaceObject(xpWallTopZone.elementRightPrefab, xpContext);
                 wallTopTabletVirtualElement.PlaceObject(xpWallTopZone.elementTabletPrefab, xpContext);
             }
         }
 
-        public override void CleanAll()
+        public override XPElement[] CleanAll()
         {
-            base.CleanAll();
+            if (holocubeFace != null)
+                holocubeFace.SetActive(false);
+            var res = base.CleanAll();
             if (_leftSpeaker != null)
             _leftSpeaker.StopAll();
             if (_leftSpeaker != null)
             _rightSpeaker.StopAll();
+            return res;
         }
 
         public VirtualElement wallTopLeftVirtualElement;
         public VirtualElement wallTopRightVirtualElement;
         public VirtualElement wallTopTabletVirtualElement;
         public XPWallTopZone xpWallTopZone { get; protected set; }
+        /// <summary>
+        /// The index of the wall top zone.
+        /// </summary>
+        [Tooltip("The index of the wall top zone.")]
+        public int index;
         /// <summary>
         /// The left speaker of the wall top.
         /// </summary>
@@ -93,5 +113,10 @@ namespace CRI.HelloHouston.Calibration
         /// The right speaker of the wall top.
         /// </summary>
         public SoundManager rightSpeaker { get { return _rightSpeaker; } }
+        /// <summary>
+        /// The corresponding holocube face.
+        /// </summary>
+        [HideInInspector]
+        public HolocubeFace holocubeFace;
     }
 }

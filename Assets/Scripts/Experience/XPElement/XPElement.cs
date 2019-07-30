@@ -6,6 +6,7 @@ namespace CRI.HelloHouston.Experience
 {
     public abstract class XPElement : MonoBehaviour
     {
+        public XPManager manager { get; protected set; }
         /// <summary>
         /// The virtual element.
         /// </summary>
@@ -46,8 +47,9 @@ namespace CRI.HelloHouston.Experience
             }
         }
 
-        public virtual void Init(VirtualElement virtualElement)
+        public virtual void Init(VirtualElement virtualElement, XPManager manager)
         {
+            this.manager = manager;
             this.virtualElement = virtualElement;
             elementType = virtualElement.elementType;
         }
@@ -67,7 +69,7 @@ namespace CRI.HelloHouston.Experience
 
         public virtual void OnHide() { }
 
-        public virtual void OnShow() { }
+        public virtual void OnShow(int currentStep) { }
 
         public virtual void OnReset() { }
     }

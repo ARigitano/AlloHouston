@@ -1,0 +1,201 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1309633763935464
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4960822762979998}
+  - component: {fileID: 114835274261029310}
+  m_Layer: 0
+  m_Name: MAIA Demo Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4960822762979998
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1309633763935464}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114835274261029310
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1309633763935464}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 452cdca12752adf4a8640190d69fcb48, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  error: 
+  _stepManager:
+    stepActions:
+    - name: Start
+      value: 0
+      action:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 114835274261029310}
+            m_MethodName: OnLoadingSuccess
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+          Culture=neutral, PublicKeyToken=null
+    - name: MO
+      value: 1
+      action:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 114835274261029310}
+            m_MethodName: OnLoadingSuccess
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+          Culture=neutral, PublicKeyToken=null
+    - name: Password
+      value: 2
+      action:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 114835274261029310}
+            m_MethodName: OnMOSuccess
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+          Culture=neutral, PublicKeyToken=null
+    - name: PI
+      value: 3
+      action:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 114835274261029310}
+            m_MethodName: OnPasswordSuccess
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+          Culture=neutral, PublicKeyToken=null
+    - name: CI
+      value: 3
+      action:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 114835274261029310}
+            m_MethodName: OnPISuccess
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+          Culture=neutral, PublicKeyToken=null
+    - name: AMO
+      value: 2
+      action:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 114835274261029310}
+            m_MethodName: OnCISuccess
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+          Culture=neutral, PublicKeyToken=null
+    - name: RI
+      value: 6
+      action:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 114835274261029310}
+            m_MethodName: OnAMOSuccess
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+          Culture=neutral, PublicKeyToken=null
+    - name: Finish
+      value: 0
+      action:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 114835274261029310}
+            m_MethodName: OnRISuccess
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+        m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+          Culture=neutral, PublicKeyToken=null
+  uiSounds:
+  - {fileID: 8300000, guid: 35764651492b9bf43aa087b9862cda1a, type: 3}
+  - {fileID: 8300000, guid: 788d497275023d04995d13ee05abea3e, type: 3}
+  - {fileID: 8300000, guid: 5005f9c51d9ec6849845aa557fb0dcbf, type: 3}
+  - {fileID: 8300000, guid: 0d3aa25d50c332b4796f1267dd65d279, type: 3}
+  - {fileID: 8300000, guid: aaa338cc78526464db27c0e35b22036d, type: 3}
+  - {fileID: 8300000, guid: 16e26ac1075339c41b53fcc8a4ef5821, type: 3}
+  - {fileID: 8300000, guid: 8d037bda4f59dda4ca32c89b2398cc86, type: 3}
+  - {fileID: 8300000, guid: 0f0ee182b9d0a714398e310330ae6b37, type: 3}

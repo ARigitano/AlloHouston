@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using CRI.HelloHouston.Translation;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -33,6 +34,12 @@ namespace CRI.HelloHouston.Experience.UI
         [Tooltip("Button to finish successfully the experiment.")]
         private Button _successButton = null;
         /// <summary>
+        /// Dropdown that selects the language of the experiment.
+        /// </summary>
+        [SerializeField]
+        [Tooltip("Dropdown that selects the language of the experiment.")]
+        private UILangDropdown _langDropdown = null;
+        /// <summary>
         /// Button to automatically fail the experiment.
         /// </summary>
         [SerializeField]
@@ -63,6 +70,8 @@ namespace CRI.HelloHouston.Experience.UI
         [SerializeField]
         [Tooltip("Color of the text of the button that wasn't selected by the user.")]
         private Color _unselectedButtonColor = Color.white;
+        private Color _failButtonColor;
+        private Color _successButtonColor;
         /// <summary>
         /// Prefab of a popup.
         /// </summary>
@@ -74,37 +83,52 @@ namespace CRI.HelloHouston.Experience.UI
         /// </summary>
         [SerializeField]
         [Tooltip("Text of the fail popup.")]
-        private string _failPopupText = null;
+        private string _failPopupTextKey = null;
         /// <summary>
         /// Text of the success popup.
         /// </summary>
         [SerializeField]
         [Tooltip("Text of the success popup.")]
-        private string _successPopupText = null;
+        private string _successPopupTextKey = null;
         /// <summary>
         /// Text of the popup when there's not enough time left.
         /// </summary>
         [SerializeField]
         [Tooltip("Text of the popup when there's not enough time left.")]
-        private string _notEnoughTimeText = null;
+        private string _timePopupTextKey = null;
 
         private XPManager _xpManager;
 
-        public void Init(GameManager gameManager, XPManager xpSynchronizer)
+        private void OnDisable()
         {
-            _xpManager = xpSynchronizer;
-            _nameText.text = xpSynchronizer.xpContext.contextName;
-            _actionButton.Init(xpSynchronizer.xpContext.xpSettings.actions, xpSynchronizer.actionController);
+            if (_xpManager != null)
+                _xpManager.onStateChange -= OnStateChange;
+        }
+
+        public void Init(GameManager gameManager, XPManager xpManager)
+        {
+            TextManager textManager = GameManager.instance.textManager;
+            LangManager langManager = xpManager.langManager;
+            _xpManager = xpManager;
+            _nameText.text = xpManager.xpContext.contextName;
+            var actions = xpManager.xpContext.xpSettings != null ? xpManager.xpContext.xpSettings.actions : new Actions.ExperienceAction[0];
+            int duration = xpManager.xpContext.xpSettings != null ? xpManager.xpContext.xpSettings.duration : 0;
+            _actionButton.Init(actions, xpManager.actionController);
+            _langDropdown.InitDropdown(langManager);
             _launchButton.onClick.AddListener(() =>
             {
-                if (gameManager.xpTimeEstimate * 60 < gameManager.timeSinceGameStart + (xpSynchronizer.xpContext.xpSettings.duration * 60))
-                    CreatePopup(_notEnoughTimeText, LaunchAction);
+                if (gameManager.xpTimeEstimate * 60 < gameManager.timeSinceGameStart + (duration * 60))
+                    CreatePopup(textManager.GetText(_timePopupTextKey), LaunchAction);
                 else
                     LaunchAction();
             });
-            _failButton.onClick.AddListener(() => CreatePopup(_failPopupText, FailAction));
-            _successButton.onClick.AddListener(() => CreatePopup(_successPopupText, SuccessAction));
-            if (!xpSynchronizer.active)
+            _failButton.onClick.AddListener(() => CreatePopup(textManager.GetText(_failPopupTextKey), FailAction));
+            if (_failButton.GetComponentInChildren<Text>())
+                _failButtonColor = _failButton.GetComponentInChildren<Text>().color;
+            _successButton.onClick.AddListener(() => CreatePopup(textManager.GetText(_successPopupTextKey), SuccessAction));
+            if (_successButton.GetComponentInChildren<Text>())
+                _successButtonColor = _successButton.GetComponentInChildren<Text>().color;
+            if (xpManager.state == XPState.Inactive)
             {
                 _launchButton.GetComponent<CanvasGroup>().Show();
                 _failButton.GetComponent<CanvasGroup>().Hide();
@@ -116,8 +140,13 @@ namespace CRI.HelloHouston.Experience.UI
                 _failButton.GetComponent<CanvasGroup>().Show();
                 _successButton.GetComponent<CanvasGroup>().Show();
             }
-            SetState(xpSynchronizer.state);
-            xpSynchronizer.onStateChange += SetState;
+            SetState(xpManager.state);
+            xpManager.onStateChange += OnStateChange;
+        }
+
+        private void OnStateChange(object sender, XPManagerEventArgs e)
+        {
+            SetState(e.currentState);
         }
 
         private void CreatePopup(string popupText, UnityAction action)
@@ -166,8 +195,14 @@ namespace CRI.HelloHouston.Experience.UI
                 if (_successButton.GetComponentInChildren<Text>())
                     _successButton.GetComponentInChildren<Text>().color = _unselectedButtonColor;
             }
-            else if (_xpManager.active)
+            else if (state == XPState.InProgress)
             {
+                _successButton.interactable = true;
+                _failButton.interactable = true;
+                if (_successButton.GetComponentInChildren<Text>())
+                    _successButton.GetComponentInChildren<Text>().color = _successButtonColor;
+                if (_failButton.GetComponentInChildren<Text>())
+                    _failButton.GetComponentInChildren<Text>().color = _failButtonColor;
                 _inProgress.Show();
                 _finished.Hide();
                 _inactive.Hide();

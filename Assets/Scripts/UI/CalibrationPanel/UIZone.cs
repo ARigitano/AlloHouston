@@ -3,10 +3,11 @@ using CRI.HelloHouston.Calibration;
 using UnityEngine;
 using CRI.HelloHouston.Experience;
 using UnityEngine.UI;
+using VRTK;
 
 namespace CRI.HelloHouston.Calibration.UI
 {
-    internal class UIZone : MonoBehaviour, IPointerClickable
+    internal class UIZone : MonoBehaviour
     {
         /// <summary>
         /// An instance of virtual zone.
@@ -96,6 +97,18 @@ namespace CRI.HelloHouston.Calibration.UI
 
         private bool _enter = false;
 
+        private VRTK_InteractableObject _interactableObject;
+
+        private void OnEnable()
+        {
+            _interactableObject = (_interactableObject == null ? GetComponent<VRTK_InteractableObject>() : _interactableObject);
+            if (_interactableObject != null)
+            {
+                _interactableObject.InteractableObjectTouched += InteractableObjectTouched;
+                _interactableObject.InteractableObjectUntouched += InteractableObjectUntouched;
+            }
+        }
+
         public void Init(ZoneManager zoneManager)
         {
             _zoneManager = zoneManager;
@@ -120,39 +133,35 @@ namespace CRI.HelloHouston.Calibration.UI
         {
             _selected = false;
             if (!_enter)
-                GetComponent<Renderer>().material = _unselectedMaterial;
+                GetComponentInChildren<Renderer>().material = _unselectedMaterial;
             else
-                GetComponent<Renderer>().material = _hoveredMaterial;
+                GetComponentInChildren<Renderer>().material = _hoveredMaterial;
         }
 
         public void Select()
         {
             _selected = true;
             if (_zoneManager != null)
-                GetComponent<Renderer>().material = _selectedMaterial;
+                GetComponentInChildren<Renderer>().material = _selectedMaterial;
         }
 
-        void IPointerClickable.OnLaserClick()
-        {
-        }
-
-        void IPointerClickable.OnLaserEnter()
-        {
-            if (_zoneManager != null && _zoneManager.IsSelectable(this) && !_selected)
-                GetComponent<Renderer>().material = _hoveredMaterial;
-            _enter = true;
-        }
-
-        void IPointerClickable.OnLaserExit()
+        private void InteractableObjectUntouched(object sender, InteractableObjectEventArgs e)
         {
             if (_zoneManager != null && !_selected)
-                GetComponent<Renderer>().material = _unselectedMaterial;
+                GetComponentInChildren<Renderer>().material = _unselectedMaterial;
             _enter = false;
+        }
+
+        private void InteractableObjectTouched(object sender, InteractableObjectEventArgs e)
+        {
+            if (_zoneManager != null && _zoneManager.IsSelectable(this) && !_selected)
+                GetComponentInChildren<Renderer>().material = _hoveredMaterial;
+            _enter = true;
         }
 
         private void Reset()
         {
-            _virtualZone = GetComponent<VirtualZone>();
+            _virtualZone = GetComponentInChildren<VirtualZone>();
             _text = GetComponentInChildren<Text>();
             _textBackground = GetComponentInChildren<Image>();
         }

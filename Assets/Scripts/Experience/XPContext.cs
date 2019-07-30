@@ -1,4 +1,5 @@
 ﻿using CRI.HelloHouston.Calibration;
+using CRI.HelloHouston.GameElements;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,6 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         [Tooltip("The group of the experiment. The same for all difficiculties and audiences versions of the experiment.")]
         public XPGroup xpGroup;
-
         /// <summary>
         /// A description of the audience for the experiment.
         /// </summary>
@@ -38,7 +38,13 @@ namespace CRI.HelloHouston.Experience
         /// All the settings of this particular experience.
         /// </summary>
         [Tooltip("All the settings of this particular experience.")]
-        public XPSettings xpSettings;
+        public XPContextSettings xpSettings;
+
+        /// <summary>
+        /// The type of tubex for this experience.
+        /// </summary>
+        [Tooltip("The type of tubex for this experience.")]
+        public TubexType tubexType;
 
         /// <summary>
         /// An empty object with the XpSynchronizer inhreting script of the experiment.
@@ -76,7 +82,22 @@ namespace CRI.HelloHouston.Experience
         /// </summary>
         [Tooltip("The door at the entrance of the room.")]
         public XPDoorZone xpDoorZone;
-        
+        /// <summary>
+        /// Icon used for the holocube.
+        /// </summary>
+        [Tooltip("Emissive texture used for the holocube.")]
+        public Texture holocubeEmissiveTexture;
+        /// <summary>
+        /// Alpha texture used for the holocube.
+        /// </summary>
+        [Tooltip("Alpha texture used for the holocube.")]
+        public Texture holocubeMainTex;
+        /// <summary>
+        /// Sprite used for the tubex hologram.
+        /// </summary>
+        [Tooltip("Sprite used for the tubex hologram.")]
+        public Sprite tubexSprite;
+
         public int totalWallTop
         {
             get
@@ -129,7 +150,12 @@ namespace CRI.HelloHouston.Experience
         {
             get
             {
-                return xpSettings.availableHints.Select(x => new GameHint(x, this)).ToArray();
+                GameHint[] res;
+                if (xpSettings != null)
+                    res = xpSettings.availableHints.Select(x => new GameHint(x, this)).ToArray();
+                else
+                    res = new GameHint[0];
+                return res;
             }
         }
 
@@ -163,10 +189,7 @@ namespace CRI.HelloHouston.Experience
         public XPManager InitManager(LogExperienceController logExperienceController, VirtualZone[] zones, int randomSeed)
         {
             XPManager res = GameObject.Instantiate(_xpManagerPrefab);
-            res.Init(this, zones, logExperienceController, randomSeed, XPState.Visible);
-            //TODO: Remove this line when then XP selection is complete.
-            res.Activate();
-            res.Show((VirtualWallTopZone)zones.First(x => x.zoneType == ZoneType.WallTop));
+            res.Init(this, zones, logExperienceController, randomSeed, XPVisibility.Hidden);
             return res;
         }
     }

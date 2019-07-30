@@ -105,6 +105,7 @@ namespace CRI.HelloHouston.Calibration.UI
             UIExperimentListing listingExperiment,
             string experimentPath)
         {
+            TextManager textManager = GameManager.instance.textManager;
             _experimentText.text = name;
             this.id = id;
             totalPanel.AddContext(id);
@@ -114,17 +115,16 @@ namespace CRI.HelloHouston.Calibration.UI
             {
                 listingExperiment.CheckNext();
             });
-            _contextDropdown.options.Add(new Dropdown.OptionData() { text = TextManager.instance.GetText("CHOOSE") });
             foreach (var option in _contexts)
-            {
                 _contextDropdown.options.Add(new Dropdown.OptionData() { text = option.contextName });
-                _contextDropdown.onValueChanged.AddListener((int value) =>
-                {
-                    ChooseContext(_contextDropdown.options[value].text);
-                    totalPanel.SetContext(id, currentContext);
-                    listingExperiment.CheckNext();
-                });
-            }
+            _contextDropdown.onValueChanged.AddListener((int value) =>
+            {
+                ChooseContext(_contextDropdown.options[value].text);
+                totalPanel.SetContext(id, currentContext);
+                listingExperiment.CheckNext();
+            });
+            _contextDropdown.onValueChanged.Invoke(0);
+            _contextDropdown.RefreshShownValue();
         }
 
         private void LoadAllContexts(string name, string experiencePath)
@@ -155,7 +155,7 @@ namespace CRI.HelloHouston.Calibration.UI
                 _cornerText.text = context.totalCorners.ToString();
                 _doorText.text = context.totalDoors.ToString();
                 _hologramText.text = context.totalHolograms.ToString();
-                _durationText.text = context.xpSettings.duration.ToString();
+                _durationText.text = context.xpSettings != null ? context.xpSettings.duration.ToString() : "N/A";
             }
             else
                 ResetAllText();
