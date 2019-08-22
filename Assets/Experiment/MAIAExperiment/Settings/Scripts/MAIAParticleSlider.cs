@@ -37,7 +37,7 @@ namespace CRI.HelloHouston.Experience.MAIA
             }
         }
 
-        private void OnValueChanged(float value)
+        public void OnValueChanged(float value)
         {
             if (onValueChanged != null)
                 onValueChanged(this, new ParticleEventArgs() { particle = this.particle, value = value });
